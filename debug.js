@@ -6,7 +6,6 @@
  *
  * 
  * debug.stack() - return the current stack to the caller
- * debug.checkValueRange(foo, 'bar', function(value){ return value < 40; })
  * 
  * Is it possible to detect anonymous function and to make give them a name
 */
@@ -84,7 +83,7 @@ debug.breakpoint	= function(fn, conditionFn){
  * debugger. It default to false
  * @param {Boolean} condition the condition which is asserted
  * @param {String} message the message which is display is condition is falsy
- * @param {?Boolean} useDebuggercondition the condition which is asserted
+ * @param {Boolean} [useDebugger] the condition which is asserted
 */
 debug.assert	= function(condition, message, useDebugger){
 	if( condition )	return;
@@ -99,6 +98,7 @@ debug.assert.useDebugger	= false;
 
 /**
  * Ensure that the property is never NaN
+ * Inspired from http://29a.ch/2011/10/20/javascript-fuck-nan-undefined by @29a_ch
  * 
  * @param {Object} baseObject the base object containing the property
  * @param {String} property the property to check
@@ -119,8 +119,7 @@ debug.noNaN	= function(baseObject, property){
 */
 debug.checkTypeof	= function(baseObject, property, typeofStr){
 	baseObject.__defineQSetter__(property, function(value){
-		var result	= typeof(value);
-		debug.assert(result === typeofStr, "property typeof('"+property+"') === '"+result+"' (instead of '"+typeofStr+"')");
+		debug.assert(typeof(value) === typeofStr, "property typeof('"+property+"') === '"+typeof(value)+"' (instead of '"+typeofStr+"')");
 		return value;
 	});
 };

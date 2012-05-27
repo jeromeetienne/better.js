@@ -10,10 +10,10 @@ describe('debug.checkValueRange()', function(){
 	});
 
 	// do all the tests
-	it('is able to set with proper type without error', function(){
+	it('is able to set with proper value without error', function(){
 		foo.bar	= 32;
 	});
-	it('triggers error when setting to a invalid type', function(){
+	it('triggers error when setting to a improper value', function(){
 		var thrown	= false;
 		try{
 			foo.bar	= 99;
