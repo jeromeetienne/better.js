@@ -1,38 +1,14 @@
 <!doctype html><title>examples</title>
 <script src="../debug.js"></script>
 <body><script>
-function foobar(a, b){
-	console.log("inside foobar");
-	return a+b;
-}
+	// define sample object
+	var foo	= {
+		bar	: 32
+	};
 
-//foobar	= debug.breakpoint(foobar)
-//foobar	= debug.obsolete(foobar)
-
-foobar	= debug.wrapCall(foobar, function(){
-	console.log("just before calling foobar")
-});
-
-console.log("res=", foobar(2, 3));
-
-var SuperClass	= function(){
-	//console.log("Instance of SuperClass created")
-}
-
-var foo	= {
-	bar	: 32,
-	instance: new SuperClass()
-};
-
-//debug.checkTypeof(foo, 'bar', 'number')
-debug.checkInstanceof(foo, 'instance', SuperClass)
-
-debug.checkOnSet(foo, 'bar', function(value){
-	debug.assert(value < 40, "foo.bar cant be larger than 40");
-})
-
-
-//debug.noNaN(foo, 'bar')
-//console.log("value", foo.bar);
+	// setup the object
+	debug.checkValueRange(foo, 'bar', function(value){
+		return value < 40;
+	});
 
 </script></body>

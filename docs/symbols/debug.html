@@ -1,0 +1,781 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="generator" content="JsDoc Toolkit" />
+		<title>debug | tQuery library</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<meta name="mobileoptimized" content="0" />
+	
+		<link rel="stylesheet" href="../css/all.css" media="all" />
+		<link rel="stylesheet" href="../css/handheld.css" media="only screen and (max-width: 660px)" />
+		<link rel="stylesheet" href="../css/handheld.css" media="handheld" />
+		<link rel="stylesheet" href="../css/screen.css" media="screen and (min-width: 661px)" />
+
+		<script src="../javascript/all.js"></script>
+		<!--[if lt IE 9]>
+			<script src="../javascript/html5.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+<div class="index">
+	<div class="menu">
+		<div class="indexLinks">
+			<a href="../index.html">Classes</a>
+			<a href="../files.html">Files</a>
+		</div>
+	
+		<h2 class="heading1">Classes</h2>
+		
+		<input type="text" name="classFilter" class="classFilter" id="ClassFilter" placeholder="Filter"></input>
+		
+		<nav>
+			<ul class="classList" id="ClassList">
+				
+					<li><a href="../symbols/debug.html">debug</a></li>
+				
+			</ul>
+		</nav>
+	</div>
+	<div class="fineprint" style="clear:both">
+		<footer>
+			
+			Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
+			Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
+			Generated on:
+			<time datetime='2012-4-27' pubdate>2012-4-27 10:50</time>
+		</footer>
+	</div>
+</div>
+
+<div class="index indexStatic"></div>
+
+<div class="content">
+	<div class="innerContent">
+		<article>
+			<header>
+				<h1 class="classTitle">
+					
+					Namespace <span>debug</span>
+				</h1>
+				
+				<div class="intro">
+					<p class="description summary">
+						
+					</p>
+						
+					
+						<ul class="summary">
+							
+							
+							
+								<li>Defined in: <a href="../symbols/src/debug.js.html">debug.js</a></li>
+							
+							
+						</ul>
+					
+				</div>
+			</header>
+			
+			
+			
+			
+	<!--
+	#### METHODS SUMMARY
+	-->
+			
+				<section>
+					
+					
+					<div class="props">
+						<h2 class="sectionTitle">Method Summary</h2>
+						
+						
+							<nav>
+								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class debug.">
+									<thead>
+										<tr>
+											<th scope="col">Method Attributes</th>
+											<th scope="col">Method Name and Description</th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										
+											<tr
+												 class='item0'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">debug.<b><a href="../symbols/debug.html#.assert">assert</a></b>(condition, message, useDebuggercondition)
+													</div>
+													<div class="description">assert which actually try to stop the excecution
+if debug.assert.useDebugger is falsy, throw an exception.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item1'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">debug.<b><a href="../symbols/debug.html#.breakpoint">breakpoint</a></b>(originalFn, conditionFn)
+													</div>
+													<div class="description">Trigger the debugger when the function is called</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item2'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">debug.<b><a href="../symbols/debug.html#.checkInstanceof">checkInstanceof</a></b>(baseObject, property, klass)
+													</div>
+													<div class="description">Ensure the type of a variable with instanceof</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item3'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">debug.<b><a href="../symbols/debug.html#.checkType">checkType</a></b>(baseObject, property, klass)
+													</div>
+													<div class="description">Ensure the type of a variable using typeof or instanceof depending on klass</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item4'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">debug.<b><a href="../symbols/debug.html#.checkTypeof">checkTypeof</a></b>(baseObject, property, typeofString)
+													</div>
+													<div class="description">Ensure the type of a variable with typeof() operator</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item5'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">debug.<b><a href="../symbols/debug.html#.checkValueRange">checkValueRange</a></b>(baseObject, property, callback)
+													</div>
+													<div class="description">Ensure the type of a variable with typeof() operator</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item6'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">debug.<b><a href="../symbols/debug.html#.noNaN">noNaN</a></b>(baseObject, property)
+													</div>
+													<div class="description">Ensure that the property is never NaN</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item7'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">debug.<b><a href="../symbols/debug.html#.obsolete">obsolete</a></b>(fn, message)
+													</div>
+													<div class="description">Display a message every time the function is called</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item8'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">debug.<b><a href="../symbols/debug.html#.wrapCall">wrapCall</a></b>(originalFn, beforeFn, afterFn)
+													</div>
+													<div class="description">Wrap a function between 2 functions</div>
+												</td>
+											</tr>
+										
+									</tbody>
+								</table>
+							</nav>
+						
+					
+						
+					</div>
+				</section>
+			
+			
+	<!--
+	#### EVENTS SUMMARY
+	-->
+			
+	<!--
+	#### CONSTRUCTOR DETAILS
+	-->
+			
+	<!--
+	#### FIELD DETAILS
+	-->
+			
+	<!--
+	#### METHOD DETAILS
+	-->		
+			
+				<section>
+					<div class="details props">
+						<div class="innerProps">
+							<h2 class="sectionTitle">
+								Method Detail
+							</h2>
+							
+							<ul class="methodDetail" id="MethodDetail">
+								
+								
+									<li 
+										 class='item0'
+									>
+										<div class="fixedFont heading" id=".assert">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											
+											
+											<span class="light">debug.</span><b>assert</b>(condition, message, useDebuggercondition)
+										</div>
+										
+										<div class="description">
+											assert which actually try to stop the excecution
+if debug.assert.useDebugger is falsy, throw an exception. else trigger the
+debugger. It default to false
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Boolean}</span> <b>condition</b>
+														
+													</dt>
+													<dd>the condition which is asserted</dd>
+												
+													<dt>
+														<span class="light fixedFont">{String}</span> <b>message</b>
+														
+													</dt>
+													<dd>the message which is display is condition is falsy</dd>
+												
+													<dt>
+														<span class="light fixedFont">{?Boolean}</span> <b>useDebuggercondition</b>
+														
+													</dt>
+													<dd>the condition which is asserted</dd>
+												
+											</dl>
+										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item1'
+									>
+										<div class="fixedFont heading" id=".breakpoint">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											<span class="light">{Function}</span>
+											
+											<span class="light">debug.</span><b>breakpoint</b>(originalFn, conditionFn)
+										</div>
+										
+										<div class="description">
+											Trigger the debugger when the function is called
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Function}</span> <b>originalFn</b>
+														
+													</dt>
+													<dd>the original function</dd>
+												
+													<dt>
+														<span class="light fixedFont">{Function}</span> <b>conditionFn</b>
+														<i>Optional</i>
+													</dt>
+													<dd>this function should return true, when the breakpoint should be triggered. default to function(){ return true; }</dd>
+												
+											</dl>
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{Function}</span> The modified function</dd>
+													
+												
+												
+												
+												
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item2'
+									>
+										<div class="fixedFont heading" id=".checkInstanceof">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											
+											
+											<span class="light">debug.</span><b>checkInstanceof</b>(baseObject, property, klass)
+										</div>
+										
+										<div class="description">
+											Ensure the type of a variable with instanceof
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Object}</span> <b>baseObject</b>
+														
+													</dt>
+													<dd>the base object containing the property</dd>
+												
+													<dt>
+														<span class="light fixedFont">{String}</span> <b>property</b>
+														
+													</dt>
+													<dd>the property to check</dd>
+												
+													<dt>
+														<span class="light fixedFont">{Object}</span> <b>klass</b>
+														
+													</dt>
+													<dd>the expected class</dd>
+												
+											</dl>
+										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item3'
+									>
+										<div class="fixedFont heading" id=".checkType">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											
+											
+											<span class="light">debug.</span><b>checkType</b>(baseObject, property, klass)
+										</div>
+										
+										<div class="description">
+											Ensure the type of a variable using typeof or instanceof depending on klass
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Object}</span> <b>baseObject</b>
+														
+													</dt>
+													<dd>the base object containing the property</dd>
+												
+													<dt>
+														<span class="light fixedFont">{String}</span> <b>property</b>
+														
+													</dt>
+													<dd>the property to check</dd>
+												
+													<dt>
+														<span class="light fixedFont">{Object}</span> <b>klass</b>
+														
+													</dt>
+													<dd>the expected class</dd>
+												
+											</dl>
+										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item4'
+									>
+										<div class="fixedFont heading" id=".checkTypeof">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											
+											
+											<span class="light">debug.</span><b>checkTypeof</b>(baseObject, property, typeofString)
+										</div>
+										
+										<div class="description">
+											Ensure the type of a variable with typeof() operator
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Object}</span> <b>baseObject</b>
+														
+													</dt>
+													<dd>the base object containing the property</dd>
+												
+													<dt>
+														<span class="light fixedFont">{String}</span> <b>property</b>
+														
+													</dt>
+													<dd>the property to check</dd>
+												
+													<dt>
+														<span class="light fixedFont">{String}</span> <b>typeofString</b>
+														
+													</dt>
+													<dd>the exepected result of typeof(property)</dd>
+												
+											</dl>
+										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item5'
+									>
+										<div class="fixedFont heading" id=".checkValueRange">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											
+											
+											<span class="light">debug.</span><b>checkValueRange</b>(baseObject, property, callback)
+										</div>
+										
+										<div class="description">
+											Ensure the type of a variable with typeof() operator
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Object}</span> <b>baseObject</b>
+														
+													</dt>
+													<dd>the base object containing the property</dd>
+												
+													<dt>
+														<span class="light fixedFont">{String}</span> <b>property</b>
+														
+													</dt>
+													<dd>the property to check</dd>
+												
+													<dt>
+														<span class="light fixedFont">{function}</span> <b>callback</b>
+														
+													</dt>
+													<dd>the function called the property is set</dd>
+												
+											</dl>
+										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item6'
+									>
+										<div class="fixedFont heading" id=".noNaN">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											
+											
+											<span class="light">debug.</span><b>noNaN</b>(baseObject, property)
+										</div>
+										
+										<div class="description">
+											Ensure that the property is never NaN
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Object}</span> <b>baseObject</b>
+														
+													</dt>
+													<dd>the base object containing the property</dd>
+												
+													<dt>
+														<span class="light fixedFont">{String}</span> <b>property</b>
+														
+													</dt>
+													<dd>the property to check</dd>
+												
+											</dl>
+										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item7'
+									>
+										<div class="fixedFont heading" id=".obsolete">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											<span class="light">{Function}</span>
+											
+											<span class="light">debug.</span><b>obsolete</b>(fn, message)
+										</div>
+										
+										<div class="description">
+											Display a message every time the function is called
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Function}</span> <b>fn</b>
+														
+													</dt>
+													<dd>the original function</dd>
+												
+													<dt>
+														<span class="light fixedFont">{String}</span> <b>message</b>
+														<i>Optional</i>
+													</dt>
+													<dd>message to display when the function is called. Optional</dd>
+												
+											</dl>
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{Function}</span> The modified function</dd>
+													
+												
+												
+												
+												
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item8'
+									>
+										<div class="fixedFont heading" id=".wrapCall">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											<span class="light">{Function}</span>
+											
+											<span class="light">debug.</span><b>wrapCall</b>(originalFn, beforeFn, afterFn)
+										</div>
+										
+										<div class="description">
+											Wrap a function between 2 functions
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Function}</span> <b>originalFn</b>
+														
+													</dt>
+													<dd>the original function</dd>
+												
+													<dt>
+														<span class="light fixedFont">{Function}</span> <b>beforeFn</b>
+														
+													</dt>
+													<dd>the function to call *before* the original function</dd>
+												
+													<dt>
+														<span class="light fixedFont">{Function}</span> <b>afterFn</b>
+														
+													</dt>
+													<dd>the function to call *after* the original function</dd>
+												
+											</dl>
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{Function}</span> The modified function</dd>
+													
+												
+												
+												
+												
+												
+											
+											</dl>
+										
+										
+									</li>
+								
+							</ul>
+						</div>
+					</div>
+				</section>
+			
+			
+	<!--
+	#### EVENT DETAILS
+	-->		
+			
+		</article>
+	</div>
+</div>
+
+		<script type="text/javascript">
+			wbos.CssTools.MediaQueryFallBack.LoadCss('../css/screen.css', '../css/handheld.css', 660)
+			codeview.classFilter.Init()
+		</script>
+	</body>
+</html>
+

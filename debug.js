@@ -5,16 +5,9 @@
  * - TODO is the namespace name properly named
  *
  * 
- * debug.checkType(property, Klass) - check that the property is of this class. work with typeof/instanceof depending on the Klass
  * debug.stack() - return the current stack to the caller
- * debug.checkValidValue(foo, 'bar', function(value){ return value < 40; })
+ * debug.checkValueRange(foo, 'bar', function(value){ return value < 40; })
  * 
- * debug.filterGetter(foo, 'bar', function(value){ return value+1; });
- * debug.filterSetter(foo, 'bar', function(value){ return value+1; });
- * 
- * debug.defineGetter(foo, 'bar', function(){ return value; }) queable setter
- * debug.defineSetter(foo, 'bar', function(value){ return value; }) queuable getter
- *
  * Is it possible to detect anonymous function and to make give them a name
 */
 
@@ -23,6 +16,11 @@
  * @namespace
 */
 var debug	= {};
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//		misc								//
+//////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Display a message every time the function is called
@@ -93,7 +91,11 @@ debug.assert	= function(condition, message, useDebugger){
 	if( debug.assert.useDebugger || useDebugger )	debugger;
 	throw new Error(message	|| "assert Failed")
 }
-debug.assert.useDebugger	= true;
+debug.assert.useDebugger	= false;
+
+//////////////////////////////////////////////////////////////////////////////////
+//		type checking							//
+//////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Ensure that the property is never NaN
@@ -139,15 +141,33 @@ debug.checkInstanceof	= function(baseObject, property, klass){
 };
 
 /**
+ * Ensure the type of a variable using typeof or instanceof depending on klass
+ * 
+ * @param {Object} baseObject the base object containing the property
+ * @param {String} property the property to check
+ * @param {Object} klass the expected class
+*/
+debug.checkType	= function(baseObject, property, klass){
+	if( klass === Number ){
+		debug.checkTypeof(baseObject, property, 'number');
+	}else if( klass === String ){
+		debug.checkTypeof(baseObject, property, 'string');
+	}else{
+		debug.checkInstanceof(baseObject, property, klass);		
+	}
+};
+
+
+/**
  * Ensure the type of a variable with typeof() operator
  * 
  * @param {Object} baseObject the base object containing the property
  * @param {String} property the property to check
- * @param {function} setterFn the function called the property is set
+ * @param {function} callback the function called the property is set
 */
-debug.checkOnSet	= function(baseObject, property, setterFn){
+debug.checkValueRange	= function(baseObject, property, callback){
 	baseObject.__defineQSetter__(property, function(value){
-		setterFn(value);
+		console.assert(callback(value) === true, "property '"+property+"' got invalid value. >"+value+"<");
 		return value;
 	});
 };
@@ -156,23 +176,33 @@ debug.checkOnSet	= function(baseObject, property, setterFn){
 //		Implement queuable getter setter				//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * by default __defineGetter__ support only one function. Same for __defineSetter
+ * This is a annoying limitation. This little library declares 2 functions
+ * Object.__defineQGetter__ and Object.__defineQGetter__.
+ * They behave the same as their native sibling but support multiple functions.
+ * Those functions are called in the same order they got registered.
+ * 
+ * (I have no idea of the reasoning behind this limitation to one function. It seems
+ *  useless to me. This remind me of onclick of the DOM instead of a proper .addEventListener) 
+*/
 (function(){
 	var _QueuableGetterSetter	= function(baseObject, property){
 		var _this	= this;
-		this.getters	= [];
-		this.setters	= [];
+		this._getters	= [];
+		this._setters	= [];
 	
 		var initialValue= baseObject[property];
 		baseObject.__defineGetter__(property, function(){
 			var value	= baseObject['__'+property];
-			for(var i = 0; i < _this.getters.length; i++){
-				value	= _this.getters[i](value)
+			for(var i = 0; i < _this._getters.length; i++){
+				value	= _this._getters[i](value)
 			}
 			return value;
 		});
 		baseObject.__defineSetter__(property, function(value){
-			for(var i = 0; i < _this.setters.length; i++){
-				value	= _this.setters[i](value)
+			for(var i = 0; i < _this._setters.length; i++){
+				value	= _this._setters[i](value)
 			}
 			baseObject['__'+property] = value;
 		});
@@ -183,20 +213,18 @@ debug.checkOnSet	= function(baseObject, property, setterFn){
 	//////////////////////////////////////////////////////////////////////////////////
 	// Override prototype of global ```Object```
 	Object.prototype.__defineQGetter__	= function(property, getterFn){
-		var baseObject	= this;
-		if( !baseObject.__dbgGetSet ){
-			baseObject.__dbgGetSet	= new _QueuableGetterSetter(baseObject, property);
+		var name	= "__dbgGetSet_" + property;
+		if( !this[name] ){
+			this[name]	= new _QueuableGetterSetter(this, property);
 		}
-		var qGetSet	= baseObject.__dbgGetSet;
-		qGetSet.getters.push(getterFn)
+		this[name]._getters.push(getterFn)
 	};
 	
 	Object.prototype.__defineQSetter__	= function(property, setterFn){
-		var baseObject	= this;
-		if( !baseObject.__dbgGetSet ){
-			baseObject.__dbgGetSet	= new _QueuableGetterSetter(baseObject, property);
+		var name	= "__dbgGetSet_" + property;
+		if( !this[name] ){
+			this[name]	= new _QueuableGetterSetter(this, property);
 		}
-		var qGetSet	= baseObject.__dbgGetSet;
-		qGetSet.setters.push(setterFn)
+		this[name]._setters.push(setterFn)
 	};
 })();
