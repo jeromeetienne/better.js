@@ -1,4 +1,11 @@
 <!doctype html><title>examples</title>
 <script src="../debug.js"></script>
 <body><script>
+var SuperClass	= function(){};
+var foo	= {
+	bar: new SuperClass()
+};
+
+debug.checkInstanceof(foo, 'bar', SuperClass)
+
 </script></body>

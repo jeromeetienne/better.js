@@ -25,7 +25,7 @@ var foo	= {
 };
 
 //debug.checkTypeof(foo, 'bar', 'number')
-//debug.checkInstanceof(foo, 'instance', SuperClass)
+debug.checkInstanceof(foo, 'instance', SuperClass)
 
 debug.checkOnSet(foo, 'bar', function(value){
 	debug.assert(value < 40, "foo.bar cant be larger than 40");

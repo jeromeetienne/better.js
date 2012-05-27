@@ -102,18 +102,11 @@ debug.assert.useDebugger	= true;
  * @param {String} property the property to check
 */
 debug.noNaN	= function(baseObject, property){
-	var initialValue= baseObject[property];
-	baseObject.__defineGetter__(property, function(){
-		return baseObject['__'+property];
+	baseObject.__defineQSetter__(property, function(value){
+		console.assert(value === value, "property '"+property+"' is a NaN");
+		return value;
 	});
-	baseObject.__defineSetter__(property, function(value){
-		// NaN is the only value where "NaN === NaN" is always false
-		console.assert( value === value, "property '"+property+"' is a NaN");
-		baseObject['__'+property] = value;
-	});
-	// set the initialValue
-	baseObject['__'+property]	= initialValue;
-};
+}
 
 /**
  * Ensure the type of a variable with typeof() operator
@@ -123,17 +116,11 @@ debug.noNaN	= function(baseObject, property){
  * @param {String} typeofString the exepected result of typeof(property)
 */
 debug.checkTypeof	= function(baseObject, property, typeofStr){
-	var initialValue= baseObject[property];
-	baseObject.__defineGetter__(property, function(){
-		return baseObject['__'+property];
-	});
-	baseObject.__defineSetter__(property, function(value){
+	baseObject.__defineQSetter__(property, function(value){
 		var result	= typeof(value);
 		debug.assert(result === typeofStr, "property typeof('"+property+"') === '"+result+"' (instead of '"+typeofStr+"')");
-		baseObject['__'+property] = value;
+		return value;
 	});
-	// set the initialValue
-	baseObject['__'+property]	= initialValue;
 };
 
 /**
@@ -144,17 +131,11 @@ debug.checkTypeof	= function(baseObject, property, typeofStr){
  * @param {Object} klass the expected class
 */
 debug.checkInstanceof	= function(baseObject, property, klass){
-	var initialValue= baseObject[property];
-	baseObject.__defineGetter__(property, function(){
-		return baseObject['__'+property];
-	});
-	baseObject.__defineSetter__(property, function(value){
+	baseObject.__defineQSetter__(property, function(value){
 		// TODO add a link toward the origin error
 		debug.assert(value instanceof klass, "property "+property+" not of proper class");
-		baseObject['__'+property] = value;
+		return value;
 	});
-	// set the initialValue
-	baseObject['__'+property]	= initialValue;
 };
 
 /**
@@ -165,16 +146,10 @@ debug.checkInstanceof	= function(baseObject, property, klass){
  * @param {function} setterFn the function called the property is set
 */
 debug.checkOnSet	= function(baseObject, property, setterFn){
-	var initialValue= baseObject[property];
-	baseObject.__defineGetter__(property, function(){
-		return baseObject['__'+property];
-	});
-	baseObject.__defineSetter__(property, function(value){
+	baseObject.__defineQSetter__(property, function(value){
 		setterFn(value);
-		baseObject['__'+property] = value;
+		return value;
 	});
-	// set the initialValue
-	baseObject['__'+property]	= initialValue;	
 };
 
 //////////////////////////////////////////////////////////////////////////////////
