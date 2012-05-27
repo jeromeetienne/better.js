@@ -1,13 +1,18 @@
 <!doctype html><title>examples</title>
-<script src="./consolex.js"></script>
+<script src="./debug.js"></script>
 <body><script>
-//function foobar(a, b){
-//	console.log("inside foobar");
-//	return a+b;
-//}
-//foobar	= consolex.debug(foobar)
-//foobar	= consolex.obsolete(foobar)
-//console.log("res=", foobar(2, 3));
+function foobar(a, b){
+	console.log("inside foobar");
+	return a+b;
+}
+//foobar	= debug.breakpoint(foobar)
+//foobar	= debug.obsolete(foobar)
+
+foobar	= debug.wrapFn(foobar, function(){
+	console.log("jj")
+})
+
+console.log("res=", foobar(2, 3));
 
 var SuperClass	= function(){
 	//console.log("Instance of SuperClass created")
@@ -18,21 +23,15 @@ var foo	= {
 	instance: new SuperClass()
 };
 
-//consolex.checkTypeOf(foo, 'bar', 'number')
+//debug.checkTypeof(foo, 'bar', 'number')
+//debug.checkInstanceof(foo, 'instance', SuperClass)
 
-consolex.noNaN(foo, 'bar')
-console.log("value", foo.bar);
-
-var createException	= function() {
-	try {
-		this.undef();
-	} catch (e) {
-		return e;
-	}
-};
+debug.checkOnSet(foo, 'bar', function(value){
+	debug.assert(value < 40, "foo.bar cant be larger than 40");
+})
 
 
-
-console.log(createException().stack);
+//debug.noNaN(foo, 'bar')
+//console.log("value", foo.bar);
 
 </script></body>
