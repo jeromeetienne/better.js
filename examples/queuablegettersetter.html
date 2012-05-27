@@ -1,0 +1,13 @@
+<!doctype html><title>examples</title>
+<script src="../debug.js"></script>
+<body><script>
+var foo	= {
+	bar	: 32,
+	x	: 3
+};
+
+foo.__defineQGetter__('x', function(value){
+	return value*2;
+});
+
+</script></body>

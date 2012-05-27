@@ -5,9 +5,15 @@
  * - TODO is the namespace name properly named
  *
  * 
- * debug.checkType(property, Class) - check that the property is of this class
+ * debug.checkType(property, Klass) - check that the property is of this class. work with typeof/instanceof depending on the Klass
  * debug.stack() - return the current stack to the caller
  * debug.checkValidValue(foo, 'bar', function(value){ return value < 40; })
+ * 
+ * debug.filterGetter(foo, 'bar', function(value){ return value+1; });
+ * debug.filterSetter(foo, 'bar', function(value){ return value+1; });
+ * 
+ * debug.defineGetter(foo, 'bar', function(){ return value; }) queable setter
+ * debug.defineSetter(foo, 'bar', function(value){ return value; }) queuable getter
  *
  * Is it possible to detect anonymous function and to make give them a name
 */
@@ -42,7 +48,7 @@ debug.obsolete	= function(originalFn, message){
  * @param {Function} afterFn the function to call *after* the original function
  * @returns {Function} The modified function
 */
-debug.wrapFn	= function(originalFn, beforeFn, afterFn){
+debug.wrapCall	= function(originalFn, beforeFn, afterFn){
 	return function(){
 		var stopNow	= false;
 		// call beforeFn if needed
@@ -169,6 +175,53 @@ debug.checkOnSet	= function(baseObject, property, setterFn){
 	});
 	// set the initialValue
 	baseObject['__'+property]	= initialValue;	
-}
+};
 
+//////////////////////////////////////////////////////////////////////////////////
+//		Implement queuable getter setter				//
+//////////////////////////////////////////////////////////////////////////////////
 
+(function(){
+	var _QueuableGetterSetter	= function(baseObject, property){
+		var _this	= this;
+		this.getters	= [];
+		this.setters	= [];
+	
+		var initialValue= baseObject[property];
+		baseObject.__defineGetter__(property, function(){
+			var value	= baseObject['__'+property];
+			for(var i = 0; i < _this.getters.length; i++){
+				value	= _this.getters[i](value)
+			}
+			return value;
+		});
+		baseObject.__defineSetter__(property, function(value){
+			for(var i = 0; i < _this.setters.length; i++){
+				value	= _this.setters[i](value)
+			}
+			baseObject['__'+property] = value;
+		});
+		// set the initialValue
+		baseObject['__'+property]	= initialValue;
+	};
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	// Override prototype of global ```Object```
+	Object.prototype.__defineQGetter__	= function(property, getterFn){
+		var baseObject	= this;
+		if( !baseObject.__dbgGetSet ){
+			baseObject.__dbgGetSet	= new _QueuableGetterSetter(baseObject, property);
+		}
+		var qGetSet	= baseObject.__dbgGetSet;
+		qGetSet.getters.push(getterFn)
+	};
+	
+	Object.prototype.__defineQSetter__	= function(property, setterFn){
+		var baseObject	= this;
+		if( !baseObject.__dbgGetSet ){
+			baseObject.__dbgGetSet	= new _QueuableGetterSetter(baseObject, property);
+		}
+		var qGetSet	= baseObject.__dbgGetSet;
+		qGetSet.setters.push(setterFn)
+	};
+})();

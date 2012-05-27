@@ -1,16 +1,17 @@
 <!doctype html><title>examples</title>
-<script src="./debug.js"></script>
+<script src="../debug.js"></script>
 <body><script>
 function foobar(a, b){
 	console.log("inside foobar");
 	return a+b;
 }
+
 //foobar	= debug.breakpoint(foobar)
 //foobar	= debug.obsolete(foobar)
 
-foobar	= debug.wrapFn(foobar, function(){
-	console.log("jj")
-})
+foobar	= debug.wrapCall(foobar, function(){
+	console.log("just before calling foobar")
+});
 
 console.log("res=", foobar(2, 3));
 
