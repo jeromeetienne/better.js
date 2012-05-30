@@ -26,9 +26,9 @@
 ********************************************************************************* -->
 	<article data-markdown>
 		
-		# Augmented Reality 3D Pong
+		# Debug.js
 		
-		## Notes about screencast
+		## **Javascript** Made **Easier to debug**
 		
 		Jerome Etienne
 	</article>
@@ -36,28 +36,245 @@
 		presentation
 ********************************************************************************* -->
 	<article data-markdown>
-		### Augmented Reality 3D Pong
+		### Debugging Javascript is hard
 
-		#### augmented reality + webgl 
-		#### *+*
-		#### game classic + live coding
-		#### *=>* augmented pong in WebGL
-		* lots of fun with technology too :)
+		* weak typing
+		* no function parameter check
+		* no value bound check
+		* no stacktrace instrumentation
 	</article>
 	<article data-markdown>
-		# *Augmented Reality 3D Pong*
-		## (Show Demo [here](../))
+		### Debug.js saves the day
+		
+		(superman time)
+		
+		## It makes *Javascript Easier to debug* :)
+	</article>
+	<article data-markdown>
+		## How ?
+	</article>
+	<article data-markdown>
+		### ProvideJavascript is hard
+
+		* Strong typing
+		  * variable type checking
+		  * type checking for functions
+		* value bound checking
+		* function attributes
+		* callstack extraction
+		* DONE implementation of __LINE__ and __FILE__
+		* DONE assert which works
+		* queuable getter/setter
+	</article>
+	<article data-markdown>
+		### stacktrace extraction
+		
+		```
+		var stacktrace	= debug.stacktrace();
+		console.log(JSON.Stringify(stacktrace));
+		// Display the following
+		// [{
+		//	"url":"http://127.0.0.1:8000/examples/playground.html",
+		//	"line":13,
+		//	"column":25
+		// }]
+		```
+	</article>
+
+	<article data-markdown>
+		### Assert which works!
+		
+		* officiel console.assert() is eyes candy only
+		* assert is meant to stop excetion
+		
+		#### Let's Fix That
+		
+		```
+		debug.assert(false, "always fails here");
+		```
+		
+		* trigger exception or even javascript ```debugger```
+	</article>
+	<article data-markdown>
+		### Supporting \_\_LINE\_\_ + \_\_FILE\_\_
+		
+		* Exactly like in C (thanks to getter/setter :)
+		
+		```
+		console.log("current line: ", debug.__LINE__)
+		console.log("current file: ", debug.__FILE__)
+		```
+	</article>
+	<article data-markdown>
+		# Queuable Getter Setter
+	</article>
+	<article data-markdown>
+		### queuable getter setter
+		
+		* modern javascript for Object.__defineGetter__
+		* used to intercept property access
+
+		#### Official __defineGetter
+		
+		```
+		var foo	= {
+			bar	: 1
+		};
+		console.log("bar", foo.bar);
+		// display in console "1"
+		foo.__defineGetter__('bar', function(){
+			return 2;
+		});
+		console.log("bar", bar);
+		// display in console $ 2
+		```
+	</article>
+	<article data-markdown>
+		### Any issues getter / setter ?
+		
+		* your can't chain multiple getter!
+		
+		```
+		var foo	= { bar	: 1 };
+		foo.__defineGetter__('bar', function(){
+			console.log("blabla")
+			return 2;
+		});
+		foo.__defineGetter__('bar', function(){
+			return 3;
+		});
+		console.log("bar", foo.bar);
+		// display in console "3" and not "blabal"
+		```
+
+		* same as in window.onLoad **vs** window.addEventListener('load', fn)
+	</article>
+	<article data-markdown>
+		## queuable getter setter to the rescue
+	</article>
+	<article data-markdown>
+		### queuable getter setter
+		
+		```
+		var foo	= {
+			bar	: 32
+		};
+		foo.__defineQGetter__('bar', function(value){
+			return value*2;
+		});
+		foo.__defineQGetter__('bar', function(value){
+			return value+1;
+		});
+		console.log( foo.bar )
+		// display "65" so they are queued! :)
+		```
+		
+		Same for ```Object.__defineQSetter__``
 	</article>
 <!-- ****************************************************************************
 		presentation
 ********************************************************************************* -->
 	<article data-markdown>
-		### table of content
+		### Function Attributes
 
-		* goal: make a augmented pong
-		* Initialistation: tquery for 3d/augmentedgesture.js for augmented reality 
-		* Code the players
-		* Code the ball
+		* obsolete() :
+		* warn();
+		* error();
+		* log();
+		* timestamp();
+		* time(id): measure with console.time(). So chrome tracing http://www.html5rocks.com/en/tutorials/games/abouttracing/
+		* profile(id): measure with console.profile()
+		
+		```
+			var foo = function(){
+				return "bar";
+			};
+			foo	= debug.fnAttr(foo).obsolete().warn('nogood').error('kk').log("kk"),
+			foo	= debug.fnAttr(foo).obsolete().warn('nogood').error('kk').log("kk"),
+		```
+	</article>
+	<article data-markdown>
+		### Variable Type checking
+		
+		* 
+	</article>
+	<article data-markdown>
+		### Type checking on function parameters
+		
+		* 
+	</article>
+	<article data-markdown>
+		### Value Bound checking
+		
+		* 
+	</article>
+	<article data-markdown>
+		### Actual assert
+		
+		* console
+	</article>
+	<article data-markdown>
+		### queuable getter setter
+		
+		* modern javascript for Object.__defineGetter__
+		* used to intercept property access
+
+		#### Official __defineGetter
+		
+		```
+		var foo	= {
+			bar	: 1
+		};
+		console.log("bar", foo.bar);
+		// display in console "1"
+		foo.__defineGetter__('bar', function(){
+			return 2;
+		});
+		console.log("bar", bar);
+		// display in console $ 2
+		```
+	</article>
+	<article data-markdown>
+		### Issue \_\_defineGetter\_\_ / \_\_defineSetter\_\_ ?
+		
+		* oh Yeah! not queauable !
+		* your can't chain multiple getter!
+		
+		```
+		var foo	= {
+			bar	: 1
+		};
+		foo.__defineGetter__('bar', function(){
+			console.log("blabla")
+			return 2;
+		});
+		foo.__defineGetter__('bar', function(){
+			return 3;
+		});
+		console.log("bar", foo.bar);
+		// display in console "3" and not "blabal"
+		```
+	</article>
+<!-- *****************************************************************************
+**		THE END								**
+******************************************************************************* -->
+	<article data-markdown>
+		### Debug.js
+
+		#### *Javascript Made Easier to Debug*
+		
+		* strong typing for early bug detection
+		* dynamic value bound check
+		* function attribute
+		  * easier profiling ```.time()```
+		  * easier logging ```.log()```
+	</article>
+	<article data-markdown>
+		# That's all folks
+		
+		### Question ?
+		
+		Jerome Etienne
 	</article>
 <!-- ****************************************************************************
 		init libraries

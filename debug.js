@@ -11,11 +11,68 @@
 */
 
 
+
 /**
  * @namespace
 */
 var debug	= {};
 
+//////////////////////////////////////////////////////////////////////////////////
+//		Implement queuable getter setter				//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * by default __defineGetter__ support only one function. Same for __defineSetter
+ * This is a annoying limitation. This little library declares 2 functions
+ * Object.__defineQGetter__ and Object.__defineQGetter__.
+ * They behave the same as their native sibling but support multiple functions.
+ * Those functions are called in the same order they got registered.
+ * 
+ * (I have no idea of the reasoning behind this limitation to one function. It seems
+ *  useless to me. This remind me of onclick of the DOM instead of a proper .addEventListener) 
+*/
+(function(){
+	var _QueuableGetterSetter	= function(baseObject, property){
+		var _this	= this;
+		this._getters	= [];
+		this._setters	= [];
+	
+		var initialValue= baseObject[property];
+		baseObject.__defineGetter__(property, function(){
+			var value	= baseObject['__'+property];
+			for(var i = 0; i < _this._getters.length; i++){
+				value	= _this._getters[i](value)
+			}
+			return value;
+		});
+		baseObject.__defineSetter__(property, function(value){
+			for(var i = 0; i < _this._setters.length; i++){
+				value	= _this._setters[i](value)
+			}
+			baseObject['__'+property] = value;
+		});
+		// set the initialValue
+		baseObject['__'+property]	= initialValue;
+	};
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	// Override prototype of global ```Object```
+	Object.prototype.__defineQGetter__	= function(property, getterFn){
+		var name	= "__dbgGetSet_" + property;
+		if( !this[name] ){
+			this[name]	= new _QueuableGetterSetter(this, property);
+		}
+		this[name]._getters.push(getterFn)
+	};
+	
+	Object.prototype.__defineQSetter__	= function(property, setterFn){
+		var name	= "__dbgGetSet_" + property;
+		if( !this[name] ){
+			this[name]	= new _QueuableGetterSetter(this, property);
+		}
+		this[name]._setters.push(setterFn)
+	};
+})();
 
 //////////////////////////////////////////////////////////////////////////////////
 //		misc								//
@@ -93,13 +150,15 @@ debug.assert	= function(condition, message, useDebugger){
 debug.assert.useDebugger	= false;
 
 /**
+ * extract a stacktrace
  * 
+ * @param {Integer} [nShift] number of calls to skip in the stacktrace 
+ * @returns {Array} array of object like {url: "http://*", line : 42, column: 12};
 */
 debug.stacktrace	= function(nShift){
 	var createException	= function() {
-		try {
-			this.undef();
-		} catch (e) {
+		try{	this.undef();
+		}catch( e ){
 			return e;
 		}
 		return undefined;
@@ -117,13 +176,33 @@ debug.stacktrace	= function(nShift){
 			line	: parseInt(matches[2]),
 			column	: parseInt(matches[3])
 		});
-	})
+	});
 	// honor nShift
 	nShift	= nShift !== undefined ? nShift : 0;
 	for(var i = 0; i < nShift+2; i++)	locations.shift();
 	// return the result
 	return locations;
 }
+
+
+/**
+ * Same as __LINE__ in C
+*/
+debug.__defineQGetter__('__LINE__', function(){
+	var stacktrace	= debug.stacktrace();
+	return stacktrace[2].line
+});
+
+/**
+ * Same as __LINE__ in C
+*/
+debug.__defineQGetter__('__FILE__', function(){
+	var stacktrace	= debug.stacktrace();
+	var url		= stacktrace[2].url;
+	var basename	= url.match(/([^/]*)$/)[1]	|| ".";
+	console.log("stacktrace", stacktrace, "url", url, "basename", basename)
+	return basename;
+});
 
 //////////////////////////////////////////////////////////////////////////////////
 //		type checking							//
@@ -204,59 +283,3 @@ debug.checkValueRange	= function(baseObject, property, callback){
 	});
 };
 
-//////////////////////////////////////////////////////////////////////////////////
-//		Implement queuable getter setter				//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * by default __defineGetter__ support only one function. Same for __defineSetter
- * This is a annoying limitation. This little library declares 2 functions
- * Object.__defineQGetter__ and Object.__defineQGetter__.
- * They behave the same as their native sibling but support multiple functions.
- * Those functions are called in the same order they got registered.
- * 
- * (I have no idea of the reasoning behind this limitation to one function. It seems
- *  useless to me. This remind me of onclick of the DOM instead of a proper .addEventListener) 
-*/
-(function(){
-	var _QueuableGetterSetter	= function(baseObject, property){
-		var _this	= this;
-		this._getters	= [];
-		this._setters	= [];
-	
-		var initialValue= baseObject[property];
-		baseObject.__defineGetter__(property, function(){
-			var value	= baseObject['__'+property];
-			for(var i = 0; i < _this._getters.length; i++){
-				value	= _this._getters[i](value)
-			}
-			return value;
-		});
-		baseObject.__defineSetter__(property, function(value){
-			for(var i = 0; i < _this._setters.length; i++){
-				value	= _this._setters[i](value)
-			}
-			baseObject['__'+property] = value;
-		});
-		// set the initialValue
-		baseObject['__'+property]	= initialValue;
-	};
-	
-	//////////////////////////////////////////////////////////////////////////////////
-	// Override prototype of global ```Object```
-	Object.prototype.__defineQGetter__	= function(property, getterFn){
-		var name	= "__dbgGetSet_" + property;
-		if( !this[name] ){
-			this[name]	= new _QueuableGetterSetter(this, property);
-		}
-		this[name]._getters.push(getterFn)
-	};
-	
-	Object.prototype.__defineQSetter__	= function(property, setterFn){
-		var name	= "__dbgGetSet_" + property;
-		if( !this[name] ){
-			this[name]	= new _QueuableGetterSetter(this, property);
-		}
-		this[name]._setters.push(setterFn)
-	};
-})();

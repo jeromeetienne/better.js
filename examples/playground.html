@@ -3,7 +3,13 @@
 <body><script>
 	function foo(){
 		var trace	= debug.stacktrace();
-		console.log("tracce", trace)		
+		console.log("tracce", trace)
+		console.log("tracce", trace)
+		console.log("__LINE__", debug.__LINE__)
+		console.log("__FILE__", debug.__FILE__)
 	}
 	foo();
+	
+	var stacktrace	= debug.stacktrace();
+	console.log(JSON.stringify(stacktrace));
 </script></body>
