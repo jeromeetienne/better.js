@@ -1,14 +1,9 @@
 <!doctype html><title>examples</title>
 <script src="../debug.js"></script>
 <body><script>
-	// define sample object
-	var foo	= {
-		bar	: 32
-	};
-
-	// setup the object
-	debug.checkValueRange(foo, 'bar', function(value){
-		return value < 40;
-	});
-
+	function foo(){
+		var trace	= debug.stacktrace();
+		console.log("tracce", trace)		
+	}
+	foo();
 </script></body>

@@ -47,7 +47,7 @@
 			Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 			Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
 			Generated on:
-			<time datetime='2012-4-27' pubdate>2012-4-27 10:50</time>
+			<time datetime='2012-4-30' pubdate>2012-4-30 10:48</time>
 		</footer>
 	</div>
 </div>
@@ -112,7 +112,7 @@
 											>
 												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont">debug.<b><a href="../symbols/debug.html#.assert">assert</a></b>(condition, message, useDebuggercondition)
+													<div class="fixedFont">debug.<b><a href="../symbols/debug.html#.assert">assert</a></b>(condition, message, useDebugger)
 													</div>
 													<div class="description">assert which actually try to stop the excecution
 if debug.assert.useDebugger is falsy, throw an exception.</div>
@@ -181,7 +181,8 @@ if debug.assert.useDebugger is falsy, throw an exception.</div>
 												<td class="nameDescription">
 													<div class="fixedFont">debug.<b><a href="../symbols/debug.html#.noNaN">noNaN</a></b>(baseObject, property)
 													</div>
-													<div class="description">Ensure that the property is never NaN</div>
+													<div class="description">Ensure that the property is never NaN
+Inspired from http://29a.ch/2011/10/20/javascript-fuck-nan-undefined by @29a_ch</div>
 												</td>
 											</tr>
 										
@@ -198,6 +199,17 @@ if debug.assert.useDebugger is falsy, throw an exception.</div>
 										
 											<tr
 												 class='item8'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">debug.<b><a href="../symbols/debug.html#.stacktrace">stacktrace</a></b>(nShift)
+													</div>
+													<div class="description"></div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item9'
 											>
 												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
@@ -253,7 +265,7 @@ if debug.assert.useDebugger is falsy, throw an exception.</div>
 											
 											
 											
-											<span class="light">debug.</span><b>assert</b>(condition, message, useDebuggercondition)
+											<span class="light">debug.</span><b>assert</b>(condition, message, useDebugger)
 										</div>
 										
 										<div class="description">
@@ -285,8 +297,8 @@ debugger. It default to false
 													<dd>the message which is display is condition is falsy</dd>
 												
 													<dt>
-														<span class="light fixedFont">{?Boolean}</span> <b>useDebuggercondition</b>
-														
+														<span class="light fixedFont">{Boolean}</span> <b>useDebugger</b>
+														<i>Optional</i>
 													</dt>
 													<dd>the condition which is asserted</dd>
 												
@@ -587,6 +599,7 @@ debugger. It default to false
 										
 										<div class="description">
 											Ensure that the property is never NaN
+Inspired from http://29a.ch/2011/10/20/javascript-fuck-nan-undefined by @29a_ch
 											
 											
 											
@@ -687,6 +700,46 @@ debugger. It default to false
 								
 									<li 
 										 class='item8'
+									>
+										<div class="fixedFont heading" id=".stacktrace">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											
+											
+											<span class="light">debug.</span><b>stacktrace</b>(nShift)
+										</div>
+										
+										<div class="description">
+											
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<b>nShift</b>
+														
+													</dt>
+													<dd></dd>
+												
+											</dl>
+										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item9'
 									>
 										<div class="fixedFont heading" id=".wrapCall">
 											<span class='lighter'>

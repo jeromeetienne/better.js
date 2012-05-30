@@ -92,6 +92,39 @@ debug.assert	= function(condition, message, useDebugger){
 }
 debug.assert.useDebugger	= false;
 
+/**
+ * 
+*/
+debug.stacktrace	= function(nShift){
+	var createException	= function() {
+		try {
+			this.undef();
+		} catch (e) {
+			return e;
+		}
+		return undefined;
+	};
+
+	var e		= createException();
+	var lines	= e.stack.split('\n');
+	var descLine	= lines.shift();
+	var locations	= [];
+	lines.forEach(function(line){
+		var matches	= line.match(/^\s+at\s+(.+):(\d+):(\d+)/);
+		console.assert(matches.length === 4, "Parse error in line: "+line)
+		locations.push({
+			url	: matches[1],
+			line	: parseInt(matches[2]),
+			column	: parseInt(matches[3])
+		});
+	})
+	// honor nShift
+	nShift	= nShift !== undefined ? nShift : 0;
+	for(var i = 0; i < nShift+2; i++)	locations.shift();
+	// return the result
+	return locations;
+}
+
 //////////////////////////////////////////////////////////////////////////////////
 //		type checking							//
 //////////////////////////////////////////////////////////////////////////////////
