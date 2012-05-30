@@ -286,7 +286,7 @@
 		if (!window.Showdown){
 			var scr		= document.createElement('script');
 			scr.onload	= markdownSlideToHtml;
-			scr.src		= 'https://raw.github.com/github/github-flavored-markdown/gh-pages/scripts/showdown.js';
+			scr.src		= 'vendor/showdown.js';
 			document.body.appendChild(scr);
 			return;
 		}
