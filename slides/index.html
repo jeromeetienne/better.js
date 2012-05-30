@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Augmented 3D Pong: notes</title>
+	<title>Debug.js Slides</title>
 	<base target=”_blank” />
 	<meta charset='utf-8'/>
 	<script src='slides.js'></script>
@@ -205,32 +205,31 @@
 	<article data-markdown>
 		### Function Attributes
 
-		* obsolete() :
-		* warn();
-		* error();
-		* log();
-		* timestamp();
-		* time(id): measure with console.time(). So chrome tracing http://www.html5rocks.com/en/tutorials/games/abouttracing/
-		* profile(id): measure with console.profile()
+		* ```obsolete()``` : display a obsolete message 
+		* ```log()```/```warn()```/```error()```: display logging message
+		* ```timestamp()```: display timestamp when entering
+		* ```time(id)```: measure with console.time().
+		  * So usefull for [chrome tracing](http://www.html5rocks.com/en/tutorials/games/abouttracing/)
+		* ```profile(id)```: measure with console.profile()
 		
 		```
 			var foo = function(){
 				return "bar";
 			};
-			foo	= debug.fnAttr(foo).obsolete().warn('nogood').error('kk').log("kk"),
-			foo	= debug.fnAttr(foo).obsolete().warn('nogood').error('kk').log("kk"),
+			foo	= debug.fnAttr(foo).timestamp().obsolete().done();
+			foo	= debug.fnAttr(foo).profile();
 		```
 	</article>
 	<article data-markdown>
 		### Variable Type checking
 		
 		```
-			var foo	= {
-				bar	: 32,
-			};
-			debug.checkType(foo, 'bar', Number);
-			foo.bar	= "aString";
-			// trigger an assert
+		var foo	= {
+			bar	: 32,
+		};
+		debug.checkType(foo, 'bar', Number);
+		foo.bar	= "aString";
+		// trigger an assert
 		```
 	</article>
 	<article data-markdown>
@@ -257,11 +256,12 @@
 
 		#### *Javascript Made Easier to Debug*
 		
-		* strong typing for early bug detection
-		* dynamic value bound check
+		* **strong typing** AND **dynamic value bound check**
+		  * **=>** early bug detection
 		* function attribute
 		  * easier profiling ```.time()```
 		  * easier logging ```.log()```
+		* Queuable getter/setter to make them usefull at last!
 	</article>
 	<article data-markdown>
 		# That's all folks

@@ -204,6 +204,79 @@ debug.__defineQGetter__('__FILE__', function(){
 	return basename;
 });
 
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Function Attribute						//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Function attribute builder
+*/
+debug.fnAttr	= function(originalFn){
+	var currentFn	= originalFn;
+	var object	= {
+		obsolete	: function(message){
+			currentFn	= debug.wrapCall(currentFn, function(){
+				console.warn(message || "Obsoleted function called. Please update your code.");
+				console.trace();
+			});
+			return object;	// for chained API
+		},
+		timestamp	: function(){
+			currentFn	= debug.wrapCall(currentFn, function(){
+				console.log("run at "+ new Date);
+			});
+			return object;	// for chained API
+		},
+		log	: function(message){
+			currentFn	= debug.wrapCall(currentFn, function(){
+				console.log(new Date+" Function Enter."+message);
+			}, function(){
+				console.log(new Date+" Function Leave."+message);
+			});
+			return object;	// for chained API
+		},
+		warn	: function(message){
+			currentFn	= debug.wrapCall(currentFn, function(){
+				console.warn(new Date+" Function Enter."+message);
+			}, function(){
+				console.warn(new Date+" Function Leave."+message);
+			});
+			return object;	// for chained API
+		},
+		error	: function(message){
+			currentFn	= debug.wrapCall(currentFn, function(){
+				console.error(new Date+" Function Enter."+message);
+			}, function(){
+				console.error(new Date+" Function Leave."+message);
+			});
+			return object;	// for chained API
+		},
+		time		: function(label){
+			label	= label !== undefined ? label : "fnAttr().time()-"+Math.floor(Math.random()*9999).toString(36);
+			currentFn	= debug.wrapCall(currentFn, function(){
+				console.time(label)
+			}, function(){
+				console.timeEnd(label)
+			});
+			return object;	// for chained API
+		},
+		profile		: function(label){
+			label	= label !== undefined ? label : "fnAttr().profile()-"+Math.floor(Math.random()*9999).toString(36);
+			currentFn	= debug.wrapCall(currentFn, function(){
+				console.profile(label)
+			}, function(){
+				console.profileEnd(label)
+			});
+			return object;	// for chained API
+		},
+		done	: function(){
+			return currentFn;
+		}
+	};
+	return object;
+}
+
 //////////////////////////////////////////////////////////////////////////////////
 //		type checking							//
 //////////////////////////////////////////////////////////////////////////////////
