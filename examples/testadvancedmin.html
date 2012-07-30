@@ -1,0 +1,24 @@
+<!doctype html><title>examples</title>
+<!-- <script src="../debug.js"></script>
+ -->
+<script src="../debug.min.js"></script>
+<body><script>
+// console.log("debug", debug);
+// console.log("debug.wrapCall", debug.wrapCall);
+// console.log("debug.fnAttr", debug.fnAttr(function(){}));
+var foo	= {
+	bar	: 32
+};
+
+debug.noNaN(foo, 'bar')
+foo.bar	= NaN;
+
+
+function obsoleteFn(){
+	console.log('inside an obsolete function')
+};
+obsoleteFn	= debug.fnAttr(obsoleteFn).obsolete().profile('wow').done();
+obsoleteFn();
+
+</script></body>
+

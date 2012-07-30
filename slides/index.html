@@ -69,6 +69,7 @@
 		* callstack extraction
 		* implementation of __LINE__ and __FILE__
 		* assert which works
+		* conditional breakpoint
 		* queuable getter/setter
 	</article>
 	<article data-markdown>
@@ -120,6 +121,29 @@
 		```
 		
 		* trigger exception or even javascript ```debugger```
+	</article>
+	<article data-markdown>
+		### Conditional breakpoint
+		
+		* based on ```debugger``` keyword
+		
+		```
+		var foo	= function(){
+			console.log("bar");
+		}
+		foo	= debug.breakpoint(foo);
+		// this will never be reached
+		```
+		
+		```
+		var foo	= function(){
+			console.log("bar");
+		}
+		foo	= debug.breakpoint(foo, function(){
+			return 
+		});
+		// this will never be reached
+		```
 	</article>
 	<article data-markdown>
 		### Supporting \_\_LINE\_\_ + \_\_FILE\_\_
@@ -261,6 +285,7 @@
 		* function attribute
 		  * easier profiling ```.time()```
 		  * easier logging ```.log()```
+		* debug with .assert() and .breakpoint()
 		* Queuable getter/setter to make them usefull at last!
 	</article>
 	<article data-markdown>

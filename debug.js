@@ -4,9 +4,6 @@
  * - modern browser MUST be supported. other may be supported
  * - TODO is the namespace name properly named
  *
- * 
- * debug.stack() - return the current stack to the caller
- * 
  * Is it possible to detect anonymous function and to make give them a name
 */
 
@@ -138,6 +135,7 @@ debug.breakpoint	= function(fn, conditionFn){
  * assert which actually try to stop the excecution
  * if debug.assert.useDebugger is falsy, throw an exception. else trigger the
  * debugger. It default to false
+ *
  * @param {Boolean} condition the condition which is asserted
  * @param {String} message the message which is display is condition is falsy
  * @param {Boolean} [useDebugger] the condition which is asserted
@@ -200,7 +198,7 @@ debug.__defineQGetter__('__FILE__', function(){
 	var stacktrace	= debug.stacktrace();
 	var url		= stacktrace[2].url;
 	var basename	= url.match(/([^/]*)$/)[1]	|| ".";
-	console.log("stacktrace", stacktrace, "url", url, "basename", basename)
+	//console.log("stacktrace", stacktrace, "url", url, "basename", basename)
 	return basename;
 });
 
@@ -213,69 +211,75 @@ debug.__defineQGetter__('__FILE__', function(){
  * Function attribute builder
 */
 debug.fnAttr	= function(originalFn){
-	var currentFn	= originalFn;
-	var object	= {
-		obsolete	: function(message){
-			currentFn	= debug.wrapCall(currentFn, function(){
-				console.warn(message || "Obsoleted function called. Please update your code.");
-				console.trace();
-			});
-			return object;	// for chained API
-		},
-		timestamp	: function(){
-			currentFn	= debug.wrapCall(currentFn, function(){
-				console.log("run at "+ new Date);
-			});
-			return object;	// for chained API
-		},
-		log	: function(message){
-			currentFn	= debug.wrapCall(currentFn, function(){
-				console.log(new Date+" Function Enter."+message);
-			}, function(){
-				console.log(new Date+" Function Leave."+message);
-			});
-			return object;	// for chained API
-		},
-		warn	: function(message){
-			currentFn	= debug.wrapCall(currentFn, function(){
-				console.warn(new Date+" Function Enter."+message);
-			}, function(){
-				console.warn(new Date+" Function Leave."+message);
-			});
-			return object;	// for chained API
-		},
-		error	: function(message){
-			currentFn	= debug.wrapCall(currentFn, function(){
-				console.error(new Date+" Function Enter."+message);
-			}, function(){
-				console.error(new Date+" Function Leave."+message);
-			});
-			return object;	// for chained API
-		},
-		time		: function(label){
-			label	= label !== undefined ? label : "fnAttr().time()-"+Math.floor(Math.random()*9999).toString(36);
-			currentFn	= debug.wrapCall(currentFn, function(){
-				console.time(label)
-			}, function(){
-				console.timeEnd(label)
-			});
-			return object;	// for chained API
-		},
-		profile		: function(label){
-			label	= label !== undefined ? label : "fnAttr().profile()-"+Math.floor(Math.random()*9999).toString(36);
-			currentFn	= debug.wrapCall(currentFn, function(){
-				console.profile(label)
-			}, function(){
-				console.profileEnd(label)
-			});
-			return object;	// for chained API
-		},
-		done	: function(){
-			return currentFn;
-		}
-	};
-	return object;
+	return new debug.FnAttrClass(originalFn)
 }
+
+debug.FnAttrClass	= function(originalFn){
+	this._currentFn	= originalFn;
+}
+
+debug.FnAttrClass.prototype.done	= function(){
+	return this._currentFn;
+}
+
+debug.FnAttrClass.prototype.obsolete	= function(message){
+	this._currentFn	= debug.wrapCall(this._currentFn, function(){
+		console.warn(message || "Obsoleted function called. Please update your code.");
+		console.trace();
+	});
+	return this;	// for chained API
+}
+
+debug.FnAttrClass.prototype.timestamp	= function(){
+	this._currentFn	= debug.wrapCall(this._currentFn, function(){
+		console.log("run at "+ new Date);
+	});
+	return this;	// for chained API
+};
+
+debug.FnAttrClass.prototype.log		= function(message){
+	this._currentFn	= debug.wrapCall(this._currentFn, function(){
+		console.log(new Date+" Function Enter."+message);
+	}, function(){
+		console.log(new Date+" Function Leave."+message);
+	});
+	return this;	// for chained API
+};
+
+debug.FnAttrClass.prototype.warn	= function(message){
+	this._currentFn	= debug.wrapCall(this._currentFn, function(){
+		console.warn(new Date+" Function Enter."+message);
+	}, function(){
+		console.warn(new Date+" Function Leave."+message);
+	});
+	return this;	// for chained API
+};
+debug.FnAttrClass.prototype.error	= function(message){
+	this._currentFn	= debug.wrapCall(this._currentFn, function(){
+		console.error(new Date+" Function Enter."+message);
+	}, function(){
+		console.error(new Date+" Function Leave."+message);
+	});
+	return this;	// for chained API
+};
+debug.FnAttrClass.prototype.time	= function(label){
+	label	= label !== undefined ? label : "fnAttr().time()-"+Math.floor(Math.random()*9999).toString(36);
+	this._currentFn	= debug.wrapCall(this._currentFn, function(){
+		console.time(label)
+	}, function(){
+		console.timeEnd(label)
+	});
+	return this;	// for chained API
+};
+debug.FnAttrClass.prototype.profile	= function(label){
+	label	= label !== undefined ? label : "fnAttr().profile()-"+Math.floor(Math.random()*9999).toString(36);
+	this._currentFn	= debug.wrapCall(this._currentFn, function(){
+		console.profile(label)
+	}, function(){
+		console.profileEnd(label)
+	});
+	return this;	// for chained API
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //		type checking							//
@@ -341,7 +345,6 @@ debug.checkType	= function(baseObject, property, klass){
 	}
 };
 
-
 /**
  * Ensure the type of a variable with typeof() operator
  * 
@@ -355,4 +358,3 @@ debug.checkValueRange	= function(baseObject, property, callback){
 		return value;
 	});
 };
-
