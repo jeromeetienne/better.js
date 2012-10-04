@@ -14,6 +14,7 @@ describe('debug.checkType()', function(){
 	it('is able to set with proper type without error', function(){
 		foo.bar	= 32;
 	});
+	
 	it('triggers error when setting to a invalid type', function(){
 		var thrown	= false;
 		try{

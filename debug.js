@@ -7,8 +7,6 @@
  * Is it possible to detect anonymous function and to make give them a name
 */
 
-
-
 /**
  * @namespace
 */
@@ -29,12 +27,22 @@ var debug	= {};
  *  useless to me. This remind me of onclick of the DOM instead of a proper .addEventListener) 
 */
 (function(){
+	/**
+	 * Class to implement queueable getter/setter
+	 * @param  {Object} baseObject The base object on which we operate
+	 * @param  {String} property   The string of property
+	 */
 	var _QueuableGetterSetter	= function(baseObject, property){
+		// sanity check 
+		console.assert( typeof(baseObject) === 'object' );
+		console.assert( typeof(property) === 'string' );
+		// backup the initial value
+		var initialValue= baseObject[property];
+		// init some local variables
 		var _this	= this;
 		this._getters	= [];
 		this._setters	= [];
-	
-		var initialValue= baseObject[property];
+		// define the root getter
 		baseObject.__defineGetter__(property, function(){
 			var value	= baseObject['__'+property];
 			for(var i = 0; i < _this._getters.length; i++){
@@ -42,6 +50,7 @@ var debug	= {};
 			}
 			return value;
 		});
+		// define the root setter		
 		baseObject.__defineSetter__(property, function(value){
 			for(var i = 0; i < _this._setters.length; i++){
 				value	= _this._setters[i](value)
@@ -56,17 +65,21 @@ var debug	= {};
 	// Override prototype of global ```Object```
 	Object.prototype.__defineQGetter__	= function(property, getterFn){
 		var name	= "__dbgGetSet_" + property;
+		// init _QueuableGetterSetter for this property if needed
 		if( !this[name] ){
 			this[name]	= new _QueuableGetterSetter(this, property);
 		}
+		// setup the new getter
 		this[name]._getters.push(getterFn)
 	};
 	
 	Object.prototype.__defineQSetter__	= function(property, setterFn){
 		var name	= "__dbgGetSet_" + property;
+		// init _QueuableGetterSetter for this property if needed
 		if( !this[name] ){
 			this[name]	= new _QueuableGetterSetter(this, property);
 		}
+		// setup the new setter
 		this[name]._setters.push(setterFn)
 	};
 })();
@@ -148,7 +161,7 @@ debug.assert	= function(condition, message, useDebugger){
 debug.assert.useDebugger	= false;
 
 /**
- * extract a stacktrace
+ * extract a stacktrace. TODO make it work in node.js/chrome/firefox and modern browsers
  * 
  * @param {Integer} [nShift] number of calls to skip in the stacktrace 
  * @returns {Array} array of object like {url: "http://*", line : 42, column: 12};
@@ -358,3 +371,6 @@ debug.checkValueRange	= function(baseObject, property, callback){
 		return value;
 	});
 };
+
+// export the namespace in node.js - if running in node.js
+if( typeof(window) === 'undefined' )	module.exports	= debug;

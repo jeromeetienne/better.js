@@ -1,19 +1,18 @@
 <!doctype html><title>examples</title>
 <script src="../debug.js"></script>
 <body><script>
-function foobar(a, b){
-	console.log("inside foobar");
-	return a+b;
-}
+	function foobar(a, b){
+		console.log("inside foobar");
+		return a+b;
+	}
 
-//foobar	= debug.breakpoint(foobar)
-//foobar	= debug.obsolete(foobar)
+	//foobar	= debug.breakpoint(foobar)
+	//foobar	= debug.obsolete(foobar)
 
-foobar	= debug.wrapCall(foobar, function(){
-	console.log("just before calling foobar")
-});
+	foobar	= debug.wrapCall(foobar, function(){
+		console.log("just before calling foobar")
+	});
 
-console.log("res=", foobar(2, 3));
-
+	console.log("res=", foobar(2, 3));
 </script></body>
 
