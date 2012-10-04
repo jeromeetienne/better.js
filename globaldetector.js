@@ -1,45 +1,72 @@
 /**
+ * Used to detect globals. works in node.js and browser
+ * 
  * from http://stackoverflow.com/questions/5088203/how-to-detect-creation-of-new-global-variables
-*/
+ */
 var GlobalDetector	= function(){
+	// take the namespace for global
+	var inBrowser	= typeof(window) !== 'undefined'	? true : false
+	var _global	= inBrowser	? window	: global;
+	var _globalStr	= inBrowser	? 'window'	: 'global';
+	// sanity check - a global namespace MUST be found
+	console.assert( _global, 'failed to find a global namespace! bailing out!' );
 	// init proplist
-	window.proplist = window.proplist || {};
-	// loop on window global object
-	for(var propname in window){
-		window.proplist[propname] = true;
+	_global.proplist = _global.proplist || {};
+	// loop on _global _global object
+	for(var propname in _global){
+		_global.proplist[propname] = true;
 	}
 	
 	// init a timer
 	var _this	= this;
 	var timerid	= null;
 	
-	this.start	= function(){
+	/**
+	 * Start periodically monitoring
+	 * @param  {Function+}	onChange optional callback called when a new global is found
+	 * @param  {Number+}	period   period at which it is checked
+	 */
+	this.start	= function(onChange, period){
+		period	= period	|| 1000;
+		onChange= onChange || function(newProperty){
+			console.warn(new Date + " -- Warning Global Detected!!! "+_globalStr+"['"+newProperty+"'] === ", _global[newProperty])
+		}
 		timerid	= setInterval(function(){
-			_this.check(function(newProperty){
-				console.warn(new Date + " -- Warning Global Detected!!! window['"+newProperty+"'] === ", window[newProperty])
-			});
-		}, 1000);
+			_this.check(onChange);
+		}, period);
 	};
+	/**
+	 * Stop periodically monitoring
+	 */
 	this.stop	= function(){
-		cancelInterval(this._timerid);	
+		cancelInterval(_timerid);	
 	};
+	/**
+	 * Check if any new global has been declared
+	 * @param  {Function+} onChange optional callback called synchronously if a new global is found
+	 */
 	this.check	= function(onChange){
-		console.log("check")
 		// parameter polymorphism
 		onChange	= onChange || function(property){}
-		// new loop on window global object
-	        for(var propname in window){
-			if( window.proplist[propname] )	continue;
+		// new loop on _global object
+	        for(var propname in _global){
+			if( _global.proplist[propname] )	continue;
 			// if this is already in the ignoreList, continue
 			if( GlobalDetector.ignoreList.indexOf(propname) !== -1 )	continue;
 			// mark this property as init
-			window.proplist[propname] = true;
+			_global.proplist[propname] = true;
 			// notify callback
 			onChange(propname);
 	        }
 	}
-	this.start();
 }
+
+/**
+ * list of variables name to ignore. populated at constructor() time
+ * @type {String[]}
+ */
 GlobalDetector.ignoreList	= [];
 
-new GlobalDetector()
+
+// export the class in node.js - if running in node.js
+if( typeof(window) === 'undefined' )	module.exports	= GlobalDetector;
