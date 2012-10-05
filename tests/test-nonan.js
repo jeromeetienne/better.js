@@ -1,3 +1,5 @@
+var debug	= debug	|| require('../debug.js')
+
 describe('debug.noNaN()', function(){
 	// define sample object
 	var foo	= {

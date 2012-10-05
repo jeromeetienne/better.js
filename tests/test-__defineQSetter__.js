@@ -1,3 +1,5 @@
+var debug	= debug	|| require('../debug.js')
+
 describe('Object.__defineQSetter__', function(){
 	// define sample object
 	var foo	= {

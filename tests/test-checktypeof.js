@@ -1,3 +1,5 @@
+var debug	= debug	|| require('../debug.js')
+
 describe('debug.checkTypeof()', function(){
 	// define sample object
 	var foo	= {

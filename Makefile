@@ -9,6 +9,9 @@ deploy:
 	# so two lines: one if no commit, one if something to commit 
 	git commit -a -m "New deploy" && git push -f origin HEAD:gh-pages && git reset HEAD~
 
+test:
+	@./node_modules/.bin/mocha -R list tests
+
 minify:
 	curl --data-urlencode "js_code@debug.js"	\
 		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
@@ -26,8 +29,6 @@ minifyAdvanced:
 		> debug.min.js
 	@rm -f /tmp/gclosureexports.tmp.mavzDXrm ${GCLOSURE_TEMPFILE}
 	@echo size minified + gzip is `gzip -c debug.min.js | wc -c` byte
-
-
 
 JSDOC_ROOT	= $(HOME)/opt/jsdoc_toolkit-2.4.0/jsdoc-toolkit
 docs:

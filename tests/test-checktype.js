@@ -1,3 +1,5 @@
+var debug	= debug	|| require('../debug.js')
+
 describe('debug.checkType()', function(){
 	// define sample object
 	var SuperClass	= function(){};

@@ -1,3 +1,5 @@
+var debug	= debug	|| require('../debug.js')
+
 describe('debug.checkInstanceof()', function(){
 	// define sample object
 	var SuperClass	= function(){};
