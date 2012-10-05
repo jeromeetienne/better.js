@@ -16,3 +16,6 @@ It got
 #### notes
 * http://stackoverflow.com/questions/367768/how-to-detect-if-a-function-is-called-as-constructor
   * to count new instance and localize them
+* https://developers.google.com/closure/compiler/docs/js-for-compiler
+  * use same format
+  * autogenerate function parameter check

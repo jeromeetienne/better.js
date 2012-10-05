@@ -10,12 +10,12 @@ var GcDetector	= function(){
 	var timerid	= null;
 	var lastUsedHeap= 0;  // remember the heap size
 	// define function to return used heap size
-	var inBrowser	= typeof(window) !== 'undefined' ? true : false;
-	var usedHeapSize= inBrowser ? function(){
+	var inNode	= typeof(window) === 'undefined' ? true : false;
+	var usedHeapSize= inNode ? function(){
+		return process.memoryUsage().heapUsed;	
+	} : function(){
 		if( !window.performance || !window.performance.memory )	return 0;
 		return window.performance.memory.usedJSHeapSize;	
-	} : function(){
-		return process.memoryUsage().heapUsed;	
 	};
 
 	/**
