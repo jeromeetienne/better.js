@@ -1,4 +1,4 @@
-var debug	= debug	|| require('../src/debug.js')
+Object.prototype.__defineQGetter__	|| require('../src/queuablegettersetter.js')
 
 describe('Object.__defineQGetter__', function(){
 	// define sample object
