@@ -86,7 +86,7 @@ var GcMonitor	= function(){
 				burnrate	= newBurnrate;
 			}
 		}
-		
+
 		lastUsedHeap	= currUsedSize;
 		lastTimestamp	= Date.now();
 	}
