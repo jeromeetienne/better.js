@@ -2,6 +2,8 @@
  * Used to detect globals. works in node.js and browser
  * 
  * from http://stackoverflow.com/questions/5088203/how-to-detect-creation-of-new-global-variables
+ * 
+ * @class detect globals
  */
 var GlobalDetector	= function(){
 	// take the namespace for global

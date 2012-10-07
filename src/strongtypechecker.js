@@ -1,5 +1,15 @@
+/**
+ * @namespace Strong typing for javascript
+ */
 var StrongTypeChecker	= {};
 
+/**
+ * function wrapper to check the type of function parameters and return value
+ * @param  {Function} originalFn  the function to wrap
+ * @param  {Array} paramsTypes allowed types for the paramter. array with each item is the allowed types for this parameter.
+ * @param  {Array} returnTypes allowed types for the return value
+ * @return {boolean} return isValid, so true if types matche, false otherwise
+ */
 StrongTypeChecker.checkFunctionTypes	= function(originalFn, paramsTypes, returnTypes){
 	return function(){
 		// check parameters type
@@ -18,6 +28,12 @@ StrongTypeChecker.checkFunctionTypes	= function(originalFn, paramsTypes, returnT
 	}
 }
 
+/**
+ * Check the type of a value
+ * @param  {*} value the value to check
+ * @param  {Array.<function>} types the types allowed for this variable
+ * @return {boolean} return isValid, so true if types matche, false otherwise
+ */
 StrongTypeChecker.checkValueType	= function(value, types){
 	// handle parameter polymorphism
 	if( types instanceof Array === false )	types	= [types];

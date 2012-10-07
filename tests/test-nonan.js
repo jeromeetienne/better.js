@@ -1,4 +1,4 @@
-var debug	= debug	|| require('../debug.js')
+var debug	= debug	|| require('../src/debug.js')
 
 describe('debug.noNaN()', function(){
 	// define sample object

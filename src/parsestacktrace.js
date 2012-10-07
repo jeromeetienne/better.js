@@ -1,5 +1,6 @@
 /**
  * parse the stacktrace of an Error
+ * 
  * @param  {Error|undefined} error optional error to parse. if not provided, generate one.
  * @return {Array.<Object>}	parsed stacktrace
  */

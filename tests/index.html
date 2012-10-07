@@ -18,17 +18,20 @@
 - thus automatic and same other, and never forgotten
 - and put this .html else where... this /tests/ contains only test script browser+web
 -->
-	<script src="../debug.js"></script>
+	<script src="../src/debug.js"></script>
 	<script src="../src/strongtypechecker.js"></script>
+	<script src="../src/parsestacktrace.js"></script>
 
 	<script src="test-nonan.js"></script>
 	<script src="test-checktypeof.js"></script>
 	<script src="test-checkinstanceof.js"></script>
 	<script src="test-checktype.js"></script>
 	<script src="test-checkvaluerange.js"></script>
-	<script src="test-strongtypechecker.js"></script>
 	<script src="test-__defineQGetter__.js"></script>
 	<script src="test-__defineQSetter__.js"></script>
+
+	<script src="test-strongtypechecker.js"></script>
+	<script src="test-parsestacktrace.js"></script>
 	<script>
 		jQuery(function () {
 			mocha.run()

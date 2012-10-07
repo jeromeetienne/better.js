@@ -1,6 +1,8 @@
 /**
- * detect gabarge collector occurance. Require chrome for now.
- * typical usage: ```new GcMonitor().start();```
+ * detect gabarge collector occurance. Require v8 for now, so chrome or node.js.
+ * typical usage: <code>new GcMonitor().start();</code>
+ * 
+ * @class monitor gabage collector activities
  * 
  * see details in http://buildnewgames.com/garbage-collector-friendly-code/
  */
@@ -21,12 +23,11 @@ var GcMonitor	= function(){
 	/**
 	 * Start monitoring periodically
 	 * 
-	 * @this {GcMonitor}
 	 * @param {Function|undefined} onChange optional function to notify when gc occurs
-	 * @param {Number|undefined} [varname] [description]
+	 * @param {Number|undefined} period period of the check. default to 50ms
 	 */
 	this.start	= function(onChange, period){
-		period	= period	|| 100;
+		period	= period	|| 50;
 		onChange= onChange || function(delta){
 			function bytesToSize(bytes, nFractDigit) {
 				var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
@@ -64,6 +65,19 @@ var GcMonitor	= function(){
 		if( delta < 0 )	onChange(-delta);		
 		lastUsedHeap	= usedHeapSize();
 	}
+}
+
+/**
+ * check if it is available on this plateform
+ * 
+ * @return {Boolean} true if it is available, false otherwise
+ */
+GcMonitor.isAvailable	= function(){
+	var inNode	= typeof(window) === 'undefined' ? true : false;
+	if( inNode )	return true;
+	if( !window.performance	)	return false;
+	if( !window.performance.memory)	return false;
+	return true;	
 }
 
 
