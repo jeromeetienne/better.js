@@ -2,7 +2,6 @@ var StrongTypeChecker	= {};
 
 StrongTypeChecker.checkFunctionTypes	= function(originalFn, paramsTypes, returnTypes){
 	return function(){
-		//console.log('arguments', arguments)
 		// check parameters type
 		console.assert(arguments.length <= paramsTypes.length, 'funciton received '+arguments.length+' parameters but recevied only '+returnTypes.length+'!');
 		for(var i = 0; i < paramsTypes.length; i++){
