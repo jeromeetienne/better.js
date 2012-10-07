@@ -68,7 +68,7 @@ var GcMonitor	= function(){
 }
 
 /**
- * check if it is available on this plateform
+ * check if it is available on the plateform it runs on 
  * 
  * @return {Boolean} true if it is available, false otherwise
  */
