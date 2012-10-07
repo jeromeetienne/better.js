@@ -1,4 +1,9 @@
-var StrongTypeChecker	= StrongTypeChecker	|| require('../strongtypechecker.js');
+var StrongTypeChecker	= StrongTypeChecker	|| require('../src/strongtypechecker.js');
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
 
 describe('StrongTypeChecker.checkValueType', function(){
 
@@ -50,5 +55,64 @@ describe('StrongTypeChecker.checkValueType', function(){
 		var types	= [Object];
 		var valid	= StrongTypeChecker.checkValueType(value, types)
 		console.assert( valid === true )
+	});
+});
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+describe('StrongTypeChecker.checkFunctionTypes', function(){
+	// define the original function
+	var fct		= function(aString, aNumber){
+		return aString + aNumber;
+	}
+	// setup checkFunctionTypes
+	fct	= StrongTypeChecker.checkFunctionTypes(fct, [[String, Number], Number], String);
+
+	it('doesnt exception if function types match', function(){
+		var result	= fct('bla', 99)
+		console.assert(result === 'bla99');
+	});
+
+	it('does exception if one parameter types doesnt match', function(){
+		var thrown	= false;
+		try{	
+			fct('bla', 'prout')
+		}catch(e){ 
+			thrown	= true;
+		};
+		console.assert(thrown, "No exception triggered!!");
+	});
+
+	it('does exception if return type§ doesnt match', function(){
+		var thrown	= false;
+		try{	
+			fct(10, 20)
+		}catch(e){ 
+			thrown	= true;
+		};
+		console.assert(thrown, "No exception triggered!!");
+	});
+
+	it('does exception if function got more parameters than allowed', function(){
+		var thrown	= false;
+		try{	
+			fct('bla', 99, 98)
+		}catch(e){ 
+			thrown	= true;
+		};
+		console.assert(thrown, "No exception triggered!!");
+	});
+
+	it('does exception if function less parameters than allowed', function(){
+		var thrown	= false;
+		try{	
+			fct('bla')
+		}catch(e){ 
+			thrown	= true;
+		};
+		console.assert(thrown, "No exception triggered!!");
 	});
 });

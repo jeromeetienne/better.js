@@ -1,11 +1,22 @@
 var StrongTypeChecker	= {};
 
-StrongTypeChecker.checkFunctionTypes	= function(fct, paramsTypes, returnTypes){
-	 var args	= Array.prototype.slice.call(arguments, 0);
+StrongTypeChecker.checkFunctionTypes	= function(originalFn, paramsTypes, returnTypes){
 	return function(){
-		console.log('arguments', args)
-		
-	}	
+		//console.log('arguments', arguments)
+		// check parameters type
+		console.assert(arguments.length <= paramsTypes.length, 'funciton received '+arguments.length+' parameters but recevied only '+returnTypes.length+'!');
+		for(var i = 0; i < paramsTypes.length; i++){
+			var isValid	= StrongTypeChecker.checkValueType(arguments[i], paramsTypes[i]);			
+			console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', paramsTypes[i], 'It is ===', arguments[i])
+		}
+		// forward the call to the original function
+		var result	= originalFn.apply(this, arguments);
+		// check the result type
+		var isValid	= StrongTypeChecker.checkValueType(result, returnTypes);			
+		console.assert(isValid, 'invalid type for returned value. MUST be of type', returnTypes, 'It is ===', result);
+		// return the result
+		return result;
+	}
 }
 
 StrongTypeChecker.checkValueType	= function(value, types){
