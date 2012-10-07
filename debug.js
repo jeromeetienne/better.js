@@ -66,9 +66,7 @@ var debug	= {};
 	Object.prototype.__defineQGetter__	= function(property, getterFn){
 		var name	= "__dbgGetSet_" + property;
 		// init _QueuableGetterSetter for this property if needed
-		if( !this[name] ){
-			this[name]	= new _QueuableGetterSetter(this, property);
-		}
+		this[name]	= this[name] || new _QueuableGetterSetter(this, property);
 		// setup the new getter
 		this[name]._getters.push(getterFn)
 	};
@@ -76,9 +74,7 @@ var debug	= {};
 	Object.prototype.__defineQSetter__	= function(property, setterFn){
 		var name	= "__dbgGetSet_" + property;
 		// init _QueuableGetterSetter for this property if needed
-		if( !this[name] ){
-			this[name]	= new _QueuableGetterSetter(this, property);
-		}
+		this[name]	= this[name] || new _QueuableGetterSetter(this, property);
 		// setup the new setter
 		this[name]._setters.push(setterFn)
 	};

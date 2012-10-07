@@ -3,19 +3,27 @@
  * @param  {Error|undefined} error optional error to parse. if not provided, generate one.
  * @return {Array.<Object>}	parsed stacktrace
  */
-function parseStacktrace(error){
+function parseStacktrace(nShift, error){
+	// handle polymorphism
+	nShift	= nShift !== undefined ? nShift	: 0;
+	error	= error	|| new Error();
+	// sanity check
+	console.assert(error instanceof Error);
 	// call the proper parser depending on the usage 
 	if( typeof(window) === 'undefined' ){
-		var stacktrace	= parserV8(error)
+		var stacktrace	= _parserV8(error)
 	}else if( navigator.userAgent.match('Chrome/') ){
-		var stacktrace	= parserV8(error)		
+		var stacktrace	= _parserV8(error)		
 	}else if( navigator.userAgent.match('Firefox/') ){
-		var stacktrace	= parserFirefox(error)				
+		var stacktrace	= _parserFirefox(error)				
 	}else{
 		console.assert(false, 'parseStacktrace() not yet implemented for', navigator.userAgent)
 		return [];
 	}
-	return stacktrace.slice(2);
+	// add one to remove the parser*() function
+	nShift	+= 1;
+	console.assert(stacktrace.length >= nShift, 'stacktrace length not large enougth to shift '+nShift)
+	return stacktrace.slice(nShift);
 
 	//////////////////////////////////////////////////////////////////////////
 	//									//
@@ -24,17 +32,13 @@ function parseStacktrace(error){
 	/**
 	 * parse stacktrace for v8 - works in node.js and chrome
 	 */
-	function parserV8(error){
-		// handle polymorphism
-		error		= error	|| new Error();
-		// sanity check
-		console.assert(error instanceof Error);
+	function _parserV8(error){
 		// start parse the error stack string
 		var lines	= error.stack.split("\n").slice(1);
 		var stacktrace	= [];
 		lines.forEach(function(line){
 			if( line.match(/\)$/) ){
-				var matches	= line.match(/^\s*at ([^\s]+) \((.+):(\d+):(\d+)\)/);
+				var matches	= line.match(/^\s*at (.+) \((.+):(\d+):(\d+)\)/);
 				var result	= {
 					fct	: matches[1],
 					url	: matches[2],
@@ -59,11 +63,7 @@ function parseStacktrace(error){
 	/**
 	 * parse the stacktrace from firefox
 	 */
-	function parserFirefox(error){
-		// handle polymorphism
-		error		= error	|| new Error();
-		// sanity check
-		console.assert(error instanceof Error);
+	function _parserFirefox(error){
 		// start parse the error stack string
 		var lines	= error.stack.split("\n").slice(0, -1);
 		var stacktrace	= [];
@@ -79,7 +79,6 @@ function parseStacktrace(error){
 		return stacktrace;
 	};
 }
-
 
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= parseStacktrace;
