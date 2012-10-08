@@ -44,8 +44,6 @@ FnAttrClass.prototype.done	= function(){
 	return this._currentFn;
 }
 
-FnAttrClass.fn	= FnAttrClass.prototype;
-
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= fnAttr;
 
@@ -54,7 +52,7 @@ if( typeof(window) === 'undefined' )	module.exports	= fnAttr;
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-FnAttrClass.fn.obsolete	= function(message){
+FnAttrClass.prototype.obsolete	= function(message){
 	var used	= false;
 	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
 		if( used )	return;
@@ -65,7 +63,7 @@ FnAttrClass.fn.obsolete	= function(message){
 	return this;	// for chained API
 }
 
-FnAttrClass.fn.timestamp	= function(){
+FnAttrClass.prototype.timestamp	= function(){
 	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
 		console.log("run at "+ new Date);
 	});
@@ -73,7 +71,7 @@ FnAttrClass.fn.timestamp	= function(){
 };
 
 
-FnAttrClass.fn.log		= function(message){
+FnAttrClass.prototype.log		= function(message){
 	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
 		console.log(message);
 	});
@@ -85,18 +83,18 @@ FnAttrClass.fn.log		= function(message){
 //////////////////////////////////////////////////////////////////////////////////
 
 
-FnAttrClass.fn.before	= function(beforeFn){
+FnAttrClass.prototype.before	= function(beforeFn){
 	this._currentFn	= fnAttr.wrapCall(this._currentFn, beforeFn, null);
 	return this;	// for chained API
 };
 
-FnAttrClass.fn.after	= function(afterFn){
+FnAttrClass.prototype.after	= function(afterFn){
 	this._currentFn	= fnAttr.wrapCall(this._currentFn, null, afterFn);
 	return this;	// for chained API
 };
 
 
-FnAttrClass.fn.warp	= function(beforeFn, afterFn){
+FnAttrClass.prototype.warp	= function(beforeFn, afterFn){
 	this._currentFn	= fnAttr.wrapCall(this._currentFn, beforeFn, afterFn);
 	return this;	// for chained API
 };
@@ -105,7 +103,7 @@ FnAttrClass.fn.warp	= function(beforeFn, afterFn){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-FnAttrClass.fn.time	= function(label){
+FnAttrClass.prototype.time	= function(label){
 	label	= label !== undefined ? label : this._fnName+".time()-"+Math.floor(Math.random()*9999).toString(36);
 	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
 		console.time(label)
@@ -114,7 +112,7 @@ FnAttrClass.fn.time	= function(label){
 	});
 	return this;	// for chained API
 };
-FnAttrClass.fn.profile	= function(label){
+FnAttrClass.prototype.profile	= function(label){
 	label	= label !== undefined ? label : this._fnName+".profile-"+Math.floor(Math.random()*9999).toString(36);
 	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
 		console.profile(label)
