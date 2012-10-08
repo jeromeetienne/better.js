@@ -1,0 +1,19 @@
+<!doctype html>
+<script src='../src/functionattr.js'></script>
+<script>
+function foo(){
+	console.log('inside')
+	return 'bar';
+}
+
+foo	= fnAttr(foo, 'Fn.foo')
+	.log('bonjour')
+	.profile()
+	.after(function(){
+		console.log('superafter')
+	}.done();
+
+foo();
+
+foo()
+</script>
