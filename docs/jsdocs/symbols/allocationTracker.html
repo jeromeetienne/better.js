@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
-		<title>GlobalDetector | debug.js library</title>
+		<title>allocationTracker | debug.js library</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<meta name="mobileoptimized" content="0" />
@@ -70,12 +70,12 @@
 			<header>
 				<h1 class="classTitle">
 					
-					Class <span>GlobalDetector</span>
+					Namespace <span>allocationTracker</span>
 				</h1>
 				
 				<div class="intro">
 					<p class="description summary">
-						detect globals
+						
 					</p>
 						
 					
@@ -83,7 +83,7 @@
 							
 							
 							
-								<li>Defined in: <a href="../symbols/src/src_globaldetector.js.html">globaldetector.js</a></li>
+								<li>Defined in: <a href="../symbols/src/src_allocationtracker.js.html">allocationtracker.js</a></li>
 							
 							
 						</ul>
@@ -94,8 +94,8 @@
 			
 				<section>
 					<div class="props">
-						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class GlobalDetector.">
-							<caption class="sectionTitle">Class Summary</caption>
+						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class allocationTracker.">
+							<caption class="sectionTitle">Namespace Summary</caption>
 							<thead>
 								<tr>
 									<th scope="col">Constructor Attributes</th>
@@ -107,9 +107,9 @@
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription" >
 										<div class="fixedFont">
-											<b><a href="../symbols/GlobalDetector.html#constructor">GlobalDetector</a></b>()
+											<b><a href="../symbols/allocationTracker.html#constructor">allocationTracker</a></b>
 										</div>
-										<div class="description">Used to detect globals.</div>
+										<div class="description"></div>
 									</td>
 								</tr>
 							</tbody>
@@ -118,42 +118,6 @@
 				</section>
 			
 			
-			
-				
-				<section>
-					
-						<nav>
-							<div class="props">
-								<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class GlobalDetector.">
-									<caption class="sectionTitle">Field Summary</caption>
-									
-									<thead>
-										<tr>
-											<th scope="col">Field Attributes</th>
-											<th scope="col">Field Name and Description</th>
-										</tr>
-									</thead>
-									
-									<tbody>
-										
-											<tr>
-												<td class="attributes">&lt;static&gt; &nbsp;</td>
-												<td class="nameDescription">
-													<div class="fixedFont">
-													GlobalDetector.<b><a href="../symbols/GlobalDetector.html#.ignoreList">ignoreList</a></b>
-													</div>
-													<div class="description">list of variables name to ignore.</div>
-												</td>
-											</tr>
-										
-									</tbody>
-								</table>
-							</div>
-						</nav>
-					
-					
-					
-				</section>
 			
 	<!--
 	#### METHODS SUMMARY
@@ -167,7 +131,7 @@
 						
 						
 							<nav>
-								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class GlobalDetector.">
+								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class allocationTracker.">
 									<thead>
 										<tr>
 											<th scope="col">Method Attributes</th>
@@ -181,33 +145,22 @@
 											<tr
 												 class='item0'
 											>
-												<td class="attributes">&nbsp;</td>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/GlobalDetector.html#check">check</a></b>(onChange)
+													<div class="fixedFont">allocationTracker.<b><a href="../symbols/allocationTracker.html#.record">record</a></b>(className)
 													</div>
-													<div class="description">Check if any new global has been declared</div>
+													<div class="description">record an allocation of a class</div>
 												</td>
 											</tr>
 										
 											<tr
 												 class='item1'
 											>
-												<td class="attributes">&nbsp;</td>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/GlobalDetector.html#start">start</a></b>(onChange, period)
+													<div class="fixedFont">allocationTracker.<b><a href="../symbols/allocationTracker.html#.reset">reset</a></b>()
 													</div>
-													<div class="description">Start periodically monitoring</div>
-												</td>
-											</tr>
-										
-											<tr
-												 class='item2'
-											>
-												<td class="attributes">&nbsp;</td>
-												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/GlobalDetector.html#stop">stop</a></b>()
-													</div>
-													<div class="description">Stop periodically monitoring</div>
+													<div class="description">reset all counters kepts by allocationTracker</div>
 												</td>
 											</tr>
 										
@@ -233,17 +186,15 @@
 					<div class="details props">
 						<div class="innerProps">
 							<h2 class="sectionTitle" id="constructor">
-								Class Detail
+								Namespace Detail
 							</h2>
 							
 							<div class="fixedFont">
-								<b>GlobalDetector</b>()
+								<b>allocationTracker</b>
 							</div>
 							
 							<div class="description">
-								Used to detect globals. works in node.js and browser
-
-from http://stackoverflow.com/questions/5088203/how-to-detect-creation-of-new-global-variables
+								
 								
 							</div>
 							
@@ -259,40 +210,6 @@ from http://stackoverflow.com/questions/5088203/how-to-detect-creation-of-new-gl
 	<!--
 	#### FIELD DETAILS
 	-->
-			
-				<section>
-					<div class="details props">
-						<div class="innerProps">
-							<h2 class="sectionTitle">
-								Field Detail
-							</h2>
-							
-							
-								<div class="fixedFont heading" id=".ignoreList">
-									<span class='lighter'>
-									&lt;static&gt; 
-									</span>
-									
-									
-									
-									<span class="light">GlobalDetector.</span><b>ignoreList</b>							
-								</div>
-								
-								<div class="description">
-									list of variables name to ignore. populated at constructor() time
-									
-									
-									
-								</div>
-								
-								
-									
-								
-								
-							
-						</div>
-					</div>
-				</section>
 			
 	<!--
 	#### METHOD DETAILS
@@ -311,18 +228,18 @@ from http://stackoverflow.com/questions/5088203/how-to-detect-creation-of-new-gl
 									<li 
 										 class='item0'
 									>
-										<div class="fixedFont heading" id="check">
+										<div class="fixedFont heading" id=".record">
 											<span class='lighter'>
-											
+											&lt;static&gt; 
 											</span>
 											
 											
 											
-											<b>check</b>(onChange)
+											<span class="light">allocationTracker.</span><b>record</b>(className)
 										</div>
 										
 										<div class="description">
-											Check if any new global has been declared
+											record an allocation of a class
 											
 											
 											
@@ -336,10 +253,10 @@ from http://stackoverflow.com/questions/5088203/how-to-detect-creation-of-new-gl
 												<dt class="heading">Parameters:</dt>
 												
 													<dt>
-														<span class="light fixedFont">{Function+}</span> <b>onChange</b>
+														<span class="light fixedFont">{String}</span> <b>className</b>
 														
 													</dt>
-													<dd>optional callback called synchronously if a new global is found</dd>
+													<dd>The class name under which this record is made</dd>
 												
 											</dl>
 										
@@ -351,18 +268,18 @@ from http://stackoverflow.com/questions/5088203/how-to-detect-creation-of-new-gl
 									<li 
 										 class='item1'
 									>
-										<div class="fixedFont heading" id="start">
+										<div class="fixedFont heading" id=".reset">
 											<span class='lighter'>
-											
+											&lt;static&gt; 
 											</span>
 											
+											<span class="light">{[type]}</span>
 											
-											
-											<b>start</b>(onChange, period)
+											<span class="light">allocationTracker.</span><b>reset</b>()
 										</div>
 										
 										<div class="description">
-											Start periodically monitoring
+											reset all counters kepts by allocationTracker
 											
 											
 											
@@ -372,53 +289,28 @@ from http://stackoverflow.com/questions/5088203/how-to-detect-creation-of-new-gl
 										
 										
 										
-											<dl class="detailList params">
-												<dt class="heading">Parameters:</dt>
+										
+										
+											<dl class="detailList nomargin">
+											
 												
-													<dt>
-														<span class="light fixedFont">{Function+}</span> <b>onChange</b>
-														
-													</dt>
-													<dd>optional callback called when a new global is found</dd>
 												
-													<dt>
-														<span class="light fixedFont">{Number+}</span> <b>period</b>
-														
-													</dt>
-													<dd>period at which it is checked</dd>
 												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{[type]}</span> [description]</dd>
+													
+												
+												
+												
+												
+												
+											
 											</dl>
-										
-										
-										
-										<div class="hr"></div>
-									</li>
-								
-									<li 
-										 class='item2'
-									>
-										<div class="fixedFont heading" id="stop">
-											<span class='lighter'>
-											
-											</span>
-											
-											
-											
-											<b>stop</b>()
-										</div>
-										
-										<div class="description">
-											Stop periodically monitoring
-											
-											
-											
-											
-										</div>
-										
-										
-										
-										
-										
 										
 										
 									</li>

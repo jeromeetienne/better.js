@@ -2,6 +2,8 @@
 
 var parseStacktrace	= require('../parseStacktrace')
 
+
+
 function aClass(){
 	var isConstructor	= this.constructor == aClass;
 	// if( isConstructor )	console.log('called with new')
