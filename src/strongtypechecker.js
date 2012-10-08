@@ -3,12 +3,36 @@
  */
 var StrongTypeChecker	= {};
 
+Object.prototype.__defineQGetter__	|| require('./queuablegettersetter.js')
+
+/**
+ * Check type with a object setter
+ * 
+ * @param  {Object} baseObject the base object which contains the property
+ * @param  {String} property   the string of the property name
+ * @param  {Array}  types      the allows tipe
+ */
+StrongTypeChecker.checkSetterType	= function(baseObject, property, types){
+	// check initial value
+	var value	= baseObject[property];
+	var isValid	= StrongTypeChecker.checkValueType(value, types)
+	console.assert(isValid, 'initial value got invalid type');
+	// setup the setter
+	baseObject.__defineQSetter__(property, function(value){
+		// check the value type
+		var isValid	= StrongTypeChecker.checkValueType(value, types);			
+		console.assert(isValid, 'invalid type');
+		// return the value
+		return value;
+	});
+};
+
 /**
  * function wrapper to check the type of function parameters and return value
  * @param  {Function} originalFn  the function to wrap
- * @param  {Array} paramsTypes allowed types for the paramter. array with each item is the allowed types for this parameter.
- * @param  {Array} returnTypes allowed types for the return value
- * @return {boolean} return isValid, so true if types matche, false otherwise
+ * @param  {Array}    paramsTypes allowed types for the paramter. array with each item is the allowed types for this parameter.
+ * @param  {Array}    returnTypes allowed types for the return value
+ * @return {boolean}  return isValid, so true if types matche, false otherwise
  */
 StrongTypeChecker.checkFunctionTypes	= function(originalFn, paramsTypes, returnTypes){
 	return function(){

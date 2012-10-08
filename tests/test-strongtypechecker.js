@@ -115,4 +115,32 @@ describe('StrongTypeChecker.checkFunctionTypes', function(){
 		};
 		console.assert(thrown, "No exception triggered!!");
 	});
+	
+
+});
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+describe('StrongTypeChecker.checkSetterType', function(){
+	var foo		= {
+		x	: 3
+	};
+	StrongTypeChecker.checkSetterType(foo, 'x', Number);
+
+	it('check accuratly the type thru a setter', function(){
+		foo.x	= 4;		
+	});
+	
+	it('fails when using an invalid type', function(){
+		var thrown	= false;
+		try{	
+			foo.x	= 'aString';		
+		}catch(e){ 
+			thrown	= true;
+		};
+		console.assert(thrown, "No exception triggered!!");
+	});
 });
