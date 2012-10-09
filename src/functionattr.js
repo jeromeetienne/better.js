@@ -1,3 +1,12 @@
+/**
+ * change global object function bar(){}.setAttr('bar').end();
+ * @param {string} fnName the name of the function 
+ */
+Function.prototype.setAttr	= function(fnName){
+	return fnAttr(this, fnName)
+}
+
+
 //////////////////////////////////////////////////////////////////////////////////
 //		Function Attribute						//
 //////////////////////////////////////////////////////////////////////////////////
@@ -40,6 +49,7 @@ var FnAttrClass	= function(originalFn, fnName){
 	this._fnName	= fnName	|| 'fnAttr'
 }
 
+FnAttrClass.prototype.end	=
 FnAttrClass.prototype.done	= function(){
 	return this._currentFn;
 }

@@ -16,3 +16,5 @@ foo	= fnAttr(foo, 'Fn.foo')
 foo();
 
 foo()
+
+
