@@ -18,6 +18,14 @@ var GcMonitor	= function(){
 		if( !window.performance || !window.performance.memory )	return 0;
 		return window.performance.memory.usedJSHeapSize;	
 	};
+	// TODO remove this usedHeapSize variable
+	this.usedHeapSize	= usedHeapSize;
+
+	// sanity check - if not available, output a warning
+	if( GcMonitor.isAvailable() === false ){
+		// open -a "/Applications/Google Chrome.app" --args --enable-memory-info
+		console.warn('memory info are unavailable... for chrome use --enable-memory-info. other browsers dont have this feature.')
+	}
 
 	/**
 	 * Start monitoring periodically
@@ -36,7 +44,7 @@ var GcMonitor	= function(){
 				var i 		= Math.floor(Math.log(bytes) / Math.log(1024));
 				return Math.round(bytes*precision / Math.pow(1024, i))/precision + ' ' + sizes[i];
 			};
-			console.warn(new Date + " -- GC occured!!! saved", bytesToSize(delta), ' consuming at ', bytesToSize(burnrate))
+			console.warn(new Date + " -- GC occured!!! saved", bytesToSize(delta), ' consuming at ', bytesToSize(burnRate))
 		}
 		timerid	= setInterval(function(){
 			_this.check(onChange);
@@ -51,7 +59,7 @@ var GcMonitor	= function(){
 	
 	var lastUsedHeap	= null;
 	var lastTimestamp	= null;
-	var burnrate		= null;	
+	var burnRate		= null;	
 	/**
 	 * Check if currently used memory is less than previous check. If so it 
 	 * is assume a GC occured
@@ -75,15 +83,15 @@ var GcMonitor	= function(){
 		// cycle; if so, then the garbage collector has kicked in
 		var deltaMem	= currUsedSize - lastUsedHeap;
 		if( deltaMem < 0 ){
-			onChange(-deltaMem, burnrate);		
+			onChange(-deltaMem, burnRate);		
 		}else{
 			var deltaTime	= present - lastTimestamp
 			var newBurnrate	= deltaMem / (deltaTime/1000);
-			// if there is a previous burnrate, smooth with it
-			if( burnrate !== null ){
-				burnrate	= burnrate * 0.7 + newBurnrate * 0.3;
+			// if there is a previous burnRate, smooth with it
+			if( burnRate !== null ){
+				burnRate	= burnRate * 0.7 + newBurnrate * 0.3;
 			}else{
-				burnrate	= newBurnrate;
+				burnRate	= newBurnrate;
 			}
 		}
 
@@ -92,11 +100,12 @@ var GcMonitor	= function(){
 	}
 	
 	/**
-	 * getter for the burnrate
+	 * getter for the burnRate
 	 * @type {Number}
 	 */
-	this.burnrate	= function(){
-		return burnrate;
+	this.burnRate	= function(){
+		if( burnRate === null )	return 0;
+		return burnRate;
 	}
 }
 
