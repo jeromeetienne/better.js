@@ -71,6 +71,7 @@ StrongTypeCheck.value	= function(value, types){
 			var valid	= typeof(value) === 'string';			
 		}else if( typeof(type) === 'string' && type.toLowerCase() === 'nonan' ){
 			if( value !== value )	return false;
+			var valid	= false;
 		}else {
 			var valid	= value instanceof type;
 		}
