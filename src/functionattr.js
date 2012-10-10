@@ -1,5 +1,6 @@
 /**
  * change global object function bar(){}.setAttr('bar').end();
+ * 
  * @param {string} fnName the name of the function 
  */
 Function.prototype.setAttr	= function(fnName){

@@ -151,16 +151,23 @@ Stacktrace.Tracker.prototype.reset	= function(){
 /**
  * Reporter in a String
  * 
- * @param  {[type]} classNameRegExp [description]
- * @param  {[type]} maxNOrigin      [description]
- * @return {[type]}                 [description]
+ * @param  {RegExp} classNameRegExp regexp of the classname to keep
+ * @param  {Number} maxNOrigin      nb origin to display per class
  */
 Stacktrace.Tracker.prototype.reportString	= function(classNameRegExp, maxNOrigin){
+	classNameRegExp	= classNameRegExp	|| /./;
 	maxNOrigin	= maxNOrigin !== undefined ? maxNOrigin	: 3;
 	var output	= [];
 	var classNames	= Object.keys(this._klasses);
-// do a filter per className
-// do a sort per className too
+	// sort classes by descending .counter
+	classNames.sort(function(a, b){
+		return this._klasses[b].counter - this._klasses[a].counter;
+	}.bind(this));
+	// filter by classname
+	classNames	= classNames.filter(function(className){
+		return className.match(classNameRegExp) ? true : false
+	});
+	// display the rest
 	classNames.forEach(function(className){
 		var klass	= this._klasses[className];
 		output.push(className+': allocated '+klass.counter+' times');

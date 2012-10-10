@@ -21,5 +21,8 @@ It got
   * autogenerate function parameter check
   
 #### TODO
-* most allocationtracker.js go in stacktrace.track
-* rename strongtypecheck in typecheck.value()
+* console.log to filter by origin
+  * DONE not tested
+* stacktrace.track to filter by origin and order by occurance
+  * DONE to test
+* fnattr to track usage
