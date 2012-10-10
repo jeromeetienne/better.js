@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
-		<title>ConsoleLogger | debug.js library</title>
+		<title>Stacktrace | debug.js library</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<meta name="mobileoptimized" content="0" />
@@ -74,12 +74,12 @@
 			<header>
 				<h1 class="classTitle">
 					
-					Namespace <span>ConsoleLogger</span>
+					Namespace <span>Stacktrace</span>
 				</h1>
 				
 				<div class="intro">
 					<p class="description summary">
-						logger compatible with console.* calls
+						
 					</p>
 						
 					
@@ -87,7 +87,7 @@
 							
 							
 							
-								<li>Defined in: <a href="../symbols/src/src_consolelogger.js.html">consolelogger.js</a></li>
+								<li>Defined in: <a href="../symbols/src/src_stacktrace.js.html">stacktrace.js</a></li>
 							
 							
 						</ul>
@@ -98,7 +98,7 @@
 			
 				<section>
 					<div class="props">
-						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class ConsoleLogger.">
+						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Stacktrace.">
 							<caption class="sectionTitle">Namespace Summary</caption>
 							<thead>
 								<tr>
@@ -111,7 +111,7 @@
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription" >
 										<div class="fixedFont">
-											<b><a href="../symbols/ConsoleLogger.html#constructor">ConsoleLogger</a></b>
+											<b><a href="../symbols/Stacktrace.html#constructor">Stacktrace</a></b>
 										</div>
 										<div class="description"></div>
 									</td>
@@ -126,6 +126,45 @@
 	<!--
 	#### METHODS SUMMARY
 	-->
+			
+				<section>
+					
+					
+					<div class="props">
+						<h2 class="sectionTitle">Method Summary</h2>
+						
+						
+							<nav>
+								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class Stacktrace.">
+									<thead>
+										<tr>
+											<th scope="col">Method Attributes</th>
+											<th scope="col">Method Name and Description</th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										
+											<tr
+												 class='item0'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">Stacktrace.<b><a href="../symbols/Stacktrace.html#.parse">parse</a></b>(error, error)
+													</div>
+													<div class="description">parse the stacktrace of an Error</div>
+												</td>
+											</tr>
+										
+									</tbody>
+								</table>
+							</nav>
+						
+					
+						
+					</div>
+				</section>
 			
 			
 	<!--
@@ -144,7 +183,7 @@
 							</h2>
 							
 							<div class="fixedFont">
-								<b>ConsoleLogger</b>
+								<b>Stacktrace</b>
 							</div>
 							
 							<div class="description">
@@ -168,6 +207,88 @@
 	<!--
 	#### METHOD DETAILS
 	-->		
+			
+				<section>
+					<div class="details props">
+						<div class="innerProps">
+							<h2 class="sectionTitle">
+								Method Detail
+							</h2>
+							
+							<ul class="methodDetail" id="MethodDetail">
+								
+								
+									<li 
+										 class='item0'
+									>
+										<div class="fixedFont heading" id=".parse">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											<span class="light">{Array.<Object>}</span>
+											
+											<span class="light">Stacktrace.</span><b>parse</b>(error, error)
+										</div>
+										
+										<div class="description">
+											parse the stacktrace of an Error
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Error|undefined}</span> <b>error</b>
+														
+													</dt>
+													<dd>optional error to parse. if not provided, generate one.</dd>
+												
+													<dt>
+														<b>error</b>
+														
+													</dt>
+													<dd></dd>
+												
+											</dl>
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{Array.<Object>}</span> parsed stacktrace</dd>
+													
+												
+												
+												
+												
+												
+											
+											</dl>
+										
+										
+									</li>
+								
+							</ul>
+						</div>
+					</div>
+				</section>
 			
 			
 	<!--

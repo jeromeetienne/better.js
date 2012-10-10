@@ -7,14 +7,14 @@ var parseStacktrace	= parseStacktrace	|| require('./parsestacktrace.js');
 
 ConsoleLogger.Severity	= {
 	'none'	: 0,
-	'log'	: 1,
+	'error'	: 1,
 	'warn'	: 2,
-	'error'	: 3
+	'log'	: 3,
 };
 
 ConsoleLogger.Severity.dflLevel	= ConsoleLogger.Severity.warn;
 
-ConsoleLogger._filter	= function(stackFrame, severity){
+ConsoleLogger.filterTest	= function(severity){
 	var stacktrace	= parseStacktrace();
 	var stackFrame	= stacktrace[2];
 	console.log('url', stackFrame.url)

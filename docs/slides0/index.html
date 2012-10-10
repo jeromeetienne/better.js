@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Debug.js Slides</title>
+	<base target=”_blank” />
+	<meta charset='utf-8'/>
+	<script src='slides.js'></script>
+</head>
+
+<body style='display: none'> 
+	<style>
+		[data-markdown] em {
+			color		: orange;
+			font-style	: normal;
+			font-weight	: bolder;
+			
+		}
+		[data-markdown] h3 {
+			font-size	: 180%;
+		}
+	</style>
+	<section class='slides layout-regular template-default'>
+
+<!-- ****************************************************************************
+		Talk Introduction
+********************************************************************************* -->
+	<article data-markdown>
+		
+		# Debug.js
+		
+		## **Javascript** Made **Easier to debug**
+		
+		Jerome Etienne
+	</article>
+<!-- ****************************************************************************
+		presentation
+********************************************************************************* -->
+	<article data-markdown>
+		### Debugging Javascript is hard
+
+		* weak typing
+		* no function parameter check
+		* no value bound check
+		* no stacktrace instrumentation
+	</article>
+	<article data-markdown>
+		### Debug.js saves the day
+		
+		(superman time)
+		
+		## It makes *Javascript Easier to debug* :)
+	</article>
+	<article data-markdown>
+		## How ?
+	</article>
+	<article data-markdown>
+		### Debug.js Features
+
+		* Strong typing
+		  * variable type checking
+		  * type checking for functions
+		* value bound checking
+		* function attributes
+	</article>
+	<article data-markdown>
+		### More Features of Debug.js 
+
+		* NaN detection
+		* callstack extraction
+		* implementation of __LINE__ and __FILE__
+		* assert which works
+		* conditional breakpoint
+		* queuable getter/setter
+	</article>
+	<article data-markdown>
+		## Let's see that!
+	</article>
+	<article data-markdown>
+		
+		# *Debug.js* Features
+	</article>
+	<article data-markdown>
+		### NaN detection
+		
+		* Usefull when you do math, like in WebGL :)
+		
+		```
+		var foo	= {
+			bar	: 32,
+		};
+		debug.noNaN(foo, 'bar')
+		foo.bar	= NaN;
+		// Trigger an assert
+		```
+	</article>
+	<article data-markdown>
+		### stacktrace extraction
+		
+		```
+		var stacktrace	= debug.stacktrace();
+		console.log(JSON.Stringify(stacktrace));
+		// Display the following
+		// [{
+		//	"url":"http://127.0.0.1:8000/examples/playground.html",
+		//	"line":13,
+		//	"column":25
+		// }]
+		```
+	</article>
+
+	<article data-markdown>
+		### Assert which works!
+		
+		* officiel console.assert() is eyes candy only
+		* assert is meant to stop excetion
+		
+		#### Let's Fix That
+		
+		```
+		debug.assert(false, "always fails here");
+		```
+		
+		* trigger exception or even javascript ```debugger```
+	</article>
+	<article data-markdown>
+		### Conditional breakpoint
+		
+		* based on ```debugger``` keyword
+		
+		```
+		var foo	= function(){
+			console.log("bar");
+		}
+		foo	= debug.breakpoint(foo);
+		// this will never be reached
+		```
+		
+		```
+		var foo	= function(){
+			console.log("bar");
+		}
+		foo	= debug.breakpoint(foo, function(){
+			return 
+		});
+		// this will never be reached
+		```
+	</article>
+	<article data-markdown>
+		### Supporting \_\_LINE\_\_ + \_\_FILE\_\_
+		
+		* Exactly like in C (thanks to getter/setter :)
+		
+		```
+		console.log("current line: ", debug.__LINE__)
+		// current line: 8 
+		console.log("current file: ", debug.__FILE__)
+		// current file: playground.html 
+		```
+	</article>
+	<article data-markdown>
+		# Queuable Getter Setter
+	</article>
+	<article data-markdown>
+		### queuable getter setter
+		
+		* modern javascript for Object.__defineGetter__
+		* used to intercept property access
+
+		#### Official __defineGetter
+		
+		```
+		var foo	= {
+			bar	: 1
+		};
+		console.log("bar", foo.bar);
+		// display in console "1"
+		foo.__defineGetter__('bar', function(){
+			return 2;
+		});
+		console.log("bar", bar);
+		// display in console $ 2
+		```
+	</article>
+	<article data-markdown>
+		### Any issues getter / setter ?
+		
+		* your can't chain multiple getter!
+		
+		```
+		var foo	= { bar	: 1 };
+		foo.__defineGetter__('bar', function(){
+			console.log("blabla")
+			return 2;
+		});
+		foo.__defineGetter__('bar', function(){
+			return 3;
+		});
+		console.log("bar", foo.bar);
+		// display in console "3" and not "blabal"
+		```
+
+		* same as in window.onLoad **vs** window.addEventListener('load', fn)
+	</article>
+	<article data-markdown>
+		## queuable getter setter to the rescue
+	</article>
+	<article data-markdown>
+		### queuable getter setter
+		
+		```
+		var foo	= {
+			bar	: 32
+		};
+		foo.__defineQGetter__('bar', function(value){
+			return value*2;
+		});
+		foo.__defineQGetter__('bar', function(value){
+			return value+1;
+		});
+		console.log( foo.bar )
+		// display "65" so they are queued! :)
+		```
+		
+		Same for ```Object.__defineQSetter__``
+	</article>
+<!-- ****************************************************************************
+		presentation
+********************************************************************************* -->
+	<article data-markdown>
+		### Function Attributes
+
+		* ```obsolete()``` : display a obsolete message 
+		* ```log()```/```warn()```/```error()```: display logging message
+		* ```timestamp()```: display timestamp when entering
+		* ```time(id)```: measure with console.time().
+		  * So usefull for [chrome tracing](http://www.html5rocks.com/en/tutorials/games/abouttracing/)
+		* ```profile(id)```: measure with console.profile()
+		
+		```
+			var foo = function(){
+				return "bar";
+			};
+			foo	= debug.fnAttr(foo).timestamp().obsolete().done();
+			foo	= debug.fnAttr(foo).profile();
+		```
+	</article>
+	<article data-markdown>
+		### Variable Type checking
+		
+		```
+		var foo	= {
+			bar	: 32,
+		};
+		debug.checkType(foo, 'bar', Number);
+		foo.bar	= "aString";
+		// trigger an assert
+		```
+	</article>
+	<article data-markdown>
+		### Value Bound checking
+		
+		```
+		var foo	= {
+			bar	: 32
+		};
+		debug.checkValueRange(foo, 'bar', function(value){
+			return value < 40;
+		});
+		foo.bar	= 25;
+		// all is OK
+		foo.bar	= 99;
+		// Trigger an assert
+		```
+		</article>
+<!-- *****************************************************************************
+**		THE END								**
+******************************************************************************* -->
+	<article data-markdown>
+		### Debug.js
+
+		#### *Javascript Made Easier to Debug*
+		
+		* **strong typing** AND **dynamic value bound check**
+		  * **=>** early bug detection
+		* function attribute
+		  * easier profiling ```.time()```
+		  * easier logging ```.log()```
+		* debug with .assert() and .breakpoint()
+		* Queuable getter/setter to make them usefull at last!
+	</article>
+	<article data-markdown>
+		# That's all folks
+		
+		### Question ?
+		
+		Jerome Etienne
+	</article>
+	<script>
+	// ==UserScript==
+	// @name Use Markdown, sometimes, in your HTML.
+	// @author Paul Irish <http://paulirish.com/>
+	// @link http://git.io/data-markdown
+	// @match *
+	// ==/UserScript==
+	
+	
+	// If you're not using this as a userscript just delete from this line up. It's cool, homey.
+	
+	(function markdownSlideToHtml(){
+	  
+		if (!window.Showdown){
+			var scr		= document.createElement('script');
+			scr.onload	= markdownSlideToHtml;
+			scr.src		= 'vendor/showdown.js';
+			document.body.appendChild(scr);
+			return;
+		}
+	
+		[].forEach.call(document.querySelectorAll('[data-markdown]'), function fn(elem){
+			// strip leading whitespace so it isn't evaluated as code
+			//var text      = elem.textContent.replace(/\n\s*\n/g,'\n');
+			// jerome- to have better support of html within markdown
+			var text      = elem.innerHTML;
+			//console.log("origin innerHTML", text.split('\n'));
+			// remove all blanks lines
+			//text		= text.replace(/\n\s*\n/g,'\n');
+			//console.log("step text", text)
+			// set indentation level so your markdown can be indented within your HTML
+			var matches	= text.match(/^\n([ \t]*)/);
+			var leadingws	= matches[1].length;
+			//console.log("first line", matches)
+			//console.log("leadingws", leadingws)
+			var regex	= new RegExp('\\n[ \\t]{' + leadingws + '}','g');
+			var md		= text.replace(regex,'\n');
+			//console.log("pre md", md);
+			html      = (new Showdown.converter()).makeHtml(md);
+			//console.log("post html", html);
+	
+			// to support prettyprint
+			html		= html.replace(/<code><br \/>/g,'<pre class="prettyprint">');
+			html		= html.replace(/<br \/><\/code>/g,'</pre>');
+			// unescape [><]
+			html		= html.replace(/&amp;gt;/g,'>');
+			html		= html.replace(/&amp;lt;/g,'<');
+			//console.log("escaped html", html);
+		  
+			// here, have sum HTML
+			elem.innerHTML = html;
+		});
+		// callback prettyprint to highlight code found in markdown
+		prettyPrint();
+	}());
+
+//* http://jsclassroom.com
+//* http://jscoaches.com
+//* http://html5coaches.com
+//* http://jsuni.com
+//* http://javascriptuni.com
+//
+//prefix: js html5 javascript
+//
+//suffix: school classroom univesity academy class education 
+//
+//
+//* https://github.com/hakimel/reveal.js/issues/15 reveal.js in markdown
+//  * do the same for html5slide
+//  * standalone, no compilation, no need to commit all to markdown
+//* https://github.com/vinyll/html5-slides-markdown does well but not proper target
+//  * nice on how to make slides in markdown tho
+//
+// http://tbassetto.github.com/chrome-dev-tools-tips-and-tricks/#8
+/*
+ * Controls flow:
+ * - describe the issue:
+ *   http://eloquentjavascript.net/chapter2.html
+ * - fix with Flow.js
+ *
+ * Js Basic:
+ * - if / else
+ * - condition
+ * - what is true/false
+ * - falsy values
+ *
+ *
+ * 
+*/
+	</script> 
+</body>
+</html>

@@ -19,3 +19,7 @@ It got
 * https://developers.google.com/closure/compiler/docs/js-for-compiler
   * use same format
   * autogenerate function parameter check
+  
+#### TODO
+* most allocationtracker.js go in stacktrace.track
+* rename strongtypecheck in typecheck.value()

@@ -36,6 +36,11 @@ describe('StrongTypeCheck.value', function(){
 		var types	= [Number, 'noNaN'];
 		var valid	= StrongTypeCheck.value(value, types)
 		console.assert( valid === true )
+
+		var value	= NaN;
+		var types	= ['noNaN'];
+		var valid	= StrongTypeCheck.value(value, types)
+		console.assert( valid === false )
 	});
 	
 	it('is valid with String', function(){

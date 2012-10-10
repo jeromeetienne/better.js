@@ -11,7 +11,8 @@ foo	= fnAttr(foo, 'Fn.foo')
 	.log('bonjour')
 	.after(function(){
 		console.log('superafter')
-	}).done();
+	})
+	.end();
 
 foo();
 

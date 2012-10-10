@@ -19,5 +19,5 @@ new aClass2();
 new aClass2();
 
 
-console.dir(allocationTracker._klasses);
+//console.dir(allocationTracker._klasses);
 console.log(allocationTracker.reportString());
