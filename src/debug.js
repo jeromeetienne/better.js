@@ -12,7 +12,7 @@
 */
 var debug	= {};
 
-Object.prototype.__defineQGetter__	|| require('./queuablegettersetter.js')
+Object.prototype.__defineQGetter__	|| require('./queueablegettersetter.js')
 
 //////////////////////////////////////////////////////////////////////////////////
 //		misc								//

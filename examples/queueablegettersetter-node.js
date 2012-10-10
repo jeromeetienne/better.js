@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // get the class
-var debug	= require('../src/debug.js');
+var debug	= require('../src/queueablegettersetter.js');
 
 var foo		= {
 	x	: 3

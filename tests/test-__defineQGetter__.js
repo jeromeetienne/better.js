@@ -1,4 +1,4 @@
-Object.prototype.__defineQGetter__	|| require('../src/queuablegettersetter.js')
+Object.prototype.__defineQGetter__	|| require('../src/queueablegettersetter.js')
 
 describe('Object.__defineQGetter__', function(){
 	// define sample object

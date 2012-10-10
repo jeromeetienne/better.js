@@ -3,7 +3,7 @@
  */
 var StrongTypeCheck	= {};
 
-Object.prototype.__defineQGetter__	|| require('./queuablegettersetter.js')
+Object.prototype.__defineQGetter__	|| require('./queueablegettersetter.js')
 
 /**
  * Check type with a object setter

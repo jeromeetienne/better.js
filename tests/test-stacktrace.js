@@ -1,10 +1,10 @@
-var parseStacktrace	= parseStacktrace	|| require('../src/parsestacktrace.js');
+var Stacktrace	= Stacktrace	|| require('../src/stacktrace.js');
 
 
-describe('parseStacktrace', function(){
+describe('Stacktrace.parse()', function(){
 	
 	function getStack(){
-		return parseStacktrace();
+		return Stacktrace.parse();
 	}
 	
 	it('is able to get the function name of the stackframe', function(){
