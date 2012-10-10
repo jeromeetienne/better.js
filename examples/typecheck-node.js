@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-var StrongTypeCheck	= require('../src/strongtypecheck.js');
+var TypeCheck	= require('../src/typecheck.js');
 
 
 var value	= 'aString';
 var types	= [Number,];
-var valid	= StrongTypeCheck.value(value, types)
+var valid	= TypeCheck.value(value, types)
 console.assert( valid === false )
 //console.log('valid', valid);
 //console.log('value', value, valid ? 'is' : 'isnt', 'of types', types)
@@ -15,7 +15,7 @@ var fct		= function(aString, aNumber){
 	return aString + aNumber;
 }
 
-fct	= StrongTypeCheck.fn(fct, [String, Number], String);
+fct	= TypeCheck.fn(fct, [String, Number], String);
 
 var result	= fct('bla', 99)
 console.log('result', result)

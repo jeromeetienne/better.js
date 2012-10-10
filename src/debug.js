@@ -75,22 +75,6 @@ debug.breakpoint	= function(fn, conditionFn){
 }
 
 /**
- * assert which actually try to stop the excecution
- * if debug.assert.useDebugger is falsy, throw an exception. else trigger the
- * debugger. It default to false
- *
- * @param {Boolean} condition the condition which is asserted
- * @param {String} message the message which is display is condition is falsy
- * @param {Boolean} [useDebugger] the condition which is asserted
-*/
-debug.assert	= function(condition, message, useDebugger){
-	if( condition )	return;
-	if( debug.assert.useDebugger || useDebugger )	debugger;
-	throw new Error(message	|| "assert Failed")
-}
-debug.assert.useDebugger	= false;
-
-/**
  * extract a stacktrace. TODO make it work in node.js/chrome/firefox and modern browsers
  * 
  * @param {Integer} [nShift] number of calls to skip in the stacktrace 
@@ -124,6 +108,22 @@ debug.stacktrace	= function(nShift){
 	// return the result
 	return locations;
 }
+
+/**
+ * assert which actually try to stop the excecution
+ * if debug.assert.useDebugger is falsy, throw an exception. else trigger the
+ * debugger. It default to false
+ *
+ * @param {Boolean} condition the condition which is asserted
+ * @param {String} message the message which is display is condition is falsy
+ * @param {Boolean} [useDebugger] the condition which is asserted
+*/
+debug.assert	= function(condition, message, useDebugger){
+	if( condition )	return;
+	if( debug.assert.useDebugger || useDebugger )	debugger;
+	throw new Error(message	|| "assert Failed")
+}
+debug.assert.useDebugger	= false;
 
 
 /**

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // get the class
-var debug	= require('../src/queueablegettersetter.js');
+require('../src/queueablegettersetter.js');
 
 var foo		= {
 	x	: 3
@@ -15,3 +15,10 @@ foo.__defineQGetter__('x', function(value){
 
 console.log('after new getter: foo.x ===', foo.x)
 
+
+
+require('./js/linefilegettersetter.js');
+
+(function blabla(){
+	console.log('super', __FILE__, __LINE__, __FUNCTION__)	
+})();
