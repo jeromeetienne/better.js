@@ -76,8 +76,13 @@ TypeCheck.value	= function(value, types){
 		}else if( type === String ){
 			var valid	= typeof(value) === 'string';			
 		}else if( typeof(type) === 'string' && type.toLowerCase() === 'nonan' ){
-			if( value !== value )	return false;
-			var valid	= false;
+			var valid	= value === value;
+			if( valid === false )	return false;
+			continue;	// continue as it is a validator
+		}else if( type instanceof TypeCheck._ValidatorClass ){
+			var valid	= type.fn(value);
+			if( valid === false )	return false;
+			continue;	// continue as it is a validator
 		}else {
 			var valid	= value instanceof type;
 		}
@@ -86,6 +91,32 @@ TypeCheck.value	= function(value, types){
 	// return the just computed result
 	return result;
 }
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Validator creator. a Validator is a function which is used to validate .value().
+ * All the validators MUST be true for the checked value to be valid. 
+ * 
+ * @param {Function(value)} fn function which return true if value is valid, false otherwise
+ */
+TypeCheck.Validator	= function(fn){
+	return new TypeCheck._ValidatorClass(fn)
+}
+
+/**
+ * Internal class to be recognisable by TypeCheck.value()
+ * 
+ * @param  {Function} fn function which return true if value is valid, false otherwise
+ */
+TypeCheck._ValidatorClass= function(fn){
+	console.assert(fn instanceof Function);
+	this.fn	= fn;
+}
+
+
 
 // export the namespace in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;

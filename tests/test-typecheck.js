@@ -166,3 +166,37 @@ describe('TypeCheck.setter', function(){
 		console.assert(thrown, "No exception triggered!!");
 	});
 });
+
+describe('TypeCheck.Validator', function(){
+	it('check accuratly NaN positive test', function(){
+		var value	= 99;
+		var types	= [Number, 'noNaN'];
+		var valid	= TypeCheck.value(value, types);
+		console.assert( valid === true )
+	});
+
+	it('check accuratly NaN negative test', function(){
+		var value	= NaN;
+		var types	= [Number, 'noNaN'];
+		var valid	= TypeCheck.value(value, types);
+		console.assert( valid === false )
+	});
+
+	it('check accuratly with BoundChecking positive', function(){
+		var value	= 99;
+		var types	= [Number, TypeCheck.Validator(function(value){
+			return value < 100;
+		})];
+		var valid	= TypeCheck.value(value, types);
+		console.assert( valid === true )
+	});
+
+	it('check accuratly with BoundChecking negative', function(){
+		var value	= 101;
+		var types	= [Number, TypeCheck.Validator(function(value){
+			return value < 100;
+		})];
+		var valid	= TypeCheck.value(value, types);
+		console.assert( valid === false )
+	});
+});
