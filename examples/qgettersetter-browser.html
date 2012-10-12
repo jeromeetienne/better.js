@@ -1,5 +1,5 @@
 <!doctype html><title>examples</title>
-<script src="../src/queueablegettersetter.js"></script>
+<script src="../src/qgettersetter.js"></script>
 
 <script src="../src/stacktrace.js"></script>
 <script src="./js/linefilegettersetter.js"></script>
@@ -18,5 +18,8 @@ foo.__defineQGetter__('x', function(value){
 console.log('after new getter: foo.x===', foo.x)
 
 
-console.log('super', __FILE__, __LINE__)
+(function blabla(){
+	console.log('super', __FILE__, __LINE__, __FUNCTION__)	
+})();
+
 </script></body>

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // get the class
-require('../src/queueablegettersetter.js');
+require('../src/qgettersetter.js');
 
 var foo		= {
 	x	: 3

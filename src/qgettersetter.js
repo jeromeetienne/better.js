@@ -18,7 +18,7 @@
 	 * @param  {Object} baseObject The base object on which we operate
 	 * @param  {String} property   The string of property
 	 */
-	var _QueueableGetterSetter	= function(baseObject, property){
+	var _QGetterSetter	= function(baseObject, property){
 		// sanity check 
 		console.assert( typeof(baseObject) === 'object' );
 		console.assert( typeof(property) === 'string' );
@@ -51,16 +51,16 @@
 	// Override prototype of global ```Object```
 	Object.prototype.__defineQGetter__	= function(property, getterFn){
 		var name	= "__dbgGetSet_" + property;
-		// init _QueueableGetterSetter for this property if needed
-		this[name]	= this[name] || new _QueueableGetterSetter(this, property);
+		// init _QGetterSetter for this property if needed
+		this[name]	= this[name] || new _QGetterSetter(this, property);
 		// setup the new getter
 		this[name]._getters.push(getterFn)
 	};
 	
 	Object.prototype.__defineQSetter__	= function(property, setterFn){
 		var name	= "__dbgGetSet_" + property;
-		// init _QueueableGetterSetter for this property if needed
-		this[name]	= this[name] || new _QueueableGetterSetter(this, property);
+		// init _QGetterSetter for this property if needed
+		this[name]	= this[name] || new _QGetterSetter(this, property);
 		// setup the new setter
 		this[name]._setters.push(setterFn)
 	};
