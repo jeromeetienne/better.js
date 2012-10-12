@@ -121,10 +121,11 @@ Stacktrace.Tracker	= function(){
  * record an allocation of a class
  * @param  {String} className The class name under which this record is made
  */
-Stacktrace.Tracker.prototype.record	= function(className){
+Stacktrace.Tracker.prototype.record	= function(className, stackLevel){
+	stackLevel		= stackLevel !== undefined ? stackLevel : 2;
 	// init variable
 	var at			= Stacktrace.Track;
-	var stackFrame		= Stacktrace.parse()[2];
+	var stackFrame		= Stacktrace.parse()[stackLevel];
 	// init Stacktrace.Track._klasses entry if needed
 	this._klasses[className]= this._klasses[className]	|| {
 		counter		: 0,
@@ -146,6 +147,15 @@ Stacktrace.Tracker.prototype.record	= function(className){
  */
 Stacktrace.Tracker.prototype.reset	= function(){
 	this._klasses	= {};
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+Stacktrace.Tracker.prototype.dump	= function(){
+	var report	= this.reportString.apply(this, arguments)
+	console.log(report);
 }
 
 /**
