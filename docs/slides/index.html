@@ -42,7 +42,7 @@
 <section data-markdown>
 	# Debug.js
 	
-	## Bunch of tools to help debug javascript
+	## Tools to help debug javascript
 </section>
 <!-- ****************************************************************************
 		presentation
@@ -162,7 +162,98 @@
 </section>
 <section>
 	<section data-markdown>
-		# Strong Type Checker.js
+		# Allocation Tracker.js
+		
+		## Find out who create too many objects
+	</section>
+	<section data-markdown>
+		## Principles
+		
+		* Object allocation triggers gc pauses... **BAD**
+		* Track Where allocation happens
+		* Track How many times it happens
+		* Track When allocation happen
+	</section>
+</section>
+<section>
+	<section data-markdown>
+		# Object Pool.js
+		
+		## Use Pool to reduce garbage collection
+	</section>
+	<section data-markdown>
+		## Principle
+		
+		1. reuse old objects 
+		2. avoid creating new objects
+		2. reduce garbage collection
+	</section>
+	<section data-markdown>
+		## Operations
+		
+		* we put objects in pool
+		* when a object is needed, it is *acquired* from the pool
+		* when it is no more needed, it is *released* to the pool
+	</section>
+	<section data-markdown>
+		## What to track ?
+		
+		* **free and allocated object ?**
+		  * maintain 2 list
+		  * track acquired and released objects
+
+		* **Only Free Objects ?**
+		  * track only free objects
+		  * maintain 1 list 
+
+		* **Free is faster but get less info**
+	</section>
+	<section data-markdown>
+		## What to track ?
+		
+		* Only free means less info
+		* so unable to track unreleased object
+		* so unable to track **leak**
+		* important feature for 2 lists pool
+	</section>
+	<section data-markdown>
+		## Performance
+		
+		* CPU performance ?
+		* Consequence on GC ?
+	</section>
+	<section data-markdown>
+		## API
+
+		#### Declaration	
+		```
+		ObjectPool.mixin(Vector3);
+		```
+		
+		#### Acquisition	
+		```
+		var vector	= Vector3.create();
+		```
+		
+		#### Releasing
+		```
+		vector.release();
+		```
+		
+		#### simple enougth
+	</section>
+	<section data-markdown>
+		## Change the API So migration needed :(
+
+		* apply it on which object
+		  * use allocationtracker.js	
+		* gain depends on class complexity
+		  * when a class is complex engouth to benefit from pool
+	</section>
+</section>
+<section>
+	<section data-markdown>
+		# Type Checker.js
 		
 		## Strong typing for javascript
 	</section>
@@ -401,6 +492,16 @@
 		```
 		
 		Same for Object.\_\_defineQSetter\_\_
+	</section>
+	<section data-markdown>
+		## TODO
+		
+		* link with the way it is done by apple
+		  * sproutcore and co
+		* link to previous work
+		  * [computed property](http://emberjs.com/documentation/#toc_computed-properties-getters) from [ember.js](http://emberjs.com/)
+		* im sure there is a pattern of this
+		  * [Mutator Method](http://en.wikipedia.org/wiki/Mutator_method#JavaScript_example) 
 	</section>
 </section>
 <section data-markdown>

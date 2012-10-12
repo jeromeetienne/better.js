@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
-		<title>allocationTracker | debug.js library</title>
+		<title>ObjectPool | debug.js library</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<meta name="mobileoptimized" content="0" />
@@ -76,7 +76,7 @@
 			<header>
 				<h1 class="classTitle">
 					
-					Namespace <span>allocationTracker</span>
+					Class <span>ObjectPool</span>
 				</h1>
 				
 				<div class="intro">
@@ -89,7 +89,7 @@
 							
 							
 							
-								<li>Defined in: <a href="../symbols/src/src_allocationtracker.js.html">allocationtracker.js</a></li>
+								<li>Defined in: <a href="../symbols/src/src_objectpool.js.html">objectpool.js</a></li>
 							
 							
 						</ul>
@@ -100,8 +100,8 @@
 			
 				<section>
 					<div class="props">
-						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class allocationTracker.">
-							<caption class="sectionTitle">Namespace Summary</caption>
+						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class ObjectPool.">
+							<caption class="sectionTitle">Class Summary</caption>
 							<thead>
 								<tr>
 									<th scope="col">Constructor Attributes</th>
@@ -113,9 +113,9 @@
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription" >
 										<div class="fixedFont">
-											<b><a href="../symbols/allocationTracker.html#constructor">allocationTracker</a></b>
+											<b><a href="../symbols/ObjectPool.html#constructor">ObjectPool</a></b>(klass)
 										</div>
-										<div class="description"></div>
+										<div class="description">Implement a Object Pool</div>
 									</td>
 								</tr>
 							</tbody>
@@ -128,6 +128,45 @@
 	<!--
 	#### METHODS SUMMARY
 	-->
+			
+				<section>
+					
+					
+					<div class="props">
+						<h2 class="sectionTitle">Method Summary</h2>
+						
+						
+							<nav>
+								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class ObjectPool.">
+									<thead>
+										<tr>
+											<th scope="col">Method Attributes</th>
+											<th scope="col">Method Name and Description</th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										
+											<tr
+												 class='item0'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">ObjectPool.<b><a href="../symbols/ObjectPool.html#.mixin">mixin</a></b>(klass)
+													</div>
+													<div class="description">mixin an ObjectPool into a class</div>
+												</td>
+											</tr>
+										
+									</tbody>
+								</table>
+							</nav>
+						
+					
+						
+					</div>
+				</section>
 			
 			
 	<!--
@@ -142,20 +181,31 @@
 					<div class="details props">
 						<div class="innerProps">
 							<h2 class="sectionTitle" id="constructor">
-								Namespace Detail
+								Class Detail
 							</h2>
 							
 							<div class="fixedFont">
-								<b>allocationTracker</b>
+								<b>ObjectPool</b>(klass)
 							</div>
 							
 							<div class="description">
-								
+								Implement a Object Pool
 								
 							</div>
 							
 							
 						
+							
+								<dl class="detailList params">
+									<dt class="heading">Parameters:</dt>
+									
+										<dt>
+											<span class="light fixedFont">{<a href="../symbols/Function.html">Function</a>}</span>  <b>klass</b>
+											
+										</dt>
+										<dd>the constructor of the class used in the pool</dd>
+									
+								</dl>
 							
 							
 							
@@ -170,6 +220,61 @@
 	<!--
 	#### METHOD DETAILS
 	-->		
+			
+				<section>
+					<div class="details props">
+						<div class="innerProps">
+							<h2 class="sectionTitle">
+								Method Detail
+							</h2>
+							
+							<ul class="methodDetail" id="MethodDetail">
+								
+								
+									<li 
+										 class='item0'
+									>
+										<div class="fixedFont heading" id=".mixin">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											
+											
+											<span class="light">ObjectPool.</span><b>mixin</b>(klass)
+										</div>
+										
+										<div class="description">
+											mixin an ObjectPool into a class
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{<a href="../symbols/Function.html">Function</a>}</span> <b>klass</b>
+														
+													</dt>
+													<dd>constructor function of the class</dd>
+												
+											</dl>
+										
+										
+										
+										
+									</li>
+								
+							</ul>
+						</div>
+					</div>
+				</section>
 			
 			
 	<!--

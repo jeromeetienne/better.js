@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
-		<title>Stacktrace | debug.js library</title>
+		<title>TypeCheck | debug.js library</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<meta name="mobileoptimized" content="0" />
@@ -76,12 +76,12 @@
 			<header>
 				<h1 class="classTitle">
 					
-					Namespace <span>Stacktrace</span>
+					Namespace <span>TypeCheck</span>
 				</h1>
 				
 				<div class="intro">
 					<p class="description summary">
-						
+						Strong typing for javascript
 					</p>
 						
 					
@@ -89,7 +89,7 @@
 							
 							
 							
-								<li>Defined in: <a href="../symbols/src/src_stacktrace.js.html">stacktrace.js</a></li>
+								<li>Defined in: <a href="../symbols/src/src_typecheck.js.html">typecheck.js</a></li>
 							
 							
 						</ul>
@@ -100,7 +100,7 @@
 			
 				<section>
 					<div class="props">
-						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class Stacktrace.">
+						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class TypeCheck.">
 							<caption class="sectionTitle">Namespace Summary</caption>
 							<thead>
 								<tr>
@@ -113,7 +113,7 @@
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription" >
 										<div class="fixedFont">
-											<b><a href="../symbols/Stacktrace.html#constructor">Stacktrace</a></b>
+											<b><a href="../symbols/TypeCheck.html#constructor">TypeCheck</a></b>
 										</div>
 										<div class="description"></div>
 									</td>
@@ -137,7 +137,7 @@
 						
 						
 							<nav>
-								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class Stacktrace.">
+								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class TypeCheck.">
 									<thead>
 										<tr>
 											<th scope="col">Method Attributes</th>
@@ -153,9 +153,9 @@
 											>
 												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont">Stacktrace.<b><a href="../symbols/Stacktrace.html#.parse">parse</a></b>(error, error)
+													<div class="fixedFont">TypeCheck.<b><a href="../symbols/TypeCheck.html#.fn">fn</a></b>(originalFn, paramsTypes, returnTypes)
 													</div>
-													<div class="description">parse the stacktrace of an Error</div>
+													<div class="description">function wrapper to check the type of function parameters and return value</div>
 												</td>
 											</tr>
 										
@@ -164,9 +164,31 @@
 											>
 												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont">Stacktrace.<b><a href="../symbols/Stacktrace.html#.Tracker">Tracker</a></b>()
+													<div class="fixedFont">TypeCheck.<b><a href="../symbols/TypeCheck.html#.setter">setter</a></b>(baseObject, property, types)
 													</div>
-													<div class="description">Tracker of stacktrace</div>
+													<div class="description">Check type with a object setter</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item2'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">TypeCheck.<b><a href="../symbols/TypeCheck.html#.Validator">Validator</a></b>(fn)
+													</div>
+													<div class="description">Validator creator.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item3'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">TypeCheck.<b><a href="../symbols/TypeCheck.html#.value">value</a></b>(value, types)
+													</div>
+													<div class="description">Check the type of a value</div>
 												</td>
 											</tr>
 										
@@ -196,7 +218,7 @@
 							</h2>
 							
 							<div class="fixedFont">
-								<b>Stacktrace</b>
+								<b>TypeCheck</b>
 							</div>
 							
 							<div class="description">
@@ -234,18 +256,18 @@
 									<li 
 										 class='item0'
 									>
-										<div class="fixedFont heading" id=".parse">
+										<div class="fixedFont heading" id=".fn">
 											<span class='lighter'>
 											&lt;static&gt; 
 											</span>
 											
-											<span class="light">{Array.<Object>}</span>
+											<span class="light">{boolean}</span>
 											
-											<span class="light">Stacktrace.</span><b>parse</b>(error, error)
+											<span class="light">TypeCheck.</span><b>fn</b>(originalFn, paramsTypes, returnTypes)
 										</div>
 										
 										<div class="description">
-											parse the stacktrace of an Error
+											function wrapper to check the type of function parameters and return value
 											
 											
 											
@@ -259,16 +281,22 @@
 												<dt class="heading">Parameters:</dt>
 												
 													<dt>
-														<span class="light fixedFont">{Error|undefined}</span> <b>error</b>
+														<span class="light fixedFont">{<a href="../symbols/Function.html">Function</a>}</span> <b>originalFn</b>
 														
 													</dt>
-													<dd>optional error to parse. if not provided, generate one.</dd>
+													<dd>the function to wrap</dd>
 												
 													<dt>
-														<b>error</b>
+														<span class="light fixedFont">{Array}</span> <b>paramsTypes</b>
 														
 													</dt>
-													<dd></dd>
+													<dd>allowed types for the paramter. array with each item is the allowed types for this parameter.</dd>
+												
+													<dt>
+														<span class="light fixedFont">{Array}</span> <b>returnTypes</b>
+														
+													</dt>
+													<dd>allowed types for the return value</dd>
 												
 											</dl>
 										
@@ -285,7 +313,7 @@
 												
 													<dt class="heading">Returns:</dt>
 													
-														<dd><span class="light fixedFont">{Array.<Object>}</span> parsed stacktrace</dd>
+														<dd><span class="light fixedFont">{boolean}</span> return isValid, so true if types matche, false otherwise</dd>
 													
 												
 												
@@ -301,18 +329,18 @@
 									<li 
 										 class='item1'
 									>
-										<div class="fixedFont heading" id=".Tracker">
+										<div class="fixedFont heading" id=".setter">
 											<span class='lighter'>
 											&lt;static&gt; 
 											</span>
 											
 											
 											
-											<span class="light">Stacktrace.</span><b>Tracker</b>()
+											<span class="light">TypeCheck.</span><b>setter</b>(baseObject, property, types)
 										</div>
 										
 										<div class="description">
-											Tracker of stacktrace
+											Check type with a object setter
 											
 											
 											
@@ -322,7 +350,138 @@
 										
 										
 										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Object}</span> <b>baseObject</b>
+														
+													</dt>
+													<dd>the base object which contains the property</dd>
+												
+													<dt>
+														<span class="light fixedFont">{String}</span> <b>property</b>
+														
+													</dt>
+													<dd>the string of the property name</dd>
+												
+													<dt>
+														<span class="light fixedFont">{Array}</span> <b>types</b>
+														
+													</dt>
+													<dd>the allows tipe</dd>
+												
+											</dl>
 										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item2'
+									>
+										<div class="fixedFont heading" id=".Validator">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											
+											
+											<span class="light">TypeCheck.</span><b>Validator</b>(fn)
+										</div>
+										
+										<div class="description">
+											Validator creator. a Validator is a function which is used to validate .value().
+All the validators MUST be true for the checked value to be valid.
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{<a href="../symbols/Function.html">Function</a>(value)}</span> <b>fn</b>
+														
+													</dt>
+													<dd>function which return true if value is valid, false otherwise</dd>
+												
+											</dl>
+										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item3'
+									>
+										<div class="fixedFont heading" id=".value">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											<span class="light">{boolean}</span>
+											
+											<span class="light">TypeCheck.</span><b>value</b>(value, types)
+										</div>
+										
+										<div class="description">
+											Check the type of a value
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{*}</span> <b>value</b>
+														
+													</dt>
+													<dd>the value to check</dd>
+												
+													<dt>
+														<span class="light fixedFont">{Array.<function>}</span> <b>types</b>
+														
+													</dt>
+													<dd>the types allowed for this variable</dd>
+												
+											</dl>
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{boolean}</span> return isValid, so true if types matche, false otherwise</dd>
+													
+												
+												
+												
+												
+												
+											
+											</dl>
 										
 										
 									</li>
