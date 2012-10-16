@@ -13,7 +13,9 @@ Function.prototype.setAttr	= function(fnName){
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Function attribute builder
+ * Function attribute creator
+ * 
+ * @return {FnAttrClass} a FnAttrClass builder
 */
 var fnAttr	= function(originalFn, fnName){
 	return new FnAttrClass(originalFn, fnName)
@@ -45,13 +47,25 @@ fnAttr.wrapCall	= function(originalFn, beforeFn, afterFn){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Internal class to build the attributes on the funciton
+ * 
+ * @constructor
+ * 
+ * @param {Function} originalFn the function on which the attributes are set
+ * @param {String}   fnName     optional name of the function - default to 'aFunction'
+ */
 var FnAttrClass	= function(originalFn, fnName){
 	this._currentFn	= originalFn;
-	this._fnName	= fnName	|| 'fnAttr'
+	this._fnName	= fnName	|| 'aFunction'
 }
 
-FnAttrClass.prototype.end	=
-FnAttrClass.prototype.done	= function(){
+/**
+ * mark the end of the attributes declaration
+ * 
+ * @return {Function} The actual function with the attributes
+*/
+FnAttrClass.prototype.end	= function(){
 	return this._currentFn;
 }
 
@@ -63,25 +77,49 @@ if( typeof(window) === 'undefined' )	module.exports	= fnAttr;
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * mark the function as deprecated - aka you can use it but it will disapears soon
+ * @param  {string} message the optional message to provide
+ */
+FnAttrClass.prototype.deprecated	= function(message){
+	var used	= false;
+	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
+		if( used )	return;
+		used	= true;
+		console.warn(message || "Deprecated function "+this._fnName+" called. Please update your code.");
+	}.bind(this));
+	return this;	// for chained API
+}
+
+/**
+ * mark the function as obsolete
+ * @param  {string} message obsolete message to display
+ */
 FnAttrClass.prototype.obsolete	= function(message){
 	var used	= false;
 	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
 		if( used )	return;
 		used	= true;
-		console.warn(message || "Obsoleted function "+this._fnName+" called. Please update your code.");
-		console.trace();
+		console.assert(false, message || "Obsoleted function "+this._fnName+" called. Please update your code.");
 	}.bind(this));
 	return this;	// for chained API
 }
 
-FnAttrClass.prototype.timestamp	= function(){
+/**
+ * display a message with a timestamp every time the function is used
+ * @return {string} message optional message to display
+ */
+FnAttrClass.prototype.timestamp	= function(message){
 	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
-		console.log("run at "+ new Date);
-	});
+		console.log(''+ new Date + ': '+this._fnName+' being called');
+	}.bind(this));
 	return this;	// for chained API
 };
 
-
+/**
+ * log a message when the function is call
+ * @param  {string} message the message to display
+ */
 FnAttrClass.prototype.log		= function(message){
 	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
 		console.log(message);
@@ -93,20 +131,21 @@ FnAttrClass.prototype.log		= function(message){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-
+/**
+ * hook a function be be caller before the actual function
+ * @param  {Function} beforeFn the function to call
+ */
 FnAttrClass.prototype.before	= function(beforeFn){
 	this._currentFn	= fnAttr.wrapCall(this._currentFn, beforeFn, null);
 	return this;	// for chained API
 };
 
+/**
+ * hook a function to be called after the actual function
+ * @param  {Function} afterFn the function to be called after
+ */
 FnAttrClass.prototype.after	= function(afterFn){
 	this._currentFn	= fnAttr.wrapCall(this._currentFn, null, afterFn);
-	return this;	// for chained API
-};
-
-
-FnAttrClass.prototype.warp	= function(beforeFn, afterFn){
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, beforeFn, afterFn);
 	return this;	// for chained API
 };
 
@@ -114,6 +153,11 @@ FnAttrClass.prototype.warp	= function(beforeFn, afterFn){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Warp the function call in a console.time()
+ * 
+ * @param  {String} label the label to use for console.time(label)
+ */
 FnAttrClass.prototype.time	= function(label){
 	label	= label !== undefined ? label : this._fnName+".time()-"+Math.floor(Math.random()*9999).toString(36);
 	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
@@ -123,6 +167,12 @@ FnAttrClass.prototype.time	= function(label){
 	});
 	return this;	// for chained API
 };
+
+/**
+ * Warp the funciton call in console.profile()/.profileEnd()
+ * 
+ * @param  {String} label label to use for console.profile()
+ */
 FnAttrClass.prototype.profile	= function(label){
 	label	= label !== undefined ? label : this._fnName+".profile-"+Math.floor(Math.random()*9999).toString(36);
 	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){

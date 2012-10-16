@@ -116,7 +116,7 @@ TypeCheck._ValidatorClass= function(fn){
 	this.fn	= fn;
 }
 
-
-
 // export the namespace in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;
+
+

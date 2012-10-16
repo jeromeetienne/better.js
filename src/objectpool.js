@@ -1,6 +1,8 @@
 /**
  * Implement a Object Pool
  * 
+ * - only track the free objects
+ * 
  * @class
  * @param {Function} klass the constructor of the class used in the pool
  */

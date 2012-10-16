@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
-		<title>Function | debug.js library</title>
+		<title>fnAttr | debug.js library</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<meta name="mobileoptimized" content="0" />
@@ -42,6 +42,8 @@
 				
 					<li><a href="../symbols/debug.html">debug</a></li>
 				
+					<li><a href="../symbols/fnAttr.html">fnAttr</a></li>
+				
 					<li><a href="../symbols/FnAttrClass.html">FnAttrClass</a></li>
 				
 					<li><a href="../symbols/Function.html">Function</a></li>
@@ -65,7 +67,7 @@
 			Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 			Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
 			Generated on:
-			<time datetime='2012-9-16' pubdate>2012-9-16 10:32</time>
+			<time datetime='2012-9-16' pubdate>2012-9-16 10:30</time>
 		</footer>
 	</div>
 </div>
@@ -78,7 +80,7 @@
 			<header>
 				<h1 class="classTitle">
 					
-					Built-In Namespace <span>Function</span>
+					Class <span>fnAttr</span>
 				</h1>
 				
 				<div class="intro">
@@ -87,9 +89,43 @@
 					</p>
 						
 					
+						<ul class="summary">
+							
+							
+							
+								<li>Defined in: <a href="../symbols/src/src_functionattr.js.html">functionattr.js</a></li>
+							
+							
+						</ul>
+					
 				</div>
 			</header>
 			
+			
+				<section>
+					<div class="props">
+						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class fnAttr.">
+							<caption class="sectionTitle">Class Summary</caption>
+							<thead>
+								<tr>
+									<th scope="col">Constructor Attributes</th>
+									<th scope="col">Constructor Name and Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription" >
+										<div class="fixedFont">
+											<b><a href="../symbols/fnAttr.html#constructor">fnAttr</a></b>(originalFn, fnName)
+										</div>
+										<div class="description">Function attribute builder</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
 			
 			
 			
@@ -105,7 +141,7 @@
 						
 						
 							<nav>
-								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class Function.">
+								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class fnAttr.">
 									<thead>
 										<tr>
 											<th scope="col">Method Attributes</th>
@@ -119,11 +155,11 @@
 											<tr
 												 class='item0'
 											>
-												<td class="attributes">&nbsp;</td>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/Function.html#setAttr">setAttr</a></b>(fnName)
+													<div class="fixedFont">fnAttr.<b><a href="../symbols/fnAttr.html#.wrapCall">wrapCall</a></b>(originalFn, beforeFn, afterFn)
 													</div>
-													<div class="description">change global object function bar(){}.setAttr('bar').end();</div>
+													<div class="description">Wrap a function between 2 functions</div>
 												</td>
 											</tr>
 										
@@ -144,6 +180,67 @@
 	<!--
 	#### CONSTRUCTOR DETAILS
 	-->
+			
+				<section>
+					<div class="details props">
+						<div class="innerProps">
+							<h2 class="sectionTitle" id="constructor">
+								Class Detail
+							</h2>
+							
+							<div class="fixedFont">
+								<b>fnAttr</b>(originalFn, fnName)
+							</div>
+							
+							<div class="description">
+								Function attribute builder
+								
+							</div>
+							
+							
+						
+							
+								<dl class="detailList params">
+									<dt class="heading">Parameters:</dt>
+									
+										<dt>
+											 <b>originalFn</b>
+											
+										</dt>
+										<dd></dd>
+									
+										<dt>
+											 <b>fnName</b>
+											
+										</dt>
+										<dd></dd>
+									
+								</dl>
+							
+							
+							
+								<dl class="detailList nomargin">
+									
+									
+									
+									
+									
+									
+									
+										<dt class="heading">Returns:</dt>
+										
+												<dd><span class="light fixedFont">{<a href="../symbols/FnAttrClass.html">FnAttrClass</a>}</span> a FnAttrClass builder</dd>
+										
+									
+									
+									
+									
+									
+								</dl>
+							
+						</div>
+					</div>
+				</section>
 			
 	<!--
 	#### FIELD DETAILS
@@ -166,22 +263,19 @@
 									<li 
 										 class='item0'
 									>
-										<div class="fixedFont heading" id="setAttr">
+										<div class="fixedFont heading" id=".wrapCall">
 											<span class='lighter'>
-											
+											&lt;static&gt; 
 											</span>
 											
+											<span class="light">{<a href="../symbols/Function.html">Function</a>}</span>
 											
-											
-											<b>setAttr</b>(fnName)
+											<span class="light">fnAttr.</span><b>wrapCall</b>(originalFn, beforeFn, afterFn)
 										</div>
 										
 										<div class="description">
-											change global object function bar(){}.setAttr('bar').end();
+											Wrap a function between 2 functions
 											
-											
-												<br />
-												<i>Defined in: </i> <a href="../symbols/src/src_functionattr.js.html">functionattr.js</a>.
 											
 											
 											
@@ -194,14 +288,47 @@
 												<dt class="heading">Parameters:</dt>
 												
 													<dt>
-														<span class="light fixedFont">{string}</span> <b>fnName</b>
+														<span class="light fixedFont">{<a href="../symbols/Function.html">Function</a>}</span> <b>originalFn</b>
 														
 													</dt>
-													<dd>the name of the function</dd>
+													<dd>the original function</dd>
+												
+													<dt>
+														<span class="light fixedFont">{<a href="../symbols/Function.html">Function</a>}</span> <b>beforeFn</b>
+														
+													</dt>
+													<dd>the function to call *before* the original function</dd>
+												
+													<dt>
+														<span class="light fixedFont">{<a href="../symbols/Function.html">Function</a>}</span> <b>afterFn</b>
+														
+													</dt>
+													<dd>the function to call *after* the original function</dd>
 												
 											</dl>
 										
 										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{<a href="../symbols/Function.html">Function</a>}</span> The modified function</dd>
+													
+												
+												
+												
+												
+												
+											
+											</dl>
 										
 										
 									</li>
