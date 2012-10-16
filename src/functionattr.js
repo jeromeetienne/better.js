@@ -1,3 +1,7 @@
+//////////////////////////////////////////////////////////////////////////////////
+//		Modification							//
+//////////////////////////////////////////////////////////////////////////////////
+
 /**
  * change global object function bar(){}.setAttr('bar').end();
  * 
@@ -74,7 +78,34 @@ if( typeof(window) === 'undefined' )	module.exports	= fnAttr;
 
 
 //////////////////////////////////////////////////////////////////////////////////
-//										//
+//		generic								//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * display a message with a timestamp every time the function is used
+ * @return {string} message optional message to display
+ */
+FnAttrClass.prototype.timestamp	= function(message){
+	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
+		console.log(''+ new Date + ': '+this._fnName+' being called');
+	}.bind(this));
+	return this;	// for chained API
+};
+
+/**
+ * log a message when the function is call
+ * @param  {string} message the message to display
+ */
+FnAttrClass.prototype.log		= function(message){
+	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
+		console.log(message);
+	});
+	return this;	// for chained API
+};
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//		support state							//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -105,30 +136,8 @@ FnAttrClass.prototype.obsolete	= function(message){
 	return this;	// for chained API
 }
 
-/**
- * display a message with a timestamp every time the function is used
- * @return {string} message optional message to display
- */
-FnAttrClass.prototype.timestamp	= function(message){
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
-		console.log(''+ new Date + ': '+this._fnName+' being called');
-	}.bind(this));
-	return this;	// for chained API
-};
-
-/**
- * log a message when the function is call
- * @param  {string} message the message to display
- */
-FnAttrClass.prototype.log		= function(message){
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
-		console.log(message);
-	});
-	return this;	// for chained API
-};
-
 //////////////////////////////////////////////////////////////////////////////////
-//										//
+//		General hooks								//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -150,7 +159,7 @@ FnAttrClass.prototype.after	= function(afterFn){
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-//										//
+//		Benchmarking								//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -182,5 +191,24 @@ FnAttrClass.prototype.profile	= function(label){
 	});
 	return this;	// for chained API
 };
+
+
+/**
+ * Trigger the debugger when the function is called
+ *
+ * @param {Function} originalFn the original function
+ * @param {Function} [conditionFn] this function should return true, when the breakpoint should be triggered. default to function(){ return true; }
+ * @returns {Function} The modified function
+*/
+FnAttrClass.prototype.breakpoint	= function(fn, conditionFn){
+	conditionFn	= conditionFn	|| function(){ return true; };
+	return function(){
+		var stopNow	= conditionFn();
+		// if stopNow, trigger debugger
+		if( stopNow === true )	debugger;
+		// forward the call to the original function
+		return fn.apply(this, arguments);
+	}
+}
 
 
