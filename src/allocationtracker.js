@@ -2,6 +2,7 @@ var Stacktrace	= Stacktrace	|| require('../src/stacktrace')
 
 /**
  * @namespace
+ * http://stackoverflow.com/questions/367768/how-to-detect-if-a-function-is-called-as-constructor
  */
 var allocationTracker	= new Stacktrace.Tracker();
 

@@ -69,7 +69,7 @@ var FnAttrClass	= function(originalFn, fnName){
  * 
  * @return {Function} The actual function with the attributes
 */
-FnAttrClass.prototype.end	= function(){
+FnAttrClass.prototype.done	= function(){
 	return this._currentFn;
 }
 
@@ -159,7 +159,7 @@ FnAttrClass.prototype.after	= function(afterFn){
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-//		Benchmarking								//
+//		Benchmarking							//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -192,23 +192,38 @@ FnAttrClass.prototype.profile	= function(label){
 	return this;	// for chained API
 };
 
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Trigger the debugger when the function is called
  *
  * @param {Function} originalFn the original function
  * @param {Function} [conditionFn] this function should return true, when the breakpoint should be triggered. default to function(){ return true; }
- * @returns {Function} The modified function
+ * @returns {FnAttrClass} for chained API
 */
 FnAttrClass.prototype.breakpoint	= function(fn, conditionFn){
 	conditionFn	= conditionFn	|| function(){ return true; };
-	return function(){
+	this._currentFn	= function(){
 		var stopNow	= conditionFn();
 		// if stopNow, trigger debugger
 		if( stopNow === true )	debugger;
 		// forward the call to the original function
-		return fn.apply(this, arguments);
-	}
+		return this._currentFn.apply(this, arguments);
+	}.bind(this)
+	return this;
+}
+
+/**
+ * check function type as in ```TypeCheck.fn``` from typecheck.js
+ * @param  {Array}    paramsTypes allowed types for the paramter. array with each item is the allowed types for this parameter.
+ * @param  {Array}    returnTypes allowed types for the return value
+ * @returns {FnAttrClass} for chained API
+ */
+FnAttrClass.prototype.typeCheck	= function(paramsTypes, returnTypes){
+	this._currentFn	= TypeCheck.fn(this._currentFn, paramsTypes, returnTypes);
+	return this;
 }
 
 

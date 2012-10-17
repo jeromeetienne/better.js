@@ -12,23 +12,16 @@ deploy:
 test:
 	@./node_modules/.bin/mocha -R list tests
 
-minify:
-	curl --data-urlencode "js_code@src/debug.js"	\
+build:
+	cat src/*.js	> build/debug.js
+
+minify: build
+	curl --data-urlencode "js_code@build/debug.js"	\
 		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
 		http://closure-compiler.appspot.com/compile		\
 		> build/debug.min.js
 	@echo size minified + gzip is `gzip -c debug.min.js | wc -c` byte
 
-
-GCLOSURE_TEMPFILE := $(shell mktemp /tmp/gclosureexports.tmp.XXXXXX)
-minifyAdvanced:
-	vendor/gclosureexports/bin/tool.js src/debug.js src/debug.gclosureexports.js	> ${GCLOSURE_TEMPFILE}
-	curl --data-urlencode "js_code@${GCLOSURE_TEMPFILE}" 		\
-		-d "output_format=text&output_info=compiled_code&compilation_level=ADVANCED_OPTIMIZATIONS" \
-		http://closure-compiler.appspot.com/compile		\
-		> build/debug.min.js
-	@rm -f /tmp/gclosureexports.tmp.mavzDXrm ${GCLOSURE_TEMPFILE}
-	@echo size minified + gzip is `gzip -c debug.min.js | wc -c` byte
 
 JSDOC_ROOT	= $(HOME)/opt/jsdoc_toolkit-2.4.0/jsdoc-toolkit
 docs:
@@ -38,4 +31,4 @@ docs:
 			-t=${JSDOC_ROOT}/templates/Codeview/		\
 			-d=docs/jsdocs/					\
 			src/*
-.PHONY: docs
+.PHONY: docs build

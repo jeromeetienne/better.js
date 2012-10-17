@@ -46,7 +46,7 @@
 		// set the initialValue
 		baseObject['__'+property]	= initialValue;
 	};
-	
+
 	//////////////////////////////////////////////////////////////////////////////////
 	// Override prototype of global ```Object```
 	Object.prototype.__defineQGetter__	= function(property, getterFn){
@@ -56,7 +56,7 @@
 		// setup the new getter
 		this[name]._getters.push(getterFn)
 	};
-	
+
 	Object.prototype.__defineQSetter__	= function(property, setterFn){
 		var name	= "__dbgGetSet_" + property;
 		// init _QGetterSetter for this property if needed

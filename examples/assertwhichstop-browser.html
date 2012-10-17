@@ -1,0 +1,13 @@
+<!doctype html>
+<script src='../src/assertwhichstop.js'></script>
+<script>
+	console.log('before assert');
+
+	// overload console.assert
+	console.assert	= assertWhichStop
+
+	//assertWhichStop(false);
+	console.assert(false);
+
+	console.log('after assert - this message should never show up');
+</script>

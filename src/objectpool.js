@@ -2,6 +2,8 @@
  * Implement a Object Pool
  * 
  * - only track the free objects
+ * - TODO implement one which track used object too
+ *   - which allocation is never released, from where
  * 
  * @class
  * @param {Function} klass the constructor of the class used in the pool

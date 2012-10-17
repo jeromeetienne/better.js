@@ -122,10 +122,10 @@ Stacktrace.Tracker	= function(){
  * @param  {String} className The class name under which this record is made
  */
 Stacktrace.Tracker.prototype.record	= function(className, stackLevel){
-	stackLevel		= stackLevel !== undefined ? stackLevel : 2;
+	stackLevel		= stackLevel !== undefined ? stackLevel : 0;
 	// init variable
 	var at			= Stacktrace.Track;
-	var stackFrame		= Stacktrace.parse()[stackLevel];
+	var stackFrame		= Stacktrace.parse()[stackLevel+2];
 	// init Stacktrace.Track._klasses entry if needed
 	this._klasses[className]= this._klasses[className]	|| {
 		counter		: 0,
@@ -153,6 +153,9 @@ Stacktrace.Tracker.prototype.reset	= function(){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Dump current state of the tracker in console.log()
+ */
 Stacktrace.Tracker.prototype.dump	= function(){
 	var report	= this.reportString.apply(this, arguments)
 	console.log(report);

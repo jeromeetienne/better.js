@@ -1,7 +1,10 @@
 /**
  * @fileOverview contains TypeCheck class
  * 
- * @todo how to handle getRange
+ * if input of type in text see 
+ * * https://developers.google.com/closure/compiler/docs/js-for-compiler
+ * * use same format
+ * * autogenerate function parameter check
  */
 
 /**
