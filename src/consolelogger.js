@@ -2,7 +2,7 @@
  * @fileOverview implementation of a log layer on top of console.*
  * 
  * * TODO how to overload the usual console.log/warn/error function
- *   * done ?
+ *   * done ? not really tested
  * * TODO put a prefix 
  * * TODO write tests
  * * TODO write examples
