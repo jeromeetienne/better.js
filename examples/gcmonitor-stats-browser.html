@@ -17,23 +17,12 @@
 		}
 	}, 100);
 	
-
-	var statsCollection	= new GcMonitorStatsCollection();
-	statsCollection.domElement.style.position='absolute';
-	statsCollection.domElement.style.right	= '0px';
-	statsCollection.domElement.style.bottom	= (47*0)+'px';
-	document.body.appendChild(statsCollection.domElement)
+	var gcMonitorStats	= new GcMonitorStats();
+	gcMonitorStats.domElement.style.position='absolute';
+	gcMonitorStats.domElement.style.bottom	= '0px';
+	gcMonitorStats.domElement.style.right	= '0px';
+	document.body.appendChild(gcMonitorStats.domElement)
 	setInterval(function(){
-		statsCollection.update();
+		gcMonitorStats.update();
 	}, 1000/60)
-
-	var statsBurnRate	= new GcMonitorStatsBurnRate();
-	statsBurnRate.domElement.style.position	= 'absolute';
-	statsBurnRate.domElement.style.right	= '0px';
-	statsBurnRate.domElement.style.bottom	= (47*1)+'px';
-	document.body.appendChild(statsBurnRate.domElement)
-	setInterval(function(){
-		statsBurnRate.update();
-	}, 1000/60)
-
 </script></body>
