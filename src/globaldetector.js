@@ -51,14 +51,14 @@ var GlobalDetector	= function(){
 		// parameter polymorphism
 		onChange	= onChange || function(property){}
 		// new loop on _global object
-	        for(var propname in _global){
-			if( _global.proplist[propname] )	continue;
+	        for(var property in _global){
+			if( _global.proplist[property] )	continue;
 			// if this is already in the ignoreList, continue
-			if( GlobalDetector.ignoreList.indexOf(propname) !== -1 )	continue;
+			if( GlobalDetector.ignoreList.indexOf(property) !== -1 )	continue;
 			// mark this property as init
-			_global.proplist[propname] = true;
+			_global.proplist[property] = true;
 			// notify callback
-			onChange(propname);
+			onChange(property);
 	        }
 	}
 }
