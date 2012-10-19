@@ -14,11 +14,3 @@ foo.__defineQGetter__('x', function(value){
 });
 
 console.log('after new getter: foo.x ===', foo.x)
-
-
-
-require('./js/linefilegettersetter.js');
-
-(function blabla(){
-	console.log('super', __FILE__, __LINE__, __FUNCTION__)	
-})();

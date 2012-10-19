@@ -31,4 +31,4 @@ docs:
 			-t=${JSDOC_ROOT}/templates/Codeview/		\
 			-d=docs/jsdocs/					\
 			src/*
-.PHONY: docs build
+.PHONY: docs build minify

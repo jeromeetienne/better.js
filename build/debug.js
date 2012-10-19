@@ -2,6 +2,7 @@ var Stacktrace	= Stacktrace	|| require('../src/stacktrace')
 
 /**
  * @namespace
+ * http://stackoverflow.com/questions/367768/how-to-detect-if-a-function-is-called-as-constructor
  */
 var allocationTracker	= new Stacktrace.Tracker();
 
@@ -12,7 +13,6 @@ if( typeof(window) === 'undefined' )	module.exports	= allocationTracker;
  * if debug.assert.useDebugger is falsy, throw an exception. else trigger the
  * debugger. It default to false. unclear how usefull it is for node.js
  * to overload console.assert just do ```console.assert	= assertWhichStop;```
-
  *
  * @param {Boolean} condition the condition which is asserted
  * @param {String} message the message which is display is condition is falsy
@@ -28,18 +28,49 @@ assertWhichStop.useDebugger	= false;
 // export the class in node.js - if running in node.js - unclear how usefull it is in node.js
 if( typeof(window) === 'undefined' )	module.exports	= assertWhichStop;
 
-var Stacktrace	= Stacktrace	|| require('./stacktrace.js');
+/**
+ * Little helper to overload console.assert
+ */
+assertWhichStop.overloadConsole	= function(){
+	console.assert	= assertWhichStop;
+}
 
+/**
+ * @fileOverview implementation of a log layer on top of console.*
+ * 
+ * * TODO how to overload the usual console.log/warn/error function
+ *   * done ? not really tested
+ * * TODO put a prefix 
+ * * TODO write tests
+ * * TODO write examples
+*/
+
+
+var Stacktrace	= Stacktrace	|| require('./stacktrace.js');
 
 /**
  * @namespace logger compatible with console.* calls
  */
 var ConsoleLogger	= {};
 
+/**
+ * the previous instance of console object
+*/
+ConsoleLogger._origConsole	= {
+	console	: console,
+	log	: console.log,
+	warn	: console.warn,
+	error	: console.error
+};
+
 
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= ConsoleLogger;
 
+/**
+ * Des ription of the various level of severity
+ * @type {Object}
+ */
 ConsoleLogger.Severity	= {
 	'all'		: 0,
 	'log'		: 1,
@@ -48,19 +79,34 @@ ConsoleLogger.Severity	= {
 	'nothing'	: 99,
 };
 
-ConsoleLogger.Severity.dfl	= ConsoleLogger.Severity.nothing;
+/**
+ * default level of severity when no filter matches
+ * 
+ * @type {Number}
+ */
+ConsoleLogger.Severity.dfl	= ConsoleLogger.Severity.all;
 
 //////////////////////////////////////////////////////////////////////////////////
-//		handle filter								//
+//		handle filters							//
 //////////////////////////////////////////////////////////////////////////////////
 
-
+/**
+ * Store all the filters
+ * @type {Array}
+ */
 ConsoleLogger._filters	= [];
 
+/**
+ * push a new filter - stackFrame 
+ * 
+ * @param  {Function(stackFrame)} validFor function which determine which stackFrame is valid 
+ * @param  {[type]} severity [description]
+ * @return {[type]}          [description]
+ */
 ConsoleLogger.pushFilter	= function(validFor, severity){
 	// sanity check - sanity level MUST be defined
 	console.assert(Object.keys(ConsoleLogger.Severity).indexOf(severity) !== -1, 'unknown severity level');
-	console.log(validFor instanceof Function);
+	console.assert(validFor instanceof Function);
 	// push new level
 	ConsoleLogger._filters.push({
 		validFor	: validFor,
@@ -68,6 +114,12 @@ ConsoleLogger.pushFilter	= function(validFor, severity){
 	});
 };
 
+/**
+ * test if a given instance of severity and stackframe is valid for ConsoleLogger
+ * @param  {string} severity   Severity to test
+ * @param  {Object} stackFrame stackframe to test (in stacktrace.js format)
+ * @return {Boolean}           true if the filter is valid, false otherwise
+ */
 ConsoleLogger.filter	= function(severity, stackFrame){
 	stackFrame	= stackFrame	|| Stacktrace.parse()[2];
 	// sanity check - sanity level MUST be defined
@@ -87,19 +139,44 @@ ConsoleLogger.filter	= function(severity, stackFrame){
 //		handle log functions						//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * log with a severity of 'log'
+ */
 ConsoleLogger.log	= function(/* ... */){
 	if( ConsoleLogger.filter('log') === false )	return;
-	console.log.apply(console, arguments);
+	var _console	= ConsoleLogger._origConsole;
+	_console.log.apply(_console.console, arguments);	
 }
 
+/**
+ * log with a severity of 'warn'
+ */
 ConsoleLogger.warn	= function(/* ... */){
 	if( ConsoleLogger.filter('warn') === false )	return;
-	console.warn.apply(console, arguments);	
+	var _console	= ConsoleLogger._origConsole;
+	_console.warn.apply(_console.console, arguments);	
 }
 
+/**
+ * log with a severity of 'error'
+ */
 ConsoleLogger.error	= function(/* ... */){
 	if( ConsoleLogger.filter('error') === false )	return;
-	console.error.apply(console, arguments);	
+	var _console	= ConsoleLogger._origConsole;
+	_console.error.apply(_console.console, arguments);	
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Helpers								//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Overload console.log/warn/error function
+ */
+ConsoleLogger.overloadConsole	= function(){
+	console.log	= ConsoleLogger.log;
+	console.warn	= ConsoleLogger.warn;
+	console.error	= ConsoleLogger.error;
 }
 //////////////////////////////////////////////////////////////////////////////////
 //		Modification							//
@@ -262,7 +339,7 @@ FnAttrClass.prototype.after	= function(afterFn){
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-//		Benchmarking								//
+//		Benchmarking							//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -295,23 +372,38 @@ FnAttrClass.prototype.profile	= function(label){
 	return this;	// for chained API
 };
 
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
 
 /**
  * Trigger the debugger when the function is called
  *
  * @param {Function} originalFn the original function
  * @param {Function} [conditionFn] this function should return true, when the breakpoint should be triggered. default to function(){ return true; }
- * @returns {Function} The modified function
+ * @returns {FnAttrClass} for chained API
 */
 FnAttrClass.prototype.breakpoint	= function(fn, conditionFn){
 	conditionFn	= conditionFn	|| function(){ return true; };
-	return function(){
+	this._currentFn	= function(){
 		var stopNow	= conditionFn();
 		// if stopNow, trigger debugger
 		if( stopNow === true )	debugger;
 		// forward the call to the original function
-		return fn.apply(this, arguments);
-	}
+		return this._currentFn.apply(this, arguments);
+	}.bind(this)
+	return this;
+}
+
+/**
+ * check function type as in ```TypeCheck.fn``` from typecheck.js
+ * @param  {Array}    paramsTypes allowed types for the paramter. array with each item is the allowed types for this parameter.
+ * @param  {Array}    returnTypes allowed types for the return value
+ * @returns {FnAttrClass} for chained API
+ */
+FnAttrClass.prototype.typeCheck	= function(paramsTypes, returnTypes){
+	this._currentFn	= TypeCheck.fn(this._currentFn, paramsTypes, returnTypes);
+	return this;
 }
 
 
@@ -520,6 +612,8 @@ if( typeof(window) === 'undefined' )	module.exports	= GlobalDetector;
  * Implement a Object Pool
  * 
  * - only track the free objects
+ * - TODO implement one which track used object too
+ *   - which allocation is never released, from where
  * 
  * @class
  * @param {Function} klass the constructor of the class used in the pool
@@ -616,7 +710,7 @@ if( typeof(window) === 'undefined' )	module.exports	= ObjectPool;
 		// set the initialValue
 		baseObject['__'+property]	= initialValue;
 	};
-	
+
 	//////////////////////////////////////////////////////////////////////////////////
 	// Override prototype of global ```Object```
 	Object.prototype.__defineQGetter__	= function(property, getterFn){
@@ -626,7 +720,7 @@ if( typeof(window) === 'undefined' )	module.exports	= ObjectPool;
 		// setup the new getter
 		this[name]._getters.push(getterFn)
 	};
-	
+
 	Object.prototype.__defineQSetter__	= function(property, setterFn){
 		var name	= "__dbgGetSet_" + property;
 		// init _QGetterSetter for this property if needed
@@ -760,10 +854,10 @@ Stacktrace.Tracker	= function(){
  * @param  {String} className The class name under which this record is made
  */
 Stacktrace.Tracker.prototype.record	= function(className, stackLevel){
-	stackLevel		= stackLevel !== undefined ? stackLevel : 2;
+	stackLevel		= stackLevel !== undefined ? stackLevel : 0;
 	// init variable
 	var at			= Stacktrace.Track;
-	var stackFrame		= Stacktrace.parse()[stackLevel];
+	var stackFrame		= Stacktrace.parse()[stackLevel+2];
 	// init Stacktrace.Track._klasses entry if needed
 	this._klasses[className]= this._klasses[className]	|| {
 		counter		: 0,
@@ -791,6 +885,9 @@ Stacktrace.Tracker.prototype.reset	= function(){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * Dump current state of the tracker in console.log()
+ */
 Stacktrace.Tracker.prototype.dump	= function(){
 	var report	= this.reportString.apply(this, arguments)
 	console.log(report);
@@ -845,7 +942,10 @@ Stacktrace.Tracker.prototype.reportString	= function(classNameRegExp, maxNOrigin
 /**
  * @fileOverview contains TypeCheck class
  * 
- * @todo how to handle getRange
+ * if input of type in text see 
+ * * https://developers.google.com/closure/compiler/docs/js-for-compiler
+ * * use same format
+ * * autogenerate function parameter check
  */
 
 /**
