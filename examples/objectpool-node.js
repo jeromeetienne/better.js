@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // get the class
-var ObjectPool	= require('../src/objectpool.js');
+var ObjectPool	= require('./helpers/objectpool.js');
 
 console.log('slota')
 
