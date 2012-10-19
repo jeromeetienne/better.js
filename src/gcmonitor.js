@@ -18,13 +18,11 @@ var GcMonitor	= function(){
 		if( !window.performance || !window.performance.memory )	return 0;
 		return window.performance.memory.usedJSHeapSize;	
 	};
-	// TODO remove this usedHeapSize variable
-	this.usedHeapSize	= usedHeapSize;
 
 	// sanity check - if not available, output a warning
 	if( GcMonitor.isAvailable() === false ){
 		// open -a "/Applications/Google Chrome.app" --args --enable-memory-info
-		console.warn('memory info are unavailable... for chrome use --enable-memory-info. other browsers dont have this feature.')
+		console.warn('memory info are unavailable... for chrome, use --enable-memory-info. other browsers dont have this feature.')
 	}
 
 	/**
