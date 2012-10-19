@@ -8,7 +8,8 @@
  * heavily based on @mrdoob stats.js
  */
 var GcMonitorStatsCollection = function (){
-
+// @TODO cleanup... remove all stats.js stuff
+// - autoscaling needed
 	var msMin	= 100;
 	var msMax	= 0;
 
@@ -140,9 +141,9 @@ var GcMonitorStatsBurnRate = function (){
 			gcMonitor.check();
 			
 			var value	= gcMonitor.burnRate();
-			value	= 0;
 			textEl.textContent = "gcRate: " + bytesToSize(value, 2);
 
+			// TODO uck
 			var normValue	= value / (5*1024*1024);
 			var height	= Math.min(30, 30 - normValue * 30);
 			updateGraph(height, '#131');
@@ -166,8 +167,8 @@ var GcMonitorStatsBurnRate = function (){
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * vuemeter on gc activity - stats.js like - union 
- * of GcMonitorStatsCollection/GcMonitorStatsBurnRate
+ * vuemeter on gc activity - stats.js like 
+ * - union of GcMonitorStatsCollection/GcMonitorStatsBurnRate
  */
 var GcMonitorStats	= function (){
 	// build domElement container
