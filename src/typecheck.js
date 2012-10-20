@@ -12,7 +12,7 @@
  */
 var TypeCheck	= {};
 
-Object.prototype.__defineQGetter__	|| require('./queueablegettersetter.js')
+Object.prototype.__defineQGetter__	|| require('./qgettersetter.js')
 
 /**
  * Check type with a object setter
