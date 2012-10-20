@@ -4,9 +4,9 @@
 	console.log('before assert');
 
 	// overload console.assert
-	console.assert	= assertWhichStop
+	assertWhichStop.onConsoleAPI();
 
-	//assertWhichStop(false);
+	// assertWhichStop(false);
 	console.assert(false);
 
 	console.log('after assert - this message should never show up');

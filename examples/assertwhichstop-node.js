@@ -3,7 +3,7 @@
 var assertWhichStop	= require('../src/assertwhichstop.js');
 
 // overload console.assert
-console.assert	= assertWhichStop
+assertWhichStop.onConsoleAPI();
 
 console.log('before assert');
 

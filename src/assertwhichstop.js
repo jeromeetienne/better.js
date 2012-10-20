@@ -11,7 +11,7 @@
 assertWhichStop	= function(condition, message, useDebugger){
 	if( condition )	return;
 	if( assertWhichStop.useDebugger || useDebugger )	debugger;
-	throw new Error(message	|| "assert Failed")
+	throw new Error(message	|| "assert Failed");
 }
 assertWhichStop.useDebugger	= false;
 
@@ -21,7 +21,7 @@ if( typeof(window) === 'undefined' )	module.exports	= assertWhichStop;
 /**
  * Little helper to overload console.assert
  */
-assertWhichStop.overloadConsole	= function(){
+assertWhichStop.onConsoleAPI	= function(){
 	console.assert	= assertWhichStop;
 }
 
