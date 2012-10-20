@@ -12,57 +12,69 @@
  * (I have no idea of the reasoning behind this limitation to one function. It seems
  *  useless to me. This remind me of onclick of the DOM instead of a proper .addEventListener) 
 */
-(function(){
-	/**
-	 * Class to implement queueable getter/setter
-	 * @param  {Object} baseObject The base object on which we operate
-	 * @param  {String} property   The string of property
-	 */
-	var _QGetterSetter	= function(baseObject, property){
-		// sanity check 
-		console.assert( typeof(baseObject) === 'object' );
-		console.assert( typeof(property) === 'string' );
-		// backup the initial value
-		var initialValue= baseObject[property];
-		// init some local variables
-		var _this	= this;
-		this._getters	= [];
-		this._setters	= [];
-		// define the root getter
-		baseObject.__defineGetter__(property, function(){
-			var value	= baseObject['__'+property];
-			for(var i = 0; i < _this._getters.length; i++){
-				value	= _this._getters[i](value)
-			}
-			return value;
-		});
-		// define the root setter		
-		baseObject.__defineSetter__(property, function(value){
-			for(var i = 0; i < _this._setters.length; i++){
-				value	= _this._setters[i](value)
-			}
-			baseObject['__'+property] = value;
-		});
-		// set the initialValue
-		baseObject['__'+property]	= initialValue;
-	};
 
-	//////////////////////////////////////////////////////////////////////////////////
-	// Override prototype of global ```Object```
-	Object.prototype.__defineQGetter__	= function(property, getterFn){
-		var name	= "__dbgGetSet_" + property;
-		// init _QGetterSetter for this property if needed
-		this[name]	= this[name] || new _QGetterSetter(this, property);
-		// setup the new getter
-		this[name]._getters.push(getterFn)
-	};
 
-	Object.prototype.__defineQSetter__	= function(property, setterFn){
-		var name	= "__dbgGetSet_" + property;
-		// init _QGetterSetter for this property if needed
-		this[name]	= this[name] || new _QGetterSetter(this, property);
-		// setup the new setter
-		this[name]._setters.push(setterFn)
-	};
-})();
+/**
+ * Class to implement queueable getter/setter
+ * @param  {Object} baseObject The base object on which we operate
+ * @param  {String} property   The string of property
+ */
+var QGetterSetter	= {};
+
+QGetterSetter.Property	= function(baseObject, property){
+	// sanity check 
+	console.assert( typeof(baseObject) === 'object' );
+	console.assert( typeof(property) === 'string' );
+	// backup the initial value
+	var initialValue= baseObject[property];
+	// init some local variables
+	var _this	= this;
+	this._getters	= [];
+	this._setters	= [];
+	// define the root getter
+	baseObject.__defineGetter__(property, function getterHandler(){
+		var value	= baseObject['__'+property];
+		for(var i = 0; i < _this._getters.length; i++){
+			value	= _this._getters[i](value, getterHandler.caller, property)
+		}
+		return value;
+	});
+	// define the root setter		
+	baseObject.__defineSetter__(property, function(value){
+		for(var i = 0; i < _this._setters.length; i++){
+			value	= _this._setters[i](value)
+		}
+		baseObject['__'+property] = value;
+	});
+	// set the initialValue
+	baseObject['__'+property]	= initialValue;
+};
+
+// export the class in node.js - if running in node.js
+if( typeof(window) === 'undefined' )	module.exports	= QGetterSetter;
+
+QGetterSetter.defineGetter	= function(baseObject, property, getterFn){
+	var name	= "__dbgGetSet_" + property;
+	// init QGetterSetter for this property if needed
+	baseObject[name]= baseObject[name] || new QGetterSetter.Property(baseObject, property);
+	// setup the new getter
+	baseObject[name]._getters.push(getterFn)
+}
+
+QGetterSetter.defineSetter	= function(baseObject, property, setterFn){
+	var name	= "__dbgGetSet_" + property;
+	// init QGetterSetter for this property if needed
+	baseObject[name]= baseObject[name] || new QGetterSetter.Property(baseObject, property);
+	// setup the new setter
+	baseObject[name]._setters.push(setterFn)
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+// Override prototype of global ```Object```
+Object.prototype.__defineQGetter__	= function(property, getterFn){
+	QGetterSetter.defineGetter(this, property, getterFn);
+};
+Object.prototype.__defineQSetter__	= function(property, setterFn){
+	QGetterSetter.defineSetter(this, property, setterFn);
+};
 
