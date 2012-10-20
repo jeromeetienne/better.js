@@ -9,15 +9,15 @@ global.foo	= 'bar';
 // start the detector
 new GlobalDetector().start();
 
+
+// dependancy
 var Stacktrace	= require('../src/stacktrace.js')
 
 
 // call that globaldetector-tracker.js ?
 
 /**
- * localize where the create
- * @param  {[type]} varName [description]
- * @return {[type]}         [description]
+ * localize where global are created
  */
 function globalMonitorLocalizeCreation(varName, creationOnly){
 	creationOnly	= creationOnly !== undefined ? creationOnly : false;
