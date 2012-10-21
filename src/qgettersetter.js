@@ -53,6 +53,13 @@ QGetterSetter.Property	= function(baseObject, property){
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= QGetterSetter;
 
+/**
+ * define a getter 
+ * 
+ * @param  {Obejct} baseObject the object containing the property
+ * @param  {string} property   the property name which gonna get the getter
+ * @param  {Function} getterFn   function which handle the getter
+ */
 QGetterSetter.defineGetter	= function(baseObject, property, getterFn){
 	var name	= "__dbgGetSet_" + property;
 	// init QGetterSetter for this property if needed
@@ -61,6 +68,13 @@ QGetterSetter.defineGetter	= function(baseObject, property, getterFn){
 	baseObject[name]._getters.push(getterFn)
 }
 
+/**
+ * define a setter 
+ * 
+ * @param  {Obejct} baseObject the object containing the property
+ * @param  {string} property   the property name which gonna get the setter
+ * @param  {Function} setterFn   function which handle the setter
+ */
 QGetterSetter.defineSetter	= function(baseObject, property, setterFn){
 	var name	= "__dbgGetSet_" + property;
 	// init QGetterSetter for this property if needed

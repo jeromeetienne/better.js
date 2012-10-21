@@ -4,13 +4,11 @@
 var Stacktrace		= require('../src/stacktrace.js');
 var QGetterSetter	= require('../src/qgettersetter.js');
 
-
-
 var aClass1	= function(){
-	console.log('in aClass1 ctor')
+	console.log('in aClass1 ctor');
 	this._bar	= 2;
 
-	this.__defineQGetter__('_bar', function aFunction(value, caller, property){
+	QGetterSetter.defineGetter(this, '_bar', function aFunction(value, caller, property){
 		// console.log('in bar checker', aFunction.caller);
 		// console.log('parse', Stacktrace.parse().slice(0,3));
 		// console.log('caller in .prototype');

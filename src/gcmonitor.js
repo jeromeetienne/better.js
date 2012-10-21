@@ -32,8 +32,8 @@ var GcMonitor	= function(){
 	 * @param {Number|undefined} period period of the check. default to 50ms
 	 */
 	this.start	= function(onChange, period){
-		period	= period	|| 50;
-		onChange= onChange || function(delta){
+		period	= period	|| 1000/60;
+		onChange= onChange	|| function(delta){
 			function bytesToSize(bytes, nFractDigit) {
 				var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
 				if (bytes == 0) return '0';
@@ -47,6 +47,7 @@ var GcMonitor	= function(){
 		timerid	= setInterval(function(){
 			_this.check(onChange);
 		}, period);
+		return this;	// for chained api
 	};
 	/**
 	 * Stop monitoring periodically
@@ -68,16 +69,16 @@ var GcMonitor	= function(){
 		// parameter polymorphism
 		onChange	= onChange || function(property){}
 
+		var present	= Date.now();//console.log('present', (present - lastTimestamp)/1000)
+		var currUsedSize= usedHeapSize();
+
 		if( lastUsedHeap === null ){
-			lastUsedHeap	= usedHeapSize();
-			lastTimestamp	= Date.now();
+			lastUsedHeap	= currUsedSize;
+			lastTimestamp	= present;
 			return;
 		}
 
-		var present	= Date.now();
-		var currUsedSize= usedHeapSize();
-
-		// check if the heap size is this cycle is LESS than what we had last
+		// check if the heap size in this cycle is LESS than what we had last
 		// cycle; if so, then the garbage collector has kicked in
 		var deltaMem	= currUsedSize - lastUsedHeap;
 		if( deltaMem < 0 ){
@@ -85,16 +86,15 @@ var GcMonitor	= function(){
 		}else{
 			var deltaTime	= present - lastTimestamp
 			var newBurnrate	= deltaMem / (deltaTime/1000);
-			// if there is a previous burnRate, smooth with it
-			if( burnRate !== null ){
-				burnRate	= burnRate * 0.7 + newBurnrate * 0.3;
-			}else{
-				burnRate	= newBurnrate;
-			}
+//burnRate	= newBurnrate;
+//console.log('deltaMem', deltaMem, 'deltaTime', deltaTime, 'currUsedSize', currUsedSize, 'lastUsedHeap', lastUsedHeap)
+			if( burnRate === null )	burnRate	= newBurnrate;
+			var friction	= 0.99;
+			burnRate	= burnRate * friction + newBurnrate * (1-friction);
 		}
 
 		lastUsedHeap	= currUsedSize;
-		lastTimestamp	= Date.now();
+		lastTimestamp	= present;
 	}
 	
 	/**
@@ -104,6 +104,14 @@ var GcMonitor	= function(){
 	this.burnRate	= function(){
 		if( burnRate === null )	return 0;
 		return burnRate;
+	}
+	
+	/**
+	 * getter for the usedHeapSize
+	 * @return {Number} used heap size in byte
+	 */
+	this.usedHeapSize	= function(){
+		return usedHeapSize();
 	}
 }
 

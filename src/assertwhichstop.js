@@ -8,7 +8,7 @@
  * @param {String} message the message which is display is condition is falsy
  * @param {Boolean} [useDebugger] the condition which is asserted
 */
-assertWhichStop	= function(condition, message, useDebugger){
+var assertWhichStop	= function(condition, message, useDebugger){
 	if( condition )	return;
 	if( assertWhichStop.useDebugger || useDebugger )	debugger;
 	throw new Error(message	|| "assert Failed");
@@ -20,8 +20,9 @@ if( typeof(window) === 'undefined' )	module.exports	= assertWhichStop;
 
 /**
  * Little helper to overload console.assert
+ * 
+ * @todo a .offConsoleAPI() or noConflict() which restore it
  */
 assertWhichStop.onConsoleAPI	= function(){
 	console.assert	= assertWhichStop;
 }
-

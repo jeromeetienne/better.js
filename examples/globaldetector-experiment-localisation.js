@@ -38,7 +38,7 @@ function globalMonitorLocalizeCreation(varName, creationOnly){
 		// actions to do notify the user
 		console.log('global', "'"+varName+"'", 'created at', originId);
 	});
-
+	// TODO should it use qgettersetter.js ?
 	global.__defineGetter__(varName, function(){
 		var realName	= 'globaldetector_valueof_'+varName;
 		var value	= this[realName];

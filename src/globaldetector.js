@@ -8,7 +8,7 @@
 var GlobalDetector	= function(){
 	// take the namespace for global
 	var inBrowser	= typeof(window) !== 'undefined'	? true : false
-	var _global	= inBrowser	? window	: global;
+	var _global	= inBrowser	?  window	:  global;
 	var _globalStr	= inBrowser	? 'window'	: 'global';
 	// sanity check - a global namespace MUST be found
 	console.assert( _global, 'failed to find a global namespace! bailing out!' );

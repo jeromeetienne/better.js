@@ -1,6 +1,6 @@
 var assertWhichStop	= assertWhichStop	|| require('../src/assertwhichstop.js');
 
-describe('assertwhichstop', function(){
+describe('assertWhichStop()', function(){
 
 	it('should not stop on true', function(){
 		assertWhichStop(true, 'this should NEVER be displayed')
