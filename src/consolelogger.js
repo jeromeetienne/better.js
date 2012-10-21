@@ -3,9 +3,12 @@
  * 
  * * TODO how to overload the usual console.log/warn/error function
  *   * done ? not really tested
- * * TODO put a prefix 
  * * TODO write tests
  * * TODO write examples
+ * * DONE put a prefix 
+ *   * messageFormatter(arguments, stackframe) => arguments
+ *   * with color on node
+ *   * etc...
 */
 
 
@@ -48,6 +51,80 @@ ConsoleLogger.Severity	= {
  * @type {Number}
  */
 ConsoleLogger.Severity.dfl	= ConsoleLogger.Severity.all;
+
+//////////////////////////////////////////////////////////////////////////////////
+//		handle formatters							//
+//////////////////////////////////////////////////////////////////////////////////
+
+ConsoleLogger.formatterIdentity	= function(args, stackFrame, severity){
+	return args;
+}
+
+ConsoleLogger.formatterTimeStamp	= function(args, stackFrame, severity){
+	// build prefix with time
+	var present	= new Date();
+	var prefixColor	= ConsoleLogger._formatterSeverityColor(severity);
+	var prefix	= prefixColor + pad(present.getHours(),2)
+				+ ':'
+				+ pad(present.getMinutes(),2)
+				+ ':'
+				+ pad(present.getSeconds(),2)
+				+ ConsoleLogger._formatterColor.reset;
+	// convert arguments into actual Array
+	args	= Array.prototype.slice.call(args, 0);
+	// prepend the prefix
+	args.unshift(prefix);
+	// return the result
+	return args;
+
+	function pad(val, len) {
+		val = String(val);
+		while(val.length < len) val = "0" + val;
+		return val;
+	};
+};
+
+ConsoleLogger.formatterOrigin	= function(args, stackFrame, severity)
+{
+	// compute prefix
+	var prefixColor	= ConsoleLogger._formatterSeverityColor(severity);
+	var originId	= stackFrame.fct + '@' + stackFrame.url + ':' + stackFrame.line;
+	var prefix	= prefixColor + originId + ConsoleLogger._formatterColor.reset;
+	// convert arguments into actual Array
+	args		= Array.prototype.slice.call(args, 0);
+	// prepend the prefix
+	args.unshift(prefix);
+	// return the result
+	return args;
+}
+ConsoleLogger._formatterColor	= {
+	black	: '\033[30m',
+	red	: '\033[31m',
+	green	: '\033[32m',
+	yellow	: '\033[33m',
+	blue	: '\033[34m',
+	purple	: '\033[35m',
+	cyan	: '\033[36m',
+	white	: '\033[37m',
+	reset	: '\033[0m',
+};
+
+/**
+ * return ainsi color per intensity
+ * @param  {String} severity the severity of the message
+ * @return {String} ansi color string
+ */
+ConsoleLogger._formatterSeverityColor	= function(severity){
+	var color	= ConsoleLogger._formatterColor;
+	if( severity === 'log' )	return color.red;
+	if( severity === 'warn' )	return color.purple;
+	return color.green;
+}
+
+/**
+ * Current message formatter
+ */
+ConsoleLogger.formatter	= ConsoleLogger.formatterIdentity;
 
 //////////////////////////////////////////////////////////////////////////////////
 //		handle filters							//
@@ -102,31 +179,35 @@ ConsoleLogger.filter	= function(severity, stackFrame){
 //		handle log functions						//
 //////////////////////////////////////////////////////////////////////////////////
 
+ConsoleLogger._print	= function(severity, args){
+	var stackFrame	= Stacktrace.parse()[2];
+
+	if( ConsoleLogger.filter(severity, stackFrame) === false )	return;
+
+	var args	= ConsoleLogger.formatter(args, stackFrame, severity);
+	var _console	= ConsoleLogger._origConsole;
+	_console[severity].apply(_console.console, args);	
+};
+
 /**
  * log with a severity of 'log'
  */
 ConsoleLogger.log	= function(/* ... */){
-	if( ConsoleLogger.filter('log') === false )	return;
-	var _console	= ConsoleLogger._origConsole;
-	_console.log.apply(_console.console, arguments);	
+	ConsoleLogger._print('log', arguments);
 }
 
 /**
  * log with a severity of 'warn'
  */
 ConsoleLogger.warn	= function(/* ... */){
-	if( ConsoleLogger.filter('warn') === false )	return;
-	var _console	= ConsoleLogger._origConsole;
-	_console.warn.apply(_console.console, arguments);	
+	ConsoleLogger._print('warn', arguments);
 }
 
 /**
  * log with a severity of 'error'
  */
 ConsoleLogger.error	= function(/* ... */){
-	if( ConsoleLogger.filter('error') === false )	return;
-	var _console	= ConsoleLogger._origConsole;
-	_console.error.apply(_console.console, arguments);	
+	ConsoleLogger._print('error', arguments);
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -135,6 +216,8 @@ ConsoleLogger.error	= function(/* ... */){
 
 /**
  * Overload console.log/warn/error function
+ * 
+ * @todo provide a noConflict  
  */
 ConsoleLogger.overloadConsole	= function(){
 	console.log	= ConsoleLogger.log;

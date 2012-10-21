@@ -8,10 +8,14 @@ var foo	= function(){};
 // 	return stackFrame.url.match(/\.js$/)	? true : false
 // }, 'all')
 
-ConsoleLogger.log('bonjour');
-
+//ConsoleLogger.formatter	= ConsoleLogger.formatterOrigin;
+ConsoleLogger.formatter	= ConsoleLogger.formatterTimeStamp;
 ConsoleLogger.overloadConsole();
 
-console.log('world')
 
+console.log('bonjour');
+
+console.warn('world!')
+
+console.error('Life is great.')
 
