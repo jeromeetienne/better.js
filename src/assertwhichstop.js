@@ -23,6 +23,6 @@ if( typeof(window) === 'undefined' )	module.exports	= assertWhichStop;
  * 
  * @todo a .offConsoleAPI() or noConflict() which restore it
  */
-assertWhichStop.onConsoleAPI	= function(){
+assertWhichStop.overloadConsole	= function(){
 	console.assert	= assertWhichStop;
 }

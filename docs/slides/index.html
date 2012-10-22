@@ -316,6 +316,13 @@
 </section>
 <section>
 	<section data-markdown>
+		# PropertyAttr.js
+		
+		## Property attribute for javascript
+	</section>
+</section>
+<section>
+	<section data-markdown>
 		# consolelogger.js
 		
 		## log layer based on console.*
@@ -524,6 +531,120 @@
 		* Directly based on [longstacktrace.js](https://github.com/tlrobinson/long-stack-traces) 
 		from [tlrobinson](https://github.com/tlrobinson)
 		* available on v8 only ?
+	</section>
+</section>
+<section>
+	<section data-markdown>
+		# assertwhichstop.js
+		
+		---
+		
+		### An assert which actually stop
+	</section>
+	<section data-markdown>		
+		## Why Assert is Important
+		
+		* you assert stuff which should be true
+		* if it is false, it is a bug
+		* lots of asserts is faster to detect bug
+		
+		-- 
+		
+		**Sanity Check are Keys in Large Applications**
+	</section>
+	<section data-markdown>
+		## console.assert is plain display
+		
+		* Like console.log() or console.error(); 
+		  * eyes candy only
+		* Doesnt stop the execution like assert() is meant to do
+		  * important to stop asap
+		  * bugs detected early are easier to fix
+		* it is a browser thing
+		  * assert stop in node.js
+		  * assert stop in c/c++
+	</section>
+	<section data-markdown>
+		## How to use it
+		
+		1. Include it
+		2. Overload console.assert if youwish
+		3. Use assert for your sanity checks
+	</section>
+	<section data-markdown>
+		## Let's Include it
+
+		In Browser
+		```
+		<script src='../src/assertwhichstop.js'></script>
+		```
+
+		In Node
+		```
+		var AssertWhichStrop	= require('assertwhichstop.js');
+		```
+		Works but less relevant as node's assert already stops
+		
+	</section>
+	<section data-markdown>
+		## Let's Overload console
+				
+		dropin replacement => easier deployment
+		```
+		// initialisation to overload console.assert
+		assertWhichStop.overloadConsole();
+		```
+		
+		
+		```
+		// now all console.assert stop
+		console.assert(false, 'This assert always fails!');
+		// so following line is not executed
+		console.log('this message is never displayed')
+		```		
+	</section>
+	<section data-markdown>
+		## Let's assert things
+		
+		For examples
+		```
+		console.assert(type(myVariable) !== 'undefined')
+		```
+	</section>
+	<section data-markdown>
+		## How does it stop
+		
+		* with an exception using Error - the default
+		* with the ```debugger;``` keyword
+		
+		```
+		// to stop with debugger, use the following line
+		assertWhichStop.useDebugger	= true;
+		```
+	</section>
+	<section data-markdown>
+		## Stopping with an exception
+		
+		Using Error and faillure message
+		```
+		throw new Error(faillure_message);
+		```
+	</section>
+	<section data-markdown>
+		## Stopping with an debugger keyword
+		
+		* not a very known keyword
+		* trigger js debugger immediatly
+		* you can start debugging
+	</section>
+	<section data-markdown>
+		## Summary
+		
+		* in browser, assert doesnt stop
+		* assertwichstop.js fix this issue
+		  * able to stop with js exception or debugger
+		* **Sanity Check is Important**
+		  * bugs detected early are easier to fix§
 	</section>
 </section>
 <section>
