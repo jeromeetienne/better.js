@@ -30,7 +30,7 @@ var GlobalDetector	= function(){
 	 */
 	this.start	= function(onChange, period){
 		period	= period	|| 1000;
-		onChange= onChange || function(newProperty){
+		onChange= onChange	|| function(newProperty){
 			console.warn(new Date + " -- Warning Global Detected!!! "+_globalStr+"['"+newProperty+"'] === ", _global[newProperty])
 		}
 		timerid	= setInterval(function(){

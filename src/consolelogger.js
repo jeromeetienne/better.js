@@ -1,16 +1,6 @@
 /**
  * @fileOverview implementation of a log layer on top of console.*
- * 
- * * TODO how to overload the usual console.log/warn/error function
- *   * done ? not really tested
- * * TODO write tests
- * * TODO write examples
- * * DONE put a prefix 
- *   * messageFormatter(arguments, stackframe) => arguments
- *   * with color on node
- *   * etc...
 */
-
 
 var Stacktrace	= Stacktrace	|| require('./stacktrace.js');
 
@@ -97,16 +87,18 @@ ConsoleLogger.formatterOrigin	= function(args, stackFrame, severity)
 	// return the result
 	return args;
 }
+
+ConsoleLogger._inNode	= typeof(window) === 'undefined' ? true : false;
 ConsoleLogger._formatterColor	= {
-	black	: '\033[30m',
-	red	: '\033[31m',
-	green	: '\033[32m',
-	yellow	: '\033[33m',
-	blue	: '\033[34m',
-	purple	: '\033[35m',
-	cyan	: '\033[36m',
-	white	: '\033[37m',
-	reset	: '\033[0m',
+	black	: ConsoleLogger._inNode === false ? '' : '\033[30m',
+	red	: ConsoleLogger._inNode === false ? '' : '\033[31m',
+	green	: ConsoleLogger._inNode === false ? '' : '\033[32m',
+	yellow	: ConsoleLogger._inNode === false ? '' : '\033[33m',
+	blue	: ConsoleLogger._inNode === false ? '' : '\033[34m',
+	purple	: ConsoleLogger._inNode === false ? '' : '\033[35m',
+	cyan	: ConsoleLogger._inNode === false ? '' : '\033[36m',
+	white	: ConsoleLogger._inNode === false ? '' : '\033[37m',
+	reset	: ConsoleLogger._inNode === false ? '' : '\033[0m',
 };
 
 /**
@@ -144,6 +136,18 @@ ConsoleLogger._filters	= [];
  * @return {[type]}          [description]
  */
 ConsoleLogger.pushFilter	= function(validFor, severity){
+	// handle polymorphism
+	if( typeof(validFor) === 'string' ){
+		var path	= validFor;
+		return ConsoleLogger.pushFilter(function(stackFrame, severity){
+			return stackFrame.url.lastIndexOf(path) === stackFrame.url.length - path.length ? true : false;
+		}, severity);
+	}else if( validFor instanceof RegExp ){
+		var regexp	= validFor;
+		return ConsoleLogger.pushFilter(function(stackFrame, severity){
+			return stackFrame.url.match(regexp)	? true : false
+		}, severity);		
+	}
 	// sanity check - sanity level MUST be defined
 	console.assert(Object.keys(ConsoleLogger.Severity).indexOf(severity) !== -1, 'unknown severity level');
 	console.assert(validFor instanceof Function);

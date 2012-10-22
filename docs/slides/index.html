@@ -342,6 +342,82 @@
 		* no big change needed
 		* you can remove it at any time
 	</section>
+	<section data-markdown>
+		## How to use it
+		
+		1. include it
+		2. setup filters you wish
+		3. use it directly or thru console.* API
+	</section>
+	<section data-markdown>
+		## Let's Include it
+
+		In Browser
+		```
+		<script src='../src/consolelogger.js'></script>
+		```
+
+		In Node
+		```
+		var ConsoleLogger	= require('consolelogger.js');
+		```
+	</section>
+	<section data-markdown>
+		## Let's Use it
+
+		Direct API		
+		```
+		ConsoleLogger.log('Javascript');
+		ConsoleLogger.warn('is');
+		ConsoleLogger.error('Beautifull!');
+		```
+	</section>
+	<section data-markdown>
+		## As Droped in replacement on console.*
+		
+		```
+		// overload console.* functions
+		ConsoleLogger.overloadConsole();
+		
+		// now console.log will use ConsoleLogger
+		console.log('Javascript');
+		console.warn('is');
+		console.error('Beautifull!');
+		```
+	</section>
+		
+		
+
+	<section data-markdown>
+		## Filter Logs Based on Severity
+
+		what to log / from where to log 
+
+		```
+		// log 'warning' or more in foo.js
+		// - origin by string
+		ConsoleLogger.pushFilter('foo.js', 'warn');
+
+		// log 'nothing' or more in boo.js
+		// - origin by regexp
+		ConsoleLogger.pushFilter(/boo\.js$/, 'nothing');
+
+		// log 'error' or more in bar.js
+		// - origin by function
+		ConsoleLogger.pushFilter(function(stackFrame, severity){
+			return stackFrame.url.match('bar.js');
+		}, 'error');
+		```
+		
+		```
+		// in foo.js
+		console.warn('hello');	// DO GO
+		// in boo.js
+		console.error('world.');	// NO GO
+		// in bar.js
+		console.warn('The end is near.');	// NO GO
+		```
+	</section>
 </section>
 <section>
 	<section data-markdown>
