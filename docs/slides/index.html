@@ -385,9 +385,12 @@
 		console.error('Beautifull!');
 		```
 	</section>
+	<section data-markdown>
+		## Tuning to fit your needs
 		
-		
-
+		* tune filters
+		* tune formatters
+	</section>
 	<section data-markdown>
 		## Filter Logs Based on Severity
 
@@ -417,6 +420,49 @@
 		// in bar.js
 		console.warn('The end is near.');	// NO GO
 		```
+	</section>
+	<section data-markdown>
+		## Message formater
+		
+		* **What**: Change message just before display
+		* **Why**: some possible examples
+		  * add timestamp
+		  * add origin
+		  * add color by severity
+		* **default**: nothing
+	</section>
+	<section data-markdown>
+		## Message formater
+		
+		Some Preconfigured
+		```
+		// set formater which prepend timestamp
+		ConsoleLogger.formatter	= ConsoleLogger.formatterIdentity;
+
+		// set formater which prepend origin 
+		ConsoleLogger.formatter	= ConsoleLogger.formatterOrigin;
+
+		// set back default formater
+		ConsoleLogger.formatter	= ConsoleLogger.formatterIdentity;
+		```
+		Output
+		```
+		12:53:13 Hello
+		12:53:13 world!
+		```
+		
+		In Node, add terminal Colors		
+	</section>
+	<section data-markdown>
+		## Summary
+
+		* consolelogger.js: log layer on top of console.*
+		* Easy to use and deploy
+		  * 1.8k after min + gzip
+		  * droppedin replacement for console.* available
+		* Flexible: tune your filters and your formatters 
+		  * control which severity go thru, and from there
+		  * control how message are displayed
 	</section>
 </section>
 <section>

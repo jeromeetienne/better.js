@@ -32,7 +32,7 @@ ConsoleLogger.Severity	= {
 	'log'		: 1,
 	'warn'		: 2,
 	'error'		: 3,
-	'nothing'	: 99,
+	'nothing'	: 99
 };
 
 /**
@@ -98,7 +98,7 @@ ConsoleLogger._formatterColor	= {
 	purple	: ConsoleLogger._inNode === false ? '' : '\033[35m',
 	cyan	: ConsoleLogger._inNode === false ? '' : '\033[36m',
 	white	: ConsoleLogger._inNode === false ? '' : '\033[37m',
-	reset	: ConsoleLogger._inNode === false ? '' : '\033[0m',
+	reset	: ConsoleLogger._inNode === false ? '' : '\033[0m'
 };
 
 /**
