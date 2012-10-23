@@ -25,7 +25,7 @@ function globalMonitorLocalizeCreation(varName, creationOnly){
 	global.__defineSetter__(varName, function(value){
 		// actually set the value in a proxy variable
 		var realName	= 'globaldetector_valueof_'+varName;
-		console.assert(this[realName] === undefined)
+		console.assert(this[realName] === undefined);
 		this[realName]	= value;
 		// if creationOnly must be reported and already reported, return now
 		if( reported && creationOnly )	return;

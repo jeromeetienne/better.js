@@ -60,7 +60,7 @@ aClass2.prototype.bar	= function(){ return this._bar;	}
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-var obj	= new aClass1
+var obj	= new aClass2
 
 console.log('obj.bla()', obj.bar());
 //console.log('obj._bla', obj._bar);

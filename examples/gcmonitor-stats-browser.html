@@ -2,15 +2,23 @@
 <script src='../src/gcmonitor.js'></script>
 <script src='helpers/gcmonitorstats.js'></script>
 <body>
-	<label>Allocation pressure</label><input id="rangeSlider" type="range" min="0" max="5000" step="100" value="1000"/>
+	<div>
+		<label>nb Allocation</label>
+		<input id="nAllocSlider" type="range" min="0" max="5000" step="100" value="1000"/>
+	</div>
+	<div>
+		<label>nb Allocation element</label>
+		<input id="allocSizeSlider" type="range" min="0" max="5000" step="10" value="1000"/>
+	</div>
 <script>
 	// new GcMonitor().start();
 	setInterval(function(){
 		var element	= document.getElementById('rangeSlider');
-		var nAlloc	= parseInt(element.value);
-		//nAlloc	= 1000;
+		var nAlloc	= parseInt(document.getElementById('nAllocSlider').value);
+		var allocSize	= parseInt(document.getElementById('allocSizeSlider').value);
+
 		for(var j = 0; j < nAlloc; j++){
-			arr	= new Array(1000)
+			arr	= new Array(allocSize)
 			for(var i = 0; i < arr.length; i++){
 				arr[i]	= i;
 			}			
@@ -24,5 +32,5 @@
 	document.body.appendChild(gcMonitorStats.domElement)
 	setInterval(function(){
 		gcMonitorStats.update();
-	}, 1000/60)
+	}, 1000/10)
 </script></body>
