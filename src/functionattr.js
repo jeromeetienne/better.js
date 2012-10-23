@@ -211,7 +211,7 @@ FnAttrClass.prototype.breakpoint	= function(fn, conditionFn){
 		if( stopNow === true )	debugger;
 		// forward the call to the original function
 		return this._currentFn.apply(this, arguments);
-	}.bind(this)
+	}.bind(this);
 	return this;
 }
 

@@ -14,6 +14,12 @@ var TypeCheck	= {};
 
 Object.prototype.__defineQGetter__	|| require('./qgettersetter.js')
 
+
+// export the namespace in node.js - if running in node.js
+if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;
+
+
+
 /**
  * Check type with a object setter
  * 
@@ -118,8 +124,3 @@ TypeCheck._ValidatorClass= function(fn){
 	console.assert(fn instanceof Function);
 	this.fn	= fn;
 }
-
-// export the namespace in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;
-
-

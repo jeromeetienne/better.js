@@ -42,7 +42,7 @@ var GcMonitor	= function(){
 				var i 		= Math.floor(Math.log(bytes) / Math.log(1024));
 				return Math.round(bytes*precision / Math.pow(1024, i))/precision + ' ' + sizes[i];
 			};
-			console.warn(new Date + " -- GC occured!!! saved", bytesToSize(delta), ' consuming at ', bytesToSize(burnRate))
+			console.warn(new Date + " -- GC occured! saved", bytesToSize(delta), 'consuming at', bytesToSize(burnRate), 'per second')
 		}
 		timerid	= setInterval(function(){
 			_this.check(onChange);
