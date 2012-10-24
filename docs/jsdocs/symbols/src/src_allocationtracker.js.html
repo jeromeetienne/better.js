@@ -9,9 +9,10 @@
 <span class='line'>  2</span> 
 <span class='line'>  3</span> </span><span class="COMM">/**
 <span class='line'>  4</span>  * @namespace
-<span class='line'>  5</span>  */</span><span class="WHIT">
-<span class='line'>  6</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">allocationTracker</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Stacktrace.Tracker</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>  7</span> 
-<span class='line'>  8</span> </span><span class="COMM">// export the class in node.js - if running in node.js</span><span class="WHIT">
-<span class='line'>  9</span> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">window</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'undefined'</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">module.exports</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">allocationTracker</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'> 10</span> </span></pre></body></html>
+<span class='line'>  5</span>  * http://stackoverflow.com/questions/367768/how-to-detect-if-a-function-is-called-as-constructor
+<span class='line'>  6</span>  */</span><span class="WHIT">
+<span class='line'>  7</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">allocationTracker</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Stacktrace.Tracker</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>  8</span> 
+<span class='line'>  9</span> </span><span class="COMM">// export the class in node.js - if running in node.js</span><span class="WHIT">
+<span class='line'> 10</span> </span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="KEYW">typeof</span><span class="PUNC">(</span><span class="NAME">window</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'undefined'</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">module.exports</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">allocationTracker</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 11</span> </span></pre></body></html>

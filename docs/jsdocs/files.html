@@ -40,8 +40,6 @@
 				
 					<li><a href="symbols/ConsoleLogger.html">ConsoleLogger</a></li>
 				
-					<li><a href="symbols/debug.html">debug</a></li>
-				
 					<li><a href="symbols/FnAttrClass.html">FnAttrClass</a></li>
 				
 					<li><a href="symbols/Function.html">Function</a></li>
@@ -50,7 +48,7 @@
 				
 					<li><a href="symbols/GlobalDetector.html">GlobalDetector</a></li>
 				
-					<li><a href="symbols/ObjectPool.html">ObjectPool</a></li>
+					<li><a href="symbols/PrivateForJS.html">PrivateForJS</a></li>
 				
 					<li><a href="symbols/Stacktrace.html">Stacktrace</a></li>
 				
@@ -65,7 +63,7 @@
 			Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 			Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
 			Generated on:
-			<time datetime='2012-9-16' pubdate>2012-9-16 10:32</time>
+			<time datetime='2012-9-23' pubdate>2012-9-23 10:44</time>
 		</footer>
 	</div>
 </div>
@@ -84,6 +82,11 @@
 						
 						
 contains TypeCheck class
+
+if input of type in text see 
+* https://developers.google.com/closure/compiler/docs/js-for-compiler
+* use same format
+* autogenerate function parameter check
 						
 						<dl class="detailList">
 							
@@ -96,14 +99,10 @@ contains TypeCheck class
 					</li>
 				
 					<li>
-						<h2 class="filename"><a href="symbols/src/src_debug.js.html">debug.js</a></h2>
+						<h2 class="filename"><a href="symbols/src/src_consolelogger.js.html">consolelogger.js</a></h2>
 						
 						
-- Depends only on console.*
-- modern browser MUST be supported. other may be supported
-- TODO is the namespace name properly named
-
-Is it possible to detect anonymous function and to make give them a name
+implementation of a log layer on top of console.*
 						
 						<dl class="detailList">
 							
@@ -131,22 +130,7 @@ Is it possible to detect anonymous function and to make give them a name
 					</li>
 				
 					<li>
-						<h2 class="filename"><a href="symbols/src/src_consolelogger.js.html">src/consolelogger.js</a></h2>
-						
-						
-						
-						<dl class="detailList">
-							
-							
-							
-							
-							
-							
-						</dl>
-					</li>
-				
-					<li>
-						<h2 class="filename"><a href="symbols/src/src_debug.gclosureexports.js.html">src/debug.gclosureexports.js</a></h2>
+						<h2 class="filename"><a href="symbols/src/src_assertwhichstop.js.html">src/assertwhichstop.js</a></h2>
 						
 						
 						
@@ -206,7 +190,22 @@ Is it possible to detect anonymous function and to make give them a name
 					</li>
 				
 					<li>
-						<h2 class="filename"><a href="symbols/src/src_objectpool.js.html">src/objectpool.js</a></h2>
+						<h2 class="filename"><a href="symbols/src/src_privateforjs.js.html">src/privateforjs.js</a></h2>
+						
+						
+						
+						<dl class="detailList">
+							
+							
+							
+							
+							
+							
+						</dl>
+					</li>
+				
+					<li>
+						<h2 class="filename"><a href="symbols/src/src_propertyattr.js.html">src/propertyattr.js</a></h2>
 						
 						
 						
