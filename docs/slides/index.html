@@ -323,6 +323,69 @@
 </section>
 <section>
 	<section data-markdown>
+		# PrivateForJS.js
+		
+		## private/public visibility for javascript
+	</section>
+	<section data-markdown>
+		## public/private visibility
+		
+		* methods and variables marked as public/private
+		* private : for current class only
+		* public : for everybody
+	</section>
+	<section data-markdown>
+		## private/public vs maintainability
+
+		* public = kinda API of the class
+		* private code === change more frequently
+		* limit public === expose as little as possible
+		  * thus conserve the ability to modify it
+		* Help maintain the code
+		  * private are easier to change because less people depends on it
+		* the _ prefix as convention
+		  * comes from python which doesnt have private/public (@TODO to check)
+		  * convention is cool but manual
+		  * human are error prone
+		  * automatic interdiction is more efficient
+	</section>
+	<section data-markdown>
+		## Detection of violation
+		
+		* violation = private part used by external code
+		* early detection makes it easier to fix
+	</section>
+	<section data-markdown>
+		## How to use it
+		
+		1. Include it
+		2. Use it 
+	</section>
+	<section data-markdown>
+		## Let's Include it
+
+		In Browser
+		```
+		<script src='../src/privateforjs.js'></script>
+		```
+
+		In Node
+		```
+		var PrivateForJS	= require('privateforjs.js');
+		```
+	</section>
+	<section data-markdown>
+		## Let's Use it
+
+		* for property
+		* so this._bar accessible only from this object
+		```
+		PrivateForJS.privateProperty(aClass, this, '_bar');
+		```
+	</section>
+</section>
+<section>
+	<section data-markdown>
 		# consolelogger.js
 		
 		## log layer based on console.*
@@ -606,7 +669,7 @@
 	<section data-markdown>
 		## Let's assert things
 		
-		For examples
+		For example
 		```
 		console.assert(type(myVariable) !== 'undefined')
 		```
