@@ -95,7 +95,7 @@ PrivateForJS.privateProperty	= function(klass, baseObject, property){
  * @return {Function}       the overloaded function
  */
 PrivateForJS.privateFunction	= function(klass, fn){
-	// MUST not use .bind(this) as it change the .caller value
+	// MUST NOT use .bind(this) as it change the .caller value
 	var _this	= this;
 	return function _checkPrivateFunction(){
 		// get caller
