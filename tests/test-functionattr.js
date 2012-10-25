@@ -1,6 +1,6 @@
 var fnAttr	= fnAttr	|| require('../src/functionattr.js');
 
-describe('functionattr', function(){
+describe('FunctionAttr', function(){
 
 	function foo(){
 		return 'bar';

@@ -25,10 +25,10 @@ describe('PrivateForJS', function(){
 
 	it('should trigger assert when accessed directly', function(){
 		var aInstance	= new aClass();
-		try{
+		try {
 			var tmp	= aInstance._bar;
 			console.assert(false, "No exception triggered!!");
-		}catch(e){};
+		} catch(e){};
 	});
 
 	it('should not trigger assert cross instance of the same class', function(){

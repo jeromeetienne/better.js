@@ -7,12 +7,9 @@ describe('assertWhichStop()', function(){
 	});
 
 	it('should stop on false', function(){
-		var thrown	= false;
 		try{	
 			assertWhichStop(false)
-		}catch(e){ 
-			thrown	= true;
-		};
-		console.assert(thrown, "No exception triggered!!");
+			console.assert(false, "No exception triggered!!");
+		}catch(e){};
 	});
 });
