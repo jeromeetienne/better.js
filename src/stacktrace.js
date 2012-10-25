@@ -59,21 +59,21 @@ Stacktrace.parse	= function(nShift, error){
 		lines.forEach(function(line){
 			if( line.match(/\)$/) ){
 				var matches	= line.match(/^\s*at (.+) \((.+):(\d+):(\d+)\)/);
-				var result	= {
+				var result	= new Stacktrace.Frame({
 					fct	: matches[1],
 					url	: matches[2],
 					line	: parseInt(matches[3], 10),
 					column	: parseInt(matches[4], 10)
-				};
+				});
 				stacktrace.push(result);
 			}else{
 				var matches	= line.match(/^\s*at (.+):(\d+):(\d+)/);
-				var result	= {
+				var result	= new Stacktrace.Frame({
 					url	: matches[1],
 					fct	: '<anonymous>',
 					line	: parseInt(matches[2], 10),
 					column	: parseInt(matches[3], 10)
-				};
+				});
 				stacktrace.push(result);
 			}
 		});
@@ -89,16 +89,47 @@ Stacktrace.parse	= function(nShift, error){
 		var stacktrace	= [];
 		lines.forEach(function(line){
 			var matches	= line.match(/^(.*)@(.+):(\d+)$/);
-			stacktrace.push({
+			stacktrace.push(new Stacktrace.Frame({
 				fct	: matches[1] === '' ? '<anonymous>' : matches[1],
 				url	: matches[2],
 				line	: parseInt(matches[3], 10),
 				column	: 1
-			});
+			}));
 		});
 		return stacktrace;
 	};
 }
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Stacktrace.Frame						//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * handle stack frame
+ */
+Stacktrace.Frame	= function(opts){
+	this.url	= opts.url;
+	this.fct	= opts.fct;
+	this.line	= opts.line;
+	this.column	= opts.column;
+};
+
+/**
+ * return the origin String
+ * @return {String} the origin of the stackframe
+ */
+Stacktrace.Frame.prototype.originId	= function(){
+	var originId	= this.fct + '@' + this.url + ':' + this.line + ':' + this.column;
+	return originId;
+};
+
+/**
+ * get the basename of the url
+ * @return {string}
+ */
+Stacktrace.Frame.prototype.basename	= function(){
+	return this.url.match(/([^/]*)$/)[1]	|| ".";
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
