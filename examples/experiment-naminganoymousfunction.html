@@ -1,0 +1,32 @@
+<!doctype html>
+<script src='../src/stacktrace.js'></script>
+<script>
+var Stacktrace	= Stacktrace	|| require('../src/stacktrace')
+
+var foo	= {
+	bar : function(){
+		console.log('inside function', Stacktrace.parse()[0]);
+	}
+};
+
+/**
+ * name anonymous function
+ * @param  {Function} fn   the function to name
+ * @param  {String}   name the name to set
+ * @return {Function}      the cloned function with a name
+ */
+function nameAnonymousFunction(fn, name){
+	// sanity check 
+	console.assert(fn.name === '', 'this function isnt anonymous');
+	// set the name in a string
+	var str = fn.toString().replace(/^function.*\(/, 'function '+name+' (');
+	// eval the string to return it
+	eval('var tmp = '+str);
+	return tmp;
+}
+
+foo.bar	= nameAnonymousFunction(foo.bar, 'foo_bar')
+
+foo.bar();
+</script>
+
