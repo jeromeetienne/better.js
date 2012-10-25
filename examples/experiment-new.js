@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-var parseStacktrace	= require('../parseStacktrace')
-
+var Stacktrace	= Stacktrace	|| require('../src/stacktrace')
 
 
 function aClass(){
@@ -11,7 +10,7 @@ function aClass(){
 	
 	var isConstructor	= this.constructor == aClass;
 	if( isConstructor ){
-		var stackItem		= parseStacktrace()[1];
+		var stackItem		= Stacktrace.parse()[1];
 		var origin		= stackItem.fct + '@' + stackItem.url + ':' + stackItem.line + ':' + stackItem.column;
 		var counters		= aClass._newCounters;
 		counters[origin]	= counters[origin] !== undefined ? counters[origin]  : 0;

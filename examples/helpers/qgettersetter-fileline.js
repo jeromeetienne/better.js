@@ -18,11 +18,7 @@ var Stacktrace	= Stacktrace	|| require('../../src/stacktrace.js');
 	_global.__defineQGetter__('__FILE__', function(){
 		var stacktrace	= Stacktrace.parse();
 		var stackFrame	= stacktrace[2];
-
-		var url		= stackFrame.url;
-		var basename	= url.match(/([^/]*)$/)[1]	|| ".";
-		//console.log("stacktrace", stacktrace, "url", url, "basename", basename)
-		return basename;
+		return stackFrame.basename();
 	});
 
 	/**
