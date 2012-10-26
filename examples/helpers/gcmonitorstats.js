@@ -9,7 +9,7 @@
  */
 var GcMonitorStatsCollection = function (){
 // @TODO cleanup... remove all stats.js stuff
-// - autoscaling needed
+
 	var container	= document.createElement( 'div' );
 	container.style.cssText = 'width:80px;opacity:0.9;cursor:pointer';
 
@@ -26,19 +26,59 @@ var GcMonitorStatsCollection = function (){
 	graphEl.style.cssText = 'position:relative;width:74px;height:30px;background-color:#0f0';
 	divEl.appendChild( graphEl );
 
-	while( graphEl.children.length < 74 ){
+	var currentValues	= [];
+	var maxViewableValue	= 2*1024*1024;
+	for(var i = 0; i < 74; i++){
+		currentValues[i]	= 0;
 		var barEl	= document.createElement( 'span' );
-		barEl.style.cssText = 'width:1px;height:30px;float:left;background-color:#131';
+		barEl.style.cssText	= 'width:1px;height:30px;float:left;background-color:#131';
 		graphEl.appendChild( barEl );
 	}
 
-	var updateGraph	= function( dom, height, color ){
-		var child	= dom.appendChild( dom.firstChild );
-		child.style.height	= height + 'px';
-		if( color ) child.style.backgroundColor	= color;
+	// get max of currentValues - used for autoscaling
+	var cpuMaxCurrentValues	= function(){
+		var max	= -Infinity;
+		for(var i = 0; i < currentValues.length; i++){
+			max	= Math.max(max, currentValues[i]);
+		}
+		return max;
 	};
-	
-	
+	// update the graph
+	var updateGraph	= function(value, color){
+		// update currentValues
+		currentValues.shift();
+		currentValues.push(value);
+		// handle autoscaling
+		var max	= cpuMaxCurrentValues();
+		if( max > maxViewableValue ){
+			maxViewableValue	= max * 1.2;
+			reflowGraph();
+		}else if( max < 0.5*maxViewableValue ){
+			maxViewableValue	= max * 1.2;
+			reflowGraph();			
+		}
+		// compute the height
+		var normValue	= value / maxViewableValue;
+		var height	= Math.min(30, 30 - normValue * 30);		
+		// display the height
+		var childEl	= graphEl.appendChild( graphEl.firstChild );
+		childEl.style.height	= height + 'px';
+		// change color if needed
+		if( color ) childEl.style.backgroundColor	= color;
+	};
+	// reflow the graph - used for autoscaling
+	var reflowGraph	= function(){
+		for(var i = 0; i < currentValues.length; i++){
+			var value	= currentValues[i];
+			// compute the height
+			var normValue	= value / maxViewableValue;
+			var height	= Math.min(30, 30 - normValue * 30);		
+			// display the height
+			var childEl	= graphEl.children[i];
+			childEl.style.height	= height + 'px';
+		}
+	};
+
 	var gcMonitor	= new GcMonitor();
 	var lastTime	= 0;
 
@@ -48,19 +88,16 @@ var GcMonitorStatsCollection = function (){
 			// refresh only 30time per second
 			if( Date.now() - lastTime < 1000/60 )	return;
 			lastTime	= Date.now()
-
+			// get value and color
 			var color	= '#131';
 			gcMonitor.check(function(delta, burnRate){
 				color	= '#830';
-			})
-			
+			});	
 			var value	= gcMonitor.usedHeapSize();
-			testEl.textContent = "gcMem: " + bytesToSize(value, 2);
-			
-			var normValue	= value / (20*1024*1024);
-			var height	= Math.min( 30, 30 - normValue * 30 );
-			updateGraph( graphEl, height, color);
-			
+			// update graph
+			updateGraph(value, color);
+			// display label
+			testEl.textContent = "gcMem: " + bytesToSize(value, 2);			
 			function bytesToSize( bytes, nFractDigit ){
 				var sizes = ['B ', 'KB', 'MB', 'GB', 'TB'];
 				if (bytes == 0) return 'n/a';
@@ -100,45 +137,71 @@ var GcMonitorStatsBurnRate = function (){
 	graphEl.style.cssText	= 'position:relative;width:74px;height:30px;background-color:#0f0';
 	divEl.appendChild( graphEl );
 
-	while( graphEl.children.length < 74 ){
+	var currentValues	= [];
+	var maxViewableValue	= 2*1024*1024;
+	for(var i = 0; i < 74; i++){
+		currentValues[i]	= 0;
 		var barEl	= document.createElement( 'span' );
 		barEl.style.cssText	= 'width:1px;height:30px;float:left;background-color:#131';
 		graphEl.appendChild( barEl );
 	}
 
-	var updateGraph	= function( height, color ){
+	// get max of currentValues - used for autoscaling
+	var cpuMaxCurrentValues	= function(){
+		var max	= -Infinity;
+		for(var i = 0; i < currentValues.length; i++){
+			max	= Math.max(max, currentValues[i]);
+		}
+		return max;
+	};
+	// update the graph
+	var updateGraph	= function(value){
+		// update currentValues
+		currentValues.shift();
+		currentValues.push(value);
+		// handle autoscaling
+		var max	= cpuMaxCurrentValues();
+		if( max > maxViewableValue ){
+			maxViewableValue	= max * 1.2;
+			reflowGraph();
+		}else if( max < 0.5*maxViewableValue ){
+			maxViewableValue	= max * 1.2;
+			reflowGraph();			
+		}
+		// compute the height
+		var normValue	= value / maxViewableValue;
+		var height	= Math.min(30, 30 - normValue * 30);		
+		// display the height
 		var childEl	= graphEl.appendChild( graphEl.firstChild );
 		childEl.style.height	= height + 'px';
-		if( color )	childEl.style.backgroundColor = color;
-	}
-	
-	
+	};
+	// reflow the graph - used for autoscaling
+	var reflowGraph	= function(){
+		for(var i = 0; i < currentValues.length; i++){
+			var value	= currentValues[i];
+			// compute the height
+			var normValue	= value / maxViewableValue;
+			var height	= Math.min(30, 30 - normValue * 30);		
+			// display the height
+			var childEl	= graphEl.children[i];
+			childEl.style.height	= height + 'px';
+		}
+	};
+
 	var gcMonitor	= new GcMonitor().start(function(){}, 1000/60);
 	var lastTime	= 0;
 	return {
 		domElement	: container,
 		update		: function(){
-			// refresh only 30time per second
+			// refresh only 5time per second
 			if( Date.now() - lastTime < 1000/5 )	return;
 			lastTime	= Date.now()
- 
+ 			// get current value
 			var value	= gcMonitor.burnRate();
-			textEl.textContent = "rate: " + bytesToSize(value, 2);
-
-			// TODO yuck hardcoded
-			// - how to do autoscaling
-			// 1. store all displayed value
-			// 2. compute max value of displayed values
-			// 3. if max > maxViewableValue,
-			// 	change maxViewableValue = max*1.1
-			// 	reflow display
-			// 4. if max < 0.7 * maxViewableValue,
-			// 	change maxViewableValue = max*1.1,
-			// 	reflow display
-			var normValue	= value / (30*1024*1024);
-			var height	= Math.min(30, 30 - normValue * 30);
-			updateGraph(height, '#131');
-			
+			// update graph
+			updateGraph(value);
+			// display label
+			textEl.textContent = "rate: " + bytesToSize(value, 2);			
 			function bytesToSize( bytes, nFractDigit ){
 				var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
 				if (bytes == 0) return 'n/a';

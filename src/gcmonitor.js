@@ -22,7 +22,7 @@ var GcMonitor	= function(){
 	// sanity check - if not available, output a warning
 	if( GcMonitor.isAvailable() === false ){
 		// open -a "/Applications/Google Chrome.app" --args --enable-memory-info
-		console.warn('memory info are unavailable... for chrome, use --enable-memory-info. other browsers dont have this feature.')
+		console.warn('memory info are unavailable... for chrome, use --enable-memory-info. Other browsers dont have this feature.')
 	}
 
 	/**
