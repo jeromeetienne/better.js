@@ -10,7 +10,7 @@ if( typeof(window) === 'undefined' )	module.exports	= Stacktrace;
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 //										//
-//		Stacktrace.parse						//
+//		Stacktrace.parse()						//
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
@@ -18,7 +18,7 @@ if( typeof(window) === 'undefined' )	module.exports	= Stacktrace;
 
 
 /**
- * parse the stacktrace of an Error
+ * parse the stacktrace of an Error.
  * 
  * @param  {Error|undefined} error optional error to parse. if not provided, generate one.
  * @return {Array.<Object>}	parsed stacktrace
@@ -119,8 +119,8 @@ Stacktrace.Frame	= function(opts){
  * @return {String} the origin of the stackframe
  */
 Stacktrace.Frame.prototype.originId	= function(){
-	var originId	= this.fct + '@' + this.url + ':' + this.line + ':' + this.column;
-	return originId;
+	var str	= this.fct + '@' + this.url + ':' + this.line + ':' + this.column;
+	return str;
 };
 
 /**

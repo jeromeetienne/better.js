@@ -57,7 +57,7 @@ PrivateForJS.getPrivateOkFn	= function(klass){
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-//										//
+//		core								//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
@@ -69,19 +69,16 @@ PrivateForJS.getPrivateOkFn	= function(klass){
  */
 PrivateForJS.privateProperty	= function(klass, baseObject, property){
 // @TODO should i put a setter too ?
-// @TODO should i allow to update list of okfunctions ?
-// * - possible as it is stored in the class ctor itself, and not on the instance
 	QGetterSetter.defineGetter(baseObject, property, function aFunction(value, caller, property){
 		// generate privateOkFns if needed - functions which can access private properties
 		klass._privateOkFn	= klass._privateOkFn || PrivateForJS.pushPrivateOkFn(klass);
 		// if caller not privateOK, notify the caller
 		var privateOkFns= klass._privateOkFn;
 		if( privateOkFns.indexOf(caller) === -1 ){
-			// get stackFrame and originId of the user
+			// get stackFrame for the originId of the user
 			var stackFrame	= Stacktrace.parse()[2];
-			var originId	= stackFrame.fct + '@' + stackFrame.url + ':' + stackFrame.line;
 			// log the event
-			console.assert(false, 'access to private property', "'"+property+"'", 'from', originId);			
+			console.assert(false, 'access to private property', "'"+property+"'", 'from', stackFrame.orginId());			
 		}
 		// actually return the value
 		return value;
@@ -105,11 +102,10 @@ PrivateForJS.privateFunction	= function(klass, fn){
 		// if caller not privateOK, notify the caller
 		var privateOkFns= klass._privateOkFn;
 		if( privateOkFns.indexOf(caller) === -1 ){
-			// get stackFrame and originId of the user
+			// get stackFrame for the originId of the user
 			var stackFrame	= Stacktrace.parse()[1];
-			var originId	= stackFrame.fct + '@' + stackFrame.url + ':' + stackFrame.line;
 			// log the event
-			console.assert(false, 'access to private function '+(fn.name ? "'"+fn.name+"'" : ''), 'from', originId);
+			console.assert(false, 'access to private property', "'"+property+"'", 'from', stackFrame.orginId());			
 		}
 		// forward the call to the original function
 		return fn.apply(_this, arguments);
@@ -117,7 +113,7 @@ PrivateForJS.privateFunction	= function(klass, fn){
 };
 
 //////////////////////////////////////////////////////////////////////////////////
-//										//
+//		helpers								//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**

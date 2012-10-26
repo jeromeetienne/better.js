@@ -78,8 +78,7 @@ ConsoleLogger.formatterOrigin	= function(args, stackFrame, severity)
 {
 	// compute prefix
 	var prefixColor	= ConsoleLogger._formatterSeverityColor(severity);
-	var originId	= stackFrame.fct + '@' + stackFrame.url + ':' + stackFrame.line;
-	var prefix	= prefixColor + originId + ConsoleLogger._formatterColor.reset;
+	var prefix	= prefixColor + stackFrame.originId() + ConsoleLogger._formatterColor.reset;
 	// convert arguments into actual Array
 	args		= Array.prototype.slice.call(args, 0);
 	// prepend the prefix
