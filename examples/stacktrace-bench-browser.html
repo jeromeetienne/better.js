@@ -1,0 +1,33 @@
+<!doctype html>
+<script src="../src/stacktrace.js"></script>
+<script>
+console.assert	= function(cond){};
+
+
+console.log('stacktrace', JSON.stringify(Stacktrace.parse(), null, '\t'));
+
+//////////////////////////////////////////////////////////////////////////////////
+
+console.time('10000times')
+for(var i = 0; i < 10000; i++){
+	Stacktrace.parse();
+}
+console.timeEnd('10000times')
+
+//////////////////////////////////////////////////////////////////////////////////
+
+function level0(){ level1();	}
+function level1(){ level2();	}
+function level2(){ level3();	}
+function level3(){ level4();	}
+function level4(){ level5();	}
+function level5(){ Stacktrace.parse();	}
+
+console.time('nested functions - 10000times')
+for(var i = 0; i < 10000; i++){
+	level5();
+}
+console.timeEnd('nested functions - 10000times')
+
+//////////////////////////////////////////////////////////////////////////////////
+</script>

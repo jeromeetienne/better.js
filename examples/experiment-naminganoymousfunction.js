@@ -6,18 +6,15 @@ var foo	= {
 	}
 };
 
-//foo.bar = eval(foo.bar.toString().replace(/^function \(\){/, 'function bar(){'))
-//foo.bar();
-
 function nameAnonymousFunction(fn, name){
 	// sanity check 
 	console.assert(fn.name === '', 'this function isnt anonymous');
-
 	// set the name in a string
 	var str = fn.toString().replace(/^function.*\(/, 'function '+name+' (');
 	// eval the string to return it
-	eval('var tmp = '+str);
-	return tmp;
+	eval('var namedFn = '+str);
+	// returned the namedFn
+	return namedFn;
 }
 
 foo.bar	= nameAnonymousFunction(foo.bar, 'foo_bar')
