@@ -6,10 +6,14 @@ var foo		= {
 
 var PropertyAttr	= require('../src/propertyattr.js');
 
-
-PropertyAttr.define(foo, 'bar').typeCheck([Number, 'nonan']);
-
+PropertyAttr.define(foo, 'bar')
+	.typeCheck([Number, 'nonan'])
+	.trackUsage();
 
 foo.bar	= 3;
 
-foo.bar	= NaN;
+console.log('value', foo.bar)
+//foo.bar	= NaN;
+
+console.log('PropertyAttr.usageTracker')
+PropertyAttr.usageTracker.dump();

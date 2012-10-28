@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var assertWhichStop	= require('../src/assertwhichstop.js');
+var assertWhichStop	= assertWhichStop	|| require('../src/assertwhichstop.js');
 
 // overload console.assert
 assertWhichStop.overloadConsole();

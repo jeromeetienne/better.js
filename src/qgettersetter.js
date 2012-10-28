@@ -26,7 +26,7 @@ QGetterSetter.Property	= function(baseObject, property){
 	console.assert( typeof(baseObject) === 'object' );
 	console.assert( typeof(property) === 'string' );
 	// backup the initial value
-	var initialValue= baseObject[property];
+	var originValue	= baseObject[property];
 	// init some local variables
 	var _this	= this;
 	this._getters	= [];
@@ -35,6 +35,10 @@ QGetterSetter.Property	= function(baseObject, property){
 	baseObject.__defineGetter__(property, function getterHandler(){
 		var value	= baseObject['__'+property];
 		for(var i = 0; i < _this._getters.length; i++){
+			// TODO why those extra param are needed
+			// - needed for privateforjs to identify the origin
+			// - is that the proper format ?
+			// - is that important for setter
 			value	= _this._getters[i](value, getterHandler.caller, property)
 		}
 		return value;
@@ -46,8 +50,8 @@ QGetterSetter.Property	= function(baseObject, property){
 		}
 		baseObject['__'+property] = value;
 	});
-	// set the initialValue
-	baseObject['__'+property]	= initialValue;
+	// set the originValue
+	baseObject['__'+property]	= originValue;
 };
 
 // export the class in node.js - if running in node.js

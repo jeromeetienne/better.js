@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 
 // get the class
-require('../src/qgettersetter.js');
+var QGetterSetter	= QGetterSetter	|| require('../src/qgettersetter.js')
+
 require('./helpers/qgettersetter-fileline.js');
 
 (function blabla(){

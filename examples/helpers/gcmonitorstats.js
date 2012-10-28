@@ -8,8 +8,6 @@
  * heavily based on @mrdoob stats.js
  */
 var GcMonitorStatsCollection = function (){
-// @TODO cleanup... remove all stats.js stuff
-
 	var container	= document.createElement( 'div' );
 	container.style.cssText = 'width:80px;opacity:0.9;cursor:pointer';
 
@@ -19,7 +17,7 @@ var GcMonitorStatsCollection = function (){
 
 	var testEl	= document.createElement( 'div' );
 	testEl.style.cssText = 'color:#0f0;font-family:Helvetica,Arial,sans-serif;font-size:9px;font-weight:bold;line-height:15px';
-	testEl.innerHTML= 'gcMem';
+	testEl.innerHTML= 'Mem';
 	divEl.appendChild( testEl );
 
 	var graphEl	= document.createElement( 'div' );
@@ -53,7 +51,7 @@ var GcMonitorStatsCollection = function (){
 		if( max > maxViewableValue ){
 			maxViewableValue	= max * 1.2;
 			reflowGraph();
-		}else if( max < 0.5*maxViewableValue ){
+		}else if( max < 0.5 * maxViewableValue ){
 			maxViewableValue	= max * 1.2;
 			reflowGraph();			
 		}
@@ -97,7 +95,7 @@ var GcMonitorStatsCollection = function (){
 			// update graph
 			updateGraph(value, color);
 			// display label
-			testEl.textContent = "gcMem: " + bytesToSize(value, 2);			
+			testEl.textContent = "Mem: " + bytesToSize(value, 2);			
 			function bytesToSize( bytes, nFractDigit ){
 				var sizes = ['B ', 'KB', 'MB', 'GB', 'TB'];
 				if (bytes == 0) return 'n/a';

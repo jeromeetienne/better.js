@@ -214,7 +214,7 @@ Stacktrace.Tracker.prototype.reportString	= function(classNameRegExp, maxNOrigin
 	// display the rest
 	classNames.forEach(function(className){
 		var klass	= this._klasses[className];
-		output.push(className+': allocated '+klass.counter+' times');
+		output.push(className+': total '+klass.counter+' times');
 		
 		var perOrigins	= klass.perOrigins;
 
