@@ -8,7 +8,7 @@
  * @param {string} fnName the name of the function 
  */
 Function.prototype.setAttr	= function(fnName){
-	return fnAttr(this, fnName)
+	return FunctionAttr.define(this, fnName)
 }
 
 
@@ -17,12 +17,17 @@ Function.prototype.setAttr	= function(fnName){
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * @namespace
+ */
+var FunctionAttr	= {};
+
+/**
  * Function attribute creator
  * 
- * @return {FnAttrClass} a FnAttrClass builder
+ * @return {FunctionAttr.Builder} a FunctionAttr.Builder builder
 */
-var fnAttr	= function(originalFn, fnName){
-	return new FnAttrClass(originalFn, fnName)
+FunctionAttr.define	= function(originalFn, fnName){
+	return new FunctionAttr.Builder(originalFn, fnName)
 }
 
 /**
@@ -33,7 +38,7 @@ var fnAttr	= function(originalFn, fnName){
  * @param {Function} afterFn the function to call *after* the original function
  * @returns {Function} The modified function
 */
-fnAttr.wrapCall	= function(originalFn, beforeFn, afterFn){
+FunctionAttr.wrapCall	= function(originalFn, beforeFn, afterFn){
 	return function(){
 		var stopNow	= false;
 		// call beforeFn if needed
@@ -59,7 +64,7 @@ fnAttr.wrapCall	= function(originalFn, beforeFn, afterFn){
  * @param {Function} originalFn the function on which the attributes are set
  * @param {String}   fnName     optional name of the function - default to 'aFunction'
  */
-var FnAttrClass	= function(originalFn, fnName){
+FunctionAttr.Builder	= function(originalFn, fnName){
 	this._currentFn	= originalFn;
 	this._fnName	= fnName	|| 'aFunction'
 }
@@ -69,12 +74,12 @@ var FnAttrClass	= function(originalFn, fnName){
  * 
  * @return {Function} The actual function with the attributes
 */
-FnAttrClass.prototype.done	= function(){
+FunctionAttr.Builder.prototype.done	= function(){
 	return this._currentFn;
 }
 
 // export the class in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= fnAttr;
+if( typeof(window) === 'undefined' )	module.exports	= FunctionAttr;
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -85,8 +90,8 @@ if( typeof(window) === 'undefined' )	module.exports	= fnAttr;
  * display a message with a timestamp every time the function is used
  * @return {string} message optional message to display
  */
-FnAttrClass.prototype.timestamp	= function(message){
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
+FunctionAttr.Builder.prototype.timestamp	= function(message){
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
 		console.log(''+ new Date + ': '+this._fnName+' being called');
 	}.bind(this));
 	return this;	// for chained API
@@ -96,8 +101,8 @@ FnAttrClass.prototype.timestamp	= function(message){
  * log a message when the function is call
  * @param  {string} message the message to display
  */
-FnAttrClass.prototype.log		= function(message){
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
+FunctionAttr.Builder.prototype.log		= function(message){
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
 		console.log(message);
 	});
 	return this;	// for chained API
@@ -112,9 +117,9 @@ FnAttrClass.prototype.log		= function(message){
  * mark the function as deprecated - aka you can use it but it will disapears soon
  * @param  {string} message the optional message to provide
  */
-FnAttrClass.prototype.deprecated	= function(message){
+FunctionAttr.Builder.prototype.deprecated	= function(message){
 	var used	= false;
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
 		if( used )	return;
 		used	= true;
 		console.warn(message || "Deprecated function "+this._fnName+" called. Please update your code.");
@@ -126,9 +131,9 @@ FnAttrClass.prototype.deprecated	= function(message){
  * mark the function as obsolete
  * @param  {string} message obsolete message to display
  */
-FnAttrClass.prototype.obsolete	= function(message){
+FunctionAttr.Builder.prototype.obsolete	= function(message){
 	var used	= false;
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
 		if( used )	return;
 		used	= true;
 		console.assert(false, message || "Obsoleted function "+this._fnName+" called. Please update your code.");
@@ -144,8 +149,8 @@ FnAttrClass.prototype.obsolete	= function(message){
  * hook a function be be caller before the actual function
  * @param  {Function} beforeFn the function to call
  */
-FnAttrClass.prototype.before	= function(beforeFn){
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, beforeFn, null);
+FunctionAttr.Builder.prototype.before	= function(beforeFn){
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, beforeFn, null);
 	return this;	// for chained API
 };
 
@@ -153,8 +158,8 @@ FnAttrClass.prototype.before	= function(beforeFn){
  * hook a function to be called after the actual function
  * @param  {Function} afterFn the function to be called after
  */
-FnAttrClass.prototype.after	= function(afterFn){
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, null, afterFn);
+FunctionAttr.Builder.prototype.after	= function(afterFn){
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, null, afterFn);
 	return this;	// for chained API
 };
 
@@ -167,9 +172,9 @@ FnAttrClass.prototype.after	= function(afterFn){
  * 
  * @param  {String} label the label to use for console.time(label)
  */
-FnAttrClass.prototype.time	= function(label){
+FunctionAttr.Builder.prototype.time	= function(label){
 	label	= label !== undefined ? label : this._fnName+".time()-"+Math.floor(Math.random()*9999).toString(36);
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
 		console.time(label)
 	}, function(){
 		console.timeEnd(label)
@@ -182,9 +187,9 @@ FnAttrClass.prototype.time	= function(label){
  * 
  * @param  {String} label label to use for console.profile()
  */
-FnAttrClass.prototype.profile	= function(label){
+FunctionAttr.Builder.prototype.profile	= function(label){
 	label	= label !== undefined ? label : this._fnName+".profile-"+Math.floor(Math.random()*9999).toString(36);
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
 		console.profile(label)
 	}, function(){
 		console.profileEnd(label)
@@ -201,9 +206,9 @@ FnAttrClass.prototype.profile	= function(label){
  *
  * @param {Function} originalFn the original function
  * @param {Function} [conditionFn] this function should return true, when the breakpoint should be triggered. default to function(){ return true; }
- * @returns {FnAttrClass} for chained API
+ * @returns {FunctionAttr.Builder} for chained API
 */
-FnAttrClass.prototype.breakpoint	= function(fn, conditionFn){
+FunctionAttr.Builder.prototype.breakpoint	= function(fn, conditionFn){
 	conditionFn	= conditionFn	|| function(){ return true; };
 	this._currentFn	= function(){
 		var stopNow	= conditionFn();
@@ -219,9 +224,9 @@ FnAttrClass.prototype.breakpoint	= function(fn, conditionFn){
  * check function type as in ```TypeCheck.fn``` from typecheck.js
  * @param  {Array}    paramsTypes allowed types for the paramter. array with each item is the allowed types for this parameter.
  * @param  {Array}    returnTypes allowed types for the return value
- * @returns {FnAttrClass} for chained API
+ * @returns {FunctionAttr.Builder} for chained API
  */
-FnAttrClass.prototype.typeCheck	= function(paramsTypes, returnTypes){
+FunctionAttr.Builder.prototype.typeCheck	= function(paramsTypes, returnTypes){
 	this._currentFn	= TypeCheck.fn(this._currentFn, paramsTypes, returnTypes);
 	return this;
 }

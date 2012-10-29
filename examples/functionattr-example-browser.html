@@ -2,18 +2,18 @@
 <script src='../src/functionattr.js'></script>
 <script>
 function foo(){
-	console.log('inside')
+	console.log('inside');
 	return 'bar';
-}
+};
 
-foo	= fnAttr(foo, 'Fn.foo')
+foo	= FunctionAttr.define(foo, 'Fn.foo')
 	.log('bonjour')
 	.profile()
 	.after(function(){
 		console.log('superafter')
-	}.done();
+	}).done();
 
 foo();
 
-foo()
+foo();
 </script>
