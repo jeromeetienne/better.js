@@ -32,3 +32,5 @@ docs:
 			-d=docs/jsdocs/					\
 			src/*
 .PHONY: docs build minify
+
+
