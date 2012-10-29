@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var GcMonitor	= require('../src/gcmonitor.js');
+var GcMonitor	= GcMonitor	|| require('../src/gcmonitor.js');
 
 new GcMonitor().start();
 

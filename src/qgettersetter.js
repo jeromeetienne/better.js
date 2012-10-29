@@ -91,9 +91,10 @@ QGetterSetter.defineSetter	= function(baseObject, property, setterFn){
 //		.overloadObjectPrototype()					//
 //////////////////////////////////////////////////////////////////////////////////
 
-
 /**
  * overload the Object.prototype with .__defineQGetter__ and .__defineQSetter__
+ * 
+ * TODO put that in example/js ?
  */
 QGetterSetter.overloadObjectPrototype	= function(){	
 	Object.prototype.__defineQGetter__	= function(property, getterFn){

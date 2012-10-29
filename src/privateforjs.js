@@ -3,6 +3,7 @@
  */
 var PrivateForJS	= {};
 
+// include dependancies
 var Stacktrace		= Stacktrace	|| require('./stacktrace.js');
 var QGetterSetter	= QGetterSetter	|| require('./qgettersetter.js')
 
