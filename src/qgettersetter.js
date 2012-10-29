@@ -88,11 +88,18 @@ QGetterSetter.defineSetter	= function(baseObject, property, setterFn){
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-// Override prototype of global ```Object``` - not mandatory
-Object.prototype.__defineQGetter__	= function(property, getterFn){
-	QGetterSetter.defineGetter(this, property, getterFn);
-};
-Object.prototype.__defineQSetter__	= function(property, setterFn){
-	QGetterSetter.defineSetter(this, property, setterFn);
-};
+//		.overloadObjectPrototype()					//
+//////////////////////////////////////////////////////////////////////////////////
 
+
+/**
+ * overload the Object.prototype with .__defineQGetter__ and .__defineQSetter__
+ */
+QGetterSetter.overloadObjectPrototype	= function(){	
+	Object.prototype.__defineQGetter__	= function(property, getterFn){
+		QGetterSetter.defineGetter(this, property, getterFn);
+	};
+	Object.prototype.__defineQSetter__	= function(property, setterFn){
+		QGetterSetter.defineSetter(this, property, setterFn);
+	};
+}

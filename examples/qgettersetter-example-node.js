@@ -9,7 +9,7 @@ var foo		= {
 
 console.log('before new getter: foo.x ===', foo.x)
 
-foo.__defineQGetter__('x', function(value){
+QGetterSetter.defineGetter(foo, 'x', function(value){
 	return value*2;
 });
 

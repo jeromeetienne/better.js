@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
-var Stacktrace	= require('../src/stacktrace.js');
-
-// get the class
-require('../src/queueablegettersetter.js');
+var Stacktrace		= Stacktrace	|| require('../src/stacktrace.js');
+var QGetterSetter	= QGetterSetter	|| require('../src/qgettersetter.js')
 
 var foo		= {
 	x	: 3
@@ -13,13 +11,13 @@ var trackUsageOf	= function(baseObject, property){
 	// define the tracker
 	var tracker	= new Stacktrace.Tracker();
 	// define the getter
-	baseObject.__defineQGetter__(property, function(value){
-		tracker.record('getter', 3)
+	QGetterSetter.defineGetter(baseObject, property, function(value){
+		tracker.record('getter', 1)
 		return value;
 	});
 	// define the trac
-	baseObject.__defineQSetter__(property, function(value){
-		tracker.record('setter', 3)
+	QGetterSetter.defineSetter(baseObject, property, function(value){
+		tracker.record('setter', 1)
 		return value;
 	});
 	return tracker;

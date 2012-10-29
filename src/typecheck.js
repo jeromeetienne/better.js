@@ -12,8 +12,8 @@
  */
 var TypeCheck	= {};
 
-Object.prototype.__defineQGetter__	|| require('./qgettersetter.js')
-
+// dependancy
+var QGetterSetter	= QGetterSetter	|| require('../src/qgettersetter.js')
 
 // export the namespace in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;
@@ -33,7 +33,7 @@ TypeCheck.setter	= function(baseObject, property, types){
 	var isValid	= TypeCheck.value(value, types)
 	console.assert(isValid, 'initial value got invalid type');
 	// setup the setter
-	baseObject.__defineQSetter__(property, function(value){
+	QGetterSetter.defineSetter|(baseObject, property, function(value){
 		// check the value type
 		var isValid	= TypeCheck.value(value, types);			
 		console.assert(isValid, 'invalid type');
