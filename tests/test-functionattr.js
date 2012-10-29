@@ -1,4 +1,4 @@
-var fnAttr	= fnAttr	|| require('../src/functionattr.js');
+var FunctionAttr	= FunctionAttr	|| require('../src/functionattr.js');
 
 describe('FunctionAttr', function(){
 
@@ -9,7 +9,7 @@ describe('FunctionAttr', function(){
 	it('notify the before() function', function(){
 		var mark= false;
 		// declare function attributes
-		foo	= fnAttr(foo).before(function(){
+		foo	= FunctionAttr.define(foo).before(function(){
 			mark	= true;
 		}).done();
 		// call the function		
@@ -22,7 +22,7 @@ describe('FunctionAttr', function(){
 	it('notify the after() function', function(){
 		var mark= false;
 		// declare function attributes
-		foo	= fnAttr(foo).after(function(){
+		foo	= FunctionAttr.define(foo).after(function(){
 			mark	= true;
 		}).done();
 		// call the function		
@@ -40,7 +40,7 @@ describe('FunctionAttr', function(){
 			state	= 'postOriginalFn';
 		}
 		// declare function attributes
-		foo	= fnAttr(foo).before(function(){
+		foo	= FunctionAttr.define(foo).before(function(){
 			console.assert(state === 'init')
 			state	= 'postbefore';	
 		}).after(function(){
