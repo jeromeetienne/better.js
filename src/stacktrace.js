@@ -57,24 +57,30 @@ Stacktrace.parse	= function(nShift, error){
 		var lines	= error.stack.split("\n").slice(1);
 		var stacktrace	= [];
 		lines.forEach(function(line){
-			if( line.match(/\)$/) ){
+			if( line.match(/\(native\)$/) ){
+				var matches	= line.match(/^\s*at (.+) \(native\)/);
+				stacktrace.push(new Stacktrace.Frame({
+					fct	: matches[1],
+					url	: 'native',
+					line	: 1,
+					column	: 1
+				}));
+			}else if( line.match(/\)$/) ){
 				var matches	= line.match(/^\s*at (.+) \((.+):(\d+):(\d+)\)/);
-				var result	= new Stacktrace.Frame({
+				stacktrace.push(new Stacktrace.Frame({
 					fct	: matches[1],
 					url	: matches[2],
 					line	: parseInt(matches[3], 10),
 					column	: parseInt(matches[4], 10)
-				});
-				stacktrace.push(result);
+				}));
 			}else{
 				var matches	= line.match(/^\s*at (.+):(\d+):(\d+)/);
-				var result	= new Stacktrace.Frame({
+				stacktrace.push(new Stacktrace.Frame({
 					url	: matches[1],
 					fct	: '<anonymous>',
 					line	: parseInt(matches[2], 10),
 					column	: parseInt(matches[3], 10)
-				});
-				stacktrace.push(result);
+				}));
 			}
 		});
 		return stacktrace;
@@ -106,6 +112,8 @@ Stacktrace.parse	= function(nShift, error){
 
 /**
  * handle stack frame
+ * 
+ * TODO do a .fromOriginId()
  */
 Stacktrace.Frame	= function(opts){
 	this.url	= opts.url;
