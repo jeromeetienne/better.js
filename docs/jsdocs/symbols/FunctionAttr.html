@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8" />
 		<meta name="generator" content="JsDoc Toolkit" />
-		<title>GlobalDetector | debug.js library</title>
+		<title>FunctionAttr | debug.js library</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 		<meta name="mobileoptimized" content="0" />
@@ -80,12 +80,12 @@
 			<header>
 				<h1 class="classTitle">
 					
-					Class <span>GlobalDetector</span>
+					Namespace <span>FunctionAttr</span>
 				</h1>
 				
 				<div class="intro">
 					<p class="description summary">
-						detect globals
+						
 					</p>
 						
 					
@@ -93,7 +93,7 @@
 							
 							
 							
-								<li>Defined in: <a href="../symbols/src/src_globaldetector.js.html">globaldetector.js</a></li>
+								<li>Defined in: <a href="../symbols/src/src_functionattr.js.html">functionattr.js</a></li>
 							
 							
 						</ul>
@@ -104,8 +104,8 @@
 			
 				<section>
 					<div class="props">
-						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class GlobalDetector.">
-							<caption class="sectionTitle">Class Summary</caption>
+						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class FunctionAttr.">
+							<caption class="sectionTitle">Namespace Summary</caption>
 							<thead>
 								<tr>
 									<th scope="col">Constructor Attributes</th>
@@ -117,9 +117,9 @@
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription" >
 										<div class="fixedFont">
-											<b><a href="../symbols/GlobalDetector.html#constructor">GlobalDetector</a></b>()
+											<b><a href="../symbols/FunctionAttr.html#constructor">FunctionAttr</a></b>
 										</div>
-										<div class="description">Used to detect globals.</div>
+										<div class="description"></div>
 									</td>
 								</tr>
 							</tbody>
@@ -128,42 +128,6 @@
 				</section>
 			
 			
-			
-				
-				<section>
-					
-						<nav>
-							<div class="props">
-								<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class GlobalDetector.">
-									<caption class="sectionTitle">Field Summary</caption>
-									
-									<thead>
-										<tr>
-											<th scope="col">Field Attributes</th>
-											<th scope="col">Field Name and Description</th>
-										</tr>
-									</thead>
-									
-									<tbody>
-										
-											<tr>
-												<td class="attributes">&lt;static&gt; &nbsp;</td>
-												<td class="nameDescription">
-													<div class="fixedFont">
-													GlobalDetector.<b><a href="../symbols/GlobalDetector.html#.ignoreList">ignoreList</a></b>
-													</div>
-													<div class="description">list of variables name to ignore.</div>
-												</td>
-											</tr>
-										
-									</tbody>
-								</table>
-							</div>
-						</nav>
-					
-					
-					
-				</section>
 			
 	<!--
 	#### METHODS SUMMARY
@@ -177,7 +141,7 @@
 						
 						
 							<nav>
-								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class GlobalDetector.">
+								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class FunctionAttr.">
 									<thead>
 										<tr>
 											<th scope="col">Method Attributes</th>
@@ -191,33 +155,22 @@
 											<tr
 												 class='item0'
 											>
-												<td class="attributes">&nbsp;</td>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/GlobalDetector.html#check">check</a></b>(onChange)
+													<div class="fixedFont">FunctionAttr.<b><a href="../symbols/FunctionAttr.html#.define">define</a></b>(originalFn, fnName)
 													</div>
-													<div class="description">Check if any new global has been declared</div>
+													<div class="description">Function attribute creator</div>
 												</td>
 											</tr>
 										
 											<tr
 												 class='item1'
 											>
-												<td class="attributes">&nbsp;</td>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/GlobalDetector.html#start">start</a></b>(onChange, period)
+													<div class="fixedFont">FunctionAttr.<b><a href="../symbols/FunctionAttr.html#.wrapCall">wrapCall</a></b>(originalFn, beforeFn, afterFn)
 													</div>
-													<div class="description">Start periodically monitoring</div>
-												</td>
-											</tr>
-										
-											<tr
-												 class='item2'
-											>
-												<td class="attributes">&nbsp;</td>
-												<td class="nameDescription">
-													<div class="fixedFont"><b><a href="../symbols/GlobalDetector.html#stop">stop</a></b>()
-													</div>
-													<div class="description">Stop periodically monitoring</div>
+													<div class="description">Wrap a function between 2 functions</div>
 												</td>
 											</tr>
 										
@@ -243,17 +196,15 @@
 					<div class="details props">
 						<div class="innerProps">
 							<h2 class="sectionTitle" id="constructor">
-								Class Detail
+								Namespace Detail
 							</h2>
 							
 							<div class="fixedFont">
-								<b>GlobalDetector</b>()
+								<b>FunctionAttr</b>
 							</div>
 							
 							<div class="description">
-								Used to detect globals. works in node.js and browser
-
-from http://stackoverflow.com/questions/5088203/how-to-detect-creation-of-new-global-variables
+								
 								
 							</div>
 							
@@ -269,40 +220,6 @@ from http://stackoverflow.com/questions/5088203/how-to-detect-creation-of-new-gl
 	<!--
 	#### FIELD DETAILS
 	-->
-			
-				<section>
-					<div class="details props">
-						<div class="innerProps">
-							<h2 class="sectionTitle">
-								Field Detail
-							</h2>
-							
-							
-								<div class="fixedFont heading" id=".ignoreList">
-									<span class='lighter'>
-									&lt;static&gt; 
-									</span>
-									
-									
-									
-									<span class="light">GlobalDetector.</span><b>ignoreList</b>							
-								</div>
-								
-								<div class="description">
-									list of variables name to ignore. populated at constructor() time
-									
-									
-									
-								</div>
-								
-								
-									
-								
-								
-							
-						</div>
-					</div>
-				</section>
 			
 	<!--
 	#### METHOD DETAILS
@@ -321,18 +238,18 @@ from http://stackoverflow.com/questions/5088203/how-to-detect-creation-of-new-gl
 									<li 
 										 class='item0'
 									>
-										<div class="fixedFont heading" id="check">
+										<div class="fixedFont heading" id=".define">
 											<span class='lighter'>
-											
+											&lt;static&gt; 
 											</span>
 											
+											<span class="light">{<a href="../symbols/FunctionAttr.Builder.html">FunctionAttr.Builder</a>}</span>
 											
-											
-											<b>check</b>(onChange)
+											<span class="light">FunctionAttr.</span><b>define</b>(originalFn, fnName)
 										</div>
 										
 										<div class="description">
-											Check if any new global has been declared
+											Function attribute creator
 											
 											
 											
@@ -346,14 +263,41 @@ from http://stackoverflow.com/questions/5088203/how-to-detect-creation-of-new-gl
 												<dt class="heading">Parameters:</dt>
 												
 													<dt>
-														<span class="light fixedFont">{<a href="../symbols/Function.html">Function</a>+}</span> <b>onChange</b>
+														<b>originalFn</b>
 														
 													</dt>
-													<dd>optional callback called synchronously if a new global is found</dd>
+													<dd></dd>
+												
+													<dt>
+														<b>fnName</b>
+														
+													</dt>
+													<dd></dd>
 												
 											</dl>
 										
 										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{<a href="../symbols/FunctionAttr.Builder.html">FunctionAttr.Builder</a>}</span> a FunctionAttr.Builder builder</dd>
+													
+												
+												
+												
+												
+												
+											
+											</dl>
 										
 										<div class="hr"></div>
 									</li>
@@ -361,18 +305,18 @@ from http://stackoverflow.com/questions/5088203/how-to-detect-creation-of-new-gl
 									<li 
 										 class='item1'
 									>
-										<div class="fixedFont heading" id="start">
+										<div class="fixedFont heading" id=".wrapCall">
 											<span class='lighter'>
-											
+											&lt;static&gt; 
 											</span>
 											
+											<span class="light">{<a href="../symbols/Function.html">Function</a>}</span>
 											
-											
-											<b>start</b>(onChange, period)
+											<span class="light">FunctionAttr.</span><b>wrapCall</b>(originalFn, beforeFn, afterFn)
 										</div>
 										
 										<div class="description">
-											Start periodically monitoring
+											Wrap a function between 2 functions
 											
 											
 											
@@ -386,49 +330,47 @@ from http://stackoverflow.com/questions/5088203/how-to-detect-creation-of-new-gl
 												<dt class="heading">Parameters:</dt>
 												
 													<dt>
-														<span class="light fixedFont">{<a href="../symbols/Function.html">Function</a>+}</span> <b>onChange</b>
+														<span class="light fixedFont">{<a href="../symbols/Function.html">Function</a>}</span> <b>originalFn</b>
 														
 													</dt>
-													<dd>optional callback called when a new global is found</dd>
+													<dd>the original function</dd>
 												
 													<dt>
-														<span class="light fixedFont">{Number+}</span> <b>period</b>
+														<span class="light fixedFont">{<a href="../symbols/Function.html">Function</a>}</span> <b>beforeFn</b>
 														
 													</dt>
-													<dd>period at which it is checked</dd>
+													<dd>the function to call *before* the original function</dd>
+												
+													<dt>
+														<span class="light fixedFont">{<a href="../symbols/Function.html">Function</a>}</span> <b>afterFn</b>
+														
+													</dt>
+													<dd>the function to call *after* the original function</dd>
 												
 											</dl>
 										
 										
 										
-										<div class="hr"></div>
-									</li>
-								
-									<li 
-										 class='item2'
-									>
-										<div class="fixedFont heading" id="stop">
-											<span class='lighter'>
+											<dl class="detailList nomargin">
 											
-											</span>
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{<a href="../symbols/Function.html">Function</a>}</span> The modified function</dd>
+													
+												
+												
+												
+												
+												
 											
-											
-											
-											<b>stop</b>()
-										</div>
-										
-										<div class="description">
-											Stop periodically monitoring
-											
-											
-											
-											
-										</div>
-										
-										
-										
-										
-										
+											</dl>
 										
 										
 									</li>

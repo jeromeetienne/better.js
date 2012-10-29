@@ -36,19 +36,23 @@
 		<nav>
 			<ul class="classList" id="ClassList">
 				
-					<li><a href="../symbols/allocationTracker.html">allocationTracker</a></li>
+					<li><a href="../symbols/AllocationTracker.html">AllocationTracker</a></li>
 				
 					<li><a href="../symbols/ConsoleLogger.html">ConsoleLogger</a></li>
 				
-					<li><a href="../symbols/FnAttrClass.html">FnAttrClass</a></li>
-				
 					<li><a href="../symbols/Function.html">Function</a></li>
+				
+					<li><a href="../symbols/FunctionAttr.html">FunctionAttr</a></li>
+				
+					<li><a href="../symbols/FunctionAttr.Builder.html">FunctionAttr<span class='break'> </span>.<span class='break'> </span>Builder</a></li>
 				
 					<li><a href="../symbols/GcMonitor.html">GcMonitor</a></li>
 				
 					<li><a href="../symbols/GlobalDetector.html">GlobalDetector</a></li>
 				
 					<li><a href="../symbols/PrivateForJS.html">PrivateForJS</a></li>
+				
+					<li><a href="../symbols/PropertyAttr.html">PropertyAttr</a></li>
 				
 					<li><a href="../symbols/Stacktrace.html">Stacktrace</a></li>
 				
@@ -63,7 +67,7 @@
 			Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 			Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
 			Generated on:
-			<time datetime='2012-9-24' pubdate>2012-9-24 18:16</time>
+			<time datetime='2012-9-29' pubdate>2012-9-29 21:42</time>
 		</footer>
 	</div>
 </div>
@@ -153,7 +157,7 @@
 											>
 												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont">PrivateForJS.<b><a href="../symbols/PrivateForJS.html#.getPrivateFn">getPrivateFn</a></b>(klass)
+													<div class="fixedFont">PrivateForJS.<b><a href="../symbols/PrivateForJS.html#.getPrivateOkFn">getPrivateOkFn</a></b>(klass)
 													</div>
 													<div class="description">return the functions allowed to access private values</div>
 												</td>
@@ -186,18 +190,7 @@
 											>
 												<td class="attributes">&lt;static&gt; &nbsp;</td>
 												<td class="nameDescription">
-													<div class="fixedFont">PrivateForJS.<b><a href="../symbols/PrivateForJS.html#.privatize">privatize</a></b>(klass, baseObject)
-													</div>
-													<div class="description">Privatize</div>
-												</td>
-											</tr>
-										
-											<tr
-												 class='item4'
-											>
-												<td class="attributes">&lt;static&gt; &nbsp;</td>
-												<td class="nameDescription">
-													<div class="fixedFont">PrivateForJS.<b><a href="../symbols/PrivateForJS.html#.pushPrivateFn">pushPrivateFn</a></b>(klass, source)
+													<div class="fixedFont">PrivateForJS.<b><a href="../symbols/PrivateForJS.html#.pushPrivateOkFn">pushPrivateOkFn</a></b>(klass, source)
 													</div>
 													<div class="description">determine which function is considered private for klass</div>
 												</td>
@@ -267,14 +260,14 @@
 									<li 
 										 class='item0'
 									>
-										<div class="fixedFont heading" id=".getPrivateFn">
+										<div class="fixedFont heading" id=".getPrivateOkFn">
 											<span class='lighter'>
 											&lt;static&gt; 
 											</span>
 											
 											<span class="light">{Array.<function>}</span>
 											
-											<span class="light">PrivateForJS.</span><b>getPrivateFn</b>(klass)
+											<span class="light">PrivateForJS.</span><b>getPrivateOkFn</b>(klass)
 										</div>
 										
 										<div class="description">
@@ -468,81 +461,14 @@
 									<li 
 										 class='item3'
 									>
-										<div class="fixedFont heading" id=".privatize">
-											<span class='lighter'>
-											&lt;static&gt; 
-											</span>
-											
-											<span class="light">{[type]}</span>
-											
-											<span class="light">PrivateForJS.</span><b>privatize</b>(klass, baseObject)
-										</div>
-										
-										<div class="description">
-											Privatize
-											
-											
-											
-											
-										</div>
-										
-										
-										
-										
-											<dl class="detailList params">
-												<dt class="heading">Parameters:</dt>
-												
-													<dt>
-														<span class="light fixedFont">{[type]}</span> <b>klass</b>
-														
-													</dt>
-													<dd>[description]</dd>
-												
-													<dt>
-														<span class="light fixedFont">{[type]}</span> <b>baseObject</b>
-														
-													</dt>
-													<dd>[description]</dd>
-												
-											</dl>
-										
-										
-										
-											<dl class="detailList nomargin">
-											
-												
-												
-												
-												
-												
-												
-												
-													<dt class="heading">Returns:</dt>
-													
-														<dd><span class="light fixedFont">{[type]}</span> [description]</dd>
-													
-												
-												
-												
-												
-												
-											
-											</dl>
-										
-										<div class="hr"></div>
-									</li>
-								
-									<li 
-										 class='item4'
-									>
-										<div class="fixedFont heading" id=".pushPrivateFn">
+										<div class="fixedFont heading" id=".pushPrivateOkFn">
 											<span class='lighter'>
 											&lt;static&gt; 
 											</span>
 											
 											
 											
-											<span class="light">PrivateForJS.</span><b>pushPrivateFn</b>(klass, source)
+											<span class="light">PrivateForJS.</span><b>pushPrivateOkFn</b>(klass, source)
 										</div>
 										
 										<div class="description">
