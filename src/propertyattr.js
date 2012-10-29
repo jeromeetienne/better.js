@@ -67,7 +67,7 @@ PropertyAttr.usageTracker	= new Stacktrace.Tracker();
 PropertyAttr.Builder.prototype.trackUsage	= function(trackName){
 	var tracker	= PropertyAttr.usageTracker;
 	// handle polymorphism
-	trackName	= trackName	|| 'PropertyAttr.trackerUsage:'+Stacktrace.parse()[1].originId();
+	trackName	= trackName	|| 'PropertyAttr.trackUsage:'+Stacktrace.parse()[1].originId();
 	// define getter
 	QGetterSetter.defineGetter(this._baseObject, this._property, function(value){
 		tracker.record(trackName, 1);
@@ -81,5 +81,18 @@ PropertyAttr.Builder.prototype.trackUsage	= function(trackName){
 	return this;	// for chained API
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+//		.privateOf()							//
+//////////////////////////////////////////////////////////////////////////////////
 
+var PrivateForJS	= PrivateForJS	|| require('../src/privateforjs.js');
 
+/**
+ * Mark this property as private
+ * @param  {Function} klass the class to which it is private
+ * @return {PropertyAttr.Builder} for chained API
+ */
+PropertyAttr.Builder.prototype.privateOf	= function(klass){
+	PrivateForJS.privateProperty(klass, this._baseObject, this._property);
+	return this;	// for chained API
+}
