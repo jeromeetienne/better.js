@@ -4,7 +4,7 @@ describe('FunctionAttr', function(){
 
 	function foo(){
 		return 'bar';
-	}
+	};
 	
 	it('notify the before() function', function(){
 		var mark= false;
