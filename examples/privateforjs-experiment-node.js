@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var PrivateForJS	= require('../src/privateforjs.js');
+var PrivateForJS	= PrivateForJS	|| require('../src/privateforjs.js');
 
 var aClass1	= function(){
 	console.log('in aClass1 ctor');
