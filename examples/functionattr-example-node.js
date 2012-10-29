@@ -10,7 +10,7 @@ function foo(){
 foo	= FunctionAttr.define(foo, 'Fn.foo')
 	.log('bonjour')
 	.after(function(){
-		console.log('superafter')
+		console.log('superafter');
 	})
 	.trackUsage()
 	.done();

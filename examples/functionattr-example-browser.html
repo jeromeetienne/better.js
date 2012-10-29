@@ -1,4 +1,5 @@
 <!doctype html>
+<script src='../src/stacktrace.js'></script>
 <script src='../src/functionattr.js'></script>
 <script>
 function foo(){
@@ -11,7 +12,9 @@ foo	= FunctionAttr.define(foo, 'Fn.foo')
 	.profile()
 	.after(function(){
 		console.log('superafter')
-	}).done();
+	})
+	.trackUsage()
+	.done();
 
 foo();
 

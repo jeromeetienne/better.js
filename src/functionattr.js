@@ -234,20 +234,21 @@ FunctionAttr.Builder.prototype.typeCheck	= function(paramsTypes, returnTypes){
 //		.trackUsage()							//
 //////////////////////////////////////////////////////////////////////////////////
 
-var Stacktrace		= Stacktrace	|| require('../src/stacktrace.js');
+var Stacktrace	= Stacktrace	|| require('../src/stacktrace.js');
 
 // create the tracker for .trackUsage
 FunctionAttr.usageTracker	= new Stacktrace.Tracker();
 
 /**
  * track where this property is used (getter and setter)
+ * 
  * @param {String|undefined} trackName	optional name for Stacktrace.Tracker. default to originId
  * @return {FunctionAttr.Builder} for chained API
  */
 FunctionAttr.Builder.prototype.trackUsage	= function(trackName){
 	var tracker	= FunctionAttr.usageTracker;
 	// handle polymorphism
-	trackName	= trackName	|| 'FunctionAttr.trackerUsage:'+Stacktrace.parse()[1].originId();
+	trackName	= trackName	|| 'FunctionAttr.trackUsage:'+Stacktrace.parse()[1].originId();
 	// actually record the usage
 	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
 		tracker.record(trackName, 1);
