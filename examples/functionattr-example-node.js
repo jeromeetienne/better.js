@@ -12,10 +12,13 @@ foo	= FunctionAttr.define(foo, 'Fn.foo')
 	.after(function(){
 		console.log('superafter')
 	})
+	.trackUsage()
 	.done();
 
 foo();
 
 foo()
+
+FunctionAttr.usageTracker.dump();
 
 
