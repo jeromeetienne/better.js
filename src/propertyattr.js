@@ -33,7 +33,7 @@ PropertyAttr.define	= function(baseObject, property){
 if( typeof(window) === 'undefined' )	module.exports	= PropertyAttr;
 
 //////////////////////////////////////////////////////////////////////////////////
-//										//
+//		.typeCheck()							//
 //////////////////////////////////////////////////////////////////////////////////
 
 var TypeCheck	= TypeCheck	|| require('../src/typecheck.js')
@@ -50,7 +50,7 @@ PropertyAttr.Builder.prototype.typeCheck	= function(types){
 
 
 //////////////////////////////////////////////////////////////////////////////////
-//										//
+//		.trackUsage()							//
 //////////////////////////////////////////////////////////////////////////////////
 
 var QGetterSetter	= QGetterSetter	|| require('../src/qgettersetter.js')
@@ -65,17 +65,16 @@ PropertyAttr.usageTracker	= new Stacktrace.Tracker();
  * @return {PropertyAttr.Builder} for chained API
  */
 PropertyAttr.Builder.prototype.trackUsage	= function(trackName){
+	var tracker	= PropertyAttr.usageTracker;
 	// handle polymorphism
 	trackName	= trackName	|| 'PropertyAttr.trackerUsage:'+Stacktrace.parse()[1].originId();
 	// define getter
 	QGetterSetter.defineGetter(this._baseObject, this._property, function(value){
-		var tracker	= PropertyAttr.usageTracker;
 		tracker.record(trackName, 1);
 		return value;	// return value unchanged	
 	});
 	// define setter
 	QGetterSetter.defineSetter(this._baseObject, this._property, function(value){
-		var tracker	= PropertyAttr.usageTracker;
 		tracker.record(trackName, 1);
 		return value;	// return value unchanged	
 	});
