@@ -53,7 +53,7 @@ PropertyAttr.Builder.prototype.typeCheck	= function(types){
 //		.trackUsage()							//
 //////////////////////////////////////////////////////////////////////////////////
 
-var QGetterSetter	= QGetterSetter	|| require('../src/qgettersetter.js')
+var QGetterSetter	= QGetterSetter	|| require('../src/qgettersetter.js');
 var Stacktrace		= Stacktrace	|| require('../src/stacktrace.js');
 
 // create the tracker for .trackUsage
