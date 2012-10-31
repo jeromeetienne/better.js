@@ -1,4 +1,4 @@
-/**
+ /**
  * @fileOverview implementation of a log layer on top of console.*
 */
 
