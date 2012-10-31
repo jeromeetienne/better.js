@@ -46,8 +46,10 @@ var GlobalDetector	= function(){
 	/**
 	 * Check if any new global has been declared
 	 * @param  {Function+} onChange optional callback called synchronously if a new global is found
+	 * @return {Boolean} true if some new globals have been detected, false otherwise
 	 */
 	this.check	= function(onChange){
+		var newGlobal	= false;
 		// parameter polymorphism
 		onChange	= onChange || function(property){}
 		// new loop on _global object
@@ -57,9 +59,12 @@ var GlobalDetector	= function(){
 			if( GlobalDetector.ignoreList.indexOf(property) !== -1 )	continue;
 			// mark this property as init
 			_global.proplist[property] = true;
+			// mark newGlobal
+			newGlobal	= true;
 			// notify callback
 			onChange(property);
 	        }
+	        return newGlobal;
 	}
 }
 
