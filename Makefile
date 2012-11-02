@@ -13,7 +13,8 @@ test:
 	@./node_modules/.bin/mocha -R list tests
 
 build:
-	cat src/*.js	> build/debug.js
+	cat src/*.js						>  build/debug.js
+	cat vendor/long-stack-traces/long-stack-traces.js	>> build/debug.js
 
 minify: build
 	curl --data-urlencode "js_code@build/debug.js"	\
