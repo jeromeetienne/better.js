@@ -46,10 +46,26 @@ ConsoleLogger.Severity.dfl	= ConsoleLogger.Severity.all;
 //		handle formatters							//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * formater which doesnt change anything
+ * 
+ * @param  {Array} args	the ```arguments``` of the logger funciton
+ * @param  {Stacktrace.Frame}	stackFrame the stackframe of the origin 
+ * @param  {string} severity	severity of the message
+ * @return {Array}		the formated args
+ */
 ConsoleLogger.formatterIdentity	= function(args, stackFrame, severity){
 	return args;
 }
 
+/**
+ * formater which add a timestamp as prefix to the message - with color if in node
+ * 
+ * @param  {Array} args	the ```arguments``` of the logger funciton
+ * @param  {Stacktrace.Frame}	stackFrame the stackframe of the origin 
+ * @param  {string} severity	severity of the message
+ * @return {Array}		the formated args
+ */
 ConsoleLogger.formatterTimeStamp	= function(args, stackFrame, severity){
 	// build prefix with time
 	var present	= new Date();
@@ -74,6 +90,14 @@ ConsoleLogger.formatterTimeStamp	= function(args, stackFrame, severity){
 	};
 };
 
+/**
+ * formater which add the origin as prefix to the message - with color if in node
+ * 
+ * @param  {Array} args	the ```arguments``` of the logger funciton
+ * @param  {Stacktrace.Frame}	stackFrame the stackframe of the origin 
+ * @param  {string} severity	severity of the message
+ * @return {Array}		the formated args
+ */
 ConsoleLogger.formatterOrigin	= function(args, stackFrame, severity)
 {
 	// compute prefix
@@ -87,7 +111,15 @@ ConsoleLogger.formatterOrigin	= function(args, stackFrame, severity)
 	return args;
 }
 
+/**
+ * flag to know if it is running in node.js or browser
+ * @type {Boolean}
+ */
 ConsoleLogger._inNode	= typeof(window) === 'undefined' ? true : false;
+/**
+ * Color code for ansi tty
+ * @type {String}
+ */
 ConsoleLogger._formatterColor	= {
 	black	: ConsoleLogger._inNode === false ? '' : '\033[30m',
 	red	: ConsoleLogger._inNode === false ? '' : '\033[31m',
@@ -189,7 +221,13 @@ ConsoleLogger._print	= function(severity, args){
 
 	var args	= ConsoleLogger.formatter(args, stackFrame, severity);
 	var _console	= ConsoleLogger._origConsole;
-	_console[severity].apply(_console.console, args);	
+	if( severity === 'log' ){
+		_console.log.apply(_console.console, args);	
+	}else if( severity === 'warn' ){
+		_console.warn.apply(_console.console, args);			
+	}else if( severity === 'error' ){
+		_console.error.apply(_console.console, args);			
+	}else console.assert(false, 'invalid severity: '+severity)
 };
 
 /**
