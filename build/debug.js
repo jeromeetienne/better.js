@@ -4,10 +4,10 @@ var Stacktrace	= Stacktrace	|| require('../src/stacktrace')
  * @namespace
  * http://stackoverflow.com/questions/367768/how-to-detect-if-a-function-is-called-as-constructor
  */
-var allocationTracker	= new Stacktrace.Tracker();
+var AllocationTracker	= new Stacktrace.Tracker();
 
 // export the class in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= allocationTracker;
+if( typeof(window) === 'undefined' )	module.exports	= AllocationTracker;
 /**
  * assert which actually try to stop the excecution
  * if debug.assert.useDebugger is falsy, throw an exception. else trigger the
@@ -18,10 +18,10 @@ if( typeof(window) === 'undefined' )	module.exports	= allocationTracker;
  * @param {String} message the message which is display is condition is falsy
  * @param {Boolean} [useDebugger] the condition which is asserted
 */
-assertWhichStop	= function(condition, message, useDebugger){
+var assertWhichStop	= function(condition, message, useDebugger){
 	if( condition )	return;
 	if( assertWhichStop.useDebugger || useDebugger )	debugger;
-	throw new Error(message	|| "assert Failed")
+	throw new Error(message	|| "assert Failed");
 }
 assertWhichStop.useDebugger	= false;
 
@@ -30,21 +30,15 @@ if( typeof(window) === 'undefined' )	module.exports	= assertWhichStop;
 
 /**
  * Little helper to overload console.assert
+ * 
+ * @todo a .offConsoleAPI() or noConflict() which restore it
  */
 assertWhichStop.overloadConsole	= function(){
 	console.assert	= assertWhichStop;
 }
-
-/**
+ /**
  * @fileOverview implementation of a log layer on top of console.*
- * 
- * * TODO how to overload the usual console.log/warn/error function
- *   * done ? not really tested
- * * TODO put a prefix 
- * * TODO write tests
- * * TODO write examples
 */
-
 
 var Stacktrace	= Stacktrace	|| require('./stacktrace.js');
 
@@ -76,7 +70,7 @@ ConsoleLogger.Severity	= {
 	'log'		: 1,
 	'warn'		: 2,
 	'error'		: 3,
-	'nothing'	: 99,
+	'nothing'	: 99
 };
 
 /**
@@ -85,6 +79,113 @@ ConsoleLogger.Severity	= {
  * @type {Number}
  */
 ConsoleLogger.Severity.dfl	= ConsoleLogger.Severity.all;
+
+//////////////////////////////////////////////////////////////////////////////////
+//		handle formatters							//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * formater which doesnt change anything
+ * 
+ * @param  {Array} args	the ```arguments``` of the logger funciton
+ * @param  {Stacktrace.Frame}	stackFrame the stackframe of the origin 
+ * @param  {string} severity	severity of the message
+ * @return {Array}		the formated args
+ */
+ConsoleLogger.formatterIdentity	= function(args, stackFrame, severity){
+	return args;
+}
+
+/**
+ * formater which add a timestamp as prefix to the message - with color if in node
+ * 
+ * @param  {Array} args	the ```arguments``` of the logger funciton
+ * @param  {Stacktrace.Frame}	stackFrame the stackframe of the origin 
+ * @param  {string} severity	severity of the message
+ * @return {Array}		the formated args
+ */
+ConsoleLogger.formatterTimeStamp	= function(args, stackFrame, severity){
+	// build prefix with time
+	var present	= new Date();
+	var prefixColor	= ConsoleLogger._formatterSeverityColor(severity);
+	var prefix	= prefixColor + pad(present.getHours(),2)
+				+ ':'
+				+ pad(present.getMinutes(),2)
+				+ ':'
+				+ pad(present.getSeconds(),2)
+				+ ConsoleLogger._formatterColor.reset;
+	// convert arguments into actual Array
+	args	= Array.prototype.slice.call(args, 0);
+	// prepend the prefix
+	args.unshift(prefix);
+	// return the result
+	return args;
+
+	function pad(val, len) {
+		val = String(val);
+		while(val.length < len) val = "0" + val;
+		return val;
+	};
+};
+
+/**
+ * formater which add the origin as prefix to the message - with color if in node
+ * 
+ * @param  {Array} args	the ```arguments``` of the logger funciton
+ * @param  {Stacktrace.Frame}	stackFrame the stackframe of the origin 
+ * @param  {string} severity	severity of the message
+ * @return {Array}		the formated args
+ */
+ConsoleLogger.formatterOrigin	= function(args, stackFrame, severity)
+{
+	// compute prefix
+	var prefixColor	= ConsoleLogger._formatterSeverityColor(severity);
+	var prefix	= prefixColor + stackFrame.originId() + ConsoleLogger._formatterColor.reset;
+	// convert arguments into actual Array
+	args		= Array.prototype.slice.call(args, 0);
+	// prepend the prefix
+	args.unshift(prefix);
+	// return the result
+	return args;
+}
+
+/**
+ * flag to know if it is running in node.js or browser
+ * @type {Boolean}
+ */
+ConsoleLogger._inNode	= typeof(window) === 'undefined' ? true : false;
+/**
+ * Color code for ansi tty
+ * @type {String}
+ */
+ConsoleLogger._formatterColor	= {
+	black	: ConsoleLogger._inNode === false ? '' : '\033[30m',
+	red	: ConsoleLogger._inNode === false ? '' : '\033[31m',
+	green	: ConsoleLogger._inNode === false ? '' : '\033[32m',
+	yellow	: ConsoleLogger._inNode === false ? '' : '\033[33m',
+	blue	: ConsoleLogger._inNode === false ? '' : '\033[34m',
+	purple	: ConsoleLogger._inNode === false ? '' : '\033[35m',
+	cyan	: ConsoleLogger._inNode === false ? '' : '\033[36m',
+	white	: ConsoleLogger._inNode === false ? '' : '\033[37m',
+	reset	: ConsoleLogger._inNode === false ? '' : '\033[0m'
+};
+
+/**
+ * return ainsi color per intensity
+ * @param  {String} severity the severity of the message
+ * @return {String} ansi color string
+ */
+ConsoleLogger._formatterSeverityColor	= function(severity){
+	var color	= ConsoleLogger._formatterColor;
+	if( severity === 'log' )	return color.red;
+	if( severity === 'warn' )	return color.purple;
+	return color.green;
+}
+
+/**
+ * Current message formatter
+ */
+ConsoleLogger.formatter	= ConsoleLogger.formatterIdentity;
 
 //////////////////////////////////////////////////////////////////////////////////
 //		handle filters							//
@@ -104,6 +205,18 @@ ConsoleLogger._filters	= [];
  * @return {[type]}          [description]
  */
 ConsoleLogger.pushFilter	= function(validFor, severity){
+	// handle polymorphism
+	if( typeof(validFor) === 'string' ){
+		var path	= validFor;
+		return ConsoleLogger.pushFilter(function(stackFrame, severity){
+			return stackFrame.url.lastIndexOf(path) === stackFrame.url.length - path.length ? true : false;
+		}, severity);
+	}else if( validFor instanceof RegExp ){
+		var regexp	= validFor;
+		return ConsoleLogger.pushFilter(function(stackFrame, severity){
+			return stackFrame.url.match(regexp)	? true : false
+		}, severity);		
+	}
 	// sanity check - sanity level MUST be defined
 	console.assert(Object.keys(ConsoleLogger.Severity).indexOf(severity) !== -1, 'unknown severity level');
 	console.assert(validFor instanceof Function);
@@ -139,31 +252,41 @@ ConsoleLogger.filter	= function(severity, stackFrame){
 //		handle log functions						//
 //////////////////////////////////////////////////////////////////////////////////
 
+ConsoleLogger._print	= function(severity, args){
+	var stackFrame	= Stacktrace.parse()[2];
+
+	if( ConsoleLogger.filter(severity, stackFrame) === false )	return;
+
+	var args	= ConsoleLogger.formatter(args, stackFrame, severity);
+	var _console	= ConsoleLogger._origConsole;
+	if( severity === 'log' ){
+		_console.log.apply(_console.console, args);	
+	}else if( severity === 'warn' ){
+		_console.warn.apply(_console.console, args);			
+	}else if( severity === 'error' ){
+		_console.error.apply(_console.console, args);			
+	}else console.assert(false, 'invalid severity: '+severity)
+};
+
 /**
  * log with a severity of 'log'
  */
 ConsoleLogger.log	= function(/* ... */){
-	if( ConsoleLogger.filter('log') === false )	return;
-	var _console	= ConsoleLogger._origConsole;
-	_console.log.apply(_console.console, arguments);	
+	ConsoleLogger._print('log', arguments);
 }
 
 /**
  * log with a severity of 'warn'
  */
 ConsoleLogger.warn	= function(/* ... */){
-	if( ConsoleLogger.filter('warn') === false )	return;
-	var _console	= ConsoleLogger._origConsole;
-	_console.warn.apply(_console.console, arguments);	
+	ConsoleLogger._print('warn', arguments);
 }
 
 /**
  * log with a severity of 'error'
  */
 ConsoleLogger.error	= function(/* ... */){
-	if( ConsoleLogger.filter('error') === false )	return;
-	var _console	= ConsoleLogger._origConsole;
-	_console.error.apply(_console.console, arguments);	
+	ConsoleLogger._print('error', arguments);
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -172,6 +295,8 @@ ConsoleLogger.error	= function(/* ... */){
 
 /**
  * Overload console.log/warn/error function
+ * 
+ * @todo provide a noConflict  
  */
 ConsoleLogger.overloadConsole	= function(){
 	console.log	= ConsoleLogger.log;
@@ -188,21 +313,25 @@ ConsoleLogger.overloadConsole	= function(){
  * @param {string} fnName the name of the function 
  */
 Function.prototype.setAttr	= function(fnName){
-	return fnAttr(this, fnName)
+	return FunctionAttr.define(this, fnName)
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////
 //		Function Attribute						//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
+ * @namespace
+ */
+var FunctionAttr	= {};
+
+/**
  * Function attribute creator
  * 
- * @return {FnAttrClass} a FnAttrClass builder
+ * @return {FunctionAttr.Builder} a FunctionAttr.Builder builder
 */
-var fnAttr	= function(originalFn, fnName){
-	return new FnAttrClass(originalFn, fnName)
+FunctionAttr.define	= function(originalFn, fnName){
+	return new FunctionAttr.Builder(originalFn, fnName)
 }
 
 /**
@@ -213,7 +342,7 @@ var fnAttr	= function(originalFn, fnName){
  * @param {Function} afterFn the function to call *after* the original function
  * @returns {Function} The modified function
 */
-fnAttr.wrapCall	= function(originalFn, beforeFn, afterFn){
+FunctionAttr.wrapCall	= function(originalFn, beforeFn, afterFn){
 	return function(){
 		var stopNow	= false;
 		// call beforeFn if needed
@@ -239,9 +368,9 @@ fnAttr.wrapCall	= function(originalFn, beforeFn, afterFn){
  * @param {Function} originalFn the function on which the attributes are set
  * @param {String}   fnName     optional name of the function - default to 'aFunction'
  */
-var FnAttrClass	= function(originalFn, fnName){
+FunctionAttr.Builder	= function(originalFn, fnName){
 	this._currentFn	= originalFn;
-	this._fnName	= fnName	|| 'aFunction'
+	this._fnName	= fnName	|| 'aFunction';
 }
 
 /**
@@ -249,12 +378,12 @@ var FnAttrClass	= function(originalFn, fnName){
  * 
  * @return {Function} The actual function with the attributes
 */
-FnAttrClass.prototype.done	= function(){
+FunctionAttr.Builder.prototype.done	= function(){
 	return this._currentFn;
 }
 
 // export the class in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= fnAttr;
+if( typeof(window) === 'undefined' )	module.exports	= FunctionAttr;
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -265,8 +394,8 @@ if( typeof(window) === 'undefined' )	module.exports	= fnAttr;
  * display a message with a timestamp every time the function is used
  * @return {string} message optional message to display
  */
-FnAttrClass.prototype.timestamp	= function(message){
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
+FunctionAttr.Builder.prototype.timestamp	= function(message){
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
 		console.log(''+ new Date + ': '+this._fnName+' being called');
 	}.bind(this));
 	return this;	// for chained API
@@ -276,8 +405,8 @@ FnAttrClass.prototype.timestamp	= function(message){
  * log a message when the function is call
  * @param  {string} message the message to display
  */
-FnAttrClass.prototype.log		= function(message){
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
+FunctionAttr.Builder.prototype.log		= function(message){
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
 		console.log(message);
 	});
 	return this;	// for chained API
@@ -292,9 +421,9 @@ FnAttrClass.prototype.log		= function(message){
  * mark the function as deprecated - aka you can use it but it will disapears soon
  * @param  {string} message the optional message to provide
  */
-FnAttrClass.prototype.deprecated	= function(message){
+FunctionAttr.Builder.prototype.deprecated	= function(message){
 	var used	= false;
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
 		if( used )	return;
 		used	= true;
 		console.warn(message || "Deprecated function "+this._fnName+" called. Please update your code.");
@@ -306,9 +435,9 @@ FnAttrClass.prototype.deprecated	= function(message){
  * mark the function as obsolete
  * @param  {string} message obsolete message to display
  */
-FnAttrClass.prototype.obsolete	= function(message){
+FunctionAttr.Builder.prototype.obsolete	= function(message){
 	var used	= false;
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
 		if( used )	return;
 		used	= true;
 		console.assert(false, message || "Obsoleted function "+this._fnName+" called. Please update your code.");
@@ -324,8 +453,8 @@ FnAttrClass.prototype.obsolete	= function(message){
  * hook a function be be caller before the actual function
  * @param  {Function} beforeFn the function to call
  */
-FnAttrClass.prototype.before	= function(beforeFn){
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, beforeFn, null);
+FunctionAttr.Builder.prototype.before	= function(beforeFn){
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, beforeFn, null);
 	return this;	// for chained API
 };
 
@@ -333,8 +462,8 @@ FnAttrClass.prototype.before	= function(beforeFn){
  * hook a function to be called after the actual function
  * @param  {Function} afterFn the function to be called after
  */
-FnAttrClass.prototype.after	= function(afterFn){
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, null, afterFn);
+FunctionAttr.Builder.prototype.after	= function(afterFn){
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, null, afterFn);
 	return this;	// for chained API
 };
 
@@ -347,9 +476,9 @@ FnAttrClass.prototype.after	= function(afterFn){
  * 
  * @param  {String} label the label to use for console.time(label)
  */
-FnAttrClass.prototype.time	= function(label){
+FunctionAttr.Builder.prototype.time	= function(label){
 	label	= label !== undefined ? label : this._fnName+".time()-"+Math.floor(Math.random()*9999).toString(36);
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
 		console.time(label)
 	}, function(){
 		console.timeEnd(label)
@@ -362,9 +491,9 @@ FnAttrClass.prototype.time	= function(label){
  * 
  * @param  {String} label label to use for console.profile()
  */
-FnAttrClass.prototype.profile	= function(label){
+FunctionAttr.Builder.prototype.profile	= function(label){
 	label	= label !== undefined ? label : this._fnName+".profile-"+Math.floor(Math.random()*9999).toString(36);
-	this._currentFn	= fnAttr.wrapCall(this._currentFn, function(){
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
 		console.profile(label)
 	}, function(){
 		console.profileEnd(label)
@@ -381,9 +510,9 @@ FnAttrClass.prototype.profile	= function(label){
  *
  * @param {Function} originalFn the original function
  * @param {Function} [conditionFn] this function should return true, when the breakpoint should be triggered. default to function(){ return true; }
- * @returns {FnAttrClass} for chained API
+ * @returns {FunctionAttr.Builder} for chained API
 */
-FnAttrClass.prototype.breakpoint	= function(fn, conditionFn){
+FunctionAttr.Builder.prototype.breakpoint	= function(fn, conditionFn){
 	conditionFn	= conditionFn	|| function(){ return true; };
 	this._currentFn	= function(){
 		var stopNow	= conditionFn();
@@ -391,7 +520,7 @@ FnAttrClass.prototype.breakpoint	= function(fn, conditionFn){
 		if( stopNow === true )	debugger;
 		// forward the call to the original function
 		return this._currentFn.apply(this, arguments);
-	}.bind(this)
+	}.bind(this);
 	return this;
 }
 
@@ -399,10 +528,37 @@ FnAttrClass.prototype.breakpoint	= function(fn, conditionFn){
  * check function type as in ```TypeCheck.fn``` from typecheck.js
  * @param  {Array}    paramsTypes allowed types for the paramter. array with each item is the allowed types for this parameter.
  * @param  {Array}    returnTypes allowed types for the return value
- * @returns {FnAttrClass} for chained API
+ * @returns {FunctionAttr.Builder} for chained API
  */
-FnAttrClass.prototype.typeCheck	= function(paramsTypes, returnTypes){
+FunctionAttr.Builder.prototype.typeCheck	= function(paramsTypes, returnTypes){
 	this._currentFn	= TypeCheck.fn(this._currentFn, paramsTypes, returnTypes);
+	return this;
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//		.trackUsage()							//
+//////////////////////////////////////////////////////////////////////////////////
+
+var Stacktrace	= Stacktrace	|| require('../src/stacktrace.js');
+
+// create the tracker for .trackUsage
+FunctionAttr.usageTracker	= new Stacktrace.Tracker();
+
+/**
+ * track where this property is used (getter and setter)
+ * 
+ * @param {String|undefined} trackName	optional name for Stacktrace.Tracker. default to originId
+ * @return {FunctionAttr.Builder} for chained API
+ */
+FunctionAttr.Builder.prototype.trackUsage	= function(trackName){
+	var tracker	= FunctionAttr.usageTracker;
+	// handle polymorphism
+	trackName	= trackName	|| 'FunctionAttr.trackUsage:'+Stacktrace.parse()[1].originId();
+	// actually record the usage
+	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
+		tracker.record(trackName, 1);
+	});
+	// for chained API
 	return this;
 }
 
@@ -427,13 +583,11 @@ var GcMonitor	= function(){
 		if( !window.performance || !window.performance.memory )	return 0;
 		return window.performance.memory.usedJSHeapSize;	
 	};
-	// TODO remove this usedHeapSize variable
-	this.usedHeapSize	= usedHeapSize;
 
 	// sanity check - if not available, output a warning
 	if( GcMonitor.isAvailable() === false ){
 		// open -a "/Applications/Google Chrome.app" --args --enable-memory-info
-		console.warn('memory info are unavailable... for chrome use --enable-memory-info. other browsers dont have this feature.')
+		console.warn('memory info are unavailable... for chrome, use --enable-memory-info. Other browsers dont have this feature.')
 	}
 
 	/**
@@ -443,8 +597,8 @@ var GcMonitor	= function(){
 	 * @param {Number|undefined} period period of the check. default to 50ms
 	 */
 	this.start	= function(onChange, period){
-		period	= period	|| 50;
-		onChange= onChange || function(delta){
+		period	= period	|| 1000/60;
+		onChange= onChange	|| function(delta){
 			function bytesToSize(bytes, nFractDigit) {
 				var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
 				if (bytes == 0) return '0';
@@ -453,11 +607,12 @@ var GcMonitor	= function(){
 				var i 		= Math.floor(Math.log(bytes) / Math.log(1024));
 				return Math.round(bytes*precision / Math.pow(1024, i))/precision + ' ' + sizes[i];
 			};
-			console.warn(new Date + " -- GC occured!!! saved", bytesToSize(delta), ' consuming at ', bytesToSize(burnRate))
+			console.warn(new Date + " -- GC occured! saved", bytesToSize(delta), 'consuming at', bytesToSize(burnRate), 'per second')
 		}
 		timerid	= setInterval(function(){
 			_this.check(onChange);
 		}, period);
+		return this;	// for chained api
 	};
 	/**
 	 * Stop monitoring periodically
@@ -479,16 +634,16 @@ var GcMonitor	= function(){
 		// parameter polymorphism
 		onChange	= onChange || function(property){}
 
+		var present	= Date.now();//console.log('present', (present - lastTimestamp)/1000)
+		var currUsedSize= usedHeapSize();
+
 		if( lastUsedHeap === null ){
-			lastUsedHeap	= usedHeapSize();
-			lastTimestamp	= Date.now();
+			lastUsedHeap	= currUsedSize;
+			lastTimestamp	= present;
 			return;
 		}
 
-		var present	= Date.now();
-		var currUsedSize= usedHeapSize();
-
-		// check if the heap size is this cycle is LESS than what we had last
+		// check if the heap size in this cycle is LESS than what we had last
 		// cycle; if so, then the garbage collector has kicked in
 		var deltaMem	= currUsedSize - lastUsedHeap;
 		if( deltaMem < 0 ){
@@ -496,16 +651,15 @@ var GcMonitor	= function(){
 		}else{
 			var deltaTime	= present - lastTimestamp
 			var newBurnrate	= deltaMem / (deltaTime/1000);
-			// if there is a previous burnRate, smooth with it
-			if( burnRate !== null ){
-				burnRate	= burnRate * 0.7 + newBurnrate * 0.3;
-			}else{
-				burnRate	= newBurnrate;
-			}
+//burnRate	= newBurnrate;
+//console.log('deltaMem', deltaMem, 'deltaTime', deltaTime, 'currUsedSize', currUsedSize, 'lastUsedHeap', lastUsedHeap)
+			if( burnRate === null )	burnRate	= newBurnrate;
+			var friction	= 0.99;
+			burnRate	= burnRate * friction + newBurnrate * (1-friction);
 		}
 
 		lastUsedHeap	= currUsedSize;
-		lastTimestamp	= Date.now();
+		lastTimestamp	= present;
 	}
 	
 	/**
@@ -515,6 +669,14 @@ var GcMonitor	= function(){
 	this.burnRate	= function(){
 		if( burnRate === null )	return 0;
 		return burnRate;
+	}
+	
+	/**
+	 * getter for the usedHeapSize
+	 * @return {Number} used heap size in byte
+	 */
+	this.usedHeapSize	= function(){
+		return usedHeapSize();
 	}
 }
 
@@ -544,7 +706,7 @@ if( typeof(window) === 'undefined' )	module.exports	= GcMonitor;
 var GlobalDetector	= function(){
 	// take the namespace for global
 	var inBrowser	= typeof(window) !== 'undefined'	? true : false
-	var _global	= inBrowser	? window	: global;
+	var _global	= inBrowser	?  window	:  global;
 	var _globalStr	= inBrowser	? 'window'	: 'global';
 	// sanity check - a global namespace MUST be found
 	console.assert( _global, 'failed to find a global namespace! bailing out!' );
@@ -566,7 +728,7 @@ var GlobalDetector	= function(){
 	 */
 	this.start	= function(onChange, period){
 		period	= period	|| 1000;
-		onChange= onChange || function(newProperty){
+		onChange= onChange	|| function(newProperty){
 			console.warn(new Date + " -- Warning Global Detected!!! "+_globalStr+"['"+newProperty+"'] === ", _global[newProperty])
 		}
 		timerid	= setInterval(function(){
@@ -582,20 +744,25 @@ var GlobalDetector	= function(){
 	/**
 	 * Check if any new global has been declared
 	 * @param  {Function+} onChange optional callback called synchronously if a new global is found
+	 * @return {Boolean} true if some new globals have been detected, false otherwise
 	 */
 	this.check	= function(onChange){
+		var newGlobal	= false;
 		// parameter polymorphism
 		onChange	= onChange || function(property){}
 		// new loop on _global object
-	        for(var propname in _global){
-			if( _global.proplist[propname] )	continue;
+	        for(var property in _global){
+			if( _global.proplist[property] )	continue;
 			// if this is already in the ignoreList, continue
-			if( GlobalDetector.ignoreList.indexOf(propname) !== -1 )	continue;
+			if( GlobalDetector.ignoreList.indexOf(property) !== -1 )	continue;
 			// mark this property as init
-			_global.proplist[propname] = true;
+			_global.proplist[property] = true;
+			// mark newGlobal
+			newGlobal	= true;
 			// notify callback
-			onChange(propname);
+			onChange(property);
 	        }
+	        return newGlobal;
 	}
 }
 
@@ -609,59 +776,218 @@ GlobalDetector.ignoreList	= [];
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= GlobalDetector;
 /**
- * Implement a Object Pool
- * 
- * - only track the free objects
- * - TODO implement one which track used object too
- *   - which allocation is never released, from where
- * 
- * @class
- * @param {Function} klass the constructor of the class used in the pool
+ * @namespace Strong typing for javascript
  */
-var ObjectPool = function(klass){
-	var _pool	= new Array();
-	return {
-		reset	: function()	{ _pool = [];		},
-		put	: function(obj)	{ _pool.push(obj);	},
-		get	: function(){			
-			if( _pool.length === 0 )	this.grow();
-			return _pool.pop();
-		},
-		grow	: function(){
-			_pool.push(new klass());
+var PrivateForJS	= {};
+
+// include dependancies
+var Stacktrace		= Stacktrace	|| require('./stacktrace.js');
+var QGetterSetter	= QGetterSetter	|| require('./qgettersetter.js')
+
+
+// export the namespace in node.js - if running in node.js
+if( typeof(window) === 'undefined' )	module.exports	= PrivateForJS;
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Handle PrivateOKFn						//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * determine which function is considered private for klass 
+ * @param  {function} klass  the constructor of the class
+ * @param  {object|function|Array.<function>|undefined} source private functions - if Function, use it directly.
+ *                           if Array.<function>, then each item is a private function
+ *                           if object, then each of its property which is a function is private
+ *                           if undefined, use klass.prototype which trigger the Object case
+ */
+PrivateForJS.pushPrivateOkFn	= function(klass, source){
+	// if source isnt provided, use klass.prototype
+	if( source === undefined )	source	= klass.prototype;
+	// init ._privateOkFn if needed
+	klass._privateOkFn	= klass._privateOkFn	|| [];
+	// handle various case of source
+	if( typeof(source) === 'function' ){
+		klass._privateOkFn.push(source)
+	}else if( typeof(source) === 'object' ){
+		Object.keys(source).forEach(function(key){
+			var val	= source[key];
+			if( typeof(val) !== 'function' )	return;
+			klass._privateOkFn.push(val);			
+		});
+	}else if( source instanceof Array ){
+		source.forEach(function(fn){
+			console.assert( typeof(val) !== 'function' );
+			klass._privateOkFn.push(fn);			
+		});
+	}else	console.assert(false);
+}
+
+/**
+ * return the functions allowed to access private values
+ * @param  {Function} klass the class to query
+ * @return {Array.<function>} return the function
+ */
+PrivateForJS.getPrivateOkFn	= function(klass){
+	// init ._privateOkFn if needed
+	klass._privateOkFn	= klass._privateOkFn	|| [];
+	// return current ones
+	return klass._privateOkFn;
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//		core								//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * define a private property on a given instance of a object class
+ * @param  {Function} klass	the class of the intenciated object
+ * @param  {Object} baseObject	the object instance
+ * @param  {String} property	the property name
+ * @return {undefined}		nothing
+ */
+PrivateForJS.privateProperty	= function(klass, baseObject, property){
+// @TODO should i put a setter too ?
+	QGetterSetter.defineGetter(baseObject, property, function aFunction(value, caller, property){
+		// generate privateOkFns if needed - functions which can access private properties
+		klass._privateOkFn	= klass._privateOkFn || PrivateForJS.pushPrivateOkFn(klass);
+		// if caller not privateOK, notify the caller
+		var privateOkFns= klass._privateOkFn;
+		if( privateOkFns.indexOf(caller) === -1 ){
+			// get stackFrame for the originId of the user
+			var stackFrame	= Stacktrace.parse()[2];
+			// log the event
+			console.assert(false, 'access to private property', "'"+property+"'", 'from', stackFrame.orginId());			
 		}
+		// actually return the value
+		return value;
+	});
+};
+
+/**
+ * define a private function
+ * @param  {Function} klass the class of the intenciated object
+ * @param  {Function} fn    the function to overload
+ * @return {Function}       the overloaded function
+ */
+PrivateForJS.privateFunction	= function(klass, fn){
+	// MUST NOT use .bind(this) as it change the .caller value
+	var _this	= this;
+	return function _checkPrivateFunction(){
+		// get caller
+		var caller	= _checkPrivateFunction.caller;
+		// generate privateOkFns if needed - functions which can access private properties
+		klass._privateOkFn	= klass._privateOkFn || PrivateForJS.pushPrivateOkFn(klass);
+		// if caller not privateOK, notify the caller
+		var privateOkFns= klass._privateOkFn;
+		if( privateOkFns.indexOf(caller) === -1 ){
+			// get stackFrame for the originId of the user
+			var stackFrame	= Stacktrace.parse()[1];
+			// log the event
+			console.assert(false, 'access to private property', "'"+property+"'", 'from', stackFrame.orginId());			
+		}
+		// forward the call to the original function
+		return fn.apply(_this, arguments);
 	};
 };
 
 /**
- * mixin an ObjectPool into a class
- * @param  {Function} klass constructor function of the class
+ * @namespace
  */
-ObjectPool.mixin	= function(klass){
-	var pool	= new ObjectPool(klass)
-	// ### possible API
-	// .create/.destroy
-	// .acquire/.release
-	// .create/.release
-	// 
-	// ### events ? onAcquire/onRelease
-	// * with microevent.js
-	// * where did you get it ?
-	// * where have i seen this ?
-	// * https://github.com/playcraft/gamecore.js/blob/master/src/pooled.js#L483
+var PropertyAttr	= {};
 
-	klass.create	= function(){
-		var obj	= pool.get();
-		klass.prototype.constructor.apply(obj, arguments)
-		return obj;
-	}
-	klass.prototype.destroy	= function(){
-		pool.put(this);
-	}
+/**
+ * Define a property attribute
+ * 
+ * @param {Object} baseObject the base object to which the property belong
+ * @param {String} property   the name of the property
+ * @return {PropertyAttr}	builder for property attributes
+ */
+PropertyAttr.define	= function(baseObject, property){
+	return new PropertyAttr.Builder(baseObject, property);
 };
 
+/**
+ * Constructor
+ * 
+ * @param {Object} baseObject the base object to which the property belong
+ * @param {String} property   the name of the property
+ */
+ PropertyAttr.Builder	= function(baseObject, property){
+	// sanity check
+	console.assert(typeof(baseObject) === 'object');
+	console.assert(typeof(property) === 'string');
+	// set local values
+	this._baseObject= baseObject;
+	this._property	= property; 
+}
+
 // export the class in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= ObjectPool;
+if( typeof(window) === 'undefined' )	module.exports	= PropertyAttr;
+
+//////////////////////////////////////////////////////////////////////////////////
+//		.typeCheck()							//
+//////////////////////////////////////////////////////////////////////////////////
+
+var TypeCheck	= TypeCheck	|| require('../src/typecheck.js')
+
+/**
+ * check if this property is of validTypes
+ * @param  {[type]} types valid types in typecheck.js format
+ * @return {PropertyAttr.Builder} for chained API
+ */
+PropertyAttr.Builder.prototype.typeCheck	= function(types){
+	TypeCheck.setter(this._baseObject, this._property, types);
+	return this;	// for chained API;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//		.trackUsage()							//
+//////////////////////////////////////////////////////////////////////////////////
+
+var QGetterSetter	= QGetterSetter	|| require('../src/qgettersetter.js');
+var Stacktrace		= Stacktrace	|| require('../src/stacktrace.js');
+
+// create the tracker for .trackUsage
+PropertyAttr.usageTracker	= new Stacktrace.Tracker();
+
+/**
+ * track where this property is used (getter and setter)
+ * @param {String|undefined} trackName	optional name for Stacktrace.Tracker. default to originId
+ * @return {PropertyAttr.Builder} for chained API
+ */
+PropertyAttr.Builder.prototype.trackUsage	= function(trackName){
+	var tracker	= PropertyAttr.usageTracker;
+	// handle polymorphism
+	trackName	= trackName	|| 'PropertyAttr.trackUsage:'+Stacktrace.parse()[1].originId();
+	// define getter
+	QGetterSetter.defineGetter(this._baseObject, this._property, function(value){
+		tracker.record(trackName, 1);
+		return value;	// return value unchanged	
+	});
+	// define setter
+	QGetterSetter.defineSetter(this._baseObject, this._property, function(value){
+		tracker.record(trackName, 1);
+		return value;	// return value unchanged	
+	});
+	return this;	// for chained API
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//		.privateOf()							//
+//////////////////////////////////////////////////////////////////////////////////
+
+var PrivateForJS	= PrivateForJS	|| require('../src/privateforjs.js');
+
+/**
+ * Mark this property as private
+ * @param  {Function} klass the class to which it is private
+ * @return {PropertyAttr.Builder} for chained API
+ */
+PropertyAttr.Builder.prototype.privateOf	= function(klass){
+	PrivateForJS.privateProperty(klass, this._baseObject, this._property);
+	return this;	// for chained API
+}
 //////////////////////////////////////////////////////////////////////////////////
 //		Implement queuable getter setter				//
 //////////////////////////////////////////////////////////////////////////////////
@@ -676,60 +1002,98 @@ if( typeof(window) === 'undefined' )	module.exports	= ObjectPool;
  * (I have no idea of the reasoning behind this limitation to one function. It seems
  *  useless to me. This remind me of onclick of the DOM instead of a proper .addEventListener) 
 */
-(function(){
-	/**
-	 * Class to implement queueable getter/setter
-	 * @param  {Object} baseObject The base object on which we operate
-	 * @param  {String} property   The string of property
-	 */
-	var _QGetterSetter	= function(baseObject, property){
-		// sanity check 
-		console.assert( typeof(baseObject) === 'object' );
-		console.assert( typeof(property) === 'string' );
-		// backup the initial value
-		var initialValue= baseObject[property];
-		// init some local variables
-		var _this	= this;
-		this._getters	= [];
-		this._setters	= [];
-		// define the root getter
-		baseObject.__defineGetter__(property, function(){
-			var value	= baseObject['__'+property];
-			for(var i = 0; i < _this._getters.length; i++){
-				value	= _this._getters[i](value)
-			}
-			return value;
-		});
-		// define the root setter		
-		baseObject.__defineSetter__(property, function(value){
-			for(var i = 0; i < _this._setters.length; i++){
-				value	= _this._setters[i](value)
-			}
-			baseObject['__'+property] = value;
-		});
-		// set the initialValue
-		baseObject['__'+property]	= initialValue;
-	};
 
-	//////////////////////////////////////////////////////////////////////////////////
-	// Override prototype of global ```Object```
+
+/**
+ * Class to implement queueable getter/setter
+ * @param  {Object} baseObject The base object on which we operate
+ * @param  {String} property   The string of property
+ */
+var QGetterSetter	= {};
+
+QGetterSetter.Property	= function(baseObject, property){
+	// sanity check 
+	console.assert( typeof(baseObject) === 'object' );
+	console.assert( typeof(property) === 'string' );
+	// backup the initial value
+	var originValue	= baseObject[property];
+	// init some local variables
+	var _this	= this;
+	this._getters	= [];
+	this._setters	= [];
+	// define the root getter
+	baseObject.__defineGetter__(property, function getterHandler(){
+		var value	= baseObject['__'+property];
+		for(var i = 0; i < _this._getters.length; i++){
+			// TODO why those extra param are needed
+			// - needed for privateforjs to identify the origin
+			// - is that the proper format ?
+			// - is that important for setter
+			value	= _this._getters[i](value, getterHandler.caller, property)
+		}
+		return value;
+	});
+	// define the root setter		
+	baseObject.__defineSetter__(property, function(value){
+		for(var i = 0; i < _this._setters.length; i++){
+			value	= _this._setters[i](value)
+		}
+		baseObject['__'+property] = value;
+	});
+	// set the originValue
+	baseObject['__'+property]	= originValue;
+};
+
+// export the class in node.js - if running in node.js
+if( typeof(window) === 'undefined' )	module.exports	= QGetterSetter;
+
+/**
+ * define a getter 
+ * 
+ * @param  {Obejct} baseObject the object containing the property
+ * @param  {string} property   the property name which gonna get the getter
+ * @param  {Function} getterFn   function which handle the getter
+ */
+QGetterSetter.defineGetter	= function(baseObject, property, getterFn){
+	var name	= "__dbgGetSet_" + property;
+	// init QGetterSetter for this property if needed
+	baseObject[name]= baseObject[name] || new QGetterSetter.Property(baseObject, property);
+	// setup the new getter
+	baseObject[name]._getters.push(getterFn)
+}
+
+/**
+ * define a setter 
+ * 
+ * @param  {Obejct} baseObject the object containing the property
+ * @param  {string} property   the property name which gonna get the setter
+ * @param  {Function} setterFn   function which handle the setter
+ */
+QGetterSetter.defineSetter	= function(baseObject, property, setterFn){
+	var name	= "__dbgGetSet_" + property;
+	// init QGetterSetter for this property if needed
+	baseObject[name]= baseObject[name] || new QGetterSetter.Property(baseObject, property);
+	// setup the new setter
+	baseObject[name]._setters.push(setterFn)
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//		.overloadObjectPrototype()					//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * overload the Object.prototype with .__defineQGetter__ and .__defineQSetter__
+ * 
+ * TODO put that in example/js ?
+ */
+QGetterSetter.overloadObjectPrototype	= function(){	
 	Object.prototype.__defineQGetter__	= function(property, getterFn){
-		var name	= "__dbgGetSet_" + property;
-		// init _QGetterSetter for this property if needed
-		this[name]	= this[name] || new _QGetterSetter(this, property);
-		// setup the new getter
-		this[name]._getters.push(getterFn)
+		QGetterSetter.defineGetter(this, property, getterFn);
 	};
-
 	Object.prototype.__defineQSetter__	= function(property, setterFn){
-		var name	= "__dbgGetSet_" + property;
-		// init _QGetterSetter for this property if needed
-		this[name]	= this[name] || new _QGetterSetter(this, property);
-		// setup the new setter
-		this[name]._setters.push(setterFn)
+		QGetterSetter.defineSetter(this, property, setterFn);
 	};
-})();
-
+}
 /**
  * @namespace
  */
@@ -742,7 +1106,7 @@ if( typeof(window) === 'undefined' )	module.exports	= Stacktrace;
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
 //										//
-//		Stacktrace.parse						//
+//		Stacktrace.parse()						//
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
@@ -750,7 +1114,7 @@ if( typeof(window) === 'undefined' )	module.exports	= Stacktrace;
 
 
 /**
- * parse the stacktrace of an Error
+ * parse the stacktrace of an Error.
  * 
  * @param  {Error|undefined} error optional error to parse. if not provided, generate one.
  * @return {Array.<Object>}	parsed stacktrace
@@ -789,24 +1153,30 @@ Stacktrace.parse	= function(nShift, error){
 		var lines	= error.stack.split("\n").slice(1);
 		var stacktrace	= [];
 		lines.forEach(function(line){
-			if( line.match(/\)$/) ){
+			if( line.match(/\(native\)$/) ){
+				var matches	= line.match(/^\s*at (.+) \(native\)/);
+				stacktrace.push(new Stacktrace.Frame({
+					fct	: matches[1],
+					url	: 'native',
+					line	: 1,
+					column	: 1
+				}));
+			}else if( line.match(/\)$/) ){
 				var matches	= line.match(/^\s*at (.+) \((.+):(\d+):(\d+)\)/);
-				var result	= {
+				stacktrace.push(new Stacktrace.Frame({
 					fct	: matches[1],
 					url	: matches[2],
 					line	: parseInt(matches[3], 10),
 					column	: parseInt(matches[4], 10)
-				};
-				stacktrace.push(result);
+				}));
 			}else{
 				var matches	= line.match(/^\s*at (.+):(\d+):(\d+)/);
-				var result	= {
+				stacktrace.push(new Stacktrace.Frame({
 					url	: matches[1],
 					fct	: '<anonymous>',
 					line	: parseInt(matches[2], 10),
 					column	: parseInt(matches[3], 10)
-				};
-				stacktrace.push(result);
+				}));
 			}
 		});
 		return stacktrace;
@@ -821,16 +1191,49 @@ Stacktrace.parse	= function(nShift, error){
 		var stacktrace	= [];
 		lines.forEach(function(line){
 			var matches	= line.match(/^(.*)@(.+):(\d+)$/);
-			stacktrace.push({
+			stacktrace.push(new Stacktrace.Frame({
 				fct	: matches[1] === '' ? '<anonymous>' : matches[1],
 				url	: matches[2],
 				line	: parseInt(matches[3], 10),
 				column	: 1
-			});
+			}));
 		});
 		return stacktrace;
 	};
 }
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Stacktrace.Frame						//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * handle stack frame
+ * 
+ * TODO do a .fromOriginId()
+ */
+Stacktrace.Frame	= function(opts){
+	this.url	= opts.url;
+	this.fct	= opts.fct;
+	this.line	= opts.line;
+	this.column	= opts.column;
+};
+
+/**
+ * return the origin String
+ * @return {String} the origin of the stackframe
+ */
+Stacktrace.Frame.prototype.originId	= function(){
+	var str	= this.fct + '@' + this.url + ':' + this.line + ':' + this.column;
+	return str;
+};
+
+/**
+ * get the basename of the url
+ * @return {string}
+ */
+Stacktrace.Frame.prototype.basename	= function(){
+	return this.url.match(/([^/]*)$/)[1]	|| ".";
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////
@@ -881,6 +1284,12 @@ Stacktrace.Tracker.prototype.reset	= function(){
 	this._klasses	= {};
 }
 
+/**
+ * getter for the results
+ */
+Stacktrace.Tracker.prototype.klasses	= function(){
+	return this._klasses;
+}
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
@@ -915,7 +1324,7 @@ Stacktrace.Tracker.prototype.reportString	= function(classNameRegExp, maxNOrigin
 	// display the rest
 	classNames.forEach(function(className){
 		var klass	= this._klasses[className];
-		output.push(className+': allocated '+klass.counter+' times');
+		output.push(className+': total '+klass.counter+' times');
 		
 		var perOrigins	= klass.perOrigins;
 
@@ -953,7 +1362,13 @@ Stacktrace.Tracker.prototype.reportString	= function(classNameRegExp, maxNOrigin
  */
 var TypeCheck	= {};
 
-Object.prototype.__defineQGetter__	|| require('./queueablegettersetter.js')
+// dependancy
+var QGetterSetter	= QGetterSetter	|| require('../src/qgettersetter.js')
+
+// export the namespace in node.js - if running in node.js
+if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;
+
+
 
 /**
  * Check type with a object setter
@@ -968,7 +1383,7 @@ TypeCheck.setter	= function(baseObject, property, types){
 	var isValid	= TypeCheck.value(value, types)
 	console.assert(isValid, 'initial value got invalid type');
 	// setup the setter
-	baseObject.__defineQSetter__(property, function(value){
+	QGetterSetter.defineSetter|(baseObject, property, function(value){
 		// check the value type
 		var isValid	= TypeCheck.value(value, types);			
 		console.assert(isValid, 'invalid type');
@@ -1059,8 +1474,3 @@ TypeCheck._ValidatorClass= function(fn){
 	console.assert(fn instanceof Function);
 	this.fn	= fn;
 }
-
-// export the namespace in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;
-
-
