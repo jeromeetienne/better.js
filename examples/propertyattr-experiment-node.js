@@ -4,7 +4,7 @@ var foo		= {
 	bar	: 2
 };
 
-var PropertyAttr	= require('../src/propertyattr.js');
+var PropertyAttr	= PropertyAttr	|| require('../src/propertyattr.js');
 
 PropertyAttr.define(foo, 'bar')
 	.typeCheck([Number, 'nonan'])

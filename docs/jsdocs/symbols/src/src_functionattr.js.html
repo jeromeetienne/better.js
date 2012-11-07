@@ -122,147 +122,172 @@
 <span class='line'>115</span> </span><span class="COMM">/**
 <span class='line'>116</span>  * mark the function as deprecated - aka you can use it but it will disapears soon
 <span class='line'>117</span>  * @param  {string} message the optional message to provide
-<span class='line'>118</span>  */</span><span class="WHIT">
-<span class='line'>119</span> </span><span class="NAME">FunctionAttr.Builder.prototype.deprecated</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>120</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">used</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>121</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>122</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">used</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>123</span> </span><span class="WHIT">		</span><span class="NAME">used</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>124</span> </span><span class="WHIT">		</span><span class="NAME">console.warn</span><span class="PUNC">(</span><span class="NAME">message</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">"Deprecated function "</span><span class="PUNC">+</span><span class="NAME">this._fnName</span><span class="PUNC">+</span><span class="STRN">" called. Please update your code."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>125</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>126</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>127</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>128</span> 
-<span class='line'>129</span> </span><span class="COMM">/**
-<span class='line'>130</span>  * mark the function as obsolete
-<span class='line'>131</span>  * @param  {string} message obsolete message to display
-<span class='line'>132</span>  */</span><span class="WHIT">
-<span class='line'>133</span> </span><span class="NAME">FunctionAttr.Builder.prototype.obsolete</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>134</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">used</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>135</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>136</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">used</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>137</span> </span><span class="WHIT">		</span><span class="NAME">used</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>138</span> </span><span class="WHIT">		</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">message</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">"Obsoleted function "</span><span class="PUNC">+</span><span class="NAME">this._fnName</span><span class="PUNC">+</span><span class="STRN">" called. Please update your code."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>139</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>140</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>141</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>142</span> 
-<span class='line'>143</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>144</span> </span><span class="COMM">//		General hooks								//</span><span class="WHIT">
+<span class='line'>118</span>  * @returns {FunctionAttr.Builder} for chained API
+<span class='line'>119</span>  */</span><span class="WHIT">
+<span class='line'>120</span> </span><span class="NAME">FunctionAttr.Builder.prototype.deprecated</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>121</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">used</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>122</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>123</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">used</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>124</span> </span><span class="WHIT">		</span><span class="NAME">used</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>125</span> </span><span class="WHIT">		</span><span class="NAME">console.warn</span><span class="PUNC">(</span><span class="NAME">message</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">"Deprecated function "</span><span class="PUNC">+</span><span class="NAME">this._fnName</span><span class="PUNC">+</span><span class="STRN">" called. Please update your code."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>126</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>127</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>128</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>129</span> 
+<span class='line'>130</span> </span><span class="COMM">/**
+<span class='line'>131</span>  * mark the function as obsolete
+<span class='line'>132</span>  * @param  {string} message obsolete message to display
+<span class='line'>133</span>  * @returns {FunctionAttr.Builder} for chained API
+<span class='line'>134</span>  */</span><span class="WHIT">
+<span class='line'>135</span> </span><span class="NAME">FunctionAttr.Builder.prototype.obsolete</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>136</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">used</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>137</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>138</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">used</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="KEYW">return</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>139</span> </span><span class="WHIT">		</span><span class="NAME">used</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>140</span> </span><span class="WHIT">		</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">message</span><span class="WHIT"> </span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">"Obsoleted function "</span><span class="PUNC">+</span><span class="NAME">this._fnName</span><span class="PUNC">+</span><span class="STRN">" called. Please update your code."</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>141</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>142</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>143</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>144</span> 
 <span class='line'>145</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>146</span> 
-<span class='line'>147</span> </span><span class="COMM">/**
-<span class='line'>148</span>  * hook a function be be caller before the actual function
-<span class='line'>149</span>  * @param  {Function} beforeFn the function to call
-<span class='line'>150</span>  */</span><span class="WHIT">
-<span class='line'>151</span> </span><span class="NAME">FunctionAttr.Builder.prototype.before</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">beforeFn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>152</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">beforeFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>153</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>154</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>155</span> 
-<span class='line'>156</span> </span><span class="COMM">/**
-<span class='line'>157</span>  * hook a function to be called after the actual function
-<span class='line'>158</span>  * @param  {Function} afterFn the function to be called after
-<span class='line'>159</span>  */</span><span class="WHIT">
-<span class='line'>160</span> </span><span class="NAME">FunctionAttr.Builder.prototype.after</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">afterFn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>161</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">afterFn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>162</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>163</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>164</span> 
-<span class='line'>165</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>166</span> </span><span class="COMM">//		Benchmarking							//</span><span class="WHIT">
-<span class='line'>167</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>146</span> </span><span class="COMM">//		General hooks								//</span><span class="WHIT">
+<span class='line'>147</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>148</span> 
+<span class='line'>149</span> </span><span class="COMM">/**
+<span class='line'>150</span>  * hook a function be be caller before the actual function
+<span class='line'>151</span>  * @param  {Function} beforeFn the function to call
+<span class='line'>152</span>  * @returns {FunctionAttr.Builder} for chained API
+<span class='line'>153</span>  */</span><span class="WHIT">
+<span class='line'>154</span> </span><span class="NAME">FunctionAttr.Builder.prototype.before</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">beforeFn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>155</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">beforeFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>156</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>157</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>158</span> 
+<span class='line'>159</span> </span><span class="COMM">/**
+<span class='line'>160</span>  * hook a function to be called after the actual function
+<span class='line'>161</span>  * @param  {Function} afterFn the function to be called after
+<span class='line'>162</span>  * @returns {FunctionAttr.Builder} for chained API
+<span class='line'>163</span>  */</span><span class="WHIT">
+<span class='line'>164</span> </span><span class="NAME">FunctionAttr.Builder.prototype.after</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">afterFn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>165</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">afterFn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>166</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>167</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>168</span> 
-<span class='line'>169</span> </span><span class="COMM">/**
-<span class='line'>170</span>  * Warp the function call in a console.time()
-<span class='line'>171</span>  * 
-<span class='line'>172</span>  * @param  {String} label the label to use for console.time(label)
-<span class='line'>173</span>  */</span><span class="WHIT">
-<span class='line'>174</span> </span><span class="NAME">FunctionAttr.Builder.prototype.time</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">label</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>175</span> </span><span class="WHIT">	</span><span class="NAME">label</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">label</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">label</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._fnName</span><span class="PUNC">+</span><span class="STRN">".time()-"</span><span class="PUNC">+</span><span class="NAME">Math.floor</span><span class="PUNC">(</span><span class="NAME">Math.random</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">*</span><span class="NUMB">9999</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toString</span><span class="PUNC">(</span><span class="NUMB">36</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>176</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>177</span> </span><span class="WHIT">		</span><span class="NAME">console.time</span><span class="PUNC">(</span><span class="NAME">label</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>178</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>179</span> </span><span class="WHIT">		</span><span class="NAME">console.timeEnd</span><span class="PUNC">(</span><span class="NAME">label</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>180</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>181</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>182</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>183</span> 
-<span class='line'>184</span> </span><span class="COMM">/**
-<span class='line'>185</span>  * Warp the funciton call in console.profile()/.profileEnd()
-<span class='line'>186</span>  * 
-<span class='line'>187</span>  * @param  {String} label label to use for console.profile()
-<span class='line'>188</span>  */</span><span class="WHIT">
-<span class='line'>189</span> </span><span class="NAME">FunctionAttr.Builder.prototype.profile</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">label</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>190</span> </span><span class="WHIT">	</span><span class="NAME">label</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">label</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">label</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._fnName</span><span class="PUNC">+</span><span class="STRN">".profile-"</span><span class="PUNC">+</span><span class="NAME">Math.floor</span><span class="PUNC">(</span><span class="NAME">Math.random</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">*</span><span class="NUMB">9999</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toString</span><span class="PUNC">(</span><span class="NUMB">36</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>191</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>192</span> </span><span class="WHIT">		</span><span class="NAME">console.profile</span><span class="PUNC">(</span><span class="NAME">label</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>193</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>194</span> </span><span class="WHIT">		</span><span class="NAME">console.profileEnd</span><span class="PUNC">(</span><span class="NAME">label</span><span class="PUNC">)</span><span class="WHIT">
-<span class='line'>195</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>196</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>197</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>198</span> 
-<span class='line'>199</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>200</span> </span><span class="COMM">//										//</span><span class="WHIT">
-<span class='line'>201</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>202</span> 
-<span class='line'>203</span> </span><span class="COMM">/**
-<span class='line'>204</span>  * Trigger the debugger when the function is called
-<span class='line'>205</span>  *
-<span class='line'>206</span>  * @param {Function} originalFn the original function
-<span class='line'>207</span>  * @param {Function} [conditionFn] this function should return true, when the breakpoint should be triggered. default to function(){ return true; }
-<span class='line'>208</span>  * @returns {FunctionAttr.Builder} for chained API
-<span class='line'>209</span> */</span><span class="WHIT">
-<span class='line'>210</span> </span><span class="NAME">FunctionAttr.Builder.prototype.breakpoint</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">conditionFn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>211</span> </span><span class="WHIT">	</span><span class="NAME">conditionFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">conditionFn</span><span class="WHIT">	</span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>212</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>213</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">stopNow</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">conditionFn</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>214</span> </span><span class="WHIT">		</span><span class="COMM">// if stopNow, trigger debugger</span><span class="WHIT">
-<span class='line'>215</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">stopNow</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">debugger</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>216</span> </span><span class="WHIT">		</span><span class="COMM">// forward the call to the original function</span><span class="WHIT">
-<span class='line'>217</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._currentFn.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>218</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>219</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>220</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>221</span> 
-<span class='line'>222</span> </span><span class="COMM">/**
-<span class='line'>223</span>  * check function type as in ```TypeCheck.fn``` from typecheck.js
-<span class='line'>224</span>  * @param  {Array}    paramsTypes allowed types for the paramter. array with each item is the allowed types for this parameter.
-<span class='line'>225</span>  * @param  {Array}    returnTypes allowed types for the return value
-<span class='line'>226</span>  * @returns {FunctionAttr.Builder} for chained API
-<span class='line'>227</span>  */</span><span class="WHIT">
-<span class='line'>228</span> </span><span class="NAME">FunctionAttr.Builder.prototype.typeCheck</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">paramsTypes</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">returnTypes</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>229</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">TypeCheck.fn</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">paramsTypes</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">returnTypes</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>230</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>231</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>232</span> 
-<span class='line'>233</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>234</span> </span><span class="COMM">//		.trackUsage()							//</span><span class="WHIT">
-<span class='line'>235</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
-<span class='line'>236</span> 
-<span class='line'>237</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Stacktrace</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Stacktrace</span><span class="WHIT">	</span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'../src/stacktrace.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>169</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>170</span> </span><span class="COMM">//		Benchmarking							//</span><span class="WHIT">
+<span class='line'>171</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>172</span> 
+<span class='line'>173</span> </span><span class="COMM">/**
+<span class='line'>174</span>  * Warp the function call in a console.time()
+<span class='line'>175</span>  * 
+<span class='line'>176</span>  * @param  {String} label the label to use for console.time(label)
+<span class='line'>177</span>  * @return {FunctionAttr.Builder} for chained API
+<span class='line'>178</span>  */</span><span class="WHIT">
+<span class='line'>179</span> </span><span class="NAME">FunctionAttr.Builder.prototype.time</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">label</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>180</span> </span><span class="WHIT">	</span><span class="NAME">label</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">label</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">label</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._fnName</span><span class="PUNC">+</span><span class="STRN">".time()-"</span><span class="PUNC">+</span><span class="NAME">Math.floor</span><span class="PUNC">(</span><span class="NAME">Math.random</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">*</span><span class="NUMB">9999</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toString</span><span class="PUNC">(</span><span class="NUMB">36</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>181</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>182</span> </span><span class="WHIT">		</span><span class="NAME">console.time</span><span class="PUNC">(</span><span class="NAME">label</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>183</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>184</span> </span><span class="WHIT">		</span><span class="NAME">console.timeEnd</span><span class="PUNC">(</span><span class="NAME">label</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>185</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>186</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>187</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>188</span> 
+<span class='line'>189</span> </span><span class="COMM">/**
+<span class='line'>190</span>  * Warp the funciton call in console.profile()/.profileEnd()
+<span class='line'>191</span>  * 
+<span class='line'>192</span>  * @param  {String} label label to use for console.profile()
+<span class='line'>193</span>  * @return {FunctionAttr.Builder} for chained API
+<span class='line'>194</span>  */</span><span class="WHIT">
+<span class='line'>195</span> </span><span class="NAME">FunctionAttr.Builder.prototype.profile</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">label</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>196</span> </span><span class="WHIT">	</span><span class="NAME">label</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">label</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">label</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">this._fnName</span><span class="PUNC">+</span><span class="STRN">".profile-"</span><span class="PUNC">+</span><span class="NAME">Math.floor</span><span class="PUNC">(</span><span class="NAME">Math.random</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">*</span><span class="NUMB">9999</span><span class="PUNC">)</span><span class="PUNC">.</span><span class="NAME">toString</span><span class="PUNC">(</span><span class="NUMB">36</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>197</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>198</span> </span><span class="WHIT">		</span><span class="NAME">console.profile</span><span class="PUNC">(</span><span class="NAME">label</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>199</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>200</span> </span><span class="WHIT">		</span><span class="NAME">console.profileEnd</span><span class="PUNC">(</span><span class="NAME">label</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>201</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>202</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>203</span> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>204</span> 
+<span class='line'>205</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>206</span> </span><span class="COMM">//										//</span><span class="WHIT">
+<span class='line'>207</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>208</span> 
+<span class='line'>209</span> </span><span class="COMM">/**
+<span class='line'>210</span>  * Trigger the debugger when the function is called
+<span class='line'>211</span>  *
+<span class='line'>212</span>  * @param {Function} originalFn the original function
+<span class='line'>213</span>  * @param {Function} [conditionFn] this function should return true, when the breakpoint should be triggered. default to function(){ return true; }
+<span class='line'>214</span>  * @returns {FunctionAttr.Builder} for chained API
+<span class='line'>215</span> */</span><span class="WHIT">
+<span class='line'>216</span> </span><span class="NAME">FunctionAttr.Builder.prototype.breakpoint</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">conditionFn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>217</span> </span><span class="WHIT">	</span><span class="NAME">conditionFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">conditionFn</span><span class="WHIT">	</span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>218</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>219</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">stopNow</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">conditionFn</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>220</span> </span><span class="WHIT">		</span><span class="COMM">// if stopNow, trigger debugger</span><span class="WHIT">
+<span class='line'>221</span> </span><span class="WHIT">		</span><span class="KEYW">if</span><span class="PUNC">(</span><span class="WHIT"> </span><span class="NAME">stopNow</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="WHIT"> </span><span class="PUNC">)</span><span class="WHIT">	</span><span class="NAME">debugger</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>222</span> </span><span class="WHIT">		</span><span class="COMM">// forward the call to the original function</span><span class="WHIT">
+<span class='line'>223</span> </span><span class="WHIT">		</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">this._currentFn.apply</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">arguments</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>224</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">.</span><span class="NAME">bind</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>225</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>226</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>227</span> 
+<span class='line'>228</span> </span><span class="COMM">/**
+<span class='line'>229</span>  * check function type as in ```TypeCheck.fn``` from typecheck.js
+<span class='line'>230</span>  * @param  {Array}    paramsTypes allowed types for the paramter. array with each item is the allowed types for this parameter.
+<span class='line'>231</span>  * @param  {Array}    returnTypes allowed types for the return value
+<span class='line'>232</span>  * @returns {FunctionAttr.Builder} for chained API
+<span class='line'>233</span>  */</span><span class="WHIT">
+<span class='line'>234</span> </span><span class="NAME">FunctionAttr.Builder.prototype.typeCheck</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">paramsTypes</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">returnTypes</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>235</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">TypeCheck.fn</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">paramsTypes</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">returnTypes</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>236</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>237</span> </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>238</span> 
-<span class='line'>239</span> </span><span class="COMM">// create the tracker for .trackUsage</span><span class="WHIT">
-<span class='line'>240</span> </span><span class="NAME">FunctionAttr.usageTracker</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Stacktrace.Tracker</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>241</span> 
-<span class='line'>242</span> </span><span class="COMM">/**
-<span class='line'>243</span>  * track where this property is used (getter and setter)
-<span class='line'>244</span>  * 
-<span class='line'>245</span>  * @param {String|undefined} trackName	optional name for Stacktrace.Tracker. default to originId
-<span class='line'>246</span>  * @return {FunctionAttr.Builder} for chained API
-<span class='line'>247</span>  */</span><span class="WHIT">
-<span class='line'>248</span> </span><span class="NAME">FunctionAttr.Builder.prototype.trackUsage</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">trackName</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>249</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tracker</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.usageTracker</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>250</span> </span><span class="WHIT">	</span><span class="COMM">// handle polymorphism</span><span class="WHIT">
-<span class='line'>251</span> </span><span class="WHIT">	</span><span class="NAME">trackName</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">trackName</span><span class="WHIT">	</span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">'FunctionAttr.trackUsage:'</span><span class="PUNC">+</span><span class="NAME">Stacktrace.parse</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">originId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>252</span> </span><span class="WHIT">	</span><span class="COMM">// actually record the usage</span><span class="WHIT">
-<span class='line'>253</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>254</span> </span><span class="WHIT">		</span><span class="NAME">tracker.record</span><span class="PUNC">(</span><span class="NAME">trackName</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>255</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>256</span> </span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
-<span class='line'>257</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>258</span> </span><span class="PUNC">}</span><span class="WHIT">
-<span class='line'>259</span> 
-<span class='line'>260</span> 
-<span class='line'>261</span> </span></pre></body></html>
+<span class='line'>239</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>240</span> </span><span class="COMM">//		.trackUsage()							//</span><span class="WHIT">
+<span class='line'>241</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>242</span> 
+<span class='line'>243</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">Stacktrace</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">Stacktrace</span><span class="WHIT">	</span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'../src/stacktrace.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>244</span> 
+<span class='line'>245</span> </span><span class="COMM">// create the tracker for .trackUsage</span><span class="WHIT">
+<span class='line'>246</span> </span><span class="NAME">FunctionAttr.usageTracker</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">Stacktrace.Tracker</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>247</span> 
+<span class='line'>248</span> </span><span class="COMM">/**
+<span class='line'>249</span>  * track where this property is used (getter and setter)
+<span class='line'>250</span>  * 
+<span class='line'>251</span>  * @param {String|undefined} trackName	optional name for Stacktrace.Tracker. default to originId
+<span class='line'>252</span>  * @return {FunctionAttr.Builder} for chained API
+<span class='line'>253</span>  */</span><span class="WHIT">
+<span class='line'>254</span> </span><span class="NAME">FunctionAttr.Builder.prototype.trackUsage</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">trackName</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>255</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">tracker</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.usageTracker</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>256</span> </span><span class="WHIT">	</span><span class="COMM">// handle polymorphism</span><span class="WHIT">
+<span class='line'>257</span> </span><span class="WHIT">	</span><span class="NAME">trackName</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">trackName</span><span class="WHIT">	</span><span class="PUNC">||</span><span class="WHIT"> </span><span class="STRN">'FunctionAttr.trackUsage:'</span><span class="PUNC">+</span><span class="NAME">Stacktrace.parse</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">[</span><span class="NUMB">1</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">originId</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>258</span> </span><span class="WHIT">	</span><span class="COMM">// actually record the usage</span><span class="WHIT">
+<span class='line'>259</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>260</span> </span><span class="WHIT">		</span><span class="NAME">tracker.record</span><span class="PUNC">(</span><span class="NAME">trackName</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>261</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>262</span> </span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>263</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>264</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>265</span> 
+<span class='line'>266</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>267</span> </span><span class="COMM">//		.private()							//</span><span class="WHIT">
+<span class='line'>268</span> </span><span class="COMM">//////////////////////////////////////////////////////////////////////////////////</span><span class="WHIT">
+<span class='line'>269</span> 
+<span class='line'>270</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">PrivateForJS</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">PrivateForJS</span><span class="WHIT">	</span><span class="PUNC">||</span><span class="WHIT"> </span><span class="NAME">require</span><span class="PUNC">(</span><span class="STRN">'../src/privateforjs.js'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>271</span> 
+<span class='line'>272</span> </span><span class="COMM">/**
+<span class='line'>273</span>  * Mark this function as private
+<span class='line'>274</span>  * @param  {Function} klass the constructor of the function
+<span class='line'>275</span>  * @return {FunctionAttr.Builder} for chained API
+<span class='line'>276</span>  */</span><span class="WHIT">
+<span class='line'>277</span> </span><span class="NAME">FunctionAttr.Builder.prototype.private</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">klass</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>278</span> </span><span class="WHIT">	</span><span class="COMM">// sanity check</span><span class="WHIT">
+<span class='line'>279</span> </span><span class="WHIT">	</span><span class="NAME">console.assert</span><span class="PUNC">(</span><span class="NAME">klass</span><span class="WHIT"> </span><span class="PUNC">!==</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">)</span><span class="WHIT">
+<span class='line'>280</span> </span><span class="WHIT">	</span><span class="COMM">// overload currenFn</span><span class="WHIT">
+<span class='line'>281</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">PrivateForJS.privateFunction</span><span class="PUNC">(</span><span class="NAME">klass</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">this_currentFn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>282</span> </span><span class="WHIT">	</span><span class="COMM">// for chained API</span><span class="WHIT">
+<span class='line'>283</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>284</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'>285</span> 
+<span class='line'>286</span> </span></pre></body></html>

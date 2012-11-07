@@ -1,4 +1,6 @@
 /**
+ * ensure private property/method stays private
+ *
  * @namespace Strong typing for javascript
  */
 var PrivateForJS	= {};

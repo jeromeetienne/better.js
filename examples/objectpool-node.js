@@ -18,7 +18,7 @@ console.log(klass)
 console.log(klass instanceof aClass)
 klass.x		= 2;
 console.log(klass)
-klass.destroy();
+klass.release();
 
 var klass	= aClass.create(4);
 console.log(klass)

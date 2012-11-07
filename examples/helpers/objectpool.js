@@ -45,7 +45,7 @@ ObjectPool.mixin	= function(klass){
 		klass.prototype.constructor.apply(obj, arguments)
 		return obj;
 	}
-	klass.prototype.destroy	= function(){
+	klass.prototype.release	= function(){
 		pool.put(this);
 	}
 };

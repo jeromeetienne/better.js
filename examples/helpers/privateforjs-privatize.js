@@ -1,3 +1,5 @@
+var PrivateForJS	= PrivateForJS	|| require('../../src/privateforjs.js');
+
 /**
  * Privatize all property/function which start with a _
  * 
@@ -18,4 +20,28 @@ PrivateForJS.privatize	= function(klass, baseObject){
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
 
+var FunctionAttr	= FunctionAttr	|| require('../../src/functionattr.js');
+
+/**
+ * plugin for functionattr.js
+ * 
+ * @param  {Function} klass    constructor for the class
+ * @return {FunctionAttr.Builder} for chained API
+ */
+FunctionAttr.Builder.prototype.privatize	= function(klass){
+	var _this	= this;
+	this._currentFn	= function(){
+console.dir(_this._currentFn)
+		// call the function
+		var value	= _this._currentFn.apply(this, arguments);
+		// privatize
+		PrivateForJS.privatize(klass, this);
+		// actually return the value
+		return value; 
+	};	
+	return this;	// for chained API	
+}

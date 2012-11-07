@@ -76,6 +76,8 @@ TypeCheck.fn	= function(originalFn, paramsTypes, returnTypes){
 TypeCheck.value	= function(value, types){
 	// handle parameter polymorphism
 	if( types instanceof Array === false )	types	= [types];
+	// if types array is empty, default to ['always'], return true as in valid
+	if( types.length === 0 )	return true;
 	// go thru each type
 	var result	= false;
 	for(var i = 0; i < types.length; i++){
@@ -83,7 +85,12 @@ TypeCheck.value	= function(value, types){
 		if( type === Number ){
 			var valid	= typeof(value) === 'number';
 		}else if( type === String ){
-			var valid	= typeof(value) === 'string';			
+			var valid	= typeof(value) === 'string';
+		}else if( typeof(type) === 'string' && type.toLowerCase() === 'always' ){
+			var valid	= true;
+		}else if( typeof(type) === 'string' && type.toLowerCase() === 'never' ){
+			// return immediatly as a failed validator
+			return false;
 		}else if( typeof(type) === 'string' && type.toLowerCase() === 'nonan' ){
 			var valid	= value === value;
 			if( valid === false )	return false;

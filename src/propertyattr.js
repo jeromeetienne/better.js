@@ -1,4 +1,6 @@
 /**
+ * handle attributes for properties
+ * 
  * @namespace
  */
 var PropertyAttr	= {};
@@ -92,7 +94,7 @@ var PrivateForJS	= PrivateForJS	|| require('../src/privateforjs.js');
  * @param  {Function} klass the class to which it is private
  * @return {PropertyAttr.Builder} for chained API
  */
-PropertyAttr.Builder.prototype.privateOf	= function(klass){
+PropertyAttr.Builder.prototype.private	= function(klass){
 	PrivateForJS.privateProperty(klass, this._baseObject, this._property);
 	return this;	// for chained API
 }

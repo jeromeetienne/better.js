@@ -35,7 +35,7 @@ FunctionAttr.define	= function(originalFn, fnName){
  * @param {Function} originalFn the original function
  * @param {Function} beforeFn the function to call *before* the original function
  * @param {Function} afterFn the function to call *after* the original function
- * @returns {Function} The modified function
+ * @return {Function} The modified function
 */
 FunctionAttr.wrapCall	= function(originalFn, beforeFn, afterFn){
 	return function(){
@@ -115,6 +115,7 @@ FunctionAttr.Builder.prototype.log		= function(message){
 /**
  * mark the function as deprecated - aka you can use it but it will disapears soon
  * @param  {string} message the optional message to provide
+ * @return {FunctionAttr.Builder} for chained API
  */
 FunctionAttr.Builder.prototype.deprecated	= function(message){
 	var used	= false;
@@ -129,6 +130,7 @@ FunctionAttr.Builder.prototype.deprecated	= function(message){
 /**
  * mark the function as obsolete
  * @param  {string} message obsolete message to display
+ * @return {FunctionAttr.Builder} for chained API
  */
 FunctionAttr.Builder.prototype.obsolete	= function(message){
 	var used	= false;
@@ -147,6 +149,7 @@ FunctionAttr.Builder.prototype.obsolete	= function(message){
 /**
  * hook a function be be caller before the actual function
  * @param  {Function} beforeFn the function to call
+ * @return {FunctionAttr.Builder} for chained API
  */
 FunctionAttr.Builder.prototype.before	= function(beforeFn){
 	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, beforeFn, null);
@@ -156,6 +159,7 @@ FunctionAttr.Builder.prototype.before	= function(beforeFn){
 /**
  * hook a function to be called after the actual function
  * @param  {Function} afterFn the function to be called after
+ * @return {FunctionAttr.Builder} for chained API
  */
 FunctionAttr.Builder.prototype.after	= function(afterFn){
 	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, null, afterFn);
@@ -170,6 +174,7 @@ FunctionAttr.Builder.prototype.after	= function(afterFn){
  * Warp the function call in a console.time()
  * 
  * @param  {String} label the label to use for console.time(label)
+ * @return {FunctionAttr.Builder} for chained API
  */
 FunctionAttr.Builder.prototype.time	= function(label){
 	label	= label !== undefined ? label : this._fnName+".time()-"+Math.floor(Math.random()*9999).toString(36);
@@ -185,6 +190,7 @@ FunctionAttr.Builder.prototype.time	= function(label){
  * Warp the funciton call in console.profile()/.profileEnd()
  * 
  * @param  {String} label label to use for console.profile()
+ * @return {FunctionAttr.Builder} for chained API
  */
 FunctionAttr.Builder.prototype.profile	= function(label){
 	label	= label !== undefined ? label : this._fnName+".profile-"+Math.floor(Math.random()*9999).toString(36);
@@ -205,7 +211,7 @@ FunctionAttr.Builder.prototype.profile	= function(label){
  *
  * @param {Function} originalFn the original function
  * @param {Function} [conditionFn] this function should return true, when the breakpoint should be triggered. default to function(){ return true; }
- * @returns {FunctionAttr.Builder} for chained API
+ * @return {FunctionAttr.Builder} for chained API
 */
 FunctionAttr.Builder.prototype.breakpoint	= function(fn, conditionFn){
 	conditionFn	= conditionFn	|| function(){ return true; };
@@ -223,7 +229,7 @@ FunctionAttr.Builder.prototype.breakpoint	= function(fn, conditionFn){
  * check function type as in ```TypeCheck.fn``` from typecheck.js
  * @param  {Array}    paramsTypes allowed types for the paramter. array with each item is the allowed types for this parameter.
  * @param  {Array}    returnTypes allowed types for the return value
- * @returns {FunctionAttr.Builder} for chained API
+ * @return {FunctionAttr.Builder} for chained API
  */
 FunctionAttr.Builder.prototype.typeCheck	= function(paramsTypes, returnTypes){
 	this._currentFn	= TypeCheck.fn(this._currentFn, paramsTypes, returnTypes);
@@ -257,4 +263,23 @@ FunctionAttr.Builder.prototype.trackUsage	= function(trackName){
 	return this;
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+//		.private()							//
+//////////////////////////////////////////////////////////////////////////////////
+
+var PrivateForJS	= PrivateForJS	|| require('../src/privateforjs.js');
+
+/**
+ * Mark this function as private
+ * @param  {Function} klass the constructor of the function
+ * @return {FunctionAttr.Builder} for chained API
+ */
+FunctionAttr.Builder.prototype.private	= function(klass){
+	// sanity check
+	console.assert(klass !== undefined)
+	// overload currenFn
+	this._currentFn	= PrivateForJS.privateFunction(klass, this_currentFn);
+	// for chained API
+	return this;
+}
 
