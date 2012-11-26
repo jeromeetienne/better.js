@@ -86,8 +86,6 @@ var GcMonitor	= function(){
 		}else{
 			var deltaTime	= present - lastTimestamp
 			var newBurnrate	= deltaMem / (deltaTime/1000);
-//burnRate	= newBurnrate;
-//console.log('deltaMem', deltaMem, 'deltaTime', deltaTime, 'currUsedSize', currUsedSize, 'lastUsedHeap', lastUsedHeap)
 			if( burnRate === null )	burnRate	= newBurnrate;
 			var friction	= 0.99;
 			burnRate	= burnRate * friction + newBurnrate * (1-friction);

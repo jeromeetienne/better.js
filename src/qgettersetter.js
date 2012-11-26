@@ -21,6 +21,13 @@
  */
 var QGetterSetter	= {};
 
+/**
+ * Define a getter/setter for a property
+ * @param {Object} baseObject the base object which is used
+ * @param {String} property   the name of the property
+ */
+
+
 QGetterSetter.Property	= function(baseObject, property){
 	// sanity check 
 	console.assert( typeof(baseObject) === 'object' );
@@ -75,7 +82,7 @@ QGetterSetter.defineGetter	= function(baseObject, property, getterFn){
 /**
  * define a setter 
  * 
- * @param  {Obejct} baseObject the object containing the property
+ * @param  {Object} baseObject the object containing the property
  * @param  {string} property   the property name which gonna get the setter
  * @param  {Function} setterFn   function which handle the setter
  */

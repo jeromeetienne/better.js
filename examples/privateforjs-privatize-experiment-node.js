@@ -9,7 +9,7 @@ var aClass1	= function(){
 
 aClass1.prototype.bar	= function aClass1_bar(){
 	return this._bar;
-}
+};
 
 aClass1	= FunctionAttr.define(aClass1)
 	.privatize()

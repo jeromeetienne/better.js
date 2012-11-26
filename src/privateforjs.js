@@ -20,7 +20,7 @@ if( typeof(window) === 'undefined' )	module.exports	= PrivateForJS;
 /**
  * determine which function is considered private for klass 
  * @param  {function} klass  the constructor of the class
- * @param  {object|function|Array.<function>|undefined} source private functions - if Function, use it directly.
+ * @param  {object|function|function[]} [source] private functions - if Function, use it directly.
  *                           if Array.<function>, then each item is a private function
  *                           if object, then each of its property which is a function is private
  *                           if undefined, use klass.prototype which trigger the Object case

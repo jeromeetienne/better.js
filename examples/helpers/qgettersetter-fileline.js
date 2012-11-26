@@ -1,4 +1,5 @@
-var Stacktrace	= Stacktrace	|| require('../../src/stacktrace.js');
+var Stacktrace		= Stacktrace	|| require('../../src/stacktrace.js');
+var QGetterSetter	= QGetterSetter	|| require('../../src/qgettersetter.js');
 
 (function(){
 	var _global	= typeof(window) === 'undefined' ? global : window;
@@ -6,7 +7,7 @@ var Stacktrace	= Stacktrace	|| require('../../src/stacktrace.js');
 	/**
 	 * Same as __LINE__ in C
 	*/
-	_global.__defineQGetter__('__LINE__', function(){
+	QGetterSetter.defineGetter(_global, '__LINE__', function(){
 		var stacktrace	= Stacktrace.parse();
 		var stackFrame	= stacktrace[2];
 		return stackFrame.line
@@ -15,7 +16,7 @@ var Stacktrace	= Stacktrace	|| require('../../src/stacktrace.js');
 	/**
 	 * Same as __LINE__ in C
 	*/
-	_global.__defineQGetter__('__FILE__', function(){
+	QGetterSetter.defineGetter(_global, '__FILE__', function(){
 		var stacktrace	= Stacktrace.parse();
 		var stackFrame	= stacktrace[2];
 		return stackFrame.basename();
@@ -24,7 +25,7 @@ var Stacktrace	= Stacktrace	|| require('../../src/stacktrace.js');
 	/**
 	 * Same as __FUNCTION__ in C
 	*/
-	_global.__defineQGetter__('__FUNCTION__', function(){
+	QGetterSetter.defineGetter(_global, '__FUNCTION__', function(){
 		var stacktrace	= Stacktrace.parse();
 		var stackFrame	= stacktrace[2];
 		return stackFrame.fct;
