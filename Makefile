@@ -31,7 +31,7 @@ docs:
 			-D="title:debug.js library"			\
 			-t=${JSDOC_ROOT}/templates/Codeview/		\
 			-d=docs/jsdocs/					\
-			src/*
+			src/*.js examples/helpers/*.js
 .PHONY: docs build minify
 
 
