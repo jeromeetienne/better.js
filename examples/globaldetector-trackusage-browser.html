@@ -7,14 +7,12 @@
 <script src='../src/stacktrace.js'></script>
 <script src='../src/privateforjs.js'></script>
 <script src='../src/propertyattr.js'></script>
-<script src='../src/functionattr.js'></script>
 
 <body><script>
 	/* Here, include PropertyAttr.js and FunctionAttr.js */
 	/* PropertyAttr.usageTracker.dump() to dump usage records of all tracked property */
-	/* FunctionAttr.usageTracker.dump() to dump usage records of all tracked function */
 	PropertyAttr.define(window, 'pif').trackUsage();
-	window.aFunction = FunctionAttr.define(window, 'aFunction').trackUsage().done();
+	PropertyAttr.define(window, 'aFunction').trackUsage();
 
 	// declare something which is in chrome debugger
 	GlobalDetector.ignoreList.push('__screenCapturePageContext__');
