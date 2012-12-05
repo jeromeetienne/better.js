@@ -1,0 +1,33 @@
+<!doctype html>
+<script src='../src/globaldetector.js'></script>
+<script src='helpers/globaldetector-trackusage.js'></script>
+
+<script src='../src/qgettersetter.js'></script>
+<script src='../src/typecheck.js'></script>
+<script src='../src/stacktrace.js'></script>
+<script src='../src/privateforjs.js'></script>
+<script src='../src/propertyattr.js'></script>
+<script src='../src/functionattr.js'></script>
+
+<body><script>
+	/* Here, include PropertyAttr.js and FunctionAttr.js */
+	/* PropertyAttr.usageTracker.dump() to dump usage records of all tracked property */
+	/* FunctionAttr.usageTracker.dump() to dump usage records of all tracked function */
+	PropertyAttr.define(window, 'pif').trackUsage();
+	window.aFunction = FunctionAttr.define(window, 'aFunction').trackUsage().done();
+
+	// declare something which is in chrome debugger
+	GlobalDetector.ignoreList.push('__screenCapturePageContext__');
+
+	// declare a global which MUST NOT be detected
+	foo	= 'bar';
+
+	// start the detector
+	var globalDetector	= new GlobalDetector().start();
+	
+	// declare a global which MUST be detected
+	pif	= 'paf';
+	
+	aFunction	= function(){};
+	
+</script></body>
