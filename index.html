@@ -62,6 +62,80 @@
 		</p>
 		<a class="btn btn-primary btn-large" href="https://github.com/jeromeetienne/debug.js">Learn more &raquo;</a></p>
 	</div>
+  <div class="row">
+    <style>
+      #myCarousel .item h1 {
+        text-align:  center;
+        font-size: 450%;
+        margin-bottom: 0.5em;
+        color: orange;
+      }
+      #myCarousel .item pre {
+        margin-top: 1em;
+      }
+    </style>
+<div id="myCarousel" class="carousel slide">
+  <!-- Carousel items -->
+  <div class="carousel-inner">
+    <div class="active item">
+      <div class="offset1 span10">
+        <h1>NaN detection</h1>
+
+        <h3>Without debug.js</h3>
+        <span>You do lot of Math ? Like in 3d with WebGL ?
+        tired of computations ending with NaN and not knowing where it comes from ?
+        Debug.js can help you!</span>
+
+        <h3>With debug.js</h3>
+        <span>Just use the strong type checking. It will automatically detect when a property becomes NaN and notify you immediatly.</span>
+        
+        <pre>PropertyAttr.define(foo, 'bar')
+          .typeCheck(['nonan', Number])</pre>
+      </div>
+    </div>
+    <div class="item">
+      <div class="offset1 span10">
+        <h1>assert which actually stop excecution</h1>
+
+        <h3>Without debug.js</h3>
+        <span>It is often best when you are notified immediatly if a issue occurs.
+        But surprisingly, default console.assert() doesn't stop the execution in browser.
+        Assert is stopping the programm execution in other language, but not in javascript.
+        If you find that unfortunate, debug.js can help you!</span>
+
+        <h3>With debug.js</h3>
+        <span>With assertWhichStop.js, you can trigger an exception or even trigger js debugger as soon as an assertion is false.
+        It is even backward compatible. It is as simple as </span>
+
+        <pre>assertWhichStop.overloadConsole();</pre>
+      </div>
+    </div>
+    <div class="item">
+      <div class="offset1 span10">
+        <h1>Private Property and Function</h1>
+
+        <h3>Without debug.js</h3>
+        <span>You handle a large code base ? You wish to ensure that what is supposed 
+        to be private is actually private. debug.js can help you.</span>
+
+        <h3>With debug.js</h3>
+        <span>With privateforjs.js, you can define which functions are allowed to access a given property, or call
+        a function.</span>
+
+        <pre>aClass = FunctionAttr.define(aClass).privatize().done();</pre>
+      </div>
+    </div>
+<!--  
+      <div class="item">
+        <div class="offset1 span10">
+        </div>
+      </div>
+ -->  </div>
+  <!-- Carousel nav -->
+  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+</div>
+  </div>
 	<div class="row">
     <div class="span12">
       <h2>Features</h2>
@@ -75,41 +149,7 @@
             <li></li>
           </ul>
         </li>
-        <li>NaN detection
-          <ul>
-            <li>You do lot of Math ? Like in 3d with WebGL ?</li>
-            <li>tired of computations ending with NaN and not knowing where it comes from ?</li>
-            <li>Debug.js can help you. Just use the strong type checking</li>
-            <li>It will automatically detect when a property becomes NaN
-              and notify you immediatly.</li>
-            <li><pre>PropertyAttr.define(foo, 'bar')
-              .typeCheck(['nonan', Number])</pre></li>
-          </ul>
-        </li>
         <li>Monitor who allocate object</li>
-        <li>assert which actually stop excecution
-          <ul>
-            <li>It is often best when you are notified immediatly if a issue occurs.</li>
-            <li>But surprisingly, default console.assert() doesn't stop the execution in browser.</li>
-            <li>Assert is stopping the programm execution in other language, but not in javascript.</li>
-            <li>If you find that unfortunate, debug.js provides a fix.</li>
-            <li></li>
-            <li>With assertWhichStop.js, you can trigger an exception or even trigger js debugger as soon as an assertion is false.</li>
-            <li>It is even backward compatible. It is as simple as </li>
-            <li><pre>assertWhichStop.overloadConsole();</pre></li>
-          </ul>
-        </li>
-        <li>Private Property and Function
-          <ul>
-            <li>You handle a large code base ?</li>
-            <li>You wish to ensure that what is supposed to be private is actually private</li>
-            <li>debug.js can help you.</li>
-            <li></li>
-            <li>With privateforjs.js, you can define which functions are allowed to access a given property, or call
-              a function.</li>
-            <li>aClass = FunctionAttr.define(aClass).privatize().done();</li>
-          </ul>
-        </li>
 
         <li>function attribute</li>
         <li>Function call wrapper</li>
