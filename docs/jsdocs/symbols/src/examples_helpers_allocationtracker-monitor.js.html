@@ -1,0 +1,68 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8"> <style>
+	.KEYW {color: #933;}
+	.COMM {color: #bbb; font-style: italic;}
+	.NUMB {color: #393;}
+	.STRN {color: #393;}
+	.REGX {color: #339;}
+	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
+	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">// allocationtracker-monitor.js in examples/js</span><span class="WHIT">
+<span class='line'>  2</span> 
+<span class='line'>  3</span> 
+<span class='line'>  4</span> </span><span class="COMM">/**
+<span class='line'>  5</span>  * monitor for allocation tracker. It open another window and display 
+<span class='line'>  6</span>  * the AllocationTracker.reportString() in it
+<span class='line'>  7</span>  * 
+<span class='line'>  8</span>  * typical usage: new AllocationTrackerMonitor().start(); 
+<span class='line'>  9</span>  * 
+<span class='line'> 10</span>  */</span><span class="WHIT">
+<span class='line'> 11</span> </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">AllocationTrackerMonitor</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 12</span> </span><span class="WHIT">	</span><span class="NAME">this._timerId</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">;</span><span class="WHIT">	
+<span class='line'> 13</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 14</span> 
+<span class='line'> 15</span> </span><span class="COMM">/**
+<span class='line'> 16</span>  * destroy the object
+<span class='line'> 17</span>  */</span><span class="WHIT">
+<span class='line'> 18</span> </span><span class="NAME">AllocationTrackerMonitor.prototype.destroy</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 19</span> </span><span class="WHIT">	</span><span class="NAME">this.stop</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">	
+<span class='line'> 20</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 21</span> 
+<span class='line'> 22</span> 
+<span class='line'> 23</span> </span><span class="COMM">/**
+<span class='line'> 24</span>  * start monitoring
+<span class='line'> 25</span>  */</span><span class="WHIT">
+<span class='line'> 26</span> </span><span class="NAME">AllocationTrackerMonitor.prototype.start</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 27</span> </span><span class="WHIT">	</span><span class="COMM">// content of the other frame</span><span class="WHIT">
+<span class='line'> 28</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">content</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT">
+<span class='line'> 29</span> </span><span class="WHIT">		</span><span class="STRN">"&lt;!doctype html>"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 30</span> </span><span class="WHIT">		</span><span class="STRN">"&lt;h1>AllocationTracker.js Reports&lt;/h1>"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 31</span> </span><span class="WHIT">		</span><span class="STRN">"Date: &lt;span id='reportTime'>&lt;/span>"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 32</span> </span><span class="WHIT">		</span><span class="STRN">"&lt;pre id='report'>&lt;/pre>"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 33</span> </span><span class="WHIT">		</span><span class="STRN">"&lt;script>"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 34</span> </span><span class="WHIT">		</span><span class="STRN">"	window.addEventListener('message', function(event){"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 35</span> </span><span class="WHIT">		</span><span class="STRN">"		document.getElementById('reportTime').innerText	= new Date().toString();"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 36</span> </span><span class="WHIT">		</span><span class="STRN">"		document.getElementById('report').innerText	= event.data;"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 37</span> </span><span class="WHIT">		</span><span class="STRN">"	},false);"</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'> 38</span> </span><span class="WHIT">		</span><span class="STRN">"&lt;\/script> "</span><span class="WHIT">
+<span class='line'> 39</span> </span><span class="WHIT">	</span><span class="PUNC">]</span><span class="PUNC">.</span><span class="NAME">join</span><span class="PUNC">(</span><span class="STRN">'\n'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 40</span> </span><span class="WHIT">	</span><span class="COMM">// build the url for the other frame</span><span class="WHIT">
+<span class='line'> 41</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">url</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"data:text/html;base64,"</span><span class="PUNC">+</span><span class="NAME">window.btoa</span><span class="PUNC">(</span><span class="NAME">content</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 42</span> 
+<span class='line'> 43</span> </span><span class="WHIT">	</span><span class="COMM">// open a window and report current allocation</span><span class="WHIT">
+<span class='line'> 44</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">myPopup</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">window.open</span><span class="PUNC">(</span><span class="NAME">url</span><span class="PUNC">,</span><span class="STRN">'newtab'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 45</span> </span><span class="WHIT">	</span><span class="NAME">setInterval</span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 46</span> </span><span class="WHIT">		</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">reportString</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">AllocationTracker.reportString</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 47</span> 
+<span class='line'> 48</span> </span><span class="WHIT">		</span><span class="NAME">myPopup.postMessage</span><span class="PUNC">(</span><span class="NAME">reportString</span><span class="PUNC">,</span><span class="STRN">'*'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">//send the message and target URI</span><span class="WHIT">
+<span class='line'> 49</span> 
+<span class='line'> 50</span> </span><span class="WHIT">		</span><span class="COMM">// reset counters every time</span><span class="WHIT">
+<span class='line'> 51</span> </span><span class="WHIT">		</span><span class="NAME">AllocationTracker.reset</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 52</span> </span><span class="WHIT">	</span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1000</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 53</span> 
+<span class='line'> 54</span> </span><span class="PUNC">}</span><span class="WHIT">
+<span class='line'> 55</span> 
+<span class='line'> 56</span> </span><span class="COMM">/**
+<span class='line'> 57</span>  * stop monitoring
+<span class='line'> 58</span>  */</span><span class="WHIT">
+<span class='line'> 59</span> </span><span class="NAME">AllocationTrackerMonitor.prototype.stop</span><span class="WHIT">		</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'> 60</span> </span><span class="WHIT">	</span><span class="NAME">this._timerId</span><span class="WHIT">	</span><span class="PUNC">&&</span><span class="WHIT"> </span><span class="NAME">clearInterval</span><span class="PUNC">(</span><span class="NAME">this._timerId</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'> 61</span> </span><span class="PUNC">}</span></pre></body></html>

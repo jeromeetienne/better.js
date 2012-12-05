@@ -42,7 +42,7 @@
 <span class='line'> 35</span>  * @param {Function} originalFn the original function
 <span class='line'> 36</span>  * @param {Function} beforeFn the function to call *before* the original function
 <span class='line'> 37</span>  * @param {Function} afterFn the function to call *after* the original function
-<span class='line'> 38</span>  * @returns {Function} The modified function
+<span class='line'> 38</span>  * @return {Function} The modified function
 <span class='line'> 39</span> */</span><span class="WHIT">
 <span class='line'> 40</span> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">originalFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">beforeFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">afterFn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 41</span> </span><span class="WHIT">	</span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
@@ -122,7 +122,7 @@
 <span class='line'>115</span> </span><span class="COMM">/**
 <span class='line'>116</span>  * mark the function as deprecated - aka you can use it but it will disapears soon
 <span class='line'>117</span>  * @param  {string} message the optional message to provide
-<span class='line'>118</span>  * @returns {FunctionAttr.Builder} for chained API
+<span class='line'>118</span>  * @return {FunctionAttr.Builder} for chained API
 <span class='line'>119</span>  */</span><span class="WHIT">
 <span class='line'>120</span> </span><span class="NAME">FunctionAttr.Builder.prototype.deprecated</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>121</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">used</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
@@ -137,7 +137,7 @@
 <span class='line'>130</span> </span><span class="COMM">/**
 <span class='line'>131</span>  * mark the function as obsolete
 <span class='line'>132</span>  * @param  {string} message obsolete message to display
-<span class='line'>133</span>  * @returns {FunctionAttr.Builder} for chained API
+<span class='line'>133</span>  * @return {FunctionAttr.Builder} for chained API
 <span class='line'>134</span>  */</span><span class="WHIT">
 <span class='line'>135</span> </span><span class="NAME">FunctionAttr.Builder.prototype.obsolete</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">message</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>136</span> </span><span class="WHIT">	</span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">used</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">;</span><span class="WHIT">
@@ -156,7 +156,7 @@
 <span class='line'>149</span> </span><span class="COMM">/**
 <span class='line'>150</span>  * hook a function be be caller before the actual function
 <span class='line'>151</span>  * @param  {Function} beforeFn the function to call
-<span class='line'>152</span>  * @returns {FunctionAttr.Builder} for chained API
+<span class='line'>152</span>  * @return {FunctionAttr.Builder} for chained API
 <span class='line'>153</span>  */</span><span class="WHIT">
 <span class='line'>154</span> </span><span class="NAME">FunctionAttr.Builder.prototype.before</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">beforeFn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>155</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">beforeFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
@@ -166,7 +166,7 @@
 <span class='line'>159</span> </span><span class="COMM">/**
 <span class='line'>160</span>  * hook a function to be called after the actual function
 <span class='line'>161</span>  * @param  {Function} afterFn the function to be called after
-<span class='line'>162</span>  * @returns {FunctionAttr.Builder} for chained API
+<span class='line'>162</span>  * @return {FunctionAttr.Builder} for chained API
 <span class='line'>163</span>  */</span><span class="WHIT">
 <span class='line'>164</span> </span><span class="NAME">FunctionAttr.Builder.prototype.after</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">afterFn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>165</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">FunctionAttr.wrapCall</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="KEYW">null</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">afterFn</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
@@ -218,7 +218,7 @@
 <span class='line'>211</span>  *
 <span class='line'>212</span>  * @param {Function} originalFn the original function
 <span class='line'>213</span>  * @param {Function} [conditionFn] this function should return true, when the breakpoint should be triggered. default to function(){ return true; }
-<span class='line'>214</span>  * @returns {FunctionAttr.Builder} for chained API
+<span class='line'>214</span>  * @return {FunctionAttr.Builder} for chained API
 <span class='line'>215</span> */</span><span class="WHIT">
 <span class='line'>216</span> </span><span class="NAME">FunctionAttr.Builder.prototype.breakpoint</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">fn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">conditionFn</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>217</span> </span><span class="WHIT">	</span><span class="NAME">conditionFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">conditionFn</span><span class="WHIT">	</span><span class="PUNC">||</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT"> </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="KEYW">true</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
@@ -236,7 +236,7 @@
 <span class='line'>229</span>  * check function type as in ```TypeCheck.fn``` from typecheck.js
 <span class='line'>230</span>  * @param  {Array}    paramsTypes allowed types for the paramter. array with each item is the allowed types for this parameter.
 <span class='line'>231</span>  * @param  {Array}    returnTypes allowed types for the return value
-<span class='line'>232</span>  * @returns {FunctionAttr.Builder} for chained API
+<span class='line'>232</span>  * @return {FunctionAttr.Builder} for chained API
 <span class='line'>233</span>  */</span><span class="WHIT">
 <span class='line'>234</span> </span><span class="NAME">FunctionAttr.Builder.prototype.typeCheck</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">paramsTypes</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">returnTypes</span><span class="PUNC">)</span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>235</span> </span><span class="WHIT">	</span><span class="NAME">this._currentFn</span><span class="WHIT">	</span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">TypeCheck.fn</span><span class="PUNC">(</span><span class="NAME">this._currentFn</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">paramsTypes</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">returnTypes</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">

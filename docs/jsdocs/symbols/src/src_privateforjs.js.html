@@ -27,7 +27,7 @@
 <span class='line'> 20</span> </span><span class="COMM">/**
 <span class='line'> 21</span>  * determine which function is considered private for klass 
 <span class='line'> 22</span>  * @param  {function} klass  the constructor of the class
-<span class='line'> 23</span>  * @param  {object|function|Array.&lt;function>|undefined} source private functions - if Function, use it directly.
+<span class='line'> 23</span>  * @param  {object|function|function[]} [source] private functions - if Function, use it directly.
 <span class='line'> 24</span>  *                           if Array.&lt;function>, then each item is a private function
 <span class='line'> 25</span>  *                           if object, then each of its property which is a function is private
 <span class='line'> 26</span>  *                           if undefined, use klass.prototype which trigger the Object case
