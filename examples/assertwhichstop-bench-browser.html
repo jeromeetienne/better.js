@@ -5,10 +5,12 @@
 
 	// overload console.assert
 	//assertWhichStop.overloadConsole();
+	
+	assertWhichStop.debug	= false;
 
 	console.time('10000asserts')
-	for(var i = 0; i < 100000; i++){
-		console.assert( i !== 200000 );
+	for(var i = 0; i < 1000000; i++){
+		assertWhichStop.debug && console.assert( i !== 200000 );
 	}
 	console.timeEnd('10000asserts');
 </script>
