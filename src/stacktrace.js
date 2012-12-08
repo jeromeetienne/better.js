@@ -199,7 +199,9 @@ Stacktrace.Tracker.prototype.klasses	= function(){
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Dump current state of the tracker in console.log()
+ * Dump current state of the tracker in console.log(). 
+ * 
+ * @see Stacktrace.Tracker.reportString()
  */
 Stacktrace.Tracker.prototype.dump	= function(){
 	var report	= this.reportString.apply(this, arguments)
@@ -213,8 +215,10 @@ Stacktrace.Tracker.prototype.dump	= function(){
  * @param  {Number} maxNOrigin      nb origin to display per class
  */
 Stacktrace.Tracker.prototype.reportString	= function(classNameRegExp, maxNOrigin){
+	// handle polymorphism
 	classNameRegExp	= classNameRegExp	|| /./;
 	maxNOrigin	= maxNOrigin !== undefined ? maxNOrigin	: 3;
+	// define local variable
 	var output	= [];
 	var classNames	= Object.keys(this._klasses);
 	// sort classes by descending .counter
@@ -244,8 +248,8 @@ Stacktrace.Tracker.prototype.reportString	= function(classNameRegExp, maxNOrigin
 			var perOrigin	= perOrigins[originId];
 			output.push('\t'+originId+' - '+perOrigin+' times')
 			//console.log(counters[origin], "new aClass at ", origin);
-		})
-	}.bind(this))
+		});
+	}.bind(this));
 	return output.join('\n');
 };
 

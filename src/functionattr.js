@@ -3,7 +3,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * change global object function bar(){}.setAttr('bar').end();
+ * change global object function bar(){}.setAttr('bar').done();
  * 
  * @param {string} fnName the name of the function 
  */

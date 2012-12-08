@@ -97,4 +97,4 @@ var PrivateForJS	= PrivateForJS	|| require('../src/privateforjs.js');
 PropertyAttr.Builder.prototype.private	= function(klass){
 	PrivateForJS.privateProperty(klass, this._baseObject, this._property);
 	return this;	// for chained API
-}
+};
