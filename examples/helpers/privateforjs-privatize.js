@@ -18,7 +18,7 @@ PrivateForJS.privatize	= function(klass, baseObject){
 		if(!baseObject.hasOwnProperty(property))continue;		
 		PrivateForJS.privateProperty(klass, baseObject, property);
 	}
-}
+};
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
@@ -35,7 +35,6 @@ var FunctionAttr	= FunctionAttr	|| require('../../src/functionattr.js');
 FunctionAttr.Builder.prototype.privatize	= function(klass){
 	var _this	= this;
 	this._currentFn	= function(){
-console.dir(_this._currentFn)
 		// call the function
 		var value	= _this._currentFn.apply(this, arguments);
 		// privatize
@@ -44,4 +43,4 @@ console.dir(_this._currentFn)
 		return value; 
 	};	
 	return this;	// for chained API	
-}
+};

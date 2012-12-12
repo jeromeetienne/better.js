@@ -9,10 +9,13 @@
 <script src='../src/propertyattr.js'></script>
 
 <body><script>
-	/* Here, include PropertyAttr.js and FunctionAttr.js */
-	/* PropertyAttr.usageTracker.dump() to dump usage records of all tracked property */
-	PropertyAttr.define(window, 'pif').trackUsage();
-	PropertyAttr.define(window, 'aFunction').trackUsage();
+	// here is the coded pasted from a previous tracking
+	if( false ){
+		/* Here, include PropertyAttr.js */
+		/* globalDetector.usageTrackerDump() to dump usage records of all tracked property */
+		PropertyAttr.define(window, 'pif').trackUsage('window.pif');
+		PropertyAttr.define(window, 'aFunction').trackUsage('window.aFunction');
+	}
 
 	// declare something which is in chrome debugger
 	GlobalDetector.ignoreList.push('__screenCapturePageContext__');
@@ -22,10 +25,9 @@
 
 	// start the detector
 	var globalDetector	= new GlobalDetector().start();
-	
+
 	// declare a global which MUST be detected
 	pif	= 'paf';
 	
 	aFunction	= function(){};
-	
 </script></body>

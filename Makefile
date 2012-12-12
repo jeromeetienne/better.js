@@ -11,10 +11,20 @@ deploy:
 
 test:
 	@./node_modules/.bin/mocha -R list tests
-
 build:
-	cat src/*.js						>  build/debug.js
-	cat vendor/long-stack-traces/long-stack-traces.js	>> build/debug.js
+	echo 				>  build/debug.js
+	cat src/qgettersetter.js	>> build/debug.js
+	cat src/stacktrace.js		>> build/debug.js
+	cat src/assertwhichstop.js	>> build/debug.js
+	cat src/consolelogger.js	>> build/debug.js
+	cat src/gcmonitor.js		>> build/debug.js
+	cat src/globaldetector.js	>> build/debug.js
+	cat src/privateforjs.js		>> build/debug.js
+	cat src/typecheck.js		>> build/debug.js
+	cat src/functionattr.js		>> build/debug.js
+	cat src/propertyattr.js		>> build/debug.js
+	
+	#cat vendor/long-stack-traces/lib/long-stack-traces.js	>> build/debug.js
 
 minify: build
 	curl --data-urlencode "js_code@build/debug.js"	\
@@ -23,6 +33,9 @@ minify: build
 		> build/debug.min.js
 	@echo size minified + gzip is `gzip -c debug.min.js | wc -c` byte
 
+buildBundle: build
+	cat build/debug.js		>  build/debug-bundle.js
+	cat examples/helpers/*.js	>> build/debug-bundle.js
 
 JSDOC_ROOT	= $(HOME)/opt/jsdoc_toolkit-2.4.0/jsdoc-toolkit
 docs:

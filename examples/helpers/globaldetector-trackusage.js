@@ -1,16 +1,12 @@
 /**
  * dump trackUsage() from globaldetector.js.
- * 
- * It doesn't use 
- * 
- * @return {String} the list of js commands to track global usage
  */
-GlobalDetector.prototype.codeForUsageTracker	= function(){
+GlobalDetector.prototype.usageTrackerCode	= function(){
 	// for each foundGlobals
 	var foundGlobals	= this.foundGlobals();
 	// build the output
 	var output	 = '/* Include PropertyAttr.js before. */\n';
-	output		+= '/* PropertyAttr.usageTracker.dump() to dump usage records of all tracked properties */\n';
+	output		+= '/* globalDetector.usageTrackerDump() to dump usage records of all tracked properties */\n';
 	// add tracking code for each foundGlobals
 	Object.keys(foundGlobals).forEach(function(globalName){
 		// take the namespace for global
@@ -18,7 +14,8 @@ GlobalDetector.prototype.codeForUsageTracker	= function(){
 		var _global	= inBrowser ?  window :  global;
 		var globalStr	= inBrowser ? 'window': 'global';		
 		// use functionattr.js if it is a function, propertyattr.js otherwise
-		var cmd	 = 'PropertyAttr.define( '+globalStr+', \''+globalName+'\').trackUsage();';		
+		var cmd	 = "PropertyAttr.define("+globalStr+", '"+globalName
+				+"').trackUsage('"+globalStr+"."+globalName+"');";		
 		output	+= cmd+'\n';
 	})
 	// return the output
@@ -26,18 +23,28 @@ GlobalDetector.prototype.codeForUsageTracker	= function(){
 };
 
 /**
- * display .codeForUsageTracker() in a new popup window
+ * display .usageTrackerCode() in a new popup window
  */
-GlobalDetector.prototype.codeForUsageTrackerWindow	= function(){
-	var codeStr	= this.codeForUsageTracker();
+GlobalDetector.prototype.usageTrackerCodeWindow	= function(){
+	var codeStr	= this.usageTrackerCode();
 	var url		= 'data:text/plain,' + codeStr;
 	window.open(url);
 };
 
 /**
- * display .codeForUsageTracker() in the javascript console
+ * display .usageTrackerCode() in the javascript console
  */
-GlobalDetector.prototype.codeForUsageTrackerConsole	= function(){
-	var codeStr	= this.codeForUsageTracker();
+GlobalDetector.prototype.usageTrackerCodeConsole	= function(){
+	var codeStr	= this.usageTrackerCode();
 	console.log(codeStr)
 };
+
+/**
+ * dump the usage
+ * 
+ * @see Stacktrace.Tracker.reportString
+ */
+GlobalDetector.prototype.usageTrackerDump	= function(){
+	// forward to PropertyAttr.usageTracker.dump
+	return PropertyAttr.usageTracker.dump.apply(PropertyAttr.usageTracker, arguments)
+}

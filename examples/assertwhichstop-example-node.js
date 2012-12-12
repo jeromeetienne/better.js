@@ -2,6 +2,9 @@
 
 var assertWhichStop	= assertWhichStop	|| require('../src/assertwhichstop.js');
 
+// use debugger to stop
+assertWhichStop.useDebugger	= true;
+
 // overload console.assert
 assertWhichStop.overloadConsole();
 

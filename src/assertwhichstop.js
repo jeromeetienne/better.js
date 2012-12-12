@@ -6,13 +6,19 @@
  *
  * @param {Boolean} condition the condition which is asserted
  * @param {String} message the message which is display is condition is falsy
- * @param {Boolean} [useDebugger] the condition which is asserted
+ * @param {Boolean} [useDebugger] if true, a failled assert will trigger js debugger
 */
 var assertWhichStop	= function(condition, message, useDebugger){
 	if( condition )	return;
 	if( assertWhichStop.useDebugger || useDebugger )	debugger;
-	throw new Error(message	|| "assert Failed");
+	throw new Error(message	|| "Assert Failed");
 }
+
+/**
+ * if true, a fail assert will trigger js debugger
+ * 
+ * @type {Boolean}
+ */
 assertWhichStop.useDebugger	= false;
 
 // export the class in node.js - if running in node.js - unclear how usefull it is in node.js
