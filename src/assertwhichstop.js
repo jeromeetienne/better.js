@@ -2,7 +2,8 @@
  * assert which actually try to stop the excecution
  * if debug.assert.useDebugger is falsy, throw an exception. else trigger the
  * debugger. It default to false. unclear how usefull it is for node.js
- * to overload console.assert just do ```console.assert	= assertWhichStop;```
+ * to overload console.assert just do ```console.assert	= assertWhichStop;```.
+ * Based on https://gist.github.com/2651899 done with jensarps.
  *
  * @param {Boolean} condition the condition which is asserted
  * @param {String} message the message which is display is condition is falsy
