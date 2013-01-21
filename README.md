@@ -14,7 +14,7 @@ which makes your javascript code much easier to debug.
 
 * With debug.js, your classes can declare functions and property as private/public.
 Thus if a private function is called from an unauthorised location, you will 
-be immediatly warned.
+be immediatly warned. 
 * With debug.js, you can declare attributes to functions e.g.
 you can mark it as deprecated, and 
 be notified when it is used.
@@ -28,12 +28,6 @@ you when it happens to be wrong.
 It is even possible to do that on any object property.
 * With debug.js, it is possible to automatically detect your global variable, then 
 to automatically local is using them, thus you can remove them easily.
-
-
-
-
-
-
   
 #### TODO
 * fnattr to track usage
