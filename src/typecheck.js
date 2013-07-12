@@ -52,7 +52,7 @@ TypeCheck.setter	= function(baseObject, property, types){
 TypeCheck.fn	= function(originalFn, paramsTypes, returnTypes){
 	return function(){
 		// check parameters type
-		console.assert(arguments.length <= paramsTypes.length, 'funciton received '+arguments.length+' parameters but recevied only '+returnTypes.length+'!');
+		console.assert(arguments.length <= paramsTypes.length, 'function received '+arguments.length+' parameters but recevied only '+returnTypes.length+'!');
 		for(var i = 0; i < paramsTypes.length; i++){
 			var isValid	= TypeCheck.value(arguments[i], paramsTypes[i]);			
 			console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', paramsTypes[i], 'It is ===', arguments[i])

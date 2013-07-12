@@ -10,7 +10,7 @@ deploy:
 	git commit -a -m "New deploy" && git push -f origin HEAD:gh-pages && git reset HEAD~
 
 test:
-	@./node_modules/.bin/mocha -R list tests
+	@./node_modules/.bin/mocha --harmony -R list tests
 build:
 	echo 				>  build/debug.js
 	cat src/qgettersetter.js	>> build/debug.js
