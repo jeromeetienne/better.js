@@ -4,7 +4,7 @@ var TypeCheck	= TypeCheck	||	require('../src/typecheck.js');
 
 // to check a value
 var value	= 'aString';
-var types	= [Number,];
+var types	= [Number];
 var valid	= TypeCheck.value(value, types)
 console.assert( valid === false )
 console.log('value', value, 'is of type', types, ':', valid)
@@ -21,6 +21,9 @@ fct	= TypeCheck.fn(fct, [String, Number], String);
 // use the function
 var result	= fct('bla', 99)
 console.log('result', result)
+
+// var result	= fct('bla', NaN)
+// console.log('result', result)
 
 // var result	= fct('bla', 'prout')
 // console.log('result', result)

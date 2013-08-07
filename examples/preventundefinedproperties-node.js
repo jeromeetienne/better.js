@@ -13,6 +13,7 @@ try{
 	console.log('foo value', obj.foo2)
 	console.assert(false, 'this point should never been reached')
 }catch(e){
+	console.assert(e.message !== 'this point should never been reached')
 }
 
 console.assert(obj.foo === 'bar')

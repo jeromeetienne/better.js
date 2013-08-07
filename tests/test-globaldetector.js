@@ -2,6 +2,10 @@ var GlobalDetector	= GlobalDetector	|| require('../src/globaldetector.js');
 
 describe('GlobalDetector', function(){
 	
+	// declare something which is in chrome debugger or other extension
+	GlobalDetector.ignoreList.push('__screenCapturePageContext__');
+	GlobalDetector.ignoreList.push('notifyScript');
+
 	var gDetector	= new GlobalDetector();
 	var _global	= typeof(window) === 'undefined' ? global : window;
 	

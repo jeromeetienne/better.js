@@ -13,7 +13,7 @@ var GlobalDetector	= function(){
 	console.assert( _global, 'failed to find a global namespace! bailing out!' );
 	// init initialGlobals
 	var initialGlobals	= {};
-	// loop on _global _global object
+	// loop on _global object
 	for(var propname in _global){
 		initialGlobals[propname] = true;
 	}
