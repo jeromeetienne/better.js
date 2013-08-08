@@ -33,7 +33,7 @@ TypeCheck.setter	= function(baseObject, property, types){
 	var isValid	= TypeCheck.value(value, types)
 	console.assert(isValid, 'initial value got invalid type');
 	// setup the setter
-	QGetterSetter.defineSetter|(baseObject, property, function(value){
+	QGetterSetter.defineSetter(baseObject, property, function(value){
 		// check the value type
 		var isValid	= TypeCheck.value(value, types);			
 		console.assert(isValid, 'invalid type');
