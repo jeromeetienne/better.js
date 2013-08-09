@@ -1,9 +1,8 @@
 /**
  * Sample of class
  * 
- * 
- * @param  {String} aString   just a string
- * @param  {Function} aFunction just a function
+ * @param  {String} 	aString   just a string
+ * @param  {Function}	aFunction just a function
  * @return {Number} magic number
  */
 var aClass1	= function(aString, aFunction){
@@ -24,4 +23,5 @@ var aClass1	= function(aString, aFunction){
  * @return {Number} magic number
  */
 aClass1.prototype._aMethod = function(aString) {
+	return 42;
 };

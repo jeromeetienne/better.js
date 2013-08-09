@@ -1,0 +1,29 @@
+{
+  "name": "debug.js",
+  "version": "0.0.1",
+  "description": "Hardening javascript in javascript",
+  "main": "examples/jsdoc2debugjs/jsdoc2debug.js",
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "test": "tests"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "~1.6.0"
+  },
+  "scripts": {
+    "test": "make tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jeromeetienne/debug.js.git"
+  },
+  "keywords": [
+    "debug",
+    "javascript"
+  ],
+  "author": "Jerome Etienne",
+  "license": "MIT",
+  "bin" : { "jsdoc2debugjs" : "./examples/jsdoc2debugjs/jsdoc2debug.js" } 
+}

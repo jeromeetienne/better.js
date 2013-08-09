@@ -1,8 +1,20 @@
 debugjs
 =======
 
-Library to help debug in Javascript.
+Hardening Your Javascript Code in Javascript.
 
+TODO
+====
+* rename to hardening.js ?
+  * safer.js
+* put jsdoc2debug.js in npm 
+* put debug.js in bower
+* how to easily include it in node.js ? 
+  * single require ?
+
+
+
+===========================
 
 #### debug.js: javascript made easy to debug
 Javascript was slow and hard to debug for a long time.

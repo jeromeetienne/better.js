@@ -14,7 +14,7 @@ PropertyAttr.define(foo, 'bar')
 foo.bar	= 3;
 
 console.log('value', foo.bar)
-foo.bar	= NaN;
+foo.bar	= 'bla';
 console.log('value', foo.bar)
 
 console.log('PropertyAttr.usageTracker')
