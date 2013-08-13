@@ -11,7 +11,6 @@ function preventUndefinedProperties(target){
 			return target[name]
 		},
 	})
-	return proxy
 }
 
 preventUndefinedProperties.available	= typeof(Proxy) !== 'undefined' && typeof(Proxy.create) === 'function'

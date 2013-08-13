@@ -30,13 +30,15 @@ if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;
 TypeCheck.setter	= function(baseObject, property, types){
 	// check initial value
 	var value	= baseObject[property];
+console.log('setter', arguments, baseObject)
+debugger;
 	var isValid	= TypeCheck.value(value, types)
 	console.assert(isValid, 'initial value got invalid type');
 	// setup the setter
 	QGetterSetter.defineSetter(baseObject, property, function(value){
 		// check the value type
 		var isValid	= TypeCheck.value(value, types);			
-		console.assert(isValid, 'invalid type');
+		console.assert(isValid, 'invalid type value='+value+' types='+types);
 		// return the value
 		return value;
 	});
@@ -50,9 +52,9 @@ TypeCheck.setter	= function(baseObject, property, types){
  * @return {boolean}  return isValid, so true if types matche, false otherwise
  */
 TypeCheck.fn	= function(originalFn, paramsTypes, returnTypes){
-	return function(){
+	return function TypeCheck_fn(){
 		// check parameters type
-		console.assert(arguments.length <= paramsTypes.length, 'function received '+arguments.length+' parameters but recevied only '+paramsTypes.length+'!');
+		console.assert(arguments.length <= paramsTypes.length, 'function received '+arguments.length+' parameters but allows only '+paramsTypes.length+'!');
 		for(var i = 0; i < paramsTypes.length; i++){
 			var isValid	= TypeCheck.value(arguments[i], paramsTypes[i]);			
 			console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', paramsTypes[i], 'It is ===', arguments[i])

@@ -30,7 +30,7 @@ var QGetterSetter	= {};
 
 QGetterSetter.Property	= function(baseObject, property){
 	// sanity check 
-	console.assert( typeof(baseObject) === 'object' );
+	console.assert( typeof(baseObject) === 'object' || typeof(baseObject) === 'function' );
 	console.assert( typeof(property) === 'string' );
 	// backup the initial value
 	var originValue	= baseObject[property];

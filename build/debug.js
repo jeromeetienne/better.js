@@ -31,7 +31,7 @@ var QGetterSetter	= {};
 
 QGetterSetter.Property	= function(baseObject, property){
 	// sanity check 
-	console.assert( typeof(baseObject) === 'object' );
+	console.assert( typeof(baseObject) === 'object' || typeof(baseObject) === 'function' );
 	console.assert( typeof(property) === 'string' );
 	// backup the initial value
 	var originValue	= baseObject[property];
@@ -818,7 +818,7 @@ var GlobalDetector	= function(){
 	console.assert( _global, 'failed to find a global namespace! bailing out!' );
 	// init initialGlobals
 	var initialGlobals	= {};
-	// loop on _global _global object
+	// loop on _global object
 	for(var propname in _global){
 		initialGlobals[propname] = true;
 	}
@@ -1046,13 +1046,15 @@ if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;
 TypeCheck.setter	= function(baseObject, property, types){
 	// check initial value
 	var value	= baseObject[property];
+console.log('setter', arguments, baseObject)
+debugger;
 	var isValid	= TypeCheck.value(value, types)
 	console.assert(isValid, 'initial value got invalid type');
 	// setup the setter
-	QGetterSetter.defineSetter|(baseObject, property, function(value){
+	QGetterSetter.defineSetter(baseObject, property, function(value){
 		// check the value type
 		var isValid	= TypeCheck.value(value, types);			
-		console.assert(isValid, 'invalid type');
+		console.assert(isValid, 'invalid type value='+value+' types='+types);
 		// return the value
 		return value;
 	});
@@ -1066,9 +1068,9 @@ TypeCheck.setter	= function(baseObject, property, types){
  * @return {boolean}  return isValid, so true if types matche, false otherwise
  */
 TypeCheck.fn	= function(originalFn, paramsTypes, returnTypes){
-	return function(){
+	return function TypeCheck_fn(){
 		// check parameters type
-		console.assert(arguments.length <= paramsTypes.length, 'function received '+arguments.length+' parameters but recevied only '+returnTypes.length+'!');
+		console.assert(arguments.length <= paramsTypes.length, 'function received '+arguments.length+' parameters but allows only '+paramsTypes.length+'!');
 		for(var i = 0; i < paramsTypes.length; i++){
 			var isValid	= TypeCheck.value(arguments[i], paramsTypes[i]);			
 			console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', paramsTypes[i], 'It is ===', arguments[i])
@@ -1154,11 +1156,13 @@ TypeCheck._ValidatorClass= function(fn){
 /**
  * change global object function bar(){}.setAttr('bar').done();
  * 
+ * @TODO to change you are modifiing the global name space
  * @param {string} fnName the name of the function 
  */
-Function.prototype.setAttr	= function(fnName){
-	return FunctionAttr.define(this, fnName)
-}
+// Function.prototype.setAttr	= function(fnName){
+// 	return FunctionAttr.define(this, fnName)
+// }
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //		Function Attribute						//
@@ -1374,6 +1378,13 @@ FunctionAttr.Builder.prototype.breakpoint	= function(fn, conditionFn){
 	return this;
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////
+//		comment								//
+//////////////////////////////////////////////////////////////////////////////////
+
+var TypeCheck	= TypeCheck	|| require('../src/typecheck.js');
+
 /**
  * check function type as in ```TypeCheck.fn``` from typecheck.js
  * @param  {Array}    paramsTypes allowed types for the paramter. array with each item is the allowed types for this parameter.
@@ -1456,9 +1467,9 @@ PropertyAttr.define	= function(baseObject, property){
  * @param {Object} baseObject the base object to which the property belong
  * @param {String} property   the name of the property
  */
- PropertyAttr.Builder	= function(baseObject, property){
+PropertyAttr.Builder	= function(baseObject, property){
 	// sanity check
-	console.assert(typeof(baseObject) === 'object');
+	console.assert(typeof(baseObject) === 'object' || typeof(baseObject) === 'function');
 	console.assert(typeof(property) === 'string');
 	// set local values
 	this._baseObject= baseObject;
@@ -1480,6 +1491,7 @@ var TypeCheck	= TypeCheck	|| require('../src/typecheck.js')
  * @return {PropertyAttr.Builder} for chained API
  */
 PropertyAttr.Builder.prototype.typeCheck	= function(types){
+console.log('dlasdfjhakdjfhalksdjfhadf', this._baseObject, this._property, types);
 	TypeCheck.setter(this._baseObject, this._property, types);
 	return this;	// for chained API;
 }
@@ -1532,3 +1544,42 @@ PropertyAttr.Builder.prototype.private	= function(klass){
 	PrivateForJS.privateProperty(klass, this._baseObject, this._property);
 	return this;	// for chained API
 };
+/**
+ * prevent the default value of 
+ * @param {Object} target the object on which we prevent undefined
+ * @return {Object} the proxy
+ */
+function preventUndefinedProperties(target){
+	console.assert(Proxy.create !== 'function', 'harmony proxy not enable. try chrome://flags or node --harmony')
+	return Proxy.create({
+		get	: function(proxy, name){
+			console.assert( target[name] !== undefined, 'property '+name+' undefined' )
+			return target[name]
+		},
+	})
+}
+
+preventUndefinedProperties.available	= typeof(Proxy) !== 'undefined' && typeof(Proxy.create) === 'function'
+
+// export the class in node.js - if running in node.js
+if( typeof(window) === 'undefined' )	module.exports	= preventUndefinedProperties;
+/**
+ * @fileOverview export all debug.js symbol for node.js
+ */
+
+// test if we in node.js
+if( typeof(window) === 'undefined' ){
+	// export each sub library
+	module.exports	= {}
+	module.exports.assertWhichStop	= assertWhichStop
+	module.exports.ConsoleLogger	= ConsoleLogger
+	module.exports.FunctionAttr	= FunctionAttr
+	module.exports.GcMonitor	= GcMonitor
+	module.exports.GlobalDetector	= GlobalDetector
+	module.exports.preventUndefinedProperties	= preventUndefinedProperties
+	module.exports.PrivateForJS	= PrivateForJS
+	module.exports.PropertyAttr	= PropertyAttr
+	module.exports.QGetterSetter	= QGetterSetter
+	module.exports.Stacktrace	= Stacktrace
+	module.exports.TypeCheck	= TypeCheck
+}

@@ -5,11 +5,13 @@
 /**
  * change global object function bar(){}.setAttr('bar').done();
  * 
+ * @TODO to change you are modifiing the global name space
  * @param {string} fnName the name of the function 
  */
-Function.prototype.setAttr	= function(fnName){
-	return FunctionAttr.define(this, fnName)
-}
+// Function.prototype.setAttr	= function(fnName){
+// 	return FunctionAttr.define(this, fnName)
+// }
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //		Function Attribute						//
@@ -224,6 +226,13 @@ FunctionAttr.Builder.prototype.breakpoint	= function(fn, conditionFn){
 	}.bind(this);
 	return this;
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//		comment								//
+//////////////////////////////////////////////////////////////////////////////////
+
+var TypeCheck	= TypeCheck	|| require('../src/typecheck.js');
 
 /**
  * check function type as in ```TypeCheck.fn``` from typecheck.js

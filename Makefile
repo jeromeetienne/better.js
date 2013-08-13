@@ -25,6 +25,7 @@ build:
 	cat src/functionattr.js			>> build/debug.js
 	cat src/propertyattr.js			>> build/debug.js
 	cat src/preventundefinedproperties.js	>> build/debug.js
+	cat src/node-export.js			>> build/debug.js
 	
 	#cat vendor/long-stack-traces/lib/long-stack-traces.js	>> build/debug.js
 

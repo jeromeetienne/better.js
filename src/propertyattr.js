@@ -22,9 +22,9 @@ PropertyAttr.define	= function(baseObject, property){
  * @param {Object} baseObject the base object to which the property belong
  * @param {String} property   the name of the property
  */
- PropertyAttr.Builder	= function(baseObject, property){
+PropertyAttr.Builder	= function(baseObject, property){
 	// sanity check
-	console.assert(typeof(baseObject) === 'object');
+	console.assert(typeof(baseObject) === 'object' || typeof(baseObject) === 'function');
 	console.assert(typeof(property) === 'string');
 	// set local values
 	this._baseObject= baseObject;
@@ -46,6 +46,7 @@ var TypeCheck	= TypeCheck	|| require('../src/typecheck.js')
  * @return {PropertyAttr.Builder} for chained API
  */
 PropertyAttr.Builder.prototype.typeCheck	= function(types){
+console.log('dlasdfjhakdjfhalksdjfhadf', this._baseObject, this._property, types);
 	TypeCheck.setter(this._baseObject, this._property, types);
 	return this;	// for chained API;
 }

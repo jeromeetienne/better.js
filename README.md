@@ -12,6 +12,25 @@ TODO
 * how to easily include it in node.js ? 
   * single require ?
 
+==========================
+
+qgettersetter.js
+stacktrace.js
+preventundefinedproperties.js
+
+assertwhichstop.js
+consolelogger.js
+
+gcmonitor.js
+globaldetector.js
+
+privateforjs.js
+typecheck.js
+
+functionattr.js
+propertyattr.js
+
+node-export.js
 
 
 ===========================
