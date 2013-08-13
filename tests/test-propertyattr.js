@@ -15,11 +15,21 @@ describe('PropertyAttr', function(){
 	});
 
 	it('works with negative .typecheck()', function(){
-		foo.bar	= NaN;
+		try{
+			foo.bar	= NaN;
+			var fail= true;
+		}catch(e){
+			console.assert(!fail, 'this should never be seen')		
+		}
 	});
 
 	it('works with negative .typecheck()', function(){
-		foo.bar	= 'aString';
+		try{
+			foo.bar	= 'aString';
+			var fail= true;
+		}catch(e){
+			console.assert(!fail, 'this should never be seen')		
+		}
 	});
 
 	it('trackUsage properly', function(){
