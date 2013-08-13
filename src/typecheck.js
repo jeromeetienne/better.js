@@ -30,8 +30,6 @@ if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;
 TypeCheck.setter	= function(baseObject, property, types){
 	// check initial value
 	var value	= baseObject[property];
-console.log('setter', arguments, baseObject)
-debugger;
 	var isValid	= TypeCheck.value(value, types)
 	console.assert(isValid, 'initial value got invalid type');
 	// setup the setter
