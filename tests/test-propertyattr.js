@@ -34,6 +34,6 @@ describe('PropertyAttr', function(){
 
 	it('trackUsage properly', function(){
 		var tracker	= PropertyAttr.usageTracker;
-		console.assert( tracker.klasses()['mocha-foo.bar'].counter === 3 );
+		console.assert( tracker.klasses()['mocha-foo.bar'].counter === 1 );
 	});
 });
