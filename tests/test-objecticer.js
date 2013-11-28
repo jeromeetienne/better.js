@@ -2,7 +2,8 @@ var ObjectIcer	= ObjectIcer	|| require('../src/objecticer.js');
 
 describe('ObjectIcer.readProperties()', function(){
 	var objReadIced	= {
-		foo	: 'bar'
+		foo	: 'bar',
+		bla	: undefined
 	}
 	var objReadIced	= ObjectIcer.readProperties(objReadIced)
 
@@ -12,6 +13,10 @@ describe('ObjectIcer.readProperties()', function(){
 			var fail= true;
 		}catch(e){}
 		console.assert(!fail, 'this should never be seen')		
+	});
+
+	it('should not assert() when reading an existing property equal to undefined', function(){
+		var dummy = objReadIced.bla
 	});
 
 	it('should not assert when reading defined property', function(){

@@ -7,8 +7,8 @@ TODO
 ====
 * rename to hardening.js ?
   * safer.js
-* put jsdoc2debug.js in npm 
-* put debug.js in bower
+* DONE put jsdoc2debug.js in npm 
+* DONE put debug.js in bower
 * how to easily include it in node.js ? 
   * single require ?
 

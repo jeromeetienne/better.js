@@ -1046,8 +1046,6 @@ if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;
 TypeCheck.setter	= function(baseObject, property, types){
 	// check initial value
 	var value	= baseObject[property];
-console.log('setter', arguments, baseObject)
-debugger;
 	var isValid	= TypeCheck.value(value, types)
 	console.assert(isValid, 'initial value got invalid type');
 	// setup the setter
@@ -1491,7 +1489,6 @@ var TypeCheck	= TypeCheck	|| require('../src/typecheck.js')
  * @return {PropertyAttr.Builder} for chained API
  */
 PropertyAttr.Builder.prototype.typeCheck	= function(types){
-console.log('dlasdfjhakdjfhalksdjfhadf', this._baseObject, this._property, types);
 	TypeCheck.setter(this._baseObject, this._property, types);
 	return this;	// for chained API;
 }
@@ -1544,42 +1541,88 @@ PropertyAttr.Builder.prototype.private	= function(klass){
 	PrivateForJS.privateProperty(klass, this._baseObject, this._property);
 	return this;	// for chained API
 };
+var ObjectIcer	= {};
+
 /**
- * prevent the default value of 
- * @param {Object} target the object on which we prevent undefined
- * @return {Object} the proxy
+ * ice properties read for target. 
+ * This is harmony stuff. it isnt available everywhere. 
+ * Chrome+node got it via v8
+ * 
+ * @param  {Object} target the object to handle
  */
-function preventUndefinedProperties(target){
+ObjectIcer.readProperties	= function(target){
 	console.assert(Proxy.create !== 'function', 'harmony proxy not enable. try chrome://flags or node --harmony')
 	return Proxy.create({
 		get	: function(proxy, name){
-			console.assert( target[name] !== undefined, 'property '+name+' undefined' )
+			console.assert( (name in target) !== false, 'property '+name+' undefined' )
 			return target[name]
 		},
 	})
 }
 
-preventUndefinedProperties.available	= typeof(Proxy) !== 'undefined' && typeof(Proxy.create) === 'function'
+ObjectIcer.readProperties.available	= typeof(Proxy) !== 'undefined' && typeof(Proxy.create) === 'function'
+
+
+/**
+ * ice properties write for target. it will trigger an exception IFF in 'strict mode'
+ * 
+ * @param  {Object} target the object to handle
+ */
+ObjectIcer.writeProperties	= function(target){
+	Object.seal(target);
+	return target
+}
+
+/**
+ * ice properties read+write for target
+ * 
+ * @param  {Object} target the object to handle
+ */
+ObjectIcer.rwProperties	= function(target){
+	target	= ObjectIcer.writeProperties(target)
+	target	= ObjectIcer.readProperties(target)
+	return target
+}
 
 // export the class in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= preventUndefinedProperties;
-/**
- * @fileOverview export all debug.js symbol for node.js
- */
+if( typeof(window) === 'undefined' )	module.exports	= ObjectIcer;
+var DEBUG	= {};
+
+//////////////////////////////////////////////////////////////////////////////////
+//		export all modules						//
+//////////////////////////////////////////////////////////////////////////////////
+
+DEBUG.assertWhichStop	= assertWhichStop
+DEBUG.ConsoleLogger	= ConsoleLogger
+DEBUG.FunctionAttr	= FunctionAttr
+DEBUG.GcMonitor		= GcMonitor
+DEBUG.GlobalDetector	= GlobalDetector
+DEBUG.ObjectIcer	= ObjectIcer
+DEBUG.PrivateForJS	= PrivateForJS
+DEBUG.PropertyAttr	= PropertyAttr
+DEBUG.QGetterSetter	= QGetterSetter
+DEBUG.Stacktrace	= Stacktrace
+DEBUG.TypeCheck		= TypeCheck
 
 // test if we in node.js
 if( typeof(window) === 'undefined' ){
-	// export each sub library
-	module.exports	= {}
-	module.exports.assertWhichStop	= assertWhichStop
-	module.exports.ConsoleLogger	= ConsoleLogger
-	module.exports.FunctionAttr	= FunctionAttr
-	module.exports.GcMonitor	= GcMonitor
-	module.exports.GlobalDetector	= GlobalDetector
-	module.exports.preventUndefinedProperties	= preventUndefinedProperties
-	module.exports.PrivateForJS	= PrivateForJS
-	module.exports.PropertyAttr	= PropertyAttr
-	module.exports.QGetterSetter	= QGetterSetter
-	module.exports.Stacktrace	= Stacktrace
-	module.exports.TypeCheck	= TypeCheck
+	module.exports	= DEBUG
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//		assertwhichstop.js						//
+//////////////////////////////////////////////////////////////////////////////////
+
+DEBUG.assert			= assertWhichStop
+DEBUG.overloadConsoleAssert	= assertWhichStop.overloadConsole
+
+//////////////////////////////////////////////////////////////////////////////////
+//		consolelogger.js						//
+//////////////////////////////////////////////////////////////////////////////////
+
+DEBUG.iceObjectRead	= ObjectIcer.readProperties
+DEBUG.iceObjectWrite	= ObjectIcer.writeProperties
+DEBUG.iceObject		= ObjectIcer.rwProperties
+
+

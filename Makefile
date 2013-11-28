@@ -13,20 +13,19 @@ test:
 	@./node_modules/.bin/mocha --harmony -R list tests
 
 build:
-	echo 					>  build/debug.js
-	cat src/qgettersetter.js		>> build/debug.js
-	cat src/stacktrace.js			>> build/debug.js
-	cat src/assertwhichstop.js		>> build/debug.js
-	cat src/consolelogger.js		>> build/debug.js
-	cat src/gcmonitor.js			>> build/debug.js
-	cat src/globaldetector.js		>> build/debug.js
-	cat src/privateforjs.js			>> build/debug.js
-	cat src/typecheck.js			>> build/debug.js
-	cat src/functionattr.js			>> build/debug.js
-	cat src/propertyattr.js			>> build/debug.js
-	cat src/preventundefinedproperties.js	>> build/debug.js
-	cat src/node-export.js			>> build/debug.js
-	cat src/debug-export.js			>> build/debug.js
+	echo 				>  build/debug.js
+	cat src/qgettersetter.js	>> build/debug.js
+	cat src/stacktrace.js		>> build/debug.js
+	cat src/assertwhichstop.js	>> build/debug.js
+	cat src/consolelogger.js	>> build/debug.js
+	cat src/gcmonitor.js		>> build/debug.js
+	cat src/globaldetector.js	>> build/debug.js
+	cat src/privateforjs.js		>> build/debug.js
+	cat src/typecheck.js		>> build/debug.js
+	cat src/functionattr.js		>> build/debug.js
+	cat src/propertyattr.js		>> build/debug.js
+	cat src/objecticer.js		>> build/debug.js
+	cat src/export-debug.js		>> build/debug.js
 	
 	#cat vendor/long-stack-traces/lib/long-stack-traces.js	>> build/debug.js
 

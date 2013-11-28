@@ -11,7 +11,7 @@ ObjectIcer.readProperties	= function(target){
 	console.assert(Proxy.create !== 'function', 'harmony proxy not enable. try chrome://flags or node --harmony')
 	return Proxy.create({
 		get	: function(proxy, name){
-			console.assert( target[name] !== undefined, 'property '+name+' undefined' )
+			console.assert( (name in target) !== false, 'property '+name+' undefined' )
 			return target[name]
 		},
 	})
@@ -36,8 +36,8 @@ ObjectIcer.writeProperties	= function(target){
  * @param  {Object} target the object to handle
  */
 ObjectIcer.rwProperties	= function(target){
-	target	= ObjectIcer.readProperties(target)
 	target	= ObjectIcer.writeProperties(target)
+	target	= ObjectIcer.readProperties(target)
 	return target
 }
 

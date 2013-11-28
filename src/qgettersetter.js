@@ -28,7 +28,7 @@ var QGetterSetter	= {};
  */
 
 
-QGetterSetter.Property	= function(baseObject, property){
+QGetterSetter._Property	= function(baseObject, property){
 	// sanity check 
 	console.assert( typeof(baseObject) === 'object' || typeof(baseObject) === 'function' );
 	console.assert( typeof(property) === 'string' );
@@ -74,7 +74,7 @@ if( typeof(window) === 'undefined' )	module.exports	= QGetterSetter;
 QGetterSetter.defineGetter	= function(baseObject, property, getterFn){
 	var name	= "__dbgGetSet_" + property;
 	// init QGetterSetter for this property if needed
-	baseObject[name]= baseObject[name] || new QGetterSetter.Property(baseObject, property);
+	baseObject[name]= baseObject[name] || new QGetterSetter._Property(baseObject, property);
 	// setup the new getter
 	baseObject[name]._getters.push(getterFn)
 }
@@ -89,7 +89,7 @@ QGetterSetter.defineGetter	= function(baseObject, property, getterFn){
 QGetterSetter.defineSetter	= function(baseObject, property, setterFn){
 	var name	= "__dbgGetSet_" + property;
 	// init QGetterSetter for this property if needed
-	baseObject[name]= baseObject[name] || new QGetterSetter.Property(baseObject, property);
+	baseObject[name]= baseObject[name] || new QGetterSetter._Property(baseObject, property);
 	// setup the new setter
 	baseObject[name]._setters.push(setterFn)
 }
