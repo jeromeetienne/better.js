@@ -46,7 +46,6 @@ var TypeCheck	= TypeCheck	|| require('../src/typecheck.js')
  * @return {PropertyAttr.Builder} for chained API
  */
 PropertyAttr.Builder.prototype.typeCheck	= function(types){
-console.log('dlasdfjhakdjfhalksdjfhadf', this._baseObject, this._property, types);
 	TypeCheck.setter(this._baseObject, this._property, types);
 	return this;	// for chained API;
 }

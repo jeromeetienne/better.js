@@ -18,18 +18,16 @@ describe('PropertyAttr', function(){
 		try{
 			foo.bar	= NaN;
 			var fail= true;
-		}catch(e){
-			console.assert(!fail, 'this should never be seen')		
-		}
+		}catch(e){}
+		console.assert(!fail, 'this should never be seen')		
 	});
 
 	it('works with negative .typecheck()', function(){
 		try{
 			foo.bar	= 'aString';
 			var fail= true;
-		}catch(e){
-			console.assert(!fail, 'this should never be seen')		
-		}
+		}catch(e){}
+		console.assert(!fail, 'this should never be seen')		
 	});
 
 	it('trackUsage properly', function(){

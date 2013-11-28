@@ -1,29 +1,27 @@
 var ObjectIcer	= ObjectIcer	|| require('../src/objecticer.js');
 
-describe('ObjectIcer()', function(){
-
-	//////////////////////////////////////////////////////////////////////////////////
-	//		comment								//
-	//////////////////////////////////////////////////////////////////////////////////
-
+describe('ObjectIcer.readProperties()', function(){
 	var objReadIced	= {
 		foo	: 'bar'
 	}
-	var objReadIced	= ObjectIcer.rwProperties(objReadIced)
+	var objReadIced	= ObjectIcer.readProperties(objReadIced)
 
 	it('should assert() when reading undefined property', function(){
 		try{	
 			var dummy = objReadIced.fooUnexisting
-			console.assert(false, 'this point should never been reached')
+			var fail= true;
 		}catch(e){}
+		console.assert(!fail, 'this should never be seen')		
 	});
+
 	it('should not assert when reading defined property', function(){
 		console.assert(objReadIced.foo === 'bar')
 	});
+});
 
-	//////////////////////////////////////////////////////////////////////////////////
-	//		comment								//
-	//////////////////////////////////////////////////////////////////////////////////
+
+describe('ObjectIcer.writeProperties()', function(){
+	"use strict";
 
 	var objWriteIced= {
 		foo	: 'bar'
@@ -34,10 +32,11 @@ describe('ObjectIcer()', function(){
 		objWriteIced.foo	= "baz";
 	});
 	
-	it('should not assert when create a new property', function(){
+	it('should assert when creating a new property', function(){
 		try{	
-			objWriteIced.foo2 = "quux";
-			console.assert(false, 'this point should never been reached')
+			objWriteIced.foo2	= "quux";
+			var fail= true;
 		}catch(e){}
+		console.assert(!fail, 'this should never be seen')
 	});
 });

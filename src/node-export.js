@@ -11,7 +11,7 @@ if( typeof(window) === 'undefined' ){
 	module.exports.FunctionAttr	= FunctionAttr
 	module.exports.GcMonitor	= GcMonitor
 	module.exports.GlobalDetector	= GlobalDetector
-	module.exports.preventUndefinedProperties	= preventUndefinedProperties
+	module.exports.ObjectIcer	= ObjectIcer
 	module.exports.PrivateForJS	= PrivateForJS
 	module.exports.PropertyAttr	= PropertyAttr
 	module.exports.QGetterSetter	= QGetterSetter

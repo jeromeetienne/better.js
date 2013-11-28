@@ -21,7 +21,7 @@ ObjectIcer.readProperties.available	= typeof(Proxy) !== 'undefined' && typeof(Pr
 
 
 /**
- * ice properties write for target
+ * ice properties write for target. it will trigger an exception IFF in 'strict mode'
  * 
  * @param  {Object} target the object to handle
  */
@@ -36,8 +36,8 @@ ObjectIcer.writeProperties	= function(target){
  * @param  {Object} target the object to handle
  */
 ObjectIcer.rwProperties	= function(target){
-	ObjectIcer.readProperties(target)
-	ObjectIcer.writeProperties(target)
+	target	= ObjectIcer.readProperties(target)
+	target	= ObjectIcer.writeProperties(target)
 	return target
 }
 
