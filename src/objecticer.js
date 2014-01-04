@@ -14,13 +14,13 @@ var ObjectIcer	= function(target, permission){
 	var checkWrite	= permission === 'write'|| permission === 'rw'
 	// use old proxy API because v8 doesnt have the new API, firefox got it tho
 	return Proxy.create({
-		get	: function(proxy, name){
+		get	: function(receiver, name){
 			if( checkRead && (name in target) === false ){
 				console.assert((name in target) === true, 'reading unexisting property '+name)			
 			}
 			return target[name]
 		},
-		set	: function(proxy, name, value){
+		set	: function(receiver, name, value){
 			if( checkWrite && (name in target) === false ){
 				console.assert((name in target) === true, 'setting unexisting property '+name)
 			}
