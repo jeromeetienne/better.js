@@ -8,7 +8,7 @@
  * @return {Object}        the protected object
  */
 var ObjectIcer	= function(target, permission){
-	console.assert(Proxy.create !== 'function', 'harmony proxy not enable. try chrome://flags or node --harmony')
+	console.assert(ObjectIcer.isAvailable, 'harmony Proxy not enable. try chrome://flags or node --harmony')
 	permission	= permission	|| 'rw'
 	var checkRead	= permission === 'read'	|| permission === 'rw'
 	var checkWrite	= permission === 'write'|| permission === 'rw'
