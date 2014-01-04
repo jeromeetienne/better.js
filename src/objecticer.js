@@ -1,7 +1,11 @@
 /**
- * use Proxy API to 
- * @param  {[type]} target [description]
- * @return {[type]}        [description]
+ * use Proxy API to freeze access and creation of unexisting property.
+ * After this, if you read a unexisting property, you will get an exception, instead of the usual undefined.
+ * After this, if you write on a unexisting property, you will get an exception, instead of a new property.
+ * 
+ * @param  {Object} target the object to protect
+ * @return {String} permission 'read' to protect only read, 'write' for write only, 'rw' for both
+ * @return {Object}        the protected object
  */
 var ObjectIcer	= function(target, permission){
 	console.assert(Proxy.create !== 'function', 'harmony proxy not enable. try chrome://flags or node --harmony')
@@ -17,7 +21,6 @@ var ObjectIcer	= function(target, permission){
 			return target[name]
 		},
 		set	: function(proxy, name, value){
-			console.log('name', name, value)
 			if( checkWrite && (name in target) === false ){
 				console.assert((name in target) === true, 'setting unexisting property '+name)
 			}
@@ -30,6 +33,12 @@ var ObjectIcer	= function(target, permission){
 		// },
 	})
 }
+
+/**
+ * check if the feature is available or not
+ * @type {Boolean}
+ */
+ObjectIcer.isAvailable        = typeof(Proxy) !== 'undefined' && typeof(Proxy.create) === 'function'
 
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= ObjectIcer;
