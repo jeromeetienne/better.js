@@ -41,7 +41,13 @@ describe('ObjectIcer.writeProperties()', function(){
 		try{	
 			objWriteIced.foo2	= "quux";
 			var fail= true;
-		}catch(e){}
+		}catch(e){
+			console.log('dadfadsfadkjlfhalkdsjfhalkdjhfalkjdhf')
+			console.log('dadfadsfadkjlfhalkdsjfhalkdjhfalkjdhf')
+			console.log('dadfadsfadkjlfhalkdsjfhalkdjhfalkjdhf')
+			console.log('dadfadsfadkjlfhalkdsjfhalkdjhfalkjdhf')
+			console.log('dadfadsfadkjlfhalkdsjfhalkdjhfalkjdhf')
+		}
 		console.assert(!fail, 'this should never be seen')
 	});
 });

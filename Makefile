@@ -25,20 +25,23 @@ build:
 	cat src/functionattr.js		>> build/debug.js
 	cat src/propertyattr.js		>> build/debug.js
 	cat src/objecticer.js		>> build/debug.js
-	cat src/export-debug.js		>> build/debug.js
+	cat src/export-better.js	>> build/debug.js
 	
 	#cat vendor/long-stack-traces/lib/long-stack-traces.js	>> build/debug.js
 
 minify: build
-	curl --data-urlencode "js_code@build/debug.js"	\
-		-d "output_format=text&output_info=compiled_code&compilation_level=SIMPLE_OPTIMIZATIONS" \
-		http://closure-compiler.appspot.com/compile		\
-		> build/debug.min.js
-	@echo size minified + gzip is `gzip -c debug.min.js | wc -c` byte
+	uglifyjs build/debug.js > build/debug.min.js
+	@echo size minified + gzip is `gzip -c build/debug.min.js | wc -c` byte
 
 buildBundle: build
 	cat build/debug.js		>  build/debug-bundle.js
 	cat examples/helpers/*.js	>> build/debug-bundle.js
+
+minifyBundle: buildBundle
+	uglifyjs build/debug-bundle.js > build/debug-bundle.min.js
+	@echo size minified + gzip is `gzip -c build/debug-bundle.min.js | wc -c` byte
+
+
 
 JSDOC_ROOT	= $(HOME)/opt/jsdoc_toolkit-2.4.0/jsdoc-toolkit
 docs:
@@ -48,6 +51,7 @@ docs:
 			-t=${JSDOC_ROOT}/templates/Codeview/		\
 			-d=docs/jsdocs/					\
 			src/*.js examples/helpers/*.js
+
 .PHONY: docs build minify
 
 

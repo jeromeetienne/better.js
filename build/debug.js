@@ -29,7 +29,7 @@ var QGetterSetter	= {};
  */
 
 
-QGetterSetter.Property	= function(baseObject, property){
+QGetterSetter._Property	= function(baseObject, property){
 	// sanity check 
 	console.assert( typeof(baseObject) === 'object' || typeof(baseObject) === 'function' );
 	console.assert( typeof(property) === 'string' );
@@ -75,7 +75,7 @@ if( typeof(window) === 'undefined' )	module.exports	= QGetterSetter;
 QGetterSetter.defineGetter	= function(baseObject, property, getterFn){
 	var name	= "__dbgGetSet_" + property;
 	// init QGetterSetter for this property if needed
-	baseObject[name]= baseObject[name] || new QGetterSetter.Property(baseObject, property);
+	baseObject[name]= baseObject[name] || new QGetterSetter._Property(baseObject, property);
 	// setup the new getter
 	baseObject[name]._getters.push(getterFn)
 }
@@ -90,7 +90,7 @@ QGetterSetter.defineGetter	= function(baseObject, property, getterFn){
 QGetterSetter.defineSetter	= function(baseObject, property, setterFn){
 	var name	= "__dbgGetSet_" + property;
 	// init QGetterSetter for this property if needed
-	baseObject[name]= baseObject[name] || new QGetterSetter.Property(baseObject, property);
+	baseObject[name]= baseObject[name] || new QGetterSetter._Property(baseObject, property);
 	// setup the new setter
 	baseObject[name]._setters.push(setterFn)
 }
@@ -243,6 +243,14 @@ Stacktrace.Frame	= function(opts){
 Stacktrace.Frame.prototype.originId	= function(){
 	var str	= this.fct + '@' + this.url + ':' + this.line + ':' + this.column;
 	return str;
+};
+
+/**
+ * return a String for this object
+ * @return {String} the human readable string
+ */
+Stacktrace.Frame.prototype.toString	= function(){
+	return this.originId();
 };
 
 /**
@@ -1035,7 +1043,6 @@ var QGetterSetter	= QGetterSetter	|| require('../src/qgettersetter.js')
 if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;
 
 
-
 /**
  * Check type with a object setter
  * 
@@ -1060,6 +1067,7 @@ TypeCheck.setter	= function(baseObject, property, types){
 
 /**
  * function wrapper to check the type of function parameters and return value
+ * 
  * @param  {Function} originalFn  the function to wrap
  * @param  {Array}    paramsTypes allowed types for the paramter. array with each item is the allowed types for this parameter.
  * @param  {Array}    returnTypes allowed types for the return value
@@ -1085,6 +1093,7 @@ TypeCheck.fn	= function(originalFn, paramsTypes, returnTypes){
 
 /**
  * Check the type of a value
+ * 
  * @param  {*} value the value to check
  * @param  {Array.<function>} types the types allowed for this variable
  * @return {boolean} return isValid, so true if types matche, false otherwise
@@ -1102,6 +1111,8 @@ TypeCheck.value	= function(value, types){
 			var valid	= typeof(value) === 'number';
 		}else if( type === String ){
 			var valid	= typeof(value) === 'string';
+		}else if( type === undefined ){
+			var valid	= typeof(value) === 'undefined';
 		}else if( typeof(type) === 'string' && type.toLowerCase() === 'always' ){
 			var valid	= true;
 		}else if( typeof(type) === 'string' && type.toLowerCase() === 'never' ){
@@ -1488,7 +1499,10 @@ var TypeCheck	= TypeCheck	|| require('../src/typecheck.js')
  * @param  {[type]} types valid types in typecheck.js format
  * @return {PropertyAttr.Builder} for chained API
  */
-PropertyAttr.Builder.prototype.typeCheck	= function(types){
+PropertyAttr.Builder.prototype.typeCheck	= // backward compatibility
+PropertyAttr.Builder.prototype.checkIf		= // backward compatibility
+PropertyAttr.Builder.prototype.type		= function(types){
+	if( arguments.length > 1 )	types	= Array.prototype.slice.call(arguments, 0);
 	TypeCheck.setter(this._baseObject, this._property, types);
 	return this;	// for chained API;
 }
@@ -1509,7 +1523,8 @@ PropertyAttr.usageTracker	= new Stacktrace.Tracker();
  * @param {String|undefined} trackName	optional name for Stacktrace.Tracker. default to originId
  * @return {PropertyAttr.Builder} for chained API
  */
-PropertyAttr.Builder.prototype.trackUsage	= function(trackName){
+PropertyAttr.Builder.prototype.trackUsage	= // backward compatibility
+PropertyAttr.Builder.prototype.track		= function(trackName){
 	var tracker	= PropertyAttr.usageTracker;
 	// handle polymorphism
 	trackName	= trackName	|| 'PropertyAttr.trackUsage:'+Stacktrace.parse()[1].originId();
@@ -1554,7 +1569,7 @@ ObjectIcer.readProperties	= function(target){
 	console.assert(Proxy.create !== 'function', 'harmony proxy not enable. try chrome://flags or node --harmony')
 	return Proxy.create({
 		get	: function(proxy, name){
-			console.assert( (name in target) !== false, 'property '+name+' undefined' )
+			console.assert( (name in target) !== false, 'reading unexisting property '+name)
 			return target[name]
 		},
 	})
@@ -1586,43 +1601,50 @@ ObjectIcer.rwProperties	= function(target){
 
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= ObjectIcer;
-var DEBUG	= {};
+var BetterJS	= {}
+var Bjs		= BetterJS
+
+console.assert(false, 'this code is obsolete')
 
 //////////////////////////////////////////////////////////////////////////////////
 //		export all modules						//
 //////////////////////////////////////////////////////////////////////////////////
 
-DEBUG.assertWhichStop	= assertWhichStop
-DEBUG.ConsoleLogger	= ConsoleLogger
-DEBUG.FunctionAttr	= FunctionAttr
-DEBUG.GcMonitor		= GcMonitor
-DEBUG.GlobalDetector	= GlobalDetector
-DEBUG.ObjectIcer	= ObjectIcer
-DEBUG.PrivateForJS	= PrivateForJS
-DEBUG.PropertyAttr	= PropertyAttr
-DEBUG.QGetterSetter	= QGetterSetter
-DEBUG.Stacktrace	= Stacktrace
-DEBUG.TypeCheck		= TypeCheck
+BetterJS.assertWhichStop= assertWhichStop
+BetterJS.ConsoleLogger	= ConsoleLogger
+BetterJS.FunctionAttr	= FunctionAttr
+BetterJS.GcMonitor	= GcMonitor
+BetterJS.GlobalDetector	= GlobalDetector
+BetterJS.ObjectIcer	= ObjectIcer
+BetterJS.PrivateForJS	= PrivateForJS
+BetterJS.PropertyAttr	= PropertyAttr
+BetterJS.QGetterSetter	= QGetterSetter
+BetterJS.Stacktrace	= Stacktrace
+BetterJS.TypeCheck	= TypeCheck
 
 // test if we in node.js
 if( typeof(window) === 'undefined' ){
-	module.exports	= DEBUG
+	module.exports	= BetterJS
 }
-
 
 //////////////////////////////////////////////////////////////////////////////////
 //		assertwhichstop.js						//
 //////////////////////////////////////////////////////////////////////////////////
 
-DEBUG.assert			= assertWhichStop
-DEBUG.overloadConsoleAssert	= assertWhichStop.overloadConsole
+BetterJS.assert			= assertWhichStop
+BetterJS.overloadConsoleAssert	= assertWhichStop.overloadConsole
 
 //////////////////////////////////////////////////////////////////////////////////
 //		consolelogger.js						//
 //////////////////////////////////////////////////////////////////////////////////
 
-DEBUG.iceObjectRead	= ObjectIcer.readProperties
-DEBUG.iceObjectWrite	= ObjectIcer.writeProperties
-DEBUG.iceObject		= ObjectIcer.rwProperties
+BetterJS.iceObjectRead	= ObjectIcer.readProperties
+BetterJS.iceObjectWrite	= ObjectIcer.writeProperties
+BetterJS.iceObject	= ObjectIcer.rwProperties
 
+//////////////////////////////////////////////////////////////////////////////////
+//		qgettersetter.js						//
+//////////////////////////////////////////////////////////////////////////////////
 
+BetterJS.defineQGetter	= QGetterSetter.defineGetter
+BetterJS.defineQSetter	= QGetterSetter.defineSetter

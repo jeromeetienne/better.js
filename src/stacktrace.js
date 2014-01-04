@@ -132,6 +132,14 @@ Stacktrace.Frame.prototype.originId	= function(){
 };
 
 /**
+ * return a String for this object
+ * @return {String} the human readable string
+ */
+Stacktrace.Frame.prototype.toString	= function(){
+	return this.originId();
+};
+
+/**
  * get the basename of the url
  * @return {string}
  */

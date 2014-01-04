@@ -19,7 +19,6 @@ var QGetterSetter	= QGetterSetter	|| require('../src/qgettersetter.js')
 if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;
 
 
-
 /**
  * Check type with a object setter
  * 
@@ -44,6 +43,7 @@ TypeCheck.setter	= function(baseObject, property, types){
 
 /**
  * function wrapper to check the type of function parameters and return value
+ * 
  * @param  {Function} originalFn  the function to wrap
  * @param  {Array}    paramsTypes allowed types for the paramter. array with each item is the allowed types for this parameter.
  * @param  {Array}    returnTypes allowed types for the return value
@@ -69,6 +69,7 @@ TypeCheck.fn	= function(originalFn, paramsTypes, returnTypes){
 
 /**
  * Check the type of a value
+ * 
  * @param  {*} value the value to check
  * @param  {Array.<function>} types the types allowed for this variable
  * @return {boolean} return isValid, so true if types matche, false otherwise
@@ -86,6 +87,8 @@ TypeCheck.value	= function(value, types){
 			var valid	= typeof(value) === 'number';
 		}else if( type === String ){
 			var valid	= typeof(value) === 'string';
+		}else if( type === undefined ){
+			var valid	= typeof(value) === 'undefined';
 		}else if( typeof(type) === 'string' && type.toLowerCase() === 'always' ){
 			var valid	= true;
 		}else if( typeof(type) === 'string' && type.toLowerCase() === 'never' ){

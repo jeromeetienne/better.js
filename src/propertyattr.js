@@ -45,7 +45,9 @@ var TypeCheck	= TypeCheck	|| require('../src/typecheck.js')
  * @param  {[type]} types valid types in typecheck.js format
  * @return {PropertyAttr.Builder} for chained API
  */
-PropertyAttr.Builder.prototype.typeCheck	= function(types){
+PropertyAttr.Builder.prototype.typeCheck	= // backward compatibility
+PropertyAttr.Builder.prototype.type		= function(types){
+	if( arguments.length > 1 )	types	= Array.prototype.slice.call(arguments, 0);
 	TypeCheck.setter(this._baseObject, this._property, types);
 	return this;	// for chained API;
 }
@@ -66,7 +68,8 @@ PropertyAttr.usageTracker	= new Stacktrace.Tracker();
  * @param {String|undefined} trackName	optional name for Stacktrace.Tracker. default to originId
  * @return {PropertyAttr.Builder} for chained API
  */
-PropertyAttr.Builder.prototype.trackUsage	= function(trackName){
+PropertyAttr.Builder.prototype.trackUsage	= // backward compatibility
+PropertyAttr.Builder.prototype.track		= function(trackName){
 	var tracker	= PropertyAttr.usageTracker;
 	// handle polymorphism
 	trackName	= trackName	|| 'PropertyAttr.trackUsage:'+Stacktrace.parse()[1].originId();

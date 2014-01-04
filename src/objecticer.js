@@ -11,7 +11,7 @@ ObjectIcer.readProperties	= function(target){
 	console.assert(Proxy.create !== 'function', 'harmony proxy not enable. try chrome://flags or node --harmony')
 	return Proxy.create({
 		get	: function(proxy, name){
-			console.assert( (name in target) !== false, 'property '+name+' undefined' )
+			console.assert( (name in target) !== false, 'reading unexisting property '+name)
 			return target[name]
 		},
 	})
