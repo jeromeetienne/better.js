@@ -1,44 +1,34 @@
-var ObjectIcer	= {};
-
 /**
- * ice properties read for target. 
- * This is harmony stuff. it isnt available everywhere. 
- * Chrome+node got it via v8
- * 
- * @param  {Object} target the object to handle
+ * use Proxy API to 
+ * @param  {[type]} target [description]
+ * @return {[type]}        [description]
  */
-ObjectIcer.readProperties	= function(target){
+var ObjectIcer	= function(target, permission){
 	console.assert(Proxy.create !== 'function', 'harmony proxy not enable. try chrome://flags or node --harmony')
+	permission	= permission	|| 'rw'
+	var checkRead	= permission === 'read'	|| permission === 'rw'
+	var checkWrite	= permission === 'write'|| permission === 'rw'
+	// use old proxy API because v8 doesnt have the new API, firefox got it tho
 	return Proxy.create({
 		get	: function(proxy, name){
-			console.assert( (name in target) !== false, 'reading unexisting property '+name)
+			if( checkRead && (name in target) === false ){
+				console.assert((name in target) === true, 'reading unexisting property '+name)			
+			}
 			return target[name]
 		},
+		set	: function(proxy, name, value){
+			console.log('name', name, value)
+			if( checkWrite && (name in target) === false ){
+				console.assert((name in target) === true, 'setting unexisting property '+name)
+			}
+			target[name]	= value
+			return true
+		},
+		// without this one, i receive errors ?
+		// has: function (name) {
+		// 	return name in target ? true : false
+		// },
 	})
-}
-
-ObjectIcer.readProperties.available	= typeof(Proxy) !== 'undefined' && typeof(Proxy.create) === 'function'
-
-
-/**
- * ice properties write for target. it will trigger an exception IFF in 'strict mode'
- * 
- * @param  {Object} target the object to handle
- */
-ObjectIcer.writeProperties	= function(target){
-	Object.seal(target);
-	return target
-}
-
-/**
- * ice properties read+write for target
- * 
- * @param  {Object} target the object to handle
- */
-ObjectIcer.rwProperties	= function(target){
-	target	= ObjectIcer.writeProperties(target)
-	target	= ObjectIcer.readProperties(target)
-	return target
 }
 
 // export the class in node.js - if running in node.js
