@@ -44,6 +44,7 @@ FunctionAttr.wrapCall	= function(originalFn, beforeFn, afterFn){
 		var stopNow	= false;
 		// call beforeFn if needed
 		if( beforeFn )	stopNow = beforeFn(originalFn, arguments);
+// TODO what is this stopNow ??? it isnt even used
 		// forward the call to the original function
 		var result	= originalFn.apply(this, arguments);
 		// call afterFn if needed
@@ -66,6 +67,7 @@ FunctionAttr.wrapCall	= function(originalFn, beforeFn, afterFn){
  * @param {String}   fnName     optional name of the function - default to 'aFunction'
  */
 FunctionAttr.Builder	= function(originalFn, fnName){
+	this._originalFn= originalFn
 	this._currentFn	= originalFn;
 	this._fnName	= fnName	|| 'aFunction';
 }
@@ -76,6 +78,10 @@ FunctionAttr.Builder	= function(originalFn, fnName){
  * @return {Function} The actual function with the attributes
 */
 FunctionAttr.Builder.prototype.done	= function(){
+	// inherit from originalFn.prototype
+	// TODO should it be copied with Object.Create or just a reference
+	this._currentFn.prototype	= this._originalFn.prototype
+	
 	return this._currentFn;
 }
 

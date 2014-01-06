@@ -1,0 +1,1 @@
+<script src='test2.js'></script>

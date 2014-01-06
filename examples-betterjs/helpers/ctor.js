@@ -9,16 +9,12 @@ var ctor	= function(klass, params){
 	}
 	
 	if( params.properties ){
-BetterJS.propertiesType	= function(baseObject, properties){
-	Object.keys(properties).forEach(function(property){
-		var allowedType	= properties[property]
-		PropertyAttr
-			.define(baseObject, property)
-			.typeCheck(allowedType)
-	})
-	return BetterJS
-}
+		Object.keys(params.properties).forEach(function(property){
+			PropertyAttr
+				.define(baseObject, property)
+				.typeCheck(properties[property])
+		})
 	}
 	
-
+	return builder.done()
 }
