@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var FunctionAttr	= require('../src/functionattr.js');
+var FunctionAttr	= require('../src/helpers/functionattr.js');
 
 function foo(){
 	console.log('inside')

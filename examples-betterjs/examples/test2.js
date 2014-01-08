@@ -1,12 +1,15 @@
-var wrapCtor	= function(originalFn, className){
+var Bjs	= Bjs	|| require('../better.js')
+
+var wrapCtor	= function(originalCtor, className){
 	// check arguments type
-	console.assert( originalFn instanceof Function )
+	console.assert( originalCtor instanceof Function )
 	// 
-	className	= className	|| originalFn.name
+	className	= className	|| originalCtor.name
 	var fn	= function SuperName(){
-		// forward the call to the original function
-		originalFn.apply(this, arguments);
+		// forward the call to original contructor
+		originalCtor.apply(this, arguments);
 console.log('bla', this.sampleProp)
+			
 	}
 	// mechanism to get fn with the propername
 	// - see https://github.com/jeromeetienne/creatorpattern.js
@@ -14,7 +17,7 @@ console.log('bla', this.sampleProp)
 	eval('fn = '+jsCode+';')
 	// inherit from original prototype
 	// - reference or copy with Object.Create()
-	fn.prototype	= originalFn.prototype
+	fn.prototype	= originalCtor.prototype
 	return fn
 }
 

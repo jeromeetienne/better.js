@@ -1,3 +1,6 @@
+// TODO put that in a legitimate class
+// It is part of better.js now
+
 var Stacktrace		= Stacktrace	|| require('../../src/stacktrace.js');
 var QGetterSetter	= QGetterSetter	|| require('../../src/qgettersetter.js');
 

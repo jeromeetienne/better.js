@@ -1,0 +1,72 @@
+var ClassAttr	= ClassAttr	|| require('../src/helpers/classattr.js')
+
+ClassAttr.overloadFunctionPrototype()
+
+//////////////////////////////////////////////////////////////////////////////////
+//		parent class								//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * animal ctos
+ */
+var Animal	= function(){
+}
+
+Animal.prototype.isVegetal	= function(){
+	return false;
+}
+
+/**
+ * cat constructor
+ */
+var Cat	= function(name){
+	// Animal.call( this );
+	this.name	= name
+	this._yo	= 99
+	console.log('end of ctor')
+}
+
+Cat.prototype = Object.create( Animal.prototype );
+
+Cat.prototype.salute	= function(){
+	return 'miaou'
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//		comment								//
+//////////////////////////////////////////////////////////////////////////////////
+
+Cat	= ClassAttr(Cat, {
+	accept		: [String],
+	privatize	: true,
+	// ice		: true,
+	properties	: {
+		name	: String,		
+	},
+	onAfter		: function(instance, args){
+		console.log('onAfter')
+	}
+})
+
+var cat	= new Cat('kitty')
+
+var ObjectIcer		= ObjectIcer	|| require('../src/objecticer.js');
+cat	= ObjectIcer(cat)
+// cat.prototype	= cat.prototype
+
+cat.prototype		= Object.create(Cat.prototype)
+cat.prototype.constructor = Cat
+
+
+console.assert(cat instanceof Cat)
+console.assert(cat instanceof Animal)
+console.assert(typeof(cat.name) === 'string')
+
+// cat.name	= 99
+console.log('name', cat.name)
+
+cat.prout	= 99
+
+// console.log('name', cat._yo)
+
+

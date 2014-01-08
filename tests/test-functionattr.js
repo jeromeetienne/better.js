@@ -1,4 +1,4 @@
-var FunctionAttr	= FunctionAttr	|| require('../src/functionattr.js');
+var FunctionAttr	= FunctionAttr	|| require('../src/helpers/functionattr.js');
 
 describe('FunctionAttr', function(){
 

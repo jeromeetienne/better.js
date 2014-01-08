@@ -1,4 +1,4 @@
-var Bjs	= Bjs	|| require('./better.js')
+var Bjs	= Bjs	|| require('../better.js')
 
 Bjs.overloadFunctionAttr()
 
@@ -35,11 +35,12 @@ Cat.prototype.salute	= function(){
 //////////////////////////////////////////////////////////////////////////////////
 
 Cat	= Bjs.fn(Cat)
-		.typeCheck([String], [undefined])
+		//.typeCheck([String], [undefined])
 		.after(function(){
+			console.log('name', this.name)
 // TODO here the ```this``` should be one of the intanciated object
-			console.assert(arguments[0] === Cat)
-			console.dir(arguments[0])
+//			console.assert(arguments[0] === Cat)
+//			console.dir(arguments[0])
 		})
 		.done()
 

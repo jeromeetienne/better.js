@@ -1,4 +1,4 @@
-var PropertyAttr	= PropertyAttr	|| require('../src/propertyattr.js');
+var PropertyAttr	= PropertyAttr	|| require('../src/helpers/propertyattr.js');
 
 describe('PropertyAttr', function(){
 	

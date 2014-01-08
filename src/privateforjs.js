@@ -81,7 +81,7 @@ PrivateForJS.privateProperty	= function(klass, baseObject, property){
 			// get stackFrame for the originId of the user
 			var stackFrame	= Stacktrace.parse()[2];
 			// log the event
-			console.assert(false, 'access to private property', "'"+property+"'", 'from', stackFrame.orginId());			
+			console.assert(false, 'access to private property', "'"+property+"'", 'from', stackFrame);			
 		}
 		// actually return the value
 		return value;
@@ -113,5 +113,31 @@ PrivateForJS.privateFunction	= function(klass, fn){
 		// forward the call to the original function
 		return fn.apply(_this, arguments);
 	};
+};
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Helpers								//
+//////////////////////////////////////////////////////////////////////////////////
+
+
+/**
+ * Privatize all property/function which start with a ```_```. 
+ * Especially useful at the end of a constructor.
+ * 
+ * @param  {Function} klass	constructor for the class
+ * @param  {object} instance	the instance of the object
+ */
+PrivateForJS.privatize	= function(klass, instance){
+	console.assert( instance.constructor === klass );
+	console.assert( instance instanceof klass );
+
+// TODO what about the .prototype
+
+	for(var property in instance){
+		var value	= instance[property]
+		if( property[0] !== '_' )		continue;
+		if(!instance.hasOwnProperty(property))continue;		
+		PrivateForJS.privateProperty(klass, instance, property);
+	}
 };
 

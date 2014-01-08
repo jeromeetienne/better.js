@@ -22,10 +22,10 @@ build:
 	cat src/globaldetector.js	>> build/debug.js
 	cat src/privateforjs.js		>> build/debug.js
 	cat src/typecheck.js		>> build/debug.js
-	cat src/functionattr.js		>> build/debug.js
-	cat src/propertyattr.js		>> build/debug.js
 	cat src/objecticer.js		>> build/debug.js
-	cat src/export-better.js	>> build/debug.js
+	cat src/helpers/functionattr.js		>> build/debug.js
+	cat src/helpers/propertyattr.js		>> build/debug.js
+	cat src/helpers/classattr.js		>> build/debug.js
 	
 	#cat vendor/long-stack-traces/lib/long-stack-traces.js	>> build/debug.js
 

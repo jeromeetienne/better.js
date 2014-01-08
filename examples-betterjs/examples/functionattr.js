@@ -1,4 +1,4 @@
-var Bjs	= Bjs	|| require('./better.js')
+var Bjs	= Bjs	|| require('../better.js')
 
 
 function add(arg1, arg2){

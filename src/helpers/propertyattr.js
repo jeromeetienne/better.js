@@ -38,7 +38,7 @@ if( typeof(window) === 'undefined' )	module.exports	= PropertyAttr;
 //		.typeCheck()							//
 //////////////////////////////////////////////////////////////////////////////////
 
-var TypeCheck	= TypeCheck	|| require('../src/typecheck.js')
+var TypeCheck	= TypeCheck	|| require('../typecheck.js')
 
 /**
  * check if this property is of validTypes
@@ -57,8 +57,8 @@ PropertyAttr.Builder.prototype.type		= function(types){
 //		.trackUsage()							//
 //////////////////////////////////////////////////////////////////////////////////
 
-var QGetterSetter	= QGetterSetter	|| require('../src/qgettersetter.js');
-var Stacktrace		= Stacktrace	|| require('../src/stacktrace.js');
+var QGetterSetter	= QGetterSetter	|| require('../qgettersetter.js');
+var Stacktrace		= Stacktrace	|| require('../stacktrace.js');
 
 // create the tracker for .trackUsage
 PropertyAttr.usageTracker	= new Stacktrace.Tracker();
@@ -90,7 +90,7 @@ PropertyAttr.Builder.prototype.track		= function(trackName){
 //		.privateOf()							//
 //////////////////////////////////////////////////////////////////////////////////
 
-var PrivateForJS	= PrivateForJS	|| require('../src/privateforjs.js');
+var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
 
 /**
  * Mark this property as private

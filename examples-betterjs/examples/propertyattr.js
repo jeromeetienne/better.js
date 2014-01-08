@@ -1,4 +1,4 @@
-global.Bjs	= require('./better.js')
+global.Bjs	= require('../better.js')
 
 var foo		= {
 	bar	: 2

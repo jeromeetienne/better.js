@@ -1,5 +1,5 @@
 
-var FunctionAttr	= FunctionAttr	|| require('../src/functionattr.js');
+var FunctionAttr	= FunctionAttr	|| require('../src/helpers/functionattr.js');
 require('./helpers/privateforjs-privatize.js');
 
 var aClass1	= function(){
@@ -14,7 +14,6 @@ aClass1.prototype.bar	= function aClass1_bar(){
 aClass1	= FunctionAttr.define(aClass1)
 	.privatize()
 	.done();
-
 
 var aObject	= new aClass1()
 

@@ -1,4 +1,4 @@
-global.Bjs	= require('./better.js')
+global.Bjs	= require('../better.js')
 
 // console.log('stack', Bjs.stack()[0].originId())
 

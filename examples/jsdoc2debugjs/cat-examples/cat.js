@@ -1,5 +1,5 @@
-// var FunctionAttr= FunctionAttr	|| require('../../../src/functionattr.js')
-// var PropertyAttr= PropertyAttr	|| require('../../../src/propertyattr.js')
+// var FunctionAttr= FunctionAttr	|| require('../../../src/helpers/functionattr.js')
+// var PropertyAttr= PropertyAttr	|| require('../../../src/helpers/propertyattr.js')
 
 /**
  * fake class for car

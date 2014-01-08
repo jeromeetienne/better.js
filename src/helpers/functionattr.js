@@ -47,6 +47,7 @@ FunctionAttr.wrapCall	= function(originalFn, beforeFn, afterFn){
 // TODO what is this stopNow ??? it isnt even used
 		// forward the call to the original function
 		var result	= originalFn.apply(this, arguments);
+console.log('warpCall', this)
 		// call afterFn if needed
 		if( afterFn )	afterFn(originalFn, arguments, result);
 		// return the result
@@ -238,7 +239,7 @@ FunctionAttr.Builder.prototype.breakpoint	= function(fn, conditionFn){
 //		comment								//
 //////////////////////////////////////////////////////////////////////////////////
 
-var TypeCheck	= TypeCheck	|| require('../src/typecheck.js');
+var TypeCheck	= TypeCheck	|| require('../typecheck.js');
 
 /**
  * check function type as in ```TypeCheck.fn``` from typecheck.js
@@ -255,7 +256,7 @@ FunctionAttr.Builder.prototype.typeCheck	= function(paramsTypes, returnTypes){
 //		.trackUsage()							//
 //////////////////////////////////////////////////////////////////////////////////
 
-var Stacktrace	= Stacktrace	|| require('../src/stacktrace.js');
+var Stacktrace	= Stacktrace	|| require('../stacktrace.js');
 
 // create the tracker for .trackUsage
 FunctionAttr.usageTracker	= new Stacktrace.Tracker();
@@ -282,7 +283,7 @@ FunctionAttr.Builder.prototype.trackUsage	= function(trackName){
 //		.private()							//
 //////////////////////////////////////////////////////////////////////////////////
 
-var PrivateForJS	= PrivateForJS	|| require('../src/privateforjs.js');
+var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
 
 /**
  * Mark this function as private

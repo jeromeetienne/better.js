@@ -89,11 +89,56 @@ BetterJS.qGetter	= QGetterSetter.defineGetter
 BetterJS.qSetter	= QGetterSetter.defineSetter
 
 //////////////////////////////////////////////////////////////////////////////////
+//		comment								//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Same as __LINE__ in C
+*/
+QGetterSetter.defineGetter(BetterJS, '__LINE__', function(){
+	var stacktrace	= Stacktrace.parse();
+	var stackFrame	= stacktrace[2];
+	return stackFrame.line
+})
+
+/**
+ * Same as __FILE__ in C
+*/
+QGetterSetter.defineGetter(BetterJS, '__FILE__', function(){
+	var stacktrace	= Stacktrace.parse();
+	var stackFrame	= stacktrace[2];
+	return stackFrame.basename();
+})
+
+/**
+ * Same as __FUNCTION__ in C
+*/
+QGetterSetter.defineGetter(BetterJS, '__FUNCTION__', function(){
+	var stacktrace	= Stacktrace.parse();
+	var stackFrame	= stacktrace[2];
+	return stackFrame.fct;
+})
+
+Bjs.overloadGlobalLineFileFunction	= function(){
+	var _global	= typeof(window) === 'undefined' ? global : window;
+	QGetterSetter.defineGetter(_global, '__LINE__', function(){
+		return Stacktrace.parse()[2].line
+	})
+	QGetterSetter.defineGetter(_global, '__FILE__', function(){
+		return Stacktrace.parse()[2].basename()
+	})
+	QGetterSetter.defineGetter(_global, '__FUNCTION__', function(){
+		return Stacktrace.parse()[2].fct
+	});
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////
 //		propertyattr.js							//
 //////////////////////////////////////////////////////////////////////////////////
 
 // get it for node.js
-var PropertyAttr	= PropertyAttr		|| require('../src/propertyattr.js');
+var PropertyAttr	= PropertyAttr		|| require('../src/helpers/propertyattr.js');
 // export the class
 BetterJS.PropertyAttr	= PropertyAttr
 BetterJS.property	= PropertyAttr.define
@@ -114,7 +159,7 @@ BetterJS.propertiesType	= function(baseObject, properties){
 //////////////////////////////////////////////////////////////////////////////////
 
 // get it for node.js
-var FunctionAttr	= FunctionAttr		|| require('../src/functionattr.js');
+var FunctionAttr	= FunctionAttr		|| require('../src/helpers/functionattr.js');
 // export the class
 BetterJS.FunctionAttr	= FunctionAttr
 
@@ -122,54 +167,29 @@ BetterJS.fn		= FunctionAttr.define
 
 BetterJS.overloadFunctionAttr	= function(){
 	// NOTES should that be a getter ? it would remove the () in .Bjs()
-	Function.prototype.Bjs	= function(){
+	Function.prototype.attr	= function(){
 		return FunctionAttr.define(this)
 	}	
 }
-
-
-// API to support
-// * add	= Bjs.fn(add)
-// 	.accept(Number, Number)
-// 	.return(Number)
-// 	.done()
-// * 2 noises to remove. the add = and the .done()
-
-// Vector	= Bjs.ctor(Vector).privatize()
-// 		.accept(Number, Number)
-// 		.properties({
-// 			x	: [Number, 'nonan'],
-// 			y	: [Number, 'nonan'],	
-// 		})
-
-// Vector	= Bjs.Class(Vector, {
-// 	accept		: [Number, Number],
-// 	privatize	: true,	// assume any name starting with _ is private
-// 	properties	: {
-// 		x	: [Number, 'nonan'],
-// 		y	: [Number, 'nonan'],	
-// 	}
-// })
-
 
 // //////////////////////////////////////////////////////////////////////////////////
 //		stracktrace.js							//
 //////////////////////////////////////////////////////////////////////////////////
 
 // get it for node.js
-var StackTrace		= StackTrace		|| require('../src/stacktrace.js');
+var Stacktrace		= Stacktrace		|| require('../src/stacktrace.js');
 // export the class
-BetterJS.StackTrace	= StackTrace
+BetterJS.Stacktrace	= Stacktrace
 
-BetterJS.stack		= StackTrace.parse
+BetterJS.stack		= Stacktrace.parse
 
 BetterJS.stackFrame	= function(index){
 	index	= index !== undefined ? index : 0;
-	return StackTrace.parse()[index]
+	return Stacktrace.parse()[index]
 }
 
-BetterJS.StackFrame	= StackTrace.Frame
-BetterJS.StackTracker	= StackTrace.Tracker
+BetterJS.StackFrame	= Stacktrace.Frame
+BetterJS.StackTracker	= Stacktrace.Tracker
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -178,6 +198,6 @@ BetterJS.StackTracker	= StackTrace.Tracker
 
 
 // get it for node.js
-var Ctor	= Ctor		|| require('./helpers/ctor.js');
-BetterJS.Class	= Ctor
+var ClassAttr	= ClassAttr		|| require('../src/helpers/classattr.js');
+BetterJS.Class	= ClassAttr
 
