@@ -13,19 +13,23 @@ test:
 	@./node_modules/.bin/mocha --harmony -R list tests
 
 build:
-	echo 				>  build/debug.js
-	cat src/qgettersetter.js	>> build/debug.js
-	cat src/stacktrace.js		>> build/debug.js
-	cat src/assertwhichstop.js	>> build/debug.js
-	cat src/consolelogger.js	>> build/debug.js
-	cat src/gcmonitor.js		>> build/debug.js
-	cat src/globaldetector.js	>> build/debug.js
-	cat src/privateforjs.js		>> build/debug.js
-	cat src/typecheck.js		>> build/debug.js
-	cat src/objecticer.js		>> build/debug.js
-	cat src/helpers/functionattr.js		>> build/debug.js
-	cat src/helpers/propertyattr.js		>> build/debug.js
-	cat src/helpers/classattr.js		>> build/debug.js
+	echo		 				>  build/better.js
+	cat examples-betterjs/better-buildprefix.js	>> build/better.js
+	cat src/qgettersetter.js			>> build/better.js
+	cat src/stacktrace.js				>> build/better.js
+	cat src/assertwhichstop.js			>> build/better.js
+	cat src/consolelogger.js			>> build/better.js
+	cat src/gcmonitor.js				>> build/better.js
+	cat src/globaldetector.js			>> build/better.js
+	cat src/privateforjs.js				>> build/better.js
+	cat src/typecheck.js				>> build/better.js
+	cat src/objecticer.js				>> build/better.js
+	cat src/helpers/functionattr.js			>> build/better.js
+	cat src/helpers/propertyattr.js			>> build/better.js
+	cat src/helpers/classattr.js			>> build/better.js
+	cat src/helpers/classattr.js			>> build/better.js
+	cat examples-betterjs/better.js			>> build/better.js
+	cat examples-betterjs/better-buildsuffix.js	>> build/better.js
 	
 	#cat vendor/long-stack-traces/lib/long-stack-traces.js	>> build/debug.js
 

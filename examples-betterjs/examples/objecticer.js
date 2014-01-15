@@ -8,7 +8,8 @@ var Bjs	= Bjs	|| require('../better.js')
 		bar	: 'slota'
 	}
 
-	foo	= Bjs.iceWrite(foo)
+	// foo	= Bjs.iceWrite(foo)
+	foo	= Bjs.ObjectIcer(foo, 'write')
 
 	// console.log('unknown property', foo.bla)
 

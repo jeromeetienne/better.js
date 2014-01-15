@@ -5,24 +5,32 @@
  * * object constructor https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/constructor
  */
 
-
 /*
-
-var MyClass	= ClassAttr(function(){
-	privatize	: true;	// privatize functions and property
-				// false
-				// 'functions'	for later
-				// 'properties'	for later
+var MyClass	= ClassAttr(ctor, function(){
+	defaultValues	: ['foo', 'bar', 42],	// set the default values of the arguments
+	inherit		: MyParentClass,	// make this class inherit from MyParentClass
+						// - support instanceOf
+						// - support .super (TODO make it tunable)
+						// - arguments : {
+						// 	parent	: MyParentClass,
+						// 	varName	: 'super'
+						// }
 	ice		: true,	// to prevent read/write non existing properties
 				// 'all' or true
 				// 'none' or false
 				// 'read'
 				// 'write'
+
+
+	privatize	: true;	// privatize functions and property
+				// false
+				// 'functions'	for later
+				// 'properties'	for later
 	accepts		: allowedTypeForFn,
 	properties	: {
 		'yourProp'	: [String, Number]
 	}
-}, attributes)
+})
 */
 
 var QGetterSetter	= QGetterSetter	|| require('../qgettersetter.js');
@@ -75,13 +83,17 @@ console.log('ice', attributes.ice, ObjectIcer.isAvailable)
 		// if( attributes.ice && ObjectIcer.isAvailable === true ){
 		// 	instance	= ObjectIcer(instance)
 		// }
-		
+
 		// honor onAfter
 		onAfter(instance, args)
 		
 		return instance
 	})
-	
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+		
 	function wrapCtor(originalCtor, className, onBefore, onAfter){
 		// arguments default
 		onBefore= onBefore	|| function(instance, args){}
@@ -117,17 +129,11 @@ if( typeof(window) === 'undefined' )	module.exports	= ClassAttr;
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- *  global ```Function``` 
+ *  overload global ```Function``` prototype to add ClassAttr
  *  
  *  ```
  *  var Cat = function(name){
- *  }.classAttr({
- *  	privatize	: true,
- *  	accept		: [String]
- *  	properties	: {
- *  		'name'	: String
- *  	}
- *  })
+ *  }.classAttr({ privatize : true })
  *  ```
  */
 ClassAttr.overloadFunctionPrototype	= function(){

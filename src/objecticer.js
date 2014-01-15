@@ -4,12 +4,13 @@
  * After this, if you write on a unexisting property, you will get an exception, instead of a new property.
  * 
  * @param  {Object} target the object to protect
- * @return {String} permission 'read' to protect only read, 'write' for write only, 'rw' for both
- * @return {Object}        the protected object
+ * @param  {String} permission 'read' to protect only read, 'write' for write only, 'rw' for both
+ * @return {Object} the protected object
  */
 var ObjectIcer	= function(target, permission){
 	console.assert(ObjectIcer.isAvailable, 'harmony Proxy not enable. try chrome://flags or node --harmony')
 	permission	= permission	|| 'rw'
+	console.assert(permission === 'rw' || permission === 'write' || permission === 'read', 'permission argument is invalid')
 	var checkRead	= permission === 'read'	|| permission === 'rw'
 	var checkWrite	= permission === 'write'|| permission === 'rw'
 	// use old proxy API because v8 doesnt have the new API, firefox got it tho
@@ -28,9 +29,9 @@ var ObjectIcer	= function(target, permission){
 			return true
 		},
 		// without this one, i receive errors ?
-		// has: function (name) {
-		// 	return name in target ? true : false
-		// },
+		has	: function (name) {
+			return name in target ? true : false
+		},
 	})
 }
 
