@@ -70,7 +70,7 @@ var ClassAttr	= function(originalCtor, attributes){
 
 
 		// honor .ice
-console.log('ice', attributes.ice, ObjectIcer.isAvailable)
+		// console.log('ice', attributes.ice, ObjectIcer.isAvailable)
 
 		// if( attributes.ice && ObjectIcer.isAvailable === true ){
 		// 	instance	= ObjectIcer(instance)

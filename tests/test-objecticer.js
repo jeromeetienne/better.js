@@ -12,7 +12,7 @@ describe('ObjectIcer (read only)', function(){
 			var dummy = object.fooUnexisting
 			var fail= true;
 		}catch(e){}
-		console.assert(!fail, 'this should never be seen')		
+		console.assert(fail !== true, 'this should never be seen')		
 	});
 
 	it('should not assert() when reading an existing property equal to undefined', function(){
@@ -44,7 +44,7 @@ describe('ObjectIcer (write only)', function(){
 			object.foo2	= "quux";
 			var fail= true;
 		}catch(e){}
-		console.assert(!fail, 'this should never be seen')
+		console.assert(fail !== true, 'this should never be seen')
 	});
 });
 
@@ -61,7 +61,7 @@ describe('ObjectIcer (rw)', function(){
 			var dummy = object.fooUnexisting
 			var fail= true;
 		}catch(e){}
-		console.assert(!fail, 'this should never be seen')		
+		console.assert(fail !== true, 'this should never be seen')		
 	});
 
 	it('should not assert() when reading an existing property equal to undefined', function(){
@@ -81,6 +81,6 @@ describe('ObjectIcer (rw)', function(){
 			object.foo2	= "quux";
 			var fail= true;
 		}catch(e){}
-		console.assert(!fail, 'this should never be seen')
+		console.assert(fail !== true, 'this should never be seen')
 	});
 });

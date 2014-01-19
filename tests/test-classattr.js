@@ -15,19 +15,16 @@ describe('ClassAttr', function(){
 
 	var Cat	= function(name, weight){
 		Animal.call( this );
-		this._name	= name
+		this.name	= name
 		this._weight	= weight
 	}
 	// classattr definition
 	Cat	= ClassAttr(Cat, {
-		arguments	: [String],
-		privatize	: true,
+		arguments	: [String, Number],
+		// privatize	: true,
 		properties	: {
-			_name	: String,
+			name	: String,
 			_weight	: Number	
-		},
-		onAfter		: function(instance, args){
-			console.log('onAfter')
 		}
 	})
 
@@ -42,8 +39,29 @@ describe('ClassAttr', function(){
 	//		comment								//
 	//////////////////////////////////////////////////////////////////////////////////
 	
-	it('works ok', function(){
-		// console.assert(false)
+	it('should be ok if arguments are valid', function(){
+		var cat	= new Cat('kitty', 1)
 	})
 
+	it('should fail if arguments are invalid', function(){
+		try{	
+			var cat		= new Cat(3, 'bar')
+			var failed	= true
+		}catch(e){};
+		console.assert(failed !== true)
+	})
+
+	it('should be ok when property type are valid', function(){
+		var cat	= new Cat('kitty', 1)
+		cat.name= 'Super kitty'
+	})
+
+	it('should fail when property type are invalid', function(){
+		var cat	= new Cat('kitty', 1)
+		try{	
+			cat.name	= 99
+			var failed	= true
+		}catch(e){};
+		console.assert(failed !== true)
+	})
 })

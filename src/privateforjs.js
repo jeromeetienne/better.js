@@ -130,7 +130,7 @@ PrivateForJS.privateFunction	= function(klass, fn){
 PrivateForJS.privatize	= function(klass, instance){
 	console.assert( instance.constructor === klass );
 	console.assert( instance instanceof klass );
-
+// console.log('privatize', arguments)
 // TODO what about the .prototype
 
 	for(var property in instance){
