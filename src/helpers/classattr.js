@@ -6,15 +6,7 @@
  */
 
 /*
-var MyClass	= ClassAttr(ctor, function(){
-	defaultValues	: ['foo', 'bar', 42],	// set the default values of the arguments
-	inherit		: MyParentClass,	// make this class inherit from MyParentClass
-						// - support instanceOf
-						// - support .super (TODO make it tunable)
-						// - arguments : {
-						// 	parent	: MyParentClass,
-						// 	varName	: 'super'
-						// }
+var MyClass	= ClassAttr(ctor, {
 	ice		: true,	// to prevent read/write non existing properties
 				// 'all' or true
 				// 'none' or false
