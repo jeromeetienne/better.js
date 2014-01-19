@@ -6,7 +6,7 @@ It provides a way to define some properties as private, the same for functions.
 It provide strong typing for the object properties.
 The constructor arguements got strong type too.
 
-Basic Usage
+## Basic Usage
 
 ```
 var MyClass	= ClassAttr(function(label, quantity){
@@ -14,7 +14,7 @@ var MyClass	= ClassAttr(function(label, quantity){
 	this.quantity	= quantity
 }, {
 	privatize	: true,
-	accept		: [String, Number],
+	arguments	: [String, Number],
 	properties	: {
 		label	: String,
 		quantity: Number
@@ -31,7 +31,7 @@ var MyClass	= ClassAttr(function(label, quantity){
 	this._quantity	= quantity
 }, {
 	privatize	: true,
-	accept		: [String, Number],
+	arguments	: [String, Number],
 	properties	: {
 		_label	: String,
 		_quantity: Number

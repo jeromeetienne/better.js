@@ -47,7 +47,7 @@ FunctionAttr.wrapCall	= function(originalFn, beforeFn, afterFn){
 // TODO what is this stopNow ??? it isnt even used
 		// forward the call to the original function
 		var result	= originalFn.apply(this, arguments);
-console.log('warpCall', this)
+// console.log('warpCall', this)
 		// call afterFn if needed
 		if( afterFn )	afterFn(originalFn, arguments, result);
 		// return the result

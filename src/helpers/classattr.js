@@ -18,7 +18,7 @@ var MyClass	= ClassAttr(ctor, {
 				// false
 				// 'functions'	for later
 				// 'properties'	for later
-	accepts		: allowedTypeForFn,
+	arguments	: allowedTypeForFn,
 	properties	: {
 		'yourProp'	: [String, Number]
 	}
@@ -42,9 +42,9 @@ var ClassAttr	= function(originalCtor, attributes){
 	var onAfter	= attributes.onAfter	|| function(instance, args){}
 	
 	return wrapCtor(originalCtor, className, function(instance, args){
-		// honor .accept
-		if( attributes.accept ){
-			var allowedTypes	= attributes.accept
+		// honor .arguments
+		if( attributes.arguments ){
+			var allowedTypes	= attributes.arguments
 			for(var i = 0; i < allowedTypes.length; i++){
 				var isValid	= TypeCheck.value(args[i], allowedTypes[i]);			
 				console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', args[i])
