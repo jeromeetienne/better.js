@@ -19,7 +19,7 @@
  * @param  {Object} baseObject The base object on which we operate
  * @param  {String} property   The string of property
  */
-var QGetterSetter	= {};
+var QGetterSetter2	= {};
 
 /**
  * Define a getter/setter for a property
@@ -27,7 +27,7 @@ var QGetterSetter	= {};
  * @param {Object} baseObject the base object which is used
  * @param {String} property   the name of the property
  */
-QGetterSetter._Property	= function(baseObject, property){
+QGetterSetter2._Property	= function(baseObject, property){
 	// sanity check 
 	console.assert( typeof(baseObject) === 'object' || typeof(baseObject) === 'function' );
 	console.assert( typeof(property) === 'string' );
@@ -38,30 +38,63 @@ QGetterSetter._Property	= function(baseObject, property){
 	this._getters	= [];
 	this._setters	= [];
 	// define the root getter
-	baseObject.__defineGetter__(property, function getterHandler(){
-		var value	= baseObject['__'+property];
-		for(var i = 0; i < _this._getters.length; i++){
-			// TODO why those extra param are needed
-			// - needed for privateforjs to identify the origin
-			// - is that the proper format ?
-			// - is that important for setter
-			value	= _this._getters[i](value, getterHandler.caller, property)
-		}
-		return value;
-	});
-	// define the root setter		
-	baseObject.__defineSetter__(property, function(value){
-		for(var i = 0; i < _this._setters.length; i++){
-			value	= _this._setters[i](value)
-		}
-		baseObject['__'+property] = value;
-	});
-	// set the originValue
-	baseObject['__'+property]	= originValue;
+	// baseObject.__defineGetter__(property, function getterHandler(){
+	// 	var value	= baseObject['__'+property];
+	// 	for(var i = 0; i < _this._getters.length; i++){
+	// 		// TODO why those extra param are needed
+	// 		// - needed for privateforjs to identify the origin
+	// 		// - is that the proper format ?
+	// 		// - is that important for setter
+	// 		value	= _this._getters[i](value, getterHandler.caller, property)
+	// 	}
+	// 	return value;
+	// });
+
+	// the storage value
+	Object.defineProperty(baseObject, '__' + property, {
+	        enumerable	: false,
+	        writable	: true,
+	        value		: baseObject[property],
+	})
+	// the accessed value
+	Object.defineProperty(baseObject, property, {
+	        enumerable	: true,
+		get		: function getterHandler(){
+			var value	= baseObject['__'+property];
+			for(var i = 0; i < _this._getters.length; i++){
+				value	= _this._getters[i](value, getterHandler.caller, property)
+			}
+			return value;
+		},
+		set		: function setterHandler(value){
+			for(var i = 0; i < _this._setters.length; i++){
+				value	= _this._setters[i](value)
+			}
+			baseObject['__'+property] = value;
+		},
+	})
 };
 
 // export the class in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= QGetterSetter;
+if( typeof(window) === 'undefined' )	module.exports	= QGetterSetter2;
+
+/**
+ * init baseObject to be able to ahndle qGetterSetter
+ * @param  {Object} baseObject the base object to modify
+ * @param  {String} property   the property which is handled
+ * @return {String}            the created property name
+ */
+QGetterSetter2._initObjectIfNeeded	= function(baseObject, property){
+	var name	= "__bjsGetSet_" + property;
+	// define the property to store all the getters/setter
+	if( baseObject[name] === undefined ){
+		Object.defineProperty(baseObject, name, {
+		        enumerable	: false,
+		        value		: new QGetterSetter2._Property(baseObject, property)
+		});
+	}
+	return name
+}
 
 /**
  * define a getter 
@@ -70,10 +103,9 @@ if( typeof(window) === 'undefined' )	module.exports	= QGetterSetter;
  * @param  {string} property   the property name which gonna get the getter
  * @param  {Function} getterFn   function which handle the getter
  */
-QGetterSetter.defineGetter	= function(baseObject, property, getterFn){
-	var name	= "__dbgGetSet_" + property;
-	// init QGetterSetter for this property if needed
-	baseObject[name]= baseObject[name] || new QGetterSetter._Property(baseObject, property);
+QGetterSetter2.defineGetter	= function(baseObject, property, getterFn){
+	// init QGetterSetter2 on this property if needed
+	var name	= QGetterSetter2._initObjectIfNeeded(baseObject, property)
 	// setup the new getter
 	baseObject[name]._getters.push(getterFn)
 }
@@ -85,10 +117,9 @@ QGetterSetter.defineGetter	= function(baseObject, property, getterFn){
  * @param  {string} property   the property name which gonna get the setter
  * @param  {Function} setterFn   function which handle the setter
  */
-QGetterSetter.defineSetter	= function(baseObject, property, setterFn){
-	var name	= "__dbgGetSet_" + property;
-	// init QGetterSetter for this property if needed
-	baseObject[name]= baseObject[name] || new QGetterSetter._Property(baseObject, property);
+QGetterSetter2.defineSetter	= function(baseObject, property, setterFn){
+	// init QGetterSetter2 on this property if needed
+	var name	= QGetterSetter2._initObjectIfNeeded(baseObject, property)
 	// setup the new setter
 	baseObject[name]._setters.push(setterFn)
 }
@@ -102,11 +133,11 @@ QGetterSetter.defineSetter	= function(baseObject, property, setterFn){
  * 
  * TODO put that in example/js ?
  */
-QGetterSetter.overloadObjectPrototype	= function(){	
+QGetterSetter2.overloadObjectPrototype	= function(){	
 	Object.prototype.__defineQGetter__	= function(property, getterFn){
-		QGetterSetter.defineGetter(this, property, getterFn);
+		QGetterSetter2.defineGetter(this, property, getterFn);
 	};
 	Object.prototype.__defineQSetter__	= function(property, setterFn){
-		QGetterSetter.defineSetter(this, property, setterFn);
+		QGetterSetter2.defineSetter(this, property, setterFn);
 	};
 }

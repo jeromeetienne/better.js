@@ -28,7 +28,7 @@ var Cat	= function(name){
 Cat.prototype = Object.create( Animal.prototype );
 
 Cat.prototype.salute	= function(){
-	return 'miaou'
+	return 'miaou'+this._yo
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -58,6 +58,6 @@ console.log('name', cat.name)
 
 // cat.prout	= 99
 
-// console.log('name', cat._yo)
+console.log('salute', cat.salute())
 
 

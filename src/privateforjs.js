@@ -19,6 +19,7 @@ if( typeof(window) === 'undefined' )	module.exports	= PrivateForJS;
 
 /**
  * determine which function is considered private for klass 
+ * 
  * @param  {function} klass  the constructor of the class
  * @param  {object|function|function[]} [source] private functions - if Function, use it directly.
  *                           if Array.<function>, then each item is a private function
@@ -41,7 +42,7 @@ PrivateForJS.pushPrivateOkFn	= function(klass, source){
 		});
 	}else if( source instanceof Array ){
 		source.forEach(function(fn){
-			console.assert( typeof(val) !== 'function' );
+			console.assert( typeof(fn) !== 'function' );
 			klass._privateOkFn.push(fn);			
 		});
 	}else	console.assert(false);
@@ -74,7 +75,7 @@ PrivateForJS.privateProperty	= function(klass, baseObject, property){
 // @TODO should i put a setter too ?
 	QGetterSetter.defineGetter(baseObject, property, function aFunction(value, caller, property){
 		// generate privateOkFns if needed - functions which can access private properties
-		klass._privateOkFn	= klass._privateOkFn || PrivateForJS.pushPrivateOkFn(klass);
+		klass._privateOkFn	= klass._privateOkFn || PrivateForJS.pushPrivateOkFn(baseObject);
 		// if caller not privateOK, notify the caller
 		var privateOkFns= klass._privateOkFn;
 		if( privateOkFns.indexOf(caller) === -1 ){
@@ -136,7 +137,7 @@ PrivateForJS.privatize	= function(klass, instance){
 	for(var property in instance){
 		var value	= instance[property]
 		if( property[0] !== '_' )		continue;
-		if(!instance.hasOwnProperty(property))continue;		
+		if(!instance.hasOwnProperty(property))	continue;
 		PrivateForJS.privateProperty(klass, instance, property);
 	}
 };

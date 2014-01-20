@@ -25,14 +25,12 @@ var MyClass	= ClassAttr(ctor, {
 })
 */
 
-var QGetterSetter	= QGetterSetter	|| require('../qgettersetter.js');
-var TypeCheck		= TypeCheck	|| require('../typecheck.js');
+var TypeCheck2		= TypeCheck2	|| require('../typecheck2.js');
 var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
-var ObjectIcer		= ObjectIcer	|| require('../objecticer.js');
 
 var ClassAttr	= function(originalCtor, attributes){
 	// handle arguments default values
-	attributes	= attributes	|| {}
+	attributes	= attributes	|| ClassAttr.defaultAttributes
 	
 	// arguments parameter checks
 	console.assert(originalCtor instanceof Function, 'invalid parameter type')
@@ -46,7 +44,7 @@ var ClassAttr	= function(originalCtor, attributes){
 		if( attributes.arguments ){
 			var allowedTypes	= attributes.arguments
 			for(var i = 0; i < allowedTypes.length; i++){
-				var isValid	= TypeCheck.value(args[i], allowedTypes[i]);			
+				var isValid	= TypeCheck2.value(args[i], allowedTypes[i]);			
 				console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', args[i])
 			}
 		}
@@ -54,17 +52,11 @@ var ClassAttr	= function(originalCtor, attributes){
 		// honor onBefore
 		onBefore(instance, args)
 	}, function(instance, args){
-		// honor .privatize
-		if( attributes.privatize ){
-			PrivateForJS.pushPrivateOkFn(originalCtor)
-			PrivateForJS.privatize(originalCtor, instance)
-		}
-
 		// honor .properties
 		if( attributes.properties ){
 			Object.keys(attributes.properties).forEach(function(property){
 				var allowedTypes	= attributes.properties[property]
-				TypeCheck.setter(instance, property, allowedTypes)
+				TypeCheck2.setter(instance, property, allowedTypes)
 			})
 		}
 
@@ -79,6 +71,12 @@ var ClassAttr	= function(originalCtor, attributes){
 		// honor onAfter
 		onAfter(instance, args)
 		
+		// honor .privatize
+		if( attributes.privatize ){
+			PrivateForJS.pushPrivateOkFn(originalCtor)
+			PrivateForJS.privatize(originalCtor, instance)
+		}
+
 		return instance
 	})
 
@@ -111,6 +109,13 @@ var ClassAttr	= function(originalCtor, attributes){
 		return fn
 	}
 }
+
+/**
+ * default attributes value to use if not provided
+ * 
+ * @type {Object}
+ */
+ClassAttr.defaultAttributes	= {};
 
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= ClassAttr;

@@ -11,10 +11,10 @@ For normal functions
 FunctionAttr(function(label, quantity){
 	
 }, {
-	accept	: [String, Number],
-	return	: String,
-	onBefore: function(){},
-	onAfter	: function(){},
+	arguments	: [String, Number],
+	return		: String,
+	onBefore	: function(){},
+	onAfter		: function(){},
 })
 ```
 

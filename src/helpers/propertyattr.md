@@ -6,9 +6,10 @@ This part needs a total refactor
 ### Possible new api
 
 ```
-PropertyAttr(this, '_foo', {
+PropertyAttr2(cat, '_foo', {
 	type	: String,
 	private	: true,
+	class	: Cat, 
 })
 ```
 
