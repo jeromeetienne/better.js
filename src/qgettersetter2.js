@@ -37,19 +37,6 @@ QGetterSetter2._Property	= function(baseObject, property){
 	var _this	= this;
 	this._getters	= [];
 	this._setters	= [];
-	// define the root getter
-	// baseObject.__defineGetter__(property, function getterHandler(){
-	// 	var value	= baseObject['__'+property];
-	// 	for(var i = 0; i < _this._getters.length; i++){
-	// 		// TODO why those extra param are needed
-	// 		// - needed for privateforjs to identify the origin
-	// 		// - is that the proper format ?
-	// 		// - is that important for setter
-	// 		value	= _this._getters[i](value, getterHandler.caller, property)
-	// 	}
-	// 	return value;
-	// });
-
 	// the storage value
 	Object.defineProperty(baseObject, '__' + property, {
 	        enumerable	: false,

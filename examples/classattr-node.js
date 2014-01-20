@@ -48,7 +48,6 @@ Cat	= ClassAttr(Cat, {
 
 var cat	= new Cat('kitty')
 
-
 console.assert(cat instanceof Cat)
 console.assert(cat instanceof Animal)
 console.assert(typeof(cat.name) === 'string')

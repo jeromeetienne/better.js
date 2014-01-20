@@ -53,7 +53,7 @@ TypeCheck2.fn	= function(originalFn, paramsTypes, returnTypes){
 // TODO is this usefull ? isnt that a duplicate with propertyAttr2
 
 	return function TypeCheck2_fn(){
-		// check parameters type
+		// check arguments type
 		console.assert(arguments.length <= paramsTypes.length, 'function received '+arguments.length+' parameters but allows only '+paramsTypes.length+'!');
 		for(var i = 0; i < paramsTypes.length; i++){
 			var isValid	= TypeCheck2.value(arguments[i], paramsTypes[i]);			
