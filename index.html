@@ -83,7 +83,7 @@
               can use it. If the caller isnt a friend function, the code is immediatly interrupted.
               It is that simple.
             </p>
-            <p><a class="btn btn-lg btn-success" href="https://github.com/jeromeetienne/better.js/" role="button">Go Github</a></p>
+            <p><a class="btn btn-lg btn-success" href="#privateInJavascript" role="button">Read More</a></p>
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@
               When a variable is set with the wrong type, the code is immediatly 
               stopped. Thus you detect bugs faster and write a better javascript.
             </p>
-            <p><a class="btn btn-lg btn-success" href="https://github.com/jeromeetienne/better.js/" role="button">Go Github</a></p>
+            <p><a class="btn btn-lg btn-success" href="#strongTypingInJavascript" role="button">Read More</a></p>
             </div>
           </div>
         </div>
@@ -135,7 +135,7 @@
       <!-- Three columns of text below the carousel -->
       <div class="row">
         <div class="col-lg-4">
-          <h2>Find Bugs Earlier</h2>
+          <h2>Faster Bug Fixes</h2>
           <p>Increase the verification done in the code.
             Support <code>private</code> to be sure your code is used from where it is 
             intented. Support <code>Strong Typing</code> to know when people are sending you garbage. All that lead to faster bug fixes. so better code.</p>
@@ -143,16 +143,16 @@
         <div class="col-lg-4">
           <h2>Better Code Monitoring</h2>
           <p>Thus you measure more accuratly what your code is actually doing. 
+            Monitor Garbage Collection or Global Variables.
             Good measures leads to better decision on which action to take.</p>
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-4">
-          <h2>Compatible With Javascript</h2>
-          <p>Javascript is <a href='http://en.wiktionary.org/wiki/ubiquitous'>ubiquitous</a>.
-            You can run it on server or browser
-            whatever the OS. 
-            Js is unique in that.
-            This is a very strong feature.
-            Let's keep it.
+          <h2>Pure 100% Javascript</h2>
+          <p>No new language to learn.
+            No compilation to javascript.
+            Only good old javascript.
+            Javascript is open standard and run everywhere.
+            You can't beat that.
           </p>
         </div><!-- /.col-lg-4 -->
       </div><!-- /.row -->
@@ -162,21 +162,21 @@
 
       <hr class="featurette-divider">
 
-      <div class="row featurette">
+      <div class="row featurette" id='privateInJavascript'>
         <div class="col-md-5">
           <h2 class="featurette-heading">Private in Javascript <span class="text-muted">Be sure your code is used from where it is intented.</span></h2>
-          <p class="lead">Better.js adds private/public support to javascript.
-          It is possible to declare a property or a function as private, and Better.js
-          will check it for you.
-          If it is used from outside the class, it will stop immediatly.
-          </p>
+          <p class="lead">Better.js adds <strong>private/public</strong> 
+            support to javascript.
+            It is possible to declare a property or a function as private, and Better.js
+            will check it for you.
+            If it is used from outside the class, it will stop immediatly.</p>
         </div>
         <div class="col-md-7">
           <pre class="prettyprint" style='font-size:140%'>
 // definition of the class
 var Cat = function(){
   this._name  = 'kitty'
-});
+})
 // Make it Better.js with privatize
 Cat = Bjs.Class(Cat, {
   privatize : true
@@ -199,13 +199,13 @@ console.log("cat's name is", cat._name)
 
       <hr class="featurette-divider">
 
-      <div class="row featurette">
+      <div class="row featurette" id='strongTypingInJavascript'>
         <div class="col-md-7">
           <pre class="prettyprint" style='font-size:140%'>
 // definition of the function
 var add = function(a, b){
   return a + b;
-});
+})
 
 // Make it better.js
 add = Bjs.Function(add, {
@@ -231,7 +231,7 @@ add('hello', 'world')
           <p class="lead">Better.js adds <strong>strong typing</strong> support to javascript.
           It is possible to declare the allowed type of each property. 
           If somebody set it to a wrong type, it is stopped immediatly.
-          The same for function arguments, you defined the allowed types and 
+          The same for function arguments, you define the allowed types and 
           better.js will make sure they are respected.
           </p>
         </div>
@@ -264,7 +264,7 @@ add('hello', 'world')
     <script type="text/javascript">  
       jQuery(function(){
         prettyPrint();
-      });
+      })
     </script>
 
     <!-- github ribbon -->

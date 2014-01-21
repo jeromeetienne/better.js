@@ -10,7 +10,6 @@ var Vector	= function(x, y){
 	this.x	= x
 	this.y	= y
 	
-	console.log
 	Bjs.propertiesType(this, {
 		x	: [Number, 'nonan'],
 		y	: [Number, 'nonan'],

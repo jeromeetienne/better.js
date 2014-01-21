@@ -1,7 +1,7 @@
 {
-  "name": "debug.js",
-  "version": "0.0.0",
-  "main": "build/debug.js",
+  "name": "better.js",
+  "version": "0.0.1",
+  "main": "build/better.js",
   "ignore": [
     "**/.*",
     "node_modules",

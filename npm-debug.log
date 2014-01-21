@@ -1,0 +1,110 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'link' ]
+2 info using npm@1.3.11
+3 info using node@v0.10.21
+4 verbose linkPkg /Users/jeromeetienne/webwork/better.js
+5 verbose link build target /usr/local/lib/node_modules/better.js
+6 verbose install where,what [ '/Users/jeromeetienne/webwork/better.js', [] ]
+7 verbose readDependencies using package.json deps
+8 verbose install where, deps [ '/Users/jeromeetienne/webwork/better.js', [ 'mocha' ] ]
+9 info preinstall better.js@0.0.2
+10 verbose readDependencies using package.json deps
+11 verbose already installed skipping mocha@~1.6.0 /Users/jeromeetienne/webwork/better.js
+12 silly resolved []
+13 info build /Users/jeromeetienne/webwork/better.js
+14 verbose linkStuff [ false, false, false, '/Users/jeromeetienne/webwork' ]
+15 info linkStuff better.js@0.0.2
+16 verbose linkBins better.js@0.0.2
+17 verbose linkMans better.js@0.0.2
+18 verbose rebuildBundles better.js@0.0.2
+19 verbose rebuildBundles [ '.bin', 'esprima', 'falafel', 'mocha', 'uglify-js' ]
+20 verbose rebuild bundle /Users/jeromeetienne/webwork/better.js/node_modules/esprima
+21 info build /Users/jeromeetienne/webwork/better.js/node_modules/esprima
+22 info preinstall esprima@1.0.4
+23 verbose linkStuff [ false,
+23 verbose linkStuff   false,
+23 verbose linkStuff   false,
+23 verbose linkStuff   '/Users/jeromeetienne/webwork/better.js/node_modules' ]
+24 info linkStuff esprima@1.0.4
+25 verbose linkBins esprima@1.0.4
+26 verbose link bins [ { esparse: './bin/esparse.js',
+26 verbose link bins     esvalidate: './bin/esvalidate.js' },
+26 verbose link bins   '/Users/jeromeetienne/webwork/better.js/node_modules/.bin',
+26 verbose link bins   false ]
+27 verbose linkMans esprima@1.0.4
+28 verbose rebuildBundles esprima@1.0.4
+29 info install esprima@1.0.4
+30 info postinstall esprima@1.0.4
+31 verbose rebuild bundle /Users/jeromeetienne/webwork/better.js/node_modules/falafel
+32 info build /Users/jeromeetienne/webwork/better.js/node_modules/falafel
+33 info preinstall falafel@0.3.1
+34 verbose linkStuff [ false,
+34 verbose linkStuff   false,
+34 verbose linkStuff   false,
+34 verbose linkStuff   '/Users/jeromeetienne/webwork/better.js/node_modules' ]
+35 info linkStuff falafel@0.3.1
+36 verbose linkBins falafel@0.3.1
+37 verbose linkMans falafel@0.3.1
+38 verbose rebuildBundles falafel@0.3.1
+39 verbose rebuildBundles [ '.bin', 'esprima' ]
+40 verbose rebuild bundle /Users/jeromeetienne/webwork/better.js/node_modules/falafel/node_modules/esprima
+41 info build /Users/jeromeetienne/webwork/better.js/node_modules/falafel/node_modules/esprima
+42 info preinstall esprima@1.1.0-dev
+43 verbose linkStuff [ false,
+43 verbose linkStuff   false,
+43 verbose linkStuff   false,
+43 verbose linkStuff   '/Users/jeromeetienne/webwork/better.js/node_modules/falafel/node_modules' ]
+44 info linkStuff esprima@1.1.0-dev
+45 verbose linkBins esprima@1.1.0-dev
+46 verbose link bins [ { esparse: './bin/esparse.js',
+46 verbose link bins     esvalidate: './bin/esvalidate.js' },
+46 verbose link bins   '/Users/jeromeetienne/webwork/better.js/node_modules/falafel/node_modules/.bin',
+46 verbose link bins   false ]
+47 verbose linkMans esprima@1.1.0-dev
+48 verbose rebuildBundles esprima@1.1.0-dev
+49 info install esprima@1.1.0-dev
+50 info postinstall esprima@1.1.0-dev
+51 info install falafel@0.3.1
+52 info postinstall falafel@0.3.1
+53 verbose rebuild bundle /Users/jeromeetienne/webwork/better.js/node_modules/uglify-js
+54 info build /Users/jeromeetienne/webwork/better.js/node_modules/uglify-js
+55 info preinstall uglify-js@2.4.9
+56 verbose linkStuff [ false,
+56 verbose linkStuff   false,
+56 verbose linkStuff   false,
+56 verbose linkStuff   '/Users/jeromeetienne/webwork/better.js/node_modules' ]
+57 info linkStuff uglify-js@2.4.9
+58 verbose linkBins uglify-js@2.4.9
+59 verbose link bins [ { uglifyjs: 'bin/uglifyjs' },
+59 verbose link bins   '/Users/jeromeetienne/webwork/better.js/node_modules/.bin',
+59 verbose link bins   false ]
+60 verbose linkMans uglify-js@2.4.9
+61 verbose rebuildBundles uglify-js@2.4.9
+62 verbose rebuildBundles [ 'async', 'optimist', 'source-map', 'uglify-to-browserify' ]
+63 info install uglify-js@2.4.9
+64 info postinstall uglify-js@2.4.9
+65 info install better.js@0.0.2
+66 info postinstall better.js@0.0.2
+67 info prepublish better.js@0.0.2
+68 info build /usr/local/lib/node_modules/better.js
+69 verbose linkStuff [ true,
+69 verbose linkStuff   '/usr/local/lib/node_modules',
+69 verbose linkStuff   true,
+69 verbose linkStuff   '/usr/local/lib/node_modules' ]
+70 info linkStuff better.js@0.0.2
+71 verbose linkBins better.js@0.0.2
+72 verbose link bins [ { jsdoc2debugjs: './examples/jsdoc2debugjs/jsdoc2debug.js' },
+72 verbose link bins   '/usr/local/bin',
+72 verbose link bins   true ]
+73 verbose linkMans better.js@0.0.2
+74 error Refusing to delete: /usr/local/bin/jsdoc2debugjs not in /usr/local/lib/node_modules/better.js
+File exists: /usr/local/bin/jsdoc2debugjs
+Move it away, and try again.
+75 error System Darwin 11.4.2
+76 error command "node" "/usr/local/bin/npm" "link"
+77 error cwd /Users/jeromeetienne/webwork/better.js
+78 error node -v v0.10.21
+79 error npm -v 1.3.11
+80 error path /usr/local/bin/jsdoc2debugjs
+81 error code EEXIST
+82 verbose exit [ 1, true ]
