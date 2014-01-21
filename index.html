@@ -5,24 +5,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="library to help you write a better javascript">
-    <meta name="author" content="jerome etienne">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
 
-    <title>Better.js - a better Javascript in Javascript.</title>
+    <title>Carousel Template for Bootstrap</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <style>
-      body {
-        padding-top: 50px;
-      }
-      .starter-template {
-        padding: 40px 15px;
-        text-align: center;
-      }
-    </style>
+    <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -32,8 +22,15 @@
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
     <![endif]-->
-  </head>
 
+    <!-- Custom styles for this template -->
+    <link href="vendor/carousel.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="vendor/prettify/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="vendor/prettify-theme-sons-of-obsidian-dark.css" />
+
+  </head>
+<!-- NAVBAR
+================================================== -->
   <body>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
@@ -57,53 +54,219 @@
       </div>
     </div> <!-- end of navbar -->
 
-    <div class="container">
+    <style>
+    #myCarousel h1 {
+      font-size: 400%;
+    }
+    </style>
 
-
-      <!-- Jumbotron -->
-      <div class="jumbotron">
-        <h1>Better.js&nbsp;<small>for a Better Javascript 
-          <span style='color: #DB5F54; -webkit-transform: rotate(-20deg); -moz-transform: rotate(-20deg);display: inline-block; font-weight: bolder;'>in</span>
-          Javascript</small></h1>
-        <p class="lead">
-          Javascript is everywhere but it may become hard to debug sometime.
-          <em>better.js library</em> provide the tools to help you write your javascript
-          and keep it running smoothly.
-        </p>
-        <p><a class="btn btn-lg btn-success" href="https://github.com/jeromeetienne/better.js/" role="button">Go Github</a></p>
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+      <!-- Indicators -->
+      <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="item active">
+          <img data-src="holder.js/900x500/auto/#777:#7a7a7a/text:Better Javascript" alt="First slide">
+          <div class="container">
+            <div class="carousel-caption">
+            <h1>Javascript got no <code>private</code>!</h1>
+            <h1 style='color: red; -webkit-transform: rotate(-20deg); -moz-transform: rotate(-20deg);display: inline-block; font-weight: bolder;'>Think Again!</h1>
+            <h2>With Better.js it does!</h2>
+            <p>
+              Suppose you got an instance of class, better.js will monitor who call which function
+              or use which property. If the property is private, only the friend functions
+              can use it. If the caller isnt a friend function, the code is immediatly interrupted.
+              It is that simple.
+            </p>
+            <p><a class="btn btn-lg btn-success" href="https://github.com/jeromeetienne/better.js/" role="button">Go Github</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img data-src="holder.js/900x500/auto/#777:#7a7a7a/text:Better Javascript" alt="First slide">
+          <div class="container">
+            <div class="carousel-caption">
+            <h1>Javascript got no <code>strong typing</code>!</h1>
+            <h1 style='color: red; -webkit-transform: rotate(-20deg); -moz-transform: rotate(-20deg);display: inline-block; font-weight: bolder;'>Think Again!</h1>
+            <h2>With Better.js it does!</h2>
+            <p>
+              When a variable is set with the wrong type, the code is immediatly 
+              stopped. Thus you detect bugs faster and write a better javascript.
+            </p>
+            <p><a class="btn btn-lg btn-success" href="https://github.com/jeromeetienne/better.js/" role="button">Go Github</a></p>
+            </div>
+          </div>
+        </div>
+        <div class="item">
+          <img data-src="holder.js/900x500/auto/#777:#7a7a7a/text:Better Javascript" alt="First slide">
+          <div class="container">
+            <div class="carousel-caption">
+            <h1 style='font-size: 700%'>Better.js<h1>
+            <h2 style='font-size: 200%'>for a Better Javascript 
+              <span style='color: #DB5F54; -webkit-transform: rotate(-20deg); -moz-transform: rotate(-20deg);display: inline-block; font-weight: bolder;'>in</span>
+              Javascript</h2>
+            <p>
+              Javascript is everywhere but it may become hard to debug sometime.
+              <em>better.js library</em> provide the tools to help you write your javascript
+              and keep it running smoothly.
+            </p>
+            <p><a class="btn btn-lg btn-success" href="https://github.com/jeromeetienne/better.js/" role="button">Go Github</a></p>
+            </div>
+          </div>
+        </div>
       </div>
+      <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
+      <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+    </div><!-- /.carousel -->
 
-      <!-- Example row of columns -->
+
+
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+
+    <div class="container marketing">
+
+      <!-- Three columns of text below the carousel -->
       <div class="row">
         <div class="col-lg-4">
-          <h2>All in javascript</h2>
-          <p>As it is all in javascript, no other dependancy that you already got.
-            Easy to run where you need it
+          <h2>Find Bugs Earlier</h2>
+          <p>Increase the verification done in the code.
+            Support <code>private</code> to be sure your code is used from where it is 
+            intented. Support <code>Strong Typing</code> to know when people are sending you garbage. All that lead to faster bug fixes. so better code.</p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <h2>Better Code Monitoring</h2>
+          <p>Thus you measure more accuratly what your code is actually doing. 
+            Good measures leads to better decision on which action to take.</p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <h2>Compatible With Javascript</h2>
+          <p>Javascript is <a href='http://en.wiktionary.org/wiki/ubiquitous'>ubiquitous</a>.
+            You can run it on server or browser
+            whatever the OS. 
+            Js is unique in that.
+            This is a very strong feature.
+            Let's keep it.
+          </p>
+        </div><!-- /.col-lg-4 -->
+      </div><!-- /.row -->
+
+
+      <!-- START THE FEATURETTES -->
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Private in Javascript <span class="text-muted">Be sure your code is used from where it is intented.</span></h2>
+          <p class="lead">Better.js adds private/public support to javascript.
+          It is possible to declare a property or a function as private, and Better.js
+          will check it for you.
+          If it is used from outside the class, it will stop immediatly.
           </p>
         </div>
-        <div class="col-lg-4">
-          <h2>Provide Missing Features</h2>
-          <p>
-            Strong type checking, variable range monitoring, garbage collection
-            avoidance, better.js got many feature to help you debug your code
-            and be sure it does what you expect.
-          </p>
-       </div>
-        <div class="col-lg-4">
-          <h2>Browser and server</h2>
-          <p>
-            As it is pure javascript, you can run it in server and in browser.
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+// definition of the class
+var Cat = function(){
+  this._name  = 'kitty'
+});
+// Make it Better.js with privatize
+Cat = Bjs.Class(Cat, {
+  privatize : true
+})
+// Get an instance of this class
+var cat = new Cat()
+// Try to display a private property from outside
+console.log("cat's name is", cat._name)
+
+// Exception Thrown 
+// 'access to private property _name'
+
+// Thanks to Better.js!
+
+// In plain javascript, it would silently ignore the 
+// issue and display the value
+</pre>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+// definition of the function
+var add = function(a, b){
+  return a + b;
+});
+
+// Make it better.js
+add = Bjs.Function(add, {
+  arguments : [Number, Number],
+  return : [Number]
+})
+
+// Try to display pass invalid arguments type
+add('hello', 'world')
+
+// Exception Thrown 
+// 'Invalid argument. it should be a Number'
+
+// Thanks to Better.js!
+
+// In plain javascript, it would silently ignore the
+// issue and execute the code.
+
+</pre>
+        </div>
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Strong Typing <span class="text-muted">Detect when people are sending you garbage.</span></h2>
+          <p class="lead">Better.js adds <strong>strong typing</strong> support to javascript.
+          It is possible to declare the allowed type of each property. 
+          If somebody set it to a wrong type, it is stopped immediatly.
+          The same for function arguments, you defined the allowed types and 
+          better.js will make sure they are respected.
           </p>
         </div>
       </div>
-    </div> <!-- /container -->
+
+      <hr class="featurette-divider">
+      <hr class="featurette-divider">
+
+      <!-- /END THE FEATURETTES -->
+
+
+      <!-- FOOTER -->
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2013 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      </footer>
+
+    </div><!-- /.container -->
 
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    
-    
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="vendor/holder.js"></script>
+
+    <!-- add prettify.js -->
+    <script type="text/javascript" src="vendor/prettify/prettify.js"></script>
+    <script type="text/javascript">  
+      jQuery(function(){
+        prettyPrint();
+      });
+    </script>
+
     <!-- github ribbon -->
     <a href="https://github.com/jeromeetienne/better.js/" target='_blank'><img style="position: absolute; top: 0; right: 0; border: 0;z-index:2000" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
 
