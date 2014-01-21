@@ -58,5 +58,3 @@ console.log('name', cat.name)
 // cat.prout	= 99
 
 console.log('salute', cat.salute())
-
-

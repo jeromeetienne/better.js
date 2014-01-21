@@ -26,7 +26,7 @@ var MyClass	= ClassAttr(ctor, {
 */
 
 var TypeCheck2		= TypeCheck2	|| require('../typecheck2.js');
-var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
+var PrivateForJS3	= PrivateForJS3	|| require('../privateforjs3.js');
 
 var ClassAttr	= function(originalCtor, attributes){
 	// handle arguments default values
@@ -73,8 +73,7 @@ var ClassAttr	= function(originalCtor, attributes){
 		
 		// honor .privatize
 		if( attributes.privatize ){
-			PrivateForJS.pushPrivateOkFn(originalCtor)
-			PrivateForJS.privatize(originalCtor, instance)
+			PrivateForJS3.privatize(instance)
 		}
 
 		return instance

@@ -32,10 +32,10 @@ describe('ClassAttr', function(){
 	Cat	= ClassAttr(Cat, {
 		arguments	: [String, Number],
 		privatize	: true,
-		// properties	: {
-		// 	name	: String,
-		// 	_weight	: Number	
-		// }
+		properties	: {
+			name	: String,
+			_weight	: Number	
+		}
 	})
 
 	//////////////////////////////////////////////////////////////////////////////////
@@ -58,19 +58,19 @@ describe('ClassAttr', function(){
 	//		properties							//
 	//////////////////////////////////////////////////////////////////////////////////
 	
-	// it('should be ok when property type are valid', function(){
-	// 	var cat	= new Cat('kitty', 1)
-	// 	cat.name= 'Super kitty'
-	// })
+	it('should be ok when property type are valid', function(){
+		var cat	= new Cat('kitty', 1)
+		cat.name= 'Super kitty'
+	})
 
-	// it('should fail when property type are invalid', function(){
-	// 	var cat	= new Cat('kitty', 1)
-	// 	try{
-	// 		cat.name	= 99
-	// 		var failed	= true
-	// 	}catch(e){};
-	// 	console.assert(failed !== true)
-	// })
+	it('should fail when property type are invalid', function(){
+		var cat	= new Cat('kitty', 1)
+		try{
+			cat.name	= 99
+			var failed	= true
+		}catch(e){};
+		console.assert(failed !== true)
+	})
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//		privatize							//
@@ -88,5 +88,19 @@ describe('ClassAttr', function(){
 			var failed	= true
 		}catch(e){};
 		console.assert(failed !== true)
+	})
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	it('should be ok with instanceof of its own class', function(){
+		var cat	= new Cat('kitty', 1)
+		console.assert(cat instanceof Cat)
+	})
+
+	it('should be ok with instanceof of its parent class', function(){
+		var cat	= new Cat('kitty', 1)
+		console.assert(cat instanceof Animal)
 	})
 })
