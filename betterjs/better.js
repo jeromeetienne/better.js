@@ -1,10 +1,8 @@
 var BetterJS	= {}
-var Bjs		= BetterJS
 
-// test if we in node.js
-if( typeof(window) === 'undefined' ){
-	module.exports	= BetterJS
-}
+// export the class in node.js - if running in node.js
+if( typeof(window) === 'undefined' )	module.exports	= BetterJS;
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //		export all modules						//
@@ -119,7 +117,7 @@ QGetterSetter.defineGetter(BetterJS, '__FUNCTION__', function(){
 	return stackFrame.fct;
 })
 
-Bjs.overloadGlobalLineFileFunction	= function(){
+BetterJS.overloadGlobalLineFileFunction	= function(){
 	var _global	= typeof(window) === 'undefined' ? global : window;
 	QGetterSetter.defineGetter(_global, '__LINE__', function(){
 		return Stacktrace.parse()[2].line

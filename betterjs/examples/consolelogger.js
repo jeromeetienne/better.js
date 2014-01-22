@@ -1,4 +1,4 @@
-global.Bjs	= Bjs	|| require('../better.js')
+var Bjs	= require('../../build/better.js')
 
 Bjs.log('hello')
 Bjs.warn('prout')
