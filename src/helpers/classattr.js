@@ -73,6 +73,7 @@ var ClassAttr	= function(originalCtor, attributes){
 		
 		// honor .privatize
 		if( attributes.privatize ){
+			PrivateForJS3.initInstance(instance)
 			PrivateForJS3.privatize(instance)
 		}
 

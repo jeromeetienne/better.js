@@ -1,4 +1,5 @@
 var PropertyAttr2	= PropertyAttr2	|| require('../src/helpers/propertyattr2.js')
+var PrivateForJS3	= PrivateForJS3	|| require('../src/privateforjs3.js')
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -42,10 +43,10 @@ console.assert(failed !== true, 'no exception thrown')
 console.log('my name is', cat.name)
 
 
+PrivateForJS3.initInstance(cat)
 PropertyAttr2(cat, '_weight', {
 	// type	: Number,
 	private	: true,
-	class	: Cat,
 })
 console.log('ddd')
 console.log('my weight is', cat._weight)

@@ -3,7 +3,7 @@
  */
 
 var TypeCheck2		= TypeCheck2	|| require('../typecheck2.js');
-var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
+var PrivateForJS3	= PrivateForJS3	|| require('../privateforjs3.js');
 
 /**
  * [FunctionAttr2 description]

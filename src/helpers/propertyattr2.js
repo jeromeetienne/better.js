@@ -3,7 +3,7 @@
  */
 
 var TypeCheck2		= TypeCheck2	|| require('../typecheck2.js');
-var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
+var PrivateForJS3	= PrivateForJS3	|| require('../privateforjs3.js');
 
 /**
  * [PropertyAttr2 description]
@@ -19,12 +19,10 @@ var PropertyAttr2	= function(baseObject, property, attributes){
 		TypeCheck2.setter(baseObject, property, allowedType)
 	}
 
-	// honor .private (.class MUST be set)	
-	// if( attributes.private ){
-	// 	// TODO could it be baseObject.constructor ?
-	// 	console.assert(typeof(attributes.class) === 'function', '.class MUST be set')
-	// 	PrivateForJS.privateProperty(attributes.class, baseObject, property)	
-	// }
+	// honor .private
+	if( attributes.private ){
+		PrivateForJS3.privateProperty(baseObject, property)	
+	}
 }
 
 

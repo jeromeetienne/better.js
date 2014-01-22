@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -13,7 +12,15 @@
 
     <!-- Bootstrap core CSS -->
     <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        min-height: 2000px;
+      }
 
+      .navbar-static-top {
+        margin-bottom: 0px;
+      }
+    </style>
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 
@@ -24,15 +31,15 @@
     <![endif]-->
 
     <!-- Custom styles for this template -->
-    <link href="vendor/carousel.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="vendor/prettify/prettify.css" />
-    <link rel="stylesheet" type="text/css" href="vendor/prettify-theme-sons-of-obsidian-dark.css" />
+    <link href="www/carousel.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="www/prettify/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="www/prettify-theme-sons-of-obsidian-dark.css" />
 
   </head>
 <!-- NAVBAR
 ================================================== -->
   <body>
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="navbar navbar-inverse navbar-static-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -247,7 +254,7 @@ add('hello', 'world')
         
         <div class="col-md-4">
           <div class="thumbnail">
-            <img src="vendor/images/last_thing_you_gonna_see.jpg">
+            <img src="www/images/last_thing_you_gonna_see.jpg">
             <div class="caption">
               <h3>"This is the last thing you gonna see if you mess with javascript!"</h3>
               <p><a href="https://twitter.com/jerome_etienne/status/333203103472046080" class="btn btn-primary" role="button">Tweet</a></p>
@@ -256,7 +263,7 @@ add('hello', 'world')
         </div>
         <div class="col-md-4">
           <div class="thumbnail">
-            <img src="vendor/images/fell_from_even.jpg">
+            <img src="www/images/fell_from_even.jpg">
             <div class="caption">
               <h3>"Javascript fell from heaven!"</h3>
               <p><a href="https://twitter.com/jerome_etienne/status/333200144570929152" class="btn btn-primary" role="button">Tweet</a></p>
@@ -265,7 +272,7 @@ add('hello', 'world')
         </div>
         <div class="col-md-4">
           <div class="thumbnail">
-            <img src="vendor/images/two_thumbs_up.jpg">
+            <img src="www/images/two_thumbs_up.jpg">
             <div class="caption">
               <h3>"Double Thumbs UP for JavaScript!"</h3>
               <p><a href="https://twitter.com/jerome_etienne/status/333196354044178432" class="btn btn-primary" role="button">Tweet</a></p>
@@ -274,7 +281,7 @@ add('hello', 'world')
         </div>
         <div class="col-md-4">
           <div class="thumbnail">
-            <img src="vendor/images/js_is_number_one.jpg">
+            <img src="www/images/js_is_number_one.jpg">
             <div class="caption">
               <h3>"Javascript is Number ONE!"</h3>
               <p><a href="https://twitter.com/jerome_etienne/status/333196061046886400" class="btn btn-primary" role="button">Tweet</a></p>
@@ -283,7 +290,7 @@ add('hello', 'world')
         </div>
         <div class="col-md-4">
           <div class="thumbnail">
-            <img src="vendor/images/love_js_this_much.jpg">
+            <img src="www/images/love_js_this_much.jpg">
             <div class="caption">
               <h3>"i love javascript THIIIIISSS much !"</h3>
               <p><a href="https://twitter.com/jerome_etienne/status/333195407620452352" class="btn btn-primary" role="button">Tweet</a></p>
@@ -304,12 +311,12 @@ add('hello', 'world')
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="vendor/bootstrap/js/jquery-1.10.2.min.js"></script>
+    <script src="www/bootstrap/js/jquery-1.10.2.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="vendor/holder.js"></script>
+    <script src="www/holder.js"></script>
 
     <!-- add prettify.js -->
-    <script type="text/javascript" src="vendor/prettify/prettify.js"></script>
+    <script type="text/javascript" src="www/prettify/prettify.js"></script>
     <script type="text/javascript">  
       jQuery(function(){
         prettyPrint();

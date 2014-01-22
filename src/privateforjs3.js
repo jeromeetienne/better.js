@@ -21,10 +21,19 @@ if( typeof(window) === 'undefined' )	module.exports	= PrivateForJS3;
  * determine which function is considered private for klass 
  * 
  * @param  {function} klass  the constructor of the class
- * @param  {function} source private function to add
+ * @param  {function} privateFn 	private function to add
  */
-PrivateForJS3.pushPrivateOkFn	= function(instance, source){
-	instance._privateOkFn.push(source)
+PrivateForJS3.pushPrivateOkFn	= function(instance, privateFn){
+	// create the storage value if needed - with non enumerable
+	if( instance._privateOkFn === undefined ){
+		Object.defineProperty(instance, '_privateOkFn', {
+		        enumerable	: false,
+		        writable	: true,
+		        value		: [],
+		})
+	}
+	// actually add the function
+	instance._privateOkFn.push(privateFn)
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -38,6 +47,7 @@ PrivateForJS3.pushPrivateOkFn	= function(instance, source){
  * @return {undefined}		nothing
  */
 PrivateForJS3.privateProperty	= function(instance, property){
+	console.assert( '_privateOkFn' in instance, 'this instance isnt init for PrivateForJS3')
 	// check private in the getter
 	QGetterSetter2.defineGetter(instance, property, function aFunction(value, caller, property){
 console.log('check getter property', property)
@@ -46,7 +56,7 @@ console.log('check getter property', property)
 			// get stackFrame for the originId of the user
 			var stackFrame	= Stacktrace.parse()[2]
 			// log the event
-			console.assert(false, 'access to private property', "'"+property+"'", 'from', stackFrame)
+			console.assert(false, 'access to private property "'+property+'" from '+stackFrame)
 		}
 		// actually return the value
 		return value;
@@ -59,7 +69,7 @@ console.log('check setter property', property)
 			// get stackFrame for the originId of the user
 			var stackFrame	= Stacktrace.parse()[2]
 			// log the event
-			console.assert(false, 'access to private property', "'"+property+"'", 'from', stackFrame)
+			console.assert(false, 'access to private property "'+property+'" from '+stackFrame)
 		}
 		// actually return the value
 		return value;
@@ -84,7 +94,7 @@ console.log('check function', functionName)
 			// get stackFrame for the originId of the user
 			var stackFrame	= Stacktrace.parse()[1]
 			// log the event
-			console.assert(false, 'access to private function', "'"+functionName+"'", 'from', stackFrame);
+			console.assert(false, 'access to private function "'+functionName+'" from '+stackFrame)
 		}
 		// forward the call to the original function
 		return fn.apply(this, arguments);
@@ -95,40 +105,31 @@ console.log('check function', functionName)
 //		Helpers								//
 //////////////////////////////////////////////////////////////////////////////////
 
-
 /**
- * Privatize all property/function which start with a ```_```. 
- * Especially useful at the end of a constructor.
+ * get all the functions of the instance, and declare them privateOK
  * 
- * @param  {Function} klass	constructor for the class
- * @param  {object} instance	the instance of the object
+ * @param  {Object} instance [description]
  */
-PrivateForJS3.privatize	= function(instance){
-	// the storage value - with non enumerable
-	Object.defineProperty(instance, '_privateOkFn', {
-	        enumerable	: false,
-	        writable	: true,
-	        value		: [],
-	})
-	
-	
-	/**
-	 * 2 steps:
-	 * ========
-	 * 1. get all the functions of the instance, and declare them privateOK
-	 * 2. get all the property and functions of the instance, and check their
-	 *    caller is in privateOK
-	 */
-
+PrivateForJS3.initInstance	= function(instance){
 	// populate the ._privateOkFn with the .prototype function which start by '_'
 	for(var property in instance){
 		// TODO should i do a .hasOwnProperty on a .prototype ?
 		if( typeof(instance[property]) !== 'function')	continue;
 		// console.log('PrivateOKFn', property)
 		PrivateForJS3.pushPrivateOkFn(instance, instance[property])
-	}
+	}	
+}
 
-	
+
+/**
+ * declare any property/functions starting with '_' as private
+ * 
+ * @param  {object} instance	the instance of the object
+ */
+PrivateForJS3.privatize	= function(instance){
+	// sanity check
+	console.assert( '_privateOkFn' in instance, 'this instance isnt init for PrivateForJS3')
+	// declare any property/functions starting with '_' as private	
 	for(var property in instance){
 		if( property[0] !== '_' )		continue;
 		if( typeof(instance[property]) === 'function' ){

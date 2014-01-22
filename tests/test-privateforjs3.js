@@ -10,6 +10,7 @@ describe('PrivateForJS3', function(){
 		this.john	= 'smith'
 		this._bar	= 2
 
+		PrivateForJS3.initInstance(this)
 		PrivateForJS3.privatize(this)
 	};
 
