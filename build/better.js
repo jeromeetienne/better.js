@@ -1,7 +1,8 @@
 
 // better.js preffix - begining of the better.js bundle
-;(function(exports){
-	//////////////////////////////////////////////////////////////////////////////////
+var BetterJS = (function(){
+// ...
+//////////////////////////////////////////////////////////////////////////////////
 //		Implement queuable getter setter				//
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -26,11 +27,10 @@ var QGetterSetter	= {};
 
 /**
  * Define a getter/setter for a property
+ * 
  * @param {Object} baseObject the base object which is used
  * @param {String} property   the name of the property
  */
-
-
 QGetterSetter._Property	= function(baseObject, property){
 	// sanity check 
 	console.assert( typeof(baseObject) === 'object' || typeof(baseObject) === 'function' );
@@ -928,6 +928,7 @@ if( typeof(window) === 'undefined' )	module.exports	= PrivateForJS;
 
 /**
  * determine which function is considered private for klass 
+ * 
  * @param  {function} klass  the constructor of the class
  * @param  {object|function|function[]} [source] private functions - if Function, use it directly.
  *                           if Array.<function>, then each item is a private function
@@ -950,7 +951,7 @@ PrivateForJS.pushPrivateOkFn	= function(klass, source){
 		});
 	}else if( source instanceof Array ){
 		source.forEach(function(fn){
-			console.assert( typeof(val) !== 'function' );
+			console.assert( typeof(fn) !== 'function' );
 			klass._privateOkFn.push(fn);			
 		});
 	}else	console.assert(false);
@@ -983,7 +984,7 @@ PrivateForJS.privateProperty	= function(klass, baseObject, property){
 // @TODO should i put a setter too ?
 	QGetterSetter.defineGetter(baseObject, property, function aFunction(value, caller, property){
 		// generate privateOkFns if needed - functions which can access private properties
-		klass._privateOkFn	= klass._privateOkFn || PrivateForJS.pushPrivateOkFn(klass);
+		klass._privateOkFn	= klass._privateOkFn || PrivateForJS.pushPrivateOkFn(baseObject);
 		// if caller not privateOK, notify the caller
 		var privateOkFns= klass._privateOkFn;
 		if( privateOkFns.indexOf(caller) === -1 ){
@@ -1039,13 +1040,13 @@ PrivateForJS.privateFunction	= function(klass, fn){
 PrivateForJS.privatize	= function(klass, instance){
 	console.assert( instance.constructor === klass );
 	console.assert( instance instanceof klass );
-
+// console.log('privatize', arguments)
 // TODO what about the .prototype
 
 	for(var property in instance){
 		var value	= instance[property]
 		if( property[0] !== '_' )		continue;
-		if(!instance.hasOwnProperty(property))continue;		
+		if(!instance.hasOwnProperty(property))	continue;
 		PrivateForJS.privateProperty(klass, instance, property);
 	}
 };
@@ -1102,6 +1103,8 @@ TypeCheck.setter	= function(baseObject, property, types){
  * @return {boolean}  return isValid, so true if types matche, false otherwise
  */
 TypeCheck.fn	= function(originalFn, paramsTypes, returnTypes){
+// TODO is this usefull ? isnt that a duplicate with propertyAttr2
+
 	return function TypeCheck_fn(){
 		// check parameters type
 		console.assert(arguments.length <= paramsTypes.length, 'function received '+arguments.length+' parameters but allows only '+paramsTypes.length+'!');
@@ -1192,12 +1195,13 @@ TypeCheck._ValidatorClass= function(fn){
  * After this, if you write on a unexisting property, you will get an exception, instead of a new property.
  * 
  * @param  {Object} target the object to protect
- * @return {String} permission 'read' to protect only read, 'write' for write only, 'rw' for both
- * @return {Object}        the protected object
+ * @param  {String} permission 'read' to protect only read, 'write' for write only, 'rw' for both
+ * @return {Object} the protected object
  */
 var ObjectIcer	= function(target, permission){
 	console.assert(ObjectIcer.isAvailable, 'harmony Proxy not enable. try chrome://flags or node --harmony')
 	permission	= permission	|| 'rw'
+	console.assert(permission === 'rw' || permission === 'write' || permission === 'read', 'permission argument is invalid')
 	var checkRead	= permission === 'read'	|| permission === 'rw'
 	var checkWrite	= permission === 'write'|| permission === 'rw'
 	// use old proxy API because v8 doesnt have the new API, firefox got it tho
@@ -1216,9 +1220,9 @@ var ObjectIcer	= function(target, permission){
 			return true
 		},
 		// without this one, i receive errors ?
-		// has: function (name) {
-		// 	return name in target ? true : false
-		// },
+		has	: function (name) {
+			return name in target ? true : false
+		},
 	})
 }
 
@@ -1279,7 +1283,7 @@ FunctionAttr.wrapCall	= function(originalFn, beforeFn, afterFn){
 // TODO what is this stopNow ??? it isnt even used
 		// forward the call to the original function
 		var result	= originalFn.apply(this, arguments);
-console.log('warpCall', this)
+// console.log('warpCall', this)
 		// call afterFn if needed
 		if( afterFn )	afterFn(originalFn, arguments, result);
 		// return the result
@@ -1641,34 +1645,32 @@ PropertyAttr.Builder.prototype.private	= function(klass){
  * * object constructor https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/constructor
  */
 
-
 /*
-
-var MyClass	= ClassAttr(function(){
-	privatize	: true;	// privatize functions and property
-				// false
-				// 'functions'	for later
-				// 'properties'	for later
+var MyClass	= ClassAttr(ctor, {
 	ice		: true,	// to prevent read/write non existing properties
 				// 'all' or true
 				// 'none' or false
 				// 'read'
 				// 'write'
-	accepts		: allowedTypeForFn,
+
+
+	privatize	: true;	// privatize functions and property
+				// false
+				// 'functions'	for later
+				// 'properties'	for later
+	arguments	: allowedTypeForFn,
 	properties	: {
 		'yourProp'	: [String, Number]
 	}
-}, attributes)
+})
 */
 
-var QGetterSetter	= QGetterSetter	|| require('../qgettersetter.js');
-var TypeCheck		= TypeCheck	|| require('../typecheck.js');
-var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
-var ObjectIcer		= ObjectIcer	|| require('../objecticer.js');
+var TypeCheck2		= TypeCheck2	|| require('../typecheck2.js');
+var PrivateForJS3	= PrivateForJS3	|| require('../privateforjs3.js');
 
 var ClassAttr	= function(originalCtor, attributes){
 	// handle arguments default values
-	attributes	= attributes	|| {}
+	attributes	= attributes	|| ClassAttr.defaultAttributes
 	
 	// arguments parameter checks
 	console.assert(originalCtor instanceof Function, 'invalid parameter type')
@@ -1678,11 +1680,11 @@ var ClassAttr	= function(originalCtor, attributes){
 	var onAfter	= attributes.onAfter	|| function(instance, args){}
 	
 	return wrapCtor(originalCtor, className, function(instance, args){
-		// honor .accept
-		if( attributes.accept ){
-			var allowedTypes	= attributes.accept
+		// honor .arguments
+		if( attributes.arguments ){
+			var allowedTypes	= attributes.arguments
 			for(var i = 0; i < allowedTypes.length; i++){
-				var isValid	= TypeCheck.value(args[i], allowedTypes[i]);			
+				var isValid	= TypeCheck2.value(args[i], allowedTypes[i]);			
 				console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', args[i])
 			}
 		}
@@ -1690,34 +1692,37 @@ var ClassAttr	= function(originalCtor, attributes){
 		// honor onBefore
 		onBefore(instance, args)
 	}, function(instance, args){
-		// honor .privatize
-		if( attributes.privatize ){
-			PrivateForJS.pushPrivateOkFn(originalCtor)
-			PrivateForJS.privatize(originalCtor, instance)
-		}
-
 		// honor .properties
 		if( attributes.properties ){
 			Object.keys(attributes.properties).forEach(function(property){
 				var allowedTypes	= attributes.properties[property]
-				TypeCheck.setter(instance, property, allowedTypes)
+				TypeCheck2.setter(instance, property, allowedTypes)
 			})
 		}
 
 
 		// honor .ice
-console.log('ice', attributes.ice, ObjectIcer.isAvailable)
+		// console.log('ice', attributes.ice, ObjectIcer.isAvailable)
 
 		// if( attributes.ice && ObjectIcer.isAvailable === true ){
 		// 	instance	= ObjectIcer(instance)
 		// }
-		
+
 		// honor onAfter
 		onAfter(instance, args)
 		
+		// honor .privatize
+		if( attributes.privatize ){
+			PrivateForJS3.privatize(instance)
+		}
+
 		return instance
 	})
-	
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+		
 	function wrapCtor(originalCtor, className, onBefore, onAfter){
 		// arguments default
 		onBefore= onBefore	|| function(instance, args){}
@@ -1744,6 +1749,13 @@ console.log('ice', attributes.ice, ObjectIcer.isAvailable)
 	}
 }
 
+/**
+ * default attributes value to use if not provided
+ * 
+ * @type {Object}
+ */
+ClassAttr.defaultAttributes	= {};
+
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= ClassAttr;
 
@@ -1753,17 +1765,11 @@ if( typeof(window) === 'undefined' )	module.exports	= ClassAttr;
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- *  global ```Function``` 
+ *  overload global ```Function``` prototype to add ClassAttr
  *  
  *  ```
  *  var Cat = function(name){
- *  }.classAttr({
- *  	privatize	: true,
- *  	accept		: [String]
- *  	properties	: {
- *  		'name'	: String
- *  	}
- *  })
+ *  }.classAttr({ privatize : true })
  *  ```
  */
 ClassAttr.overloadFunctionPrototype	= function(){
@@ -1778,34 +1784,32 @@ ClassAttr.overloadFunctionPrototype	= function(){
  * * object constructor https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/constructor
  */
 
-
 /*
-
-var MyClass	= ClassAttr(function(){
-	privatize	: true;	// privatize functions and property
-				// false
-				// 'functions'	for later
-				// 'properties'	for later
+var MyClass	= ClassAttr(ctor, {
 	ice		: true,	// to prevent read/write non existing properties
 				// 'all' or true
 				// 'none' or false
 				// 'read'
 				// 'write'
-	accepts		: allowedTypeForFn,
+
+
+	privatize	: true;	// privatize functions and property
+				// false
+				// 'functions'	for later
+				// 'properties'	for later
+	arguments	: allowedTypeForFn,
 	properties	: {
 		'yourProp'	: [String, Number]
 	}
-}, attributes)
+})
 */
 
-var QGetterSetter	= QGetterSetter	|| require('../qgettersetter.js');
-var TypeCheck		= TypeCheck	|| require('../typecheck.js');
-var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
-var ObjectIcer		= ObjectIcer	|| require('../objecticer.js');
+var TypeCheck2		= TypeCheck2	|| require('../typecheck2.js');
+var PrivateForJS3	= PrivateForJS3	|| require('../privateforjs3.js');
 
 var ClassAttr	= function(originalCtor, attributes){
 	// handle arguments default values
-	attributes	= attributes	|| {}
+	attributes	= attributes	|| ClassAttr.defaultAttributes
 	
 	// arguments parameter checks
 	console.assert(originalCtor instanceof Function, 'invalid parameter type')
@@ -1815,11 +1819,11 @@ var ClassAttr	= function(originalCtor, attributes){
 	var onAfter	= attributes.onAfter	|| function(instance, args){}
 	
 	return wrapCtor(originalCtor, className, function(instance, args){
-		// honor .accept
-		if( attributes.accept ){
-			var allowedTypes	= attributes.accept
+		// honor .arguments
+		if( attributes.arguments ){
+			var allowedTypes	= attributes.arguments
 			for(var i = 0; i < allowedTypes.length; i++){
-				var isValid	= TypeCheck.value(args[i], allowedTypes[i]);			
+				var isValid	= TypeCheck2.value(args[i], allowedTypes[i]);			
 				console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', args[i])
 			}
 		}
@@ -1827,34 +1831,37 @@ var ClassAttr	= function(originalCtor, attributes){
 		// honor onBefore
 		onBefore(instance, args)
 	}, function(instance, args){
-		// honor .privatize
-		if( attributes.privatize ){
-			PrivateForJS.pushPrivateOkFn(originalCtor)
-			PrivateForJS.privatize(originalCtor, instance)
-		}
-
 		// honor .properties
 		if( attributes.properties ){
 			Object.keys(attributes.properties).forEach(function(property){
 				var allowedTypes	= attributes.properties[property]
-				TypeCheck.setter(instance, property, allowedTypes)
+				TypeCheck2.setter(instance, property, allowedTypes)
 			})
 		}
 
 
 		// honor .ice
-console.log('ice', attributes.ice, ObjectIcer.isAvailable)
+		// console.log('ice', attributes.ice, ObjectIcer.isAvailable)
 
 		// if( attributes.ice && ObjectIcer.isAvailable === true ){
 		// 	instance	= ObjectIcer(instance)
 		// }
-		
+
 		// honor onAfter
 		onAfter(instance, args)
 		
+		// honor .privatize
+		if( attributes.privatize ){
+			PrivateForJS3.privatize(instance)
+		}
+
 		return instance
 	})
-	
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+		
 	function wrapCtor(originalCtor, className, onBefore, onAfter){
 		// arguments default
 		onBefore= onBefore	|| function(instance, args){}
@@ -1881,6 +1888,13 @@ console.log('ice', attributes.ice, ObjectIcer.isAvailable)
 	}
 }
 
+/**
+ * default attributes value to use if not provided
+ * 
+ * @type {Object}
+ */
+ClassAttr.defaultAttributes	= {};
+
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= ClassAttr;
 
@@ -1890,17 +1904,11 @@ if( typeof(window) === 'undefined' )	module.exports	= ClassAttr;
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- *  global ```Function``` 
+ *  overload global ```Function``` prototype to add ClassAttr
  *  
  *  ```
  *  var Cat = function(name){
- *  }.classAttr({
- *  	privatize	: true,
- *  	accept		: [String]
- *  	properties	: {
- *  		'name'	: String
- *  	}
- *  })
+ *  }.classAttr({ privatize : true })
  *  ```
  */
 ClassAttr.overloadFunctionPrototype	= function(){
@@ -2111,7 +2119,6 @@ BetterJS.StackTracker	= Stacktrace.Tracker
 var ClassAttr	= ClassAttr		|| require('../src/helpers/classattr.js');
 BetterJS.Class	= ClassAttr
 
-	// suffix - end of the better.js bundle
-	exports.BetterJS= BetterJS
-	exports.Bjs	= Bjs
-})(typeof(window) !== 'undefined' ? window : global);
+// End of Better.js
+})();
+var Bjs	= BetterJS

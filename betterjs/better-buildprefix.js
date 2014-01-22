@@ -1,3 +1,3 @@
 // better.js preffix - begining of the better.js bundle
-;(function(exports){
-	
+var BetterJS = (function(){
+// ...
