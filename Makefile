@@ -27,7 +27,6 @@ build:
 	cat src/typecheck.js			>> build/better.js
 	cat src/typecheck2.js			>> build/better.js
 	cat src/objecticer.js			>> build/better.js
-	cat src/helpers/functionattr.js		>> build/better.js
 	cat src/helpers/functionattr2.js	>> build/better.js
 	cat src/helpers/propertyattr.js		>> build/better.js
 	cat src/helpers/propertyattr2.js	>> build/better.js
