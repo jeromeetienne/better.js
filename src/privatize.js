@@ -46,7 +46,7 @@ Privatize.pushPrivateOkFn	= function(instance, privateFn){
  * @param  {String} property	the property name
  * @return {undefined}		nothing
  */
-Privatize.privateProperty	= function(instance, property){
+Privatize.property	= function(instance, property){
 	console.assert( '_privateOkFn' in instance, 'this instance isnt init for Privatize')
 	// check private in the getter
 	QGetterSetter.defineGetter(instance, property, function aFunction(value, caller, property){
@@ -83,11 +83,11 @@ console.log('check setter property', property)
  * @param  {Function} fn    the function to overload
  * @return {Function}       the overloaded function
  */
-Privatize.privateFunction	= function(instance, fn){
+Privatize.function	= function(instance, fn){
 	var functionName= fn.name || 'anonymous'
-	return function _checkPrivateFunction(){
+	return function _checkFunction(){
 		// get caller
-		var caller	= _checkPrivateFunction.caller;
+		var caller	= _checkFunction.caller;
 		// if caller not privateOK, notify the caller
 console.log('check function', functionName)
 		if( instance._privateOkFn.indexOf(caller) === -1 ){
@@ -110,7 +110,7 @@ console.log('check function', functionName)
  * 
  * @param  {Object} instance [description]
  */
-Privatize.initInstance	= function(instance){
+Privatize.prepare	= function(instance){
 	// populate the ._privateOkFn with the .prototype function which start by '_'
 	for(var property in instance){
 		// TODO should i do a .hasOwnProperty on a .prototype ?
@@ -126,18 +126,19 @@ Privatize.initInstance	= function(instance){
  * 
  * @param  {object} instance	the instance of the object
  */
-Privatize.privatize	= function(instance){
+Privatize.privatize	= function(instance, selectorRegexp){
+	selectorRegexp	= selectorRegexp	|| /^_.*/
 	// sanity check
 	console.assert( '_privateOkFn' in instance, 'this instance isnt init for Privatize')
 	// declare any property/functions starting with '_' as private	
 	for(var property in instance){
-		if( property[0] !== '_' )		continue;
+		if( property.match(selectorRegexp) === null )		continue;
 		if( typeof(instance[property]) === 'function' ){
 			// console.log('declare', property, 'as private function')
-			instance[property] = Privatize.privateFunction(instance, instance[property])
+			instance[property] = Privatize.function(instance, instance[property])
 		}else{
 			// console.log('declare', property, 'as private property')
-			Privatize.privateProperty(instance, property);		
+			Privatize.property(instance, property);		
 		}
 	}
 };

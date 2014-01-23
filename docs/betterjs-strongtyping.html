@@ -1,5 +1,7 @@
-strongtyping
-============
+<!DOCTYPE html><html><title>Strong Typing With Better.js</title><xmp style="display:none;">
+
+Strong Typing With Better.js
+============================
 
 This part check the type of variables and property.
 It is used in various place in better.js to check 
@@ -23,7 +25,14 @@ As a shortcut, if you provide a non array value, it will be put in a array.
 so ```Vector3``` will be converted as ```[Vector3]```.
 It may be nice in case your variable has a single type.
 
+There is some special case like :
+
+* ```any```: it will accept any type
+* ```never```: it will never say it is valid
+* ```nonan```: it will not accept nan
+
 ## Definition of a strong typing for function arguments
+
 When a function is called, it received arguments,
 so like an array of variables.
 
@@ -50,6 +59,8 @@ Here is one in case your value is a selection among options, e.g. 'low', 'normal
 	return ['low', 'normal', 'high'].indexof(value) !== -1
 })]
 ```
+
+</xmp><script src="http://strapdownjs.com/v/0.2/strapdown.js"></script></script></html>
 
 
 

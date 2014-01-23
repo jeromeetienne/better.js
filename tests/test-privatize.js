@@ -10,7 +10,7 @@ describe('Privatize', function(){
 		this.john	= 'smith'
 		this._bar	= 2
 
-		Privatize.initInstance(this)
+		Privatize.prepare(this)
 		Privatize.privatize(this)
 	};
 

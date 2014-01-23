@@ -78,7 +78,7 @@ var ClassAttr	= function(originalCtor, attributes){
 		
 		// honor .privatize
 		if( attributes.privatize ){
-			Privatize.initInstance(instance)
+			Privatize.prepare (instance)
 			Privatize.privatize(instance)
 		}
 
