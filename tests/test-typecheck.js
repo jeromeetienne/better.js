@@ -1,6 +1,5 @@
 var TypeCheck	= TypeCheck	|| require('../src/typecheck.js');
 
-
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
@@ -101,29 +100,33 @@ describe('TypeCheck.fn', function(){
 	it('does exception if one parameter types doesnt match', function(){
 		try{	
 			fct('bla', 'prout')
-			console.assert(false, "No exception triggered!!");
+			var failed	= true
 		}catch(e){};
+		console.assert(failed !== true, "No exception triggered!!");
 	});
 
-	it('does exception if return type§ doesnt match', function(){
+	it('does exception if return type doesnt match', function(){
 		try{	
 			fct(10, 20)
-			console.assert(false, "No exception triggered!!");
+			var failed	= true
 		}catch(e){};
+		console.assert(failed !== true, "No exception triggered!!");
 	});
 
 	it('does exception if function got more parameters than allowed', function(){
 		try{	
 			fct('bla', 99, 98)
-			console.assert(false, "No exception triggered!!");
+			var failed	= true
 		}catch(e){};
+		console.assert(failed !== true, "No exception triggered!!");
 	});
 
 	it('does exception if function less parameters than allowed', function(){
 		try{	
 			fct('bla')
-			console.assert(false, "No exception triggered!!");
-		}catch(e){ };
+			var failed	= true
+		}catch(e){};
+		console.assert(failed !== true, "No exception triggered!!");
 	});
 	
 
@@ -147,8 +150,9 @@ describe('TypeCheck.setter', function(){
 	it('fails when using an invalid type', function(){
 		try{
 			foo.x	= 'aString';		
-			console.assert(false, "No exception triggered!!");
+			var failed	= true
 		}catch(e){};
+		console.assert(failed !== true, "No exception triggered!!");
 	});
 });
 

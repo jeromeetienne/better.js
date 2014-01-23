@@ -30,7 +30,7 @@ var MyClass	= ClassAttr(ctor, {
 })
 */
 
-var TypeCheck2		= TypeCheck2	|| require('../typecheck2.js');
+var TypeCheck		= TypeCheck	|| require('../typecheck.js');
 var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
 
 var ClassAttr	= function(originalCtor, attributes){
@@ -49,7 +49,7 @@ var ClassAttr	= function(originalCtor, attributes){
 		if( attributes.arguments ){
 			var allowedTypes	= attributes.arguments
 			for(var i = 0; i < allowedTypes.length; i++){
-				var isValid	= TypeCheck2.value(args[i], allowedTypes[i]);			
+				var isValid	= TypeCheck.value(args[i], allowedTypes[i]);			
 				console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', args[i])
 			}
 		}
@@ -61,7 +61,7 @@ var ClassAttr	= function(originalCtor, attributes){
 		if( attributes.properties ){
 			Object.keys(attributes.properties).forEach(function(property){
 				var allowedTypes	= attributes.properties[property]
-				TypeCheck2.setter(instance, property, allowedTypes)
+				TypeCheck.setter(instance, property, allowedTypes)
 			})
 		}
 
