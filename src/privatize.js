@@ -24,6 +24,14 @@ if( typeof(window) === 'undefined' )	module.exports	= Privatize;
  * @param  {function} privateFn 	private function to add
  */
 Privatize.pushPrivateOkFn	= function(instance, privateFn){
+	// init if needed
+	Privatize._initIfNeeded(instance);
+	// actually add the function
+	instance._privateOkFn.push(privateFn)
+}
+
+
+Privatize._initIfNeeded	= function(instance){
 	// create the storage value if needed - with non enumerable
 	if( instance._privateOkFn === undefined ){
 		Object.defineProperty(instance, '_privateOkFn', {
@@ -31,9 +39,7 @@ Privatize.pushPrivateOkFn	= function(instance, privateFn){
 		        writable	: true,
 		        value		: [],
 		})
-	}
-	// actually add the function
-	instance._privateOkFn.push(privateFn)
+	}	
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -50,7 +56,7 @@ Privatize.property	= function(instance, property){
 	console.assert( '_privateOkFn' in instance, 'this instance isnt init for Privatize')
 	// check private in the getter
 	QGetterSetter.defineGetter(instance, property, function aFunction(value, caller, property){
-console.log('check getter property', property)
+// console.log('check getter property', property, instance._privateOkFn)
 		// if caller not privateOK, notify the caller
 		if( instance._privateOkFn.indexOf(caller) === -1 ){
 			// get stackFrame for the originId of the user
@@ -63,7 +69,7 @@ console.log('check getter property', property)
 	});
 	// check private in the setter
 	QGetterSetter.defineSetter(instance, property, function aFunction(value, caller, property){
-console.log('check setter property', property)
+// console.log('check setter property', property)
 		// if caller not privateOK, notify the caller
 		if( instance._privateOkFn.indexOf(caller) === -1 ){
 			// get stackFrame for the originId of the user
@@ -89,7 +95,7 @@ Privatize.function	= function(instance, fn){
 		// get caller
 		var caller	= _checkFunction.caller;
 		// if caller not privateOK, notify the caller
-console.log('check function', functionName)
+// console.log('check function', functionName)
 		if( instance._privateOkFn.indexOf(caller) === -1 ){
 			// get stackFrame for the originId of the user
 			var stackFrame	= Stacktrace.parse()[1]
@@ -111,6 +117,8 @@ console.log('check function', functionName)
  * @param  {Object} instance [description]
  */
 Privatize.prepare	= function(instance){
+	// init if needed
+	Privatize._initIfNeeded(instance);
 	// populate the ._privateOkFn with the .prototype function which start by '_'
 	for(var property in instance){
 		// TODO should i do a .hasOwnProperty on a .prototype ?
@@ -128,8 +136,8 @@ Privatize.prepare	= function(instance){
  */
 Privatize.privatize	= function(instance, selectorRegexp){
 	selectorRegexp	= selectorRegexp	|| /^_.*/
-	// sanity check
-	console.assert( '_privateOkFn' in instance, 'this instance isnt init for Privatize')
+	// init if needed
+	Privatize._initIfNeeded(instance);
 	// declare any property/functions starting with '_' as private	
 	for(var property in instance){
 		if( property.match(selectorRegexp) === null )		continue;

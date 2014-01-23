@@ -41,118 +41,6 @@ QGetterSetter._Property	= function(baseObject, property){
 	var _this	= this;
 	this._getters	= [];
 	this._setters	= [];
-	// define the root getter
-	baseObject.__defineGetter__(property, function getterHandler(){
-		var value	= baseObject['__'+property];
-		for(var i = 0; i < _this._getters.length; i++){
-			// TODO why those extra param are needed
-			// - needed for privateforjs to identify the origin
-			// - is that the proper format ?
-			// - is that important for setter
-			value	= _this._getters[i](value, getterHandler.caller, property)
-		}
-		return value;
-	});
-	// define the root setter		
-	baseObject.__defineSetter__(property, function(value){
-		for(var i = 0; i < _this._setters.length; i++){
-			value	= _this._setters[i](value)
-		}
-		baseObject['__'+property] = value;
-	});
-	// set the originValue
-	baseObject['__'+property]	= originValue;
-};
-
-// export the class in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= QGetterSetter;
-
-/**
- * define a getter 
- * 
- * @param  {Obejct} baseObject the object containing the property
- * @param  {string} property   the property name which gonna get the getter
- * @param  {Function} getterFn   function which handle the getter
- */
-QGetterSetter.defineGetter	= function(baseObject, property, getterFn){
-	var name	= "__dbgGetSet_" + property;
-	// init QGetterSetter for this property if needed
-	baseObject[name]= baseObject[name] || new QGetterSetter._Property(baseObject, property);
-	// setup the new getter
-	baseObject[name]._getters.push(getterFn)
-}
-
-/**
- * define a setter 
- * 
- * @param  {Object} baseObject the object containing the property
- * @param  {string} property   the property name which gonna get the setter
- * @param  {Function} setterFn   function which handle the setter
- */
-QGetterSetter.defineSetter	= function(baseObject, property, setterFn){
-	var name	= "__dbgGetSet_" + property;
-	// init QGetterSetter for this property if needed
-	baseObject[name]= baseObject[name] || new QGetterSetter._Property(baseObject, property);
-	// setup the new setter
-	baseObject[name]._setters.push(setterFn)
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-//		.overloadObjectPrototype()					//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * overload the Object.prototype with .__defineQGetter__ and .__defineQSetter__
- * 
- * TODO put that in example/js ?
- */
-QGetterSetter.overloadObjectPrototype	= function(){	
-	Object.prototype.__defineQGetter__	= function(property, getterFn){
-		QGetterSetter.defineGetter(this, property, getterFn);
-	};
-	Object.prototype.__defineQSetter__	= function(property, setterFn){
-		QGetterSetter.defineSetter(this, property, setterFn);
-	};
-}
-//////////////////////////////////////////////////////////////////////////////////
-//		Implement queuable getter setter				//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * by default __defineGetter__ support only one function. Same for __defineSetter
- * This is a annoying limitation. This little library declares 2 functions
- * Object.__defineQGetter__ and Object.__defineQGetter__.
- * They behave the same as their native sibling but support multiple functions.
- * Those functions are called in the same order they got registered.
- * 
- * (I have no idea of the reasoning behind this limitation to one function. It seems
- *  useless to me. This remind me of onclick of the DOM instead of a proper .addEventListener) 
-*/
-
-
-/**
- * Class to implement queueable getter/setter
- * @param  {Object} baseObject The base object on which we operate
- * @param  {String} property   The string of property
- */
-var QGetterSetter2	= {};
-
-/**
- * Define a getter/setter for a property
- * 
- * @param {Object} baseObject the base object which is used
- * @param {String} property   the name of the property
- */
-QGetterSetter2._Property	= function(baseObject, property){
-	// sanity check 
-	console.assert( typeof(baseObject) === 'object' || typeof(baseObject) === 'function' );
-	console.assert( typeof(property) === 'string' );
-	// backup the initial value
-	var originValue	= baseObject[property];
-	// init some local variables
-	var _this	= this;
-	this._getters	= [];
-	this._setters	= [];
 	// the storage value
 	Object.defineProperty(baseObject, '__' + property, {
 	        enumerable	: false,
@@ -179,7 +67,7 @@ QGetterSetter2._Property	= function(baseObject, property){
 };
 
 // export the class in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= QGetterSetter2;
+if( typeof(window) === 'undefined' )	module.exports	= QGetterSetter;
 
 /**
  * init baseObject to be able to ahndle qGetterSetter
@@ -187,13 +75,13 @@ if( typeof(window) === 'undefined' )	module.exports	= QGetterSetter2;
  * @param  {String} property   the property which is handled
  * @return {String}            the created property name
  */
-QGetterSetter2._initObjectIfNeeded	= function(baseObject, property){
+QGetterSetter._initObjectIfNeeded	= function(baseObject, property){
 	var name	= "__bjsGetSet_" + property;
 	// define the property to store all the getters/setter
 	if( baseObject[name] === undefined ){
 		Object.defineProperty(baseObject, name, {
 		        enumerable	: false,
-		        value		: new QGetterSetter2._Property(baseObject, property)
+		        value		: new QGetterSetter._Property(baseObject, property)
 		});
 	}
 	return name
@@ -206,9 +94,9 @@ QGetterSetter2._initObjectIfNeeded	= function(baseObject, property){
  * @param  {string} property   the property name which gonna get the getter
  * @param  {Function} getterFn   function which handle the getter
  */
-QGetterSetter2.defineGetter	= function(baseObject, property, getterFn){
-	// init QGetterSetter2 on this property if needed
-	var name	= QGetterSetter2._initObjectIfNeeded(baseObject, property)
+QGetterSetter.defineGetter	= function(baseObject, property, getterFn){
+	// init QGetterSetter on this property if needed
+	var name	= QGetterSetter._initObjectIfNeeded(baseObject, property)
 	// setup the new getter
 	baseObject[name]._getters.push(getterFn)
 }
@@ -220,9 +108,9 @@ QGetterSetter2.defineGetter	= function(baseObject, property, getterFn){
  * @param  {string} property   the property name which gonna get the setter
  * @param  {Function} setterFn   function which handle the setter
  */
-QGetterSetter2.defineSetter	= function(baseObject, property, setterFn){
-	// init QGetterSetter2 on this property if needed
-	var name	= QGetterSetter2._initObjectIfNeeded(baseObject, property)
+QGetterSetter.defineSetter	= function(baseObject, property, setterFn){
+	// init QGetterSetter on this property if needed
+	var name	= QGetterSetter._initObjectIfNeeded(baseObject, property)
 	// setup the new setter
 	baseObject[name]._setters.push(setterFn)
 }
@@ -236,12 +124,12 @@ QGetterSetter2.defineSetter	= function(baseObject, property, setterFn){
  * 
  * TODO put that in example/js ?
  */
-QGetterSetter2.overloadObjectPrototype	= function(){	
+QGetterSetter.overloadObjectPrototype	= function(){	
 	Object.prototype.__defineQGetter__	= function(property, getterFn){
-		QGetterSetter2.defineGetter(this, property, getterFn);
+		QGetterSetter.defineGetter(this, property, getterFn);
 	};
 	Object.prototype.__defineQSetter__	= function(property, setterFn){
-		QGetterSetter2.defineSetter(this, property, setterFn);
+		QGetterSetter.defineSetter(this, property, setterFn);
 	};
 }
 /**
@@ -1042,15 +930,15 @@ if( typeof(window) === 'undefined' )	module.exports	= GlobalDetector;
  *
  * @namespace Strong typing for javascript
  */
-var PrivateForJS	= {};
+var Privatize	= {};
 
 // include dependancies
 var Stacktrace		= Stacktrace	|| require('./stacktrace.js');
-var QGetterSetter	= QGetterSetter	|| require('./qgettersetter.js')
+var QGetterSetter	= QGetterSetter|| require('./qgettersetter.js')
 
 
 // export the namespace in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= PrivateForJS;
+if( typeof(window) === 'undefined' )	module.exports	= Privatize;
 
 //////////////////////////////////////////////////////////////////////////////////
 //		Handle PrivateOKFn						//
@@ -1060,154 +948,25 @@ if( typeof(window) === 'undefined' )	module.exports	= PrivateForJS;
  * determine which function is considered private for klass 
  * 
  * @param  {function} klass  the constructor of the class
- * @param  {object|function|function[]} [source] private functions - if Function, use it directly.
- *                           if Array.<function>, then each item is a private function
- *                           if object, then each of its property which is a function is private
- *                           if undefined, use klass.prototype which trigger the Object case
+ * @param  {function} privateFn 	private function to add
  */
-PrivateForJS.pushPrivateOkFn	= function(klass, source){
-	// if source isnt provided, use klass.prototype
-	if( source === undefined )	source	= klass.prototype;
-	// init ._privateOkFn if needed
-	klass._privateOkFn	= klass._privateOkFn	|| [];
-	// handle various case of source
-	if( typeof(source) === 'function' ){
-		klass._privateOkFn.push(source)
-	}else if( typeof(source) === 'object' ){
-		Object.keys(source).forEach(function(key){
-			var val	= source[key];
-			if( typeof(val) !== 'function' )	return;
-			klass._privateOkFn.push(val);			
-		});
-	}else if( source instanceof Array ){
-		source.forEach(function(fn){
-			console.assert( typeof(fn) !== 'function' );
-			klass._privateOkFn.push(fn);			
-		});
-	}else	console.assert(false);
+Privatize.pushPrivateOkFn	= function(instance, privateFn){
+	// init if needed
+	Privatize._initIfNeeded(instance);
+	// actually add the function
+	instance._privateOkFn.push(privateFn)
 }
 
-/**
- * return the functions allowed to access private values
- * @param  {Function} klass the class to query
- * @return {Array.<function>} return the function
- */
-PrivateForJS.getPrivateOkFn	= function(klass){
-	// init ._privateOkFn if needed
-	klass._privateOkFn	= klass._privateOkFn	|| [];
-	// return current ones
-	return klass._privateOkFn;
-}
 
-//////////////////////////////////////////////////////////////////////////////////
-//		core								//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * define a private property on a given instance of a object class
- * @param  {Function} klass	the class of the intenciated object
- * @param  {Object} baseObject	the object instance
- * @param  {String} property	the property name
- * @return {undefined}		nothing
- */
-PrivateForJS.privateProperty	= function(klass, baseObject, property){
-// @TODO should i put a setter too ?
-	QGetterSetter.defineGetter(baseObject, property, function aFunction(value, caller, property){
-		// generate privateOkFns if needed - functions which can access private properties
-		klass._privateOkFn	= klass._privateOkFn || PrivateForJS.pushPrivateOkFn(baseObject);
-		// if caller not privateOK, notify the caller
-		var privateOkFns= klass._privateOkFn;
-		if( privateOkFns.indexOf(caller) === -1 ){
-			// get stackFrame for the originId of the user
-			var stackFrame	= Stacktrace.parse()[2];
-			// log the event
-			console.assert(false, 'access to private property', "'"+property+"'", 'from', stackFrame);			
-		}
-		// actually return the value
-		return value;
-	});
-};
-
-/**
- * define a private function
- * @param  {Function} klass the class of the intenciated object
- * @param  {Function} fn    the function to overload
- * @return {Function}       the overloaded function
- */
-PrivateForJS.privateFunction	= function(klass, fn){
-	// MUST NOT use .bind(this) as it change the .caller value
-	var _this	= this;
-	return function _checkPrivateFunction(){
-		// get caller
-		var caller	= _checkPrivateFunction.caller;
-		// generate privateOkFns if needed - functions which can access private properties
-		klass._privateOkFn	= klass._privateOkFn || PrivateForJS.pushPrivateOkFn(klass);
-		// if caller not privateOK, notify the caller
-		var privateOkFns= klass._privateOkFn;
-		if( privateOkFns.indexOf(caller) === -1 ){
-			// get stackFrame for the originId of the user
-			var stackFrame	= Stacktrace.parse()[1];
-			// log the event
-			console.assert(false, 'access to private property', "'"+property+"'", 'from', stackFrame.orginId());			
-		}
-		// forward the call to the original function
-		return fn.apply(_this, arguments);
-	};
-};
-
-//////////////////////////////////////////////////////////////////////////////////
-//		Helpers								//
-//////////////////////////////////////////////////////////////////////////////////
-
-
-/**
- * Privatize all property/function which start with a ```_```. 
- * Especially useful at the end of a constructor.
- * 
- * @param  {Function} klass	constructor for the class
- * @param  {object} instance	the instance of the object
- */
-PrivateForJS.privatize	= function(klass, instance){
-	console.assert( instance.constructor === klass );
-	console.assert( instance instanceof klass );
-// console.log('privatize', arguments)
-// TODO what about the .prototype
-
-	for(var property in instance){
-		var value	= instance[property]
-		if( property[0] !== '_' )		continue;
-		if(!instance.hasOwnProperty(property))	continue;
-		PrivateForJS.privateProperty(klass, instance, property);
-	}
-};
-
-/**
- * ensure private property/method stays private
- *
- * @namespace Strong typing for javascript
- */
-var PrivateForJS3	= {};
-
-// include dependancies
-var Stacktrace		= Stacktrace	|| require('./stacktrace.js');
-var QGetterSetter2	= QGetterSetter2|| require('./qgettersetter2.js')
-
-
-// export the namespace in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= PrivateForJS3;
-
-//////////////////////////////////////////////////////////////////////////////////
-//		Handle PrivateOKFn						//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * determine which function is considered private for klass 
- * 
- * @param  {function} klass  the constructor of the class
- * @param  {function} source private function to add
- */
-PrivateForJS3.pushPrivateOkFn	= function(instance, source){
-	instance._privateOkFn.push(source)
+Privatize._initIfNeeded	= function(instance){
+	// create the storage value if needed - with non enumerable
+	if( instance._privateOkFn === undefined ){
+		Object.defineProperty(instance, '_privateOkFn', {
+		        enumerable	: false,
+		        writable	: true,
+		        value		: [],
+		})
+	}	
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -1220,29 +979,30 @@ PrivateForJS3.pushPrivateOkFn	= function(instance, source){
  * @param  {String} property	the property name
  * @return {undefined}		nothing
  */
-PrivateForJS3.privateProperty	= function(instance, property){
+Privatize.property	= function(instance, property){
+	console.assert( '_privateOkFn' in instance, 'this instance isnt init for Privatize')
 	// check private in the getter
-	QGetterSetter2.defineGetter(instance, property, function aFunction(value, caller, property){
-console.log('check getter property', property)
+	QGetterSetter.defineGetter(instance, property, function aFunction(value, caller, property){
+// console.log('check getter property', property, instance._privateOkFn)
 		// if caller not privateOK, notify the caller
 		if( instance._privateOkFn.indexOf(caller) === -1 ){
 			// get stackFrame for the originId of the user
 			var stackFrame	= Stacktrace.parse()[2]
 			// log the event
-			console.assert(false, 'access to private property', "'"+property+"'", 'from', stackFrame)
+			console.assert(false, 'access to private property "'+property+'" from '+stackFrame)
 		}
 		// actually return the value
 		return value;
 	});
 	// check private in the setter
-	QGetterSetter2.defineSetter(instance, property, function aFunction(value, caller, property){
-console.log('check setter property', property)
+	QGetterSetter.defineSetter(instance, property, function aFunction(value, caller, property){
+// console.log('check setter property', property)
 		// if caller not privateOK, notify the caller
 		if( instance._privateOkFn.indexOf(caller) === -1 ){
 			// get stackFrame for the originId of the user
 			var stackFrame	= Stacktrace.parse()[2]
 			// log the event
-			console.assert(false, 'access to private property', "'"+property+"'", 'from', stackFrame)
+			console.assert(false, 'access to private property "'+property+'" from '+stackFrame)
 		}
 		// actually return the value
 		return value;
@@ -1256,18 +1016,18 @@ console.log('check setter property', property)
  * @param  {Function} fn    the function to overload
  * @return {Function}       the overloaded function
  */
-PrivateForJS3.privateFunction	= function(instance, fn){
+Privatize.function	= function(instance, fn){
 	var functionName= fn.name || 'anonymous'
-	return function _checkPrivateFunction(){
+	return function _checkFunction(){
 		// get caller
-		var caller	= _checkPrivateFunction.caller;
+		var caller	= _checkFunction.caller;
 		// if caller not privateOK, notify the caller
-console.log('check function', functionName)
+// console.log('check function', functionName)
 		if( instance._privateOkFn.indexOf(caller) === -1 ){
 			// get stackFrame for the originId of the user
 			var stackFrame	= Stacktrace.parse()[1]
 			// log the event
-			console.assert(false, 'access to private function', "'"+functionName+"'", 'from', stackFrame);
+			console.assert(false, 'access to private function "'+functionName+'" from '+stackFrame)
 		}
 		// forward the call to the original function
 		return fn.apply(this, arguments);
@@ -1278,54 +1038,48 @@ console.log('check function', functionName)
 //		Helpers								//
 //////////////////////////////////////////////////////////////////////////////////
 
-
 /**
- * Privatize all property/function which start with a ```_```. 
- * Especially useful at the end of a constructor.
+ * get all the functions of the instance, and declare them privateOK
  * 
- * @param  {Function} klass	constructor for the class
- * @param  {object} instance	the instance of the object
+ * @param  {Object} instance [description]
  */
-PrivateForJS3.privatize	= function(instance){
-	// the storage value - with non enumerable
-	Object.defineProperty(instance, '_privateOkFn', {
-	        enumerable	: false,
-	        writable	: true,
-	        value		: [],
-	})
-	
-	
-	/**
-	 * 2 steps:
-	 * ========
-	 * 1. get all the functions of the instance, and declare them privateOK
-	 * 2. get all the property and functions of the instance, and check their
-	 *    caller is in privateOK
-	 */
-
+Privatize.prepare	= function(instance){
+	// init if needed
+	Privatize._initIfNeeded(instance);
 	// populate the ._privateOkFn with the .prototype function which start by '_'
 	for(var property in instance){
 		// TODO should i do a .hasOwnProperty on a .prototype ?
 		if( typeof(instance[property]) !== 'function')	continue;
 		// console.log('PrivateOKFn', property)
-		PrivateForJS3.pushPrivateOkFn(instance, instance[property])
-	}
+		Privatize.pushPrivateOkFn(instance, instance[property])
+	}	
+}
 
-	
+
+/**
+ * declare any property/functions starting with '_' as private
+ * 
+ * @param  {object} instance	the instance of the object
+ */
+Privatize.privatize	= function(instance, selectorRegexp){
+	selectorRegexp	= selectorRegexp	|| /^_.*/
+	// init if needed
+	Privatize._initIfNeeded(instance);
+	// declare any property/functions starting with '_' as private	
 	for(var property in instance){
-		if( property[0] !== '_' )		continue;
+		if( property.match(selectorRegexp) === null )		continue;
 		if( typeof(instance[property]) === 'function' ){
 			// console.log('declare', property, 'as private function')
-			instance[property] = PrivateForJS3.privateFunction(instance, instance[property])
+			instance[property] = Privatize.function(instance, instance[property])
 		}else{
 			// console.log('declare', property, 'as private property')
-			PrivateForJS3.privateProperty(instance, property);		
+			Privatize.property(instance, property);		
 		}
 	}
 };
 
 /**
- * @fileOverview contains TypeCheck class
+ * @fileOverview contains StrongTyping class
  * 
  * if input of type in text see 
  * * https://developers.google.com/closure/compiler/docs/js-for-compiler
@@ -1336,13 +1090,13 @@ PrivateForJS3.privatize	= function(instance){
 /**
  * @namespace Strong typing for javascript
  */
-var TypeCheck	= {};
+var StrongTyping	= {};
 
 // dependancy
 var QGetterSetter	= QGetterSetter	|| require('../src/qgettersetter.js')
 
 // export the namespace in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;
+if( typeof(window) === 'undefined' )	module.exports	= StrongTyping;
 
 
 /**
@@ -1352,15 +1106,15 @@ if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;
  * @param  {String} property   the string of the property name
  * @param  {Array}  types      the allows tipe
  */
-TypeCheck.setter	= function(baseObject, property, types){
+StrongTyping.setter	= function(baseObject, property, types){
 	// check initial value
 	var value	= baseObject[property];
-	var isValid	= TypeCheck.value(value, types)
+	var isValid	= StrongTyping.value(value, types)
 	console.assert(isValid, 'initial value got invalid type');
 	// setup the setter
 	QGetterSetter.defineSetter(baseObject, property, function(value){
 		// check the value type
-		var isValid	= TypeCheck.value(value, types);			
+		var isValid	= StrongTyping.value(value, types);			
 		console.assert(isValid, 'invalid type value='+value+' types='+types);
 		// return the value
 		return value;
@@ -1375,158 +1129,20 @@ TypeCheck.setter	= function(baseObject, property, types){
  * @param  {Array}    returnTypes allowed types for the return value
  * @return {boolean}  return isValid, so true if types matche, false otherwise
  */
-TypeCheck.fn	= function(originalFn, paramsTypes, returnTypes){
+StrongTyping.fn	= function(originalFn, paramsTypes, returnTypes){
 // TODO is this usefull ? isnt that a duplicate with propertyAttr2
 
-	return function TypeCheck_fn(){
-		// check parameters type
-		console.assert(arguments.length <= paramsTypes.length, 'function received '+arguments.length+' parameters but allows only '+paramsTypes.length+'!');
-		for(var i = 0; i < paramsTypes.length; i++){
-			var isValid	= TypeCheck.value(arguments[i], paramsTypes[i]);			
-			console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', paramsTypes[i], 'It is ===', arguments[i])
-		}
-		// forward the call to the original function
-		var result	= originalFn.apply(this, arguments);
-		// check the result type
-		var isValid	= TypeCheck.value(result, returnTypes);			
-		console.assert(isValid, 'invalid type for returned value. MUST be of type', returnTypes, 'It is ===', result);
-		// return the result
-		return result;
-	}
-}
-
-/**
- * Check the type of a value
- * 
- * @param  {*} value the value to check
- * @param  {Array.<function>} types the types allowed for this variable
- * @return {boolean} return isValid, so true if types matche, false otherwise
- */
-TypeCheck.value	= function(value, types){
-	// handle parameter polymorphism
-	if( types instanceof Array === false )	types	= [types];
-	// if types array is empty, default to ['always'], return true as in valid
-	if( types.length === 0 )	return true;
-	// go thru each type
-	var result	= false;
-	for(var i = 0; i < types.length; i++){
-		var type	= types[i];
-		if( type === Number ){
-			var valid	= typeof(value) === 'number';
-		}else if( type === String ){
-			var valid	= typeof(value) === 'string';
-		}else if( type === undefined ){
-			var valid	= typeof(value) === 'undefined';
-		}else if( typeof(type) === 'string' && type.toLowerCase() === 'always' ){
-			var valid	= true;
-		}else if( typeof(type) === 'string' && type.toLowerCase() === 'never' ){
-			// return immediatly as a failed validator
-			return false;
-		}else if( typeof(type) === 'string' && type.toLowerCase() === 'nonan' ){
-			var valid	= value === value;
-			if( valid === false )	return false;
-			continue;	// continue as it is a validator
-		}else if( type instanceof TypeCheck._ValidatorClass ){
-			var valid	= type.fn(value);
-			if( valid === false )	return false;
-			continue;	// continue as it is a validator
-		}else {
-			var valid	= value instanceof type;
-		}
-		result	= result || valid;
-	}
-	// return the just computed result
-	return result;
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-//										//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Validator creator. a Validator is a function which is used to validate .value().
- * All the validators MUST be true for the checked value to be valid. 
- * 
- * @param {Function(value)} fn function which return true if value is valid, false otherwise
- */
-TypeCheck.Validator	= function(fn){
-	return new TypeCheck._ValidatorClass(fn)
-}
-
-/**
- * Internal class to be recognisable by TypeCheck.value()
- * 
- * @param  {Function} fn function which return true if value is valid, false otherwise
- */
-TypeCheck._ValidatorClass= function(fn){
-	console.assert(fn instanceof Function);
-	this.fn	= fn;
-}
-/**
- * @fileOverview contains TypeCheck2 class
- * 
- * if input of type in text see 
- * * https://developers.google.com/closure/compiler/docs/js-for-compiler
- * * use same format
- * * autogenerate function parameter check
- */
-
-/**
- * @namespace Strong typing for javascript
- */
-var TypeCheck2	= {};
-
-// dependancy
-var QGetterSetter2	= QGetterSetter2	|| require('../src/qgettersetter2.js')
-
-// export the namespace in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= TypeCheck2;
-
-
-/**
- * Check type with a object setter
- * 
- * @param  {Object} baseObject the base object which contains the property
- * @param  {String} property   the string of the property name
- * @param  {Array}  types      the allows tipe
- */
-TypeCheck2.setter	= function(baseObject, property, types){
-	// check initial value
-	var value	= baseObject[property];
-	var isValid	= TypeCheck2.value(value, types)
-	console.assert(isValid, 'initial value got invalid type');
-	// setup the setter
-	QGetterSetter2.defineSetter(baseObject, property, function(value){
-		// check the value type
-		var isValid	= TypeCheck2.value(value, types);			
-		console.assert(isValid, 'invalid type value='+value+' types='+types);
-		// return the value
-		return value;
-	});
-};
-
-/**
- * function wrapper to check the type of function parameters and return value
- * 
- * @param  {Function} originalFn  the function to wrap
- * @param  {Array}    paramsTypes allowed types for the paramter. array with each item is the allowed types for this parameter.
- * @param  {Array}    returnTypes allowed types for the return value
- * @return {boolean}  return isValid, so true if types matche, false otherwise
- */
-TypeCheck2.fn	= function(originalFn, paramsTypes, returnTypes){
-// TODO is this usefull ? isnt that a duplicate with propertyAttr2
-
-	return function TypeCheck2_fn(){
+	return function StrongTyping_fn(){
 		// check arguments type
 		console.assert(arguments.length <= paramsTypes.length, 'function received '+arguments.length+' parameters but allows only '+paramsTypes.length+'!');
 		for(var i = 0; i < paramsTypes.length; i++){
-			var isValid	= TypeCheck2.value(arguments[i], paramsTypes[i]);			
+			var isValid	= StrongTyping.value(arguments[i], paramsTypes[i]);			
 			console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', paramsTypes[i], 'It is ===', arguments[i])
 		}
 		// forward the call to the original function
 		var result	= originalFn.apply(this, arguments);
 		// check the result type
-		var isValid	= TypeCheck2.value(result, returnTypes);			
+		var isValid	= StrongTyping.value(result, returnTypes);			
 		console.assert(isValid, 'invalid type for returned value. MUST be of type', returnTypes, 'It is ===', result);
 		// return the result
 		return result;
@@ -1540,7 +1156,7 @@ TypeCheck2.fn	= function(originalFn, paramsTypes, returnTypes){
  * @param  {Array.<function>} types the types allowed for this variable
  * @return {boolean} return isValid, so true if types matche, false otherwise
  */
-TypeCheck2.value	= function(value, types){
+StrongTyping.value	= function(value, types){
 	// handle parameter polymorphism
 	if( types instanceof Array === false )	types	= [types];
 	// if types array is empty, default to ['always'], return true as in valid
@@ -1555,7 +1171,7 @@ TypeCheck2.value	= function(value, types){
 			var valid	= typeof(value) === 'string';
 		}else if( type === undefined ){
 			var valid	= typeof(value) === 'undefined';
-		}else if( typeof(type) === 'string' && type.toLowerCase() === 'always' ){
+		}else if( typeof(type) === 'string' && type.toLowerCase() === 'any' ){
 			var valid	= true;
 		}else if( typeof(type) === 'string' && type.toLowerCase() === 'never' ){
 			// return immediatly as a failed validator
@@ -1564,7 +1180,7 @@ TypeCheck2.value	= function(value, types){
 			var valid	= value === value;
 			if( valid === false )	return false;
 			continue;	// continue as it is a validator
-		}else if( type instanceof TypeCheck2._ValidatorClass ){
+		}else if( type instanceof StrongTyping._ValidatorClass ){
 			var valid	= type.fn(value);
 			if( valid === false )	return false;
 			continue;	// continue as it is a validator
@@ -1587,16 +1203,16 @@ TypeCheck2.value	= function(value, types){
  * 
  * @param {Function(value)} fn function which return true if value is valid, false otherwise
  */
-TypeCheck2.Validator	= function(fn){
-	return new TypeCheck2._ValidatorClass(fn)
+StrongTyping.Validator	= function(fn){
+	return new StrongTyping._ValidatorClass(fn)
 }
 
 /**
- * Internal class to be recognisable by TypeCheck2.value()
+ * Internal class to be recognisable by StrongTyping.value()
  * 
  * @param  {Function} fn function which return true if value is valid, false otherwise
  */
-TypeCheck2._ValidatorClass= function(fn){
+StrongTyping._ValidatorClass= function(fn){
 	console.assert(fn instanceof Function);
 	this.fn	= fn;
 }
@@ -1645,346 +1261,73 @@ ObjectIcer.isAvailable        = typeof(Proxy) !== 'undefined' && typeof(Proxy.cr
 
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= ObjectIcer;
-//////////////////////////////////////////////////////////////////////////////////
-//		Modification							//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * change global object function bar(){}.setAttr('bar').done();
- * 
- * @TODO to change you are modifiing the global name space
- * @param {string} fnName the name of the function 
- */
-// Function.prototype.setAttr	= function(fnName){
-// 	return FunctionAttr.define(this, fnName)
-// }
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//		Function Attribute						//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * @namespace
- */
-var FunctionAttr	= {};
-
-/**
- * Function attribute creator
- * 
- * @return {FunctionAttr.Builder} a FunctionAttr.Builder builder
-*/
-FunctionAttr.define	= function(originalFn, fnName){
-	return new FunctionAttr.Builder(originalFn, fnName)
-}
-
-/**
- * Wrap a function between 2 functions
- * 
- * @param {Function} originalFn the original function
- * @param {Function} beforeFn the function to call *before* the original function
- * @param {Function} afterFn the function to call *after* the original function
- * @return {Function} The modified function
-*/
-FunctionAttr.wrapCall	= function(originalFn, beforeFn, afterFn){
-	return function(){
-		var stopNow	= false;
-		// call beforeFn if needed
-		if( beforeFn )	stopNow = beforeFn(originalFn, arguments);
-// TODO what is this stopNow ??? it isnt even used
-		// forward the call to the original function
-		var result	= originalFn.apply(this, arguments);
-// console.log('warpCall', this)
-		// call afterFn if needed
-		if( afterFn )	afterFn(originalFn, arguments, result);
-		// return the result
-		return result;
-	}
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-//										//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Internal class to build the attributes on the funciton
- * 
- * @constructor
- * 
- * @param {Function} originalFn the function on which the attributes are set
- * @param {String}   fnName     optional name of the function - default to 'aFunction'
- */
-FunctionAttr.Builder	= function(originalFn, fnName){
-	this._originalFn= originalFn
-	this._currentFn	= originalFn;
-	this._fnName	= fnName	|| 'aFunction';
-}
-
-/**
- * mark the end of the attributes declaration
- * 
- * @return {Function} The actual function with the attributes
-*/
-FunctionAttr.Builder.prototype.done	= function(){
-	// inherit from originalFn.prototype
-	// TODO should it be copied with Object.Create or just a reference
-	this._currentFn.prototype	= this._originalFn.prototype
-	
-	return this._currentFn;
-}
-
-// export the class in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= FunctionAttr;
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//		generic								//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * display a message with a timestamp every time the function is used
- * @return {string} message optional message to display
- */
-FunctionAttr.Builder.prototype.timestamp	= function(message){
-	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
-		console.log(''+ new Date + ': '+this._fnName+' being called');
-	}.bind(this));
-	return this;	// for chained API
-};
-
-/**
- * log a message when the function is call
- * @param  {string} message the message to display
- */
-FunctionAttr.Builder.prototype.log		= function(message){
-	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
-		console.log(message);
-	});
-	return this;	// for chained API
-};
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//		support state							//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * mark the function as deprecated - aka you can use it but it will disapears soon
- * @param  {string} message the optional message to provide
- * @return {FunctionAttr.Builder} for chained API
- */
-FunctionAttr.Builder.prototype.deprecated	= function(message){
-	var used	= false;
-	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
-		if( used )	return;
-		used	= true;
-		console.warn(message || "Deprecated function "+this._fnName+" called. Please update your code.");
-	}.bind(this));
-	return this;	// for chained API
-}
-
-/**
- * mark the function as obsolete
- * @param  {string} message obsolete message to display
- * @return {FunctionAttr.Builder} for chained API
- */
-FunctionAttr.Builder.prototype.obsolete	= function(message){
-	var used	= false;
-	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
-		if( used )	return;
-		used	= true;
-		console.assert(false, message || "Obsoleted function "+this._fnName+" called. Please update your code.");
-	}.bind(this));
-	return this;	// for chained API
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-//		General hooks								//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * hook a function be be caller before the actual function
- * @param  {Function} beforeFn the function to call
- * @return {FunctionAttr.Builder} for chained API
- */
-FunctionAttr.Builder.prototype.before	= function(beforeFn){
-	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, beforeFn, null);
-	return this;	// for chained API
-};
-
-/**
- * hook a function to be called after the actual function
- * @param  {Function} afterFn the function to be called after
- * @return {FunctionAttr.Builder} for chained API
- */
-FunctionAttr.Builder.prototype.after	= function(afterFn){
-	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, null, afterFn);
-	return this;	// for chained API
-};
-
-//////////////////////////////////////////////////////////////////////////////////
-//		Benchmarking							//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Warp the function call in a console.time()
- * 
- * @param  {String} label the label to use for console.time(label)
- * @return {FunctionAttr.Builder} for chained API
- */
-FunctionAttr.Builder.prototype.time	= function(label){
-	label	= label !== undefined ? label : this._fnName+".time()-"+Math.floor(Math.random()*9999).toString(36);
-	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
-		console.time(label)
-	}, function(){
-		console.timeEnd(label)
-	});
-	return this;	// for chained API
-};
-
-/**
- * Warp the funciton call in console.profile()/.profileEnd()
- * 
- * @param  {String} label label to use for console.profile()
- * @return {FunctionAttr.Builder} for chained API
- */
-FunctionAttr.Builder.prototype.profile	= function(label){
-	label	= label !== undefined ? label : this._fnName+".profile-"+Math.floor(Math.random()*9999).toString(36);
-	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
-		console.profile(label)
-	}, function(){
-		console.profileEnd(label)
-	});
-	return this;	// for chained API
-};
-
-//////////////////////////////////////////////////////////////////////////////////
-//										//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * Trigger the debugger when the function is called
- *
- * @param {Function} originalFn the original function
- * @param {Function} [conditionFn] this function should return true, when the breakpoint should be triggered. default to function(){ return true; }
- * @return {FunctionAttr.Builder} for chained API
-*/
-FunctionAttr.Builder.prototype.breakpoint	= function(fn, conditionFn){
-	conditionFn	= conditionFn	|| function(){ return true; };
-	this._currentFn	= function(){
-		var stopNow	= conditionFn();
-		// if stopNow, trigger debugger
-		if( stopNow === true )	debugger;
-		// forward the call to the original function
-		return this._currentFn.apply(this, arguments);
-	}.bind(this);
-	return this;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//		comment								//
-//////////////////////////////////////////////////////////////////////////////////
-
-var TypeCheck	= TypeCheck	|| require('../typecheck.js');
-
-/**
- * check function type as in ```TypeCheck.fn``` from typecheck.js
- * @param  {Array}    paramsTypes allowed types for the paramter. array with each item is the allowed types for this parameter.
- * @param  {Array}    returnTypes allowed types for the return value
- * @return {FunctionAttr.Builder} for chained API
- */
-FunctionAttr.Builder.prototype.typeCheck	= function(paramsTypes, returnTypes){
-	this._currentFn	= TypeCheck.fn(this._currentFn, paramsTypes, returnTypes);
-	return this;
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-//		.trackUsage()							//
-//////////////////////////////////////////////////////////////////////////////////
-
-var Stacktrace	= Stacktrace	|| require('../stacktrace.js');
-
-// create the tracker for .trackUsage
-FunctionAttr.usageTracker	= new Stacktrace.Tracker();
-
-/**
- * track where this property is used (getter and setter)
- * 
- * @param {String|undefined} trackName	optional name for Stacktrace.Tracker. default to originId
- * @return {FunctionAttr.Builder} for chained API
- */
-FunctionAttr.Builder.prototype.trackUsage	= function(trackName){
-	var tracker	= FunctionAttr.usageTracker;
-	// handle polymorphism
-	trackName	= trackName	|| 'FunctionAttr.trackUsage:'+Stacktrace.parse()[1].originId();
-	// actually record the usage
-	this._currentFn	= FunctionAttr.wrapCall(this._currentFn, function(){
-		tracker.record(trackName, 1);
-	});
-	// for chained API
-	return this;
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-//		.private()							//
-//////////////////////////////////////////////////////////////////////////////////
-
-var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
-
-/**
- * Mark this function as private
- * @param  {Function} klass the constructor of the function
- * @return {FunctionAttr.Builder} for chained API
- */
-FunctionAttr.Builder.prototype.private	= function(klass){
-	// sanity check
-	console.assert(klass !== undefined)
-	// overload currenFn
-	this._currentFn	= PrivateForJS.privateFunction(klass, this_currentFn);
-	// for chained API
-	return this;
-}
-
 /**
  * @fileOverview definition of PropertyAttr - based on other core libraries
  */
 
-var TypeCheck2		= TypeCheck2	|| require('../typecheck2.js');
-var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
+var StrongTyping= StrongTyping	|| require('../strongtyping.js');
+var Privatize	= Privatize	|| require('../privatize.js');
+
+/** 
+ * plugin system
+ * * seem cool, but you loose all the shortness of closure
+ * * so not now
+ */
+// FunctionAttr.plugins	= {}
+// FunctionAttr.plugins['arguments']	= {
+// 	onBefore	: function(){
+// 		var allowedTypes	= attributes.arguments
+// 		console.assert(args.length <= allowedTypes.length, 'function received '+args.length+' parameters but allows only '+allowedTypes.length+'!');
+// 		for(var i = 0; i < allowedTypes.length; i++){
+// 			var isValid	= StrongTyping.value(args[i], allowedTypes[i]);
+// 			console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', arguments[i])
+// 		}		
+// 	}
+// }
+// FunctionAttr.plugins['return']	= {
+// 	onAfter		: function(instance, args, returnedValue){
+// 		var allowedTypes= attributes.return
+// // console.log('blabla', arguments)
+// 		var isValid	= StrongTyping.value(returnedValue, allowedTypes)
+// 		console.assert(isValid, 'invalid type for returned value. MUST be of type', allowedTypes, 'It is ===', returnedValue)			
+// 	}
+// }
 
 /**
- * [FunctionAttr2 description]
+ * [FunctionAttr description]
  * 
  * @param {Object} baseObject the base object
  * @param {String} property   the property name
  * @param {Object} attributes the attributes for this property
  */
-var FunctionAttr2	= function(originalFn, attributes){
+var FunctionAttr	= function(originalFn, attributes){
 	var functionName= attributes.name	|| originalFn.name
+	
+	var privateDone	= false
 
 	return wrapFunction(originalFn, functionName, function(instance, args){
+		// honor .private
+		if( attributes.private === true && privateDone === false ){
+			Privatize.pushPrivateOkFn(instance, originalFn)
+			privateDone	= true
+		}
+
 		// honor .arguments - check arguments type
 		if( attributes.arguments !== undefined ){
 			var allowedTypes	= attributes.arguments
 			console.assert(args.length <= allowedTypes.length, 'function received '+args.length+' parameters but allows only '+allowedTypes.length+'!');
 			for(var i = 0; i < allowedTypes.length; i++){
-				var isValid	= TypeCheck2.value(args[i], allowedTypes[i]);			
+				var isValid	= StrongTyping.value(args[i], allowedTypes[i]);
 				console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', arguments[i])
 			}			
 		}
 		
-		// honor .private
-		if( attributes.private === true ){
-			// TODO honor .private
-			console.assert(false, 'not yet implemented')
-		}
 	}, function(returnedValue, instance, args){
 		// honor .return - check the result type
 		if( attributes.return !== undefined ){
 			var allowedTypes= attributes.return
 	// console.log('blabla', arguments)
-			var isValid	= TypeCheck2.value(returnedValue, allowedTypes)
+			var isValid	= StrongTyping.value(returnedValue, allowedTypes)
 			console.assert(isValid, 'invalid type for returned value. MUST be of type', allowedTypes, 'It is ===', returnedValue)			
 		}
 	})
@@ -2019,144 +1362,39 @@ var FunctionAttr2	= function(originalFn, attributes){
 
 
 // export the class in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= FunctionAttr2;
+if( typeof(window) === 'undefined' )	module.exports	= FunctionAttr;
 
 
-/**
- * handle attributes for properties
- * 
- * @namespace
- */
-var PropertyAttr	= {};
-
-/**
- * Define a property attribute
- * 
- * @param {Object} baseObject the base object to which the property belong
- * @param {String} property   the name of the property
- * @return {PropertyAttr}	builder for property attributes
- */
-PropertyAttr.define	= function(baseObject, property){
-	return new PropertyAttr.Builder(baseObject, property);
-};
-
-/**
- * Constructor
- * 
- * @param {Object} baseObject the base object to which the property belong
- * @param {String} property   the name of the property
- */
-PropertyAttr.Builder	= function(baseObject, property){
-	// sanity check
-	console.assert(typeof(baseObject) === 'object' || typeof(baseObject) === 'function');
-	console.assert(typeof(property) === 'string');
-	// set local values
-	this._baseObject= baseObject;
-	this._property	= property; 
-}
-
-// export the class in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= PropertyAttr;
-
-//////////////////////////////////////////////////////////////////////////////////
-//		.typeCheck()							//
-//////////////////////////////////////////////////////////////////////////////////
-
-var TypeCheck	= TypeCheck	|| require('../typecheck.js')
-
-/**
- * check if this property is of validTypes
- * @param  {[type]} types valid types in typecheck.js format
- * @return {PropertyAttr.Builder} for chained API
- */
-PropertyAttr.Builder.prototype.typeCheck	= // backward compatibility
-PropertyAttr.Builder.prototype.type		= function(types){
-	if( arguments.length > 1 )	types	= Array.prototype.slice.call(arguments, 0);
-	TypeCheck.setter(this._baseObject, this._property, types);
-	return this;	// for chained API;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//		.trackUsage()							//
-//////////////////////////////////////////////////////////////////////////////////
-
-var QGetterSetter	= QGetterSetter	|| require('../qgettersetter.js');
-var Stacktrace		= Stacktrace	|| require('../stacktrace.js');
-
-// create the tracker for .trackUsage
-PropertyAttr.usageTracker	= new Stacktrace.Tracker();
-
-/**
- * track where this property is used (getter and setter)
- * @param {String|undefined} trackName	optional name for Stacktrace.Tracker. default to originId
- * @return {PropertyAttr.Builder} for chained API
- */
-PropertyAttr.Builder.prototype.trackUsage	= // backward compatibility
-PropertyAttr.Builder.prototype.track		= function(trackName){
-	var tracker	= PropertyAttr.usageTracker;
-	// handle polymorphism
-	trackName	= trackName	|| 'PropertyAttr.trackUsage:'+Stacktrace.parse()[1].originId();
-	// define getter
-	QGetterSetter.defineGetter(this._baseObject, this._property, function(value){
-		tracker.record(trackName, 1);
-		return value;	// return value unchanged	
-	});
-	// define setter
-	QGetterSetter.defineSetter(this._baseObject, this._property, function(value){
-		tracker.record(trackName, 1);
-		return value;	// return value unchanged	
-	});
-	return this;	// for chained API
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-//		.privateOf()							//
-//////////////////////////////////////////////////////////////////////////////////
-
-var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
-
-/**
- * Mark this property as private
- * @param  {Function} klass the class to which it is private
- * @return {PropertyAttr.Builder} for chained API
- */
-PropertyAttr.Builder.prototype.private	= function(klass){
-	PrivateForJS.privateProperty(klass, this._baseObject, this._property);
-	return this;	// for chained API
-};
 /**
  * @fileOverview definition of PropertyAttr - based on other core libraries
  */
 
-var TypeCheck2		= TypeCheck2	|| require('../typecheck2.js');
-var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
+var StrongTyping= StrongTyping	|| require('../strongtyping.js');
+var Privatize	= Privatize	|| require('../privatize.js');
 
 /**
- * [PropertyAttr2 description]
+ * [PropertyAttr description]
  * 
  * @param {Object} baseObject the base object
  * @param {String} property   the property name
  * @param {Object} attributes the attributes for this property
  */
-var PropertyAttr2	= function(baseObject, property, attributes){
+var PropertyAttr	= function(baseObject, property, attributes){
 	// honor .type	
 	if( attributes.type ){
 		var allowedType	= attributes.type
-		TypeCheck2.setter(baseObject, property, allowedType)
+		StrongTyping.setter(baseObject, property, allowedType)
 	}
 
-	// honor .private (.class MUST be set)	
-	// if( attributes.private ){
-	// 	// TODO could it be baseObject.constructor ?
-	// 	console.assert(typeof(attributes.class) === 'function', '.class MUST be set')
-	// 	PrivateForJS.privateProperty(attributes.class, baseObject, property)	
-	// }
+	// honor .private
+	if( attributes.private ){
+		Privatize.property(baseObject, property)	
+	}
 }
 
 
 // export the class in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= PropertyAttr2;
+if( typeof(window) === 'undefined' )	module.exports	= PropertyAttr;
 
 
 /**
@@ -2174,6 +1412,11 @@ var MyClass	= ClassAttr(ctor, {
 				// 'read'
 				// 'write'
 
+	name	: 'myClass',	// the name of the class, name the ctor function
+
+	obsolete: 'obsolete since v1.0',	// log once this message on usage, then throw an exception
+	deprecated: 'deprecated since v1.0',	// long once this message on usage
+
 
 	privatize	: true;	// privatize functions and property
 				// false
@@ -2186,8 +1429,8 @@ var MyClass	= ClassAttr(ctor, {
 })
 */
 
-var TypeCheck2		= TypeCheck2	|| require('../typecheck2.js');
-var PrivateForJS3	= PrivateForJS3	|| require('../privateforjs3.js');
+var StrongTyping= StrongTyping	|| require('../strongtyping.js');
+var Privatize	= Privatize	|| require('../privatize.js');
 
 var ClassAttr	= function(originalCtor, attributes){
 	// handle arguments default values
@@ -2205,7 +1448,7 @@ var ClassAttr	= function(originalCtor, attributes){
 		if( attributes.arguments ){
 			var allowedTypes	= attributes.arguments
 			for(var i = 0; i < allowedTypes.length; i++){
-				var isValid	= TypeCheck2.value(args[i], allowedTypes[i]);			
+				var isValid	= StrongTyping.value(args[i], allowedTypes[i]);			
 				console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', args[i])
 			}
 		}
@@ -2217,7 +1460,7 @@ var ClassAttr	= function(originalCtor, attributes){
 		if( attributes.properties ){
 			Object.keys(attributes.properties).forEach(function(property){
 				var allowedTypes	= attributes.properties[property]
-				TypeCheck2.setter(instance, property, allowedTypes)
+				StrongTyping.setter(instance, property, allowedTypes)
 			})
 		}
 
@@ -2234,7 +1477,8 @@ var ClassAttr	= function(originalCtor, attributes){
 		
 		// honor .privatize
 		if( attributes.privatize ){
-			PrivateForJS3.privatize(instance)
+			Privatize.prepare (instance)
+			Privatize.privatize(instance)
 		}
 
 		return instance

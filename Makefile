@@ -16,20 +16,16 @@ build:
 	echo		 			>  build/better.js
 	cat betterjs/better-buildprefix.js	>> build/better.js
 	cat src/qgettersetter.js		>> build/better.js
-	cat src/qgettersetter2.js		>> build/better.js
 	cat src/stacktrace.js			>> build/better.js
 	cat src/assertwhichstop.js		>> build/better.js
 	cat src/consolelogger.js		>> build/better.js
 	cat src/gcmonitor.js			>> build/better.js
 	cat src/globaldetector.js		>> build/better.js
-	cat src/privateforjs.js			>> build/better.js
-	cat src/privateforjs3.js		>> build/better.js
-	cat src/typecheck.js			>> build/better.js
-	cat src/typecheck2.js			>> build/better.js
+	cat src/privatize.js			>> build/better.js
+	cat src/strongtyping.js			>> build/better.js
 	cat src/objecticer.js			>> build/better.js
-	cat src/helpers/functionattr.js	>> build/better.js
+	cat src/helpers/functionattr.js		>> build/better.js
 	cat src/helpers/propertyattr.js		>> build/better.js
-	cat src/helpers/propertyattr2.js	>> build/better.js
 	cat src/helpers/classattr.js		>> build/better.js
 	cat betterjs/better.js			>> build/better.js
 	cat betterjs/better-buildsuffix.js	>> build/better.js
