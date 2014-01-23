@@ -1,40 +1,51 @@
 var PrivateForJS	= PrivateForJS	|| require('../src/privateforjs.js');
 
 describe('PrivateForJS', function(){
-	// define a simple class 
-	var aClass	= function(){
-		this._bar	= 2;
-		
-		// define a private property
-		PrivateForJS.privateProperty(aClass, this, '_bar');
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	var aClass1	= function aClass1_ctor(){
+		this._add	= function aClass1_add(a,b){ return a+b }
+		this.john	= 'smith'
+		this._bar	= 2
+
+		PrivateForJS.initInstance(this)
+		PrivateForJS.privatize(this)
 	};
-	aClass.prototype.bar	= function(){
-		return this._bar;
+
+	aClass1.prototype.bar	= function aClass1_bar(){
+		return this._bar
 	}
-	aClass.prototype.crossBar	= function(obj){
+	aClass1.prototype.crossBar	= function(obj){
 		return obj._bar;
 	}
-	// define function which are ok to push
-	PrivateForJS.pushPrivateOkFn(aClass);
+	aClass1.prototype._foo	= function aClass1__foo(){
+		console.log('inside foo')
+		return 3
+	}	
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
 	
-	
-	it('should not trigger assert thru the getter', function(){
-		var aInstance	= new aClass();
-		console.assert( aInstance.bar() === 2 );
-	});
-
-	it('should trigger assert when accessed directly', function(){
-		var aInstance	= new aClass();
+	it('should assert when private properties are accessed directly', function(){
+		var aInstance	= new aClass1()
 		try {
 			var tmp	= aInstance._bar;
-			console.assert(false, "No exception triggered!!");
+			var failed	= true
 		} catch(e){};
-	});
+		console.assert(failed !== true, "No exception triggered!!")
+	})
+
+	it('should not assert thru the public getter function', function(){
+		var aInstance	= new aClass1()
+		console.assert( aInstance.bar() === 2 )
+	})
 
 	it('should not trigger assert cross instance of the same class', function(){
-		var aInstance1	= new aClass();
-		var aInstance2	= new aClass();
-		console.assert( aInstance2.crossBar(aInstance1) === 2 );
-	});
+		var aInstance1	= new aClass1()
+		var aInstance2	= new aClass1()
+		console.assert( aInstance2.crossBar(aInstance1) === 2 )
+	})
 });
 

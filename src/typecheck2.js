@@ -13,7 +13,7 @@
 var TypeCheck2	= {};
 
 // dependancy
-var QGetterSetter2	= QGetterSetter2	|| require('../src/qgettersetter2.js')
+var QGetterSetter	= QGetterSetter	|| require('../src/qgettersetter.js')
 
 // export the namespace in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= TypeCheck2;
@@ -32,7 +32,7 @@ TypeCheck2.setter	= function(baseObject, property, types){
 	var isValid	= TypeCheck2.value(value, types)
 	console.assert(isValid, 'initial value got invalid type');
 	// setup the setter
-	QGetterSetter2.defineSetter(baseObject, property, function(value){
+	QGetterSetter.defineSetter(baseObject, property, function(value){
 		// check the value type
 		var isValid	= TypeCheck2.value(value, types);			
 		console.assert(isValid, 'invalid type value='+value+' types='+types);

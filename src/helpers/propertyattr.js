@@ -3,7 +3,7 @@
  */
 
 var TypeCheck2		= TypeCheck2	|| require('../typecheck2.js');
-var PrivateForJS3	= PrivateForJS3	|| require('../privateforjs3.js');
+var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
 
 /**
  * [PropertyAttr description]
@@ -21,7 +21,7 @@ var PropertyAttr	= function(baseObject, property, attributes){
 
 	// honor .private
 	if( attributes.private ){
-		PrivateForJS3.privateProperty(baseObject, property)	
+		PrivateForJS.privateProperty(baseObject, property)	
 	}
 }
 

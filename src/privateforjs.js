@@ -7,7 +7,7 @@ var PrivateForJS	= {};
 
 // include dependancies
 var Stacktrace		= Stacktrace	|| require('./stacktrace.js');
-var QGetterSetter	= QGetterSetter	|| require('./qgettersetter.js')
+var QGetterSetter	= QGetterSetter|| require('./qgettersetter.js')
 
 
 // export the namespace in node.js - if running in node.js
@@ -21,43 +21,19 @@ if( typeof(window) === 'undefined' )	module.exports	= PrivateForJS;
  * determine which function is considered private for klass 
  * 
  * @param  {function} klass  the constructor of the class
- * @param  {object|function|function[]} [source] private functions - if Function, use it directly.
- *                           if Array.<function>, then each item is a private function
- *                           if object, then each of its property which is a function is private
- *                           if undefined, use klass.prototype which trigger the Object case
+ * @param  {function} privateFn 	private function to add
  */
-PrivateForJS.pushPrivateOkFn	= function(klass, source){
-	// if source isnt provided, use klass.prototype
-	if( source === undefined )	source	= klass.prototype;
-	// init ._privateOkFn if needed
-	klass._privateOkFn	= klass._privateOkFn	|| [];
-	// handle various case of source
-	if( typeof(source) === 'function' ){
-		klass._privateOkFn.push(source)
-	}else if( typeof(source) === 'object' ){
-		Object.keys(source).forEach(function(key){
-			var val	= source[key];
-			if( typeof(val) !== 'function' )	return;
-			klass._privateOkFn.push(val);			
-		});
-	}else if( source instanceof Array ){
-		source.forEach(function(fn){
-			console.assert( typeof(fn) !== 'function' );
-			klass._privateOkFn.push(fn);			
-		});
-	}else	console.assert(false);
-}
-
-/**
- * return the functions allowed to access private values
- * @param  {Function} klass the class to query
- * @return {Array.<function>} return the function
- */
-PrivateForJS.getPrivateOkFn	= function(klass){
-	// init ._privateOkFn if needed
-	klass._privateOkFn	= klass._privateOkFn	|| [];
-	// return current ones
-	return klass._privateOkFn;
+PrivateForJS.pushPrivateOkFn	= function(instance, privateFn){
+	// create the storage value if needed - with non enumerable
+	if( instance._privateOkFn === undefined ){
+		Object.defineProperty(instance, '_privateOkFn', {
+		        enumerable	: false,
+		        writable	: true,
+		        value		: [],
+		})
+	}
+	// actually add the function
+	instance._privateOkFn.push(privateFn)
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -66,53 +42,62 @@ PrivateForJS.getPrivateOkFn	= function(klass){
 
 /**
  * define a private property on a given instance of a object class
- * @param  {Function} klass	the class of the intenciated object
- * @param  {Object} baseObject	the object instance
+ * @param  {Object} instance	the object instance
  * @param  {String} property	the property name
  * @return {undefined}		nothing
  */
-PrivateForJS.privateProperty	= function(klass, baseObject, property){
-// @TODO should i put a setter too ?
-	QGetterSetter.defineGetter(baseObject, property, function aFunction(value, caller, property){
-		// generate privateOkFns if needed - functions which can access private properties
-		klass._privateOkFn	= klass._privateOkFn || PrivateForJS.pushPrivateOkFn(baseObject);
+PrivateForJS.privateProperty	= function(instance, property){
+	console.assert( '_privateOkFn' in instance, 'this instance isnt init for PrivateForJS')
+	// check private in the getter
+	QGetterSetter.defineGetter(instance, property, function aFunction(value, caller, property){
+console.log('check getter property', property)
 		// if caller not privateOK, notify the caller
-		var privateOkFns= klass._privateOkFn;
-		if( privateOkFns.indexOf(caller) === -1 ){
+		if( instance._privateOkFn.indexOf(caller) === -1 ){
 			// get stackFrame for the originId of the user
-			var stackFrame	= Stacktrace.parse()[2];
+			var stackFrame	= Stacktrace.parse()[2]
 			// log the event
-			console.assert(false, 'access to private property', "'"+property+"'", 'from', stackFrame);			
+			console.assert(false, 'access to private property "'+property+'" from '+stackFrame)
+		}
+		// actually return the value
+		return value;
+	});
+	// check private in the setter
+	QGetterSetter.defineSetter(instance, property, function aFunction(value, caller, property){
+console.log('check setter property', property)
+		// if caller not privateOK, notify the caller
+		if( instance._privateOkFn.indexOf(caller) === -1 ){
+			// get stackFrame for the originId of the user
+			var stackFrame	= Stacktrace.parse()[2]
+			// log the event
+			console.assert(false, 'access to private property "'+property+'" from '+stackFrame)
 		}
 		// actually return the value
 		return value;
 	});
 };
 
+
 /**
  * define a private function
- * @param  {Function} klass the class of the intenciated object
+ * @param  {Object} instance	the object instance
  * @param  {Function} fn    the function to overload
  * @return {Function}       the overloaded function
  */
-PrivateForJS.privateFunction	= function(klass, fn){
-	// MUST NOT use .bind(this) as it change the .caller value
-	var _this	= this;
+PrivateForJS.privateFunction	= function(instance, fn){
+	var functionName= fn.name || 'anonymous'
 	return function _checkPrivateFunction(){
 		// get caller
 		var caller	= _checkPrivateFunction.caller;
-		// generate privateOkFns if needed - functions which can access private properties
-		klass._privateOkFn	= klass._privateOkFn || PrivateForJS.pushPrivateOkFn(klass);
 		// if caller not privateOK, notify the caller
-		var privateOkFns= klass._privateOkFn;
-		if( privateOkFns.indexOf(caller) === -1 ){
+console.log('check function', functionName)
+		if( instance._privateOkFn.indexOf(caller) === -1 ){
 			// get stackFrame for the originId of the user
-			var stackFrame	= Stacktrace.parse()[1];
+			var stackFrame	= Stacktrace.parse()[1]
 			// log the event
-			console.assert(false, 'access to private property', "'"+property+"'", 'from', stackFrame.orginId());			
+			console.assert(false, 'access to private function "'+functionName+'" from '+stackFrame)
 		}
 		// forward the call to the original function
-		return fn.apply(_this, arguments);
+		return fn.apply(this, arguments);
 	};
 };
 
@@ -120,25 +105,40 @@ PrivateForJS.privateFunction	= function(klass, fn){
 //		Helpers								//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * get all the functions of the instance, and declare them privateOK
+ * 
+ * @param  {Object} instance [description]
+ */
+PrivateForJS.initInstance	= function(instance){
+	// populate the ._privateOkFn with the .prototype function which start by '_'
+	for(var property in instance){
+		// TODO should i do a .hasOwnProperty on a .prototype ?
+		if( typeof(instance[property]) !== 'function')	continue;
+		// console.log('PrivateOKFn', property)
+		PrivateForJS.pushPrivateOkFn(instance, instance[property])
+	}	
+}
+
 
 /**
- * Privatize all property/function which start with a ```_```. 
- * Especially useful at the end of a constructor.
+ * declare any property/functions starting with '_' as private
  * 
- * @param  {Function} klass	constructor for the class
  * @param  {object} instance	the instance of the object
  */
-PrivateForJS.privatize	= function(klass, instance){
-	console.assert( instance.constructor === klass );
-	console.assert( instance instanceof klass );
-// console.log('privatize', arguments)
-// TODO what about the .prototype
-
+PrivateForJS.privatize	= function(instance){
+	// sanity check
+	console.assert( '_privateOkFn' in instance, 'this instance isnt init for PrivateForJS')
+	// declare any property/functions starting with '_' as private	
 	for(var property in instance){
-		var value	= instance[property]
 		if( property[0] !== '_' )		continue;
-		if(!instance.hasOwnProperty(property))	continue;
-		PrivateForJS.privateProperty(klass, instance, property);
+		if( typeof(instance[property]) === 'function' ){
+			// console.log('declare', property, 'as private function')
+			instance[property] = PrivateForJS.privateFunction(instance, instance[property])
+		}else{
+			// console.log('declare', property, 'as private property')
+			PrivateForJS.privateProperty(instance, property);		
+		}
 	}
 };
 

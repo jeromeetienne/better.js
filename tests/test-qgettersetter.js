@@ -8,38 +8,50 @@ describe('QGetterSetter.defineGetter', function(){
 
 	// setup the object
 	QGetterSetter.defineGetter(foo, 'bar', function(value){
-		return value*2;
-	});
+		return value*2
+	})
 	QGetterSetter.defineGetter(foo, 'bar', function(value){
-		return value+1;
-	});
+		return value+1
+	})
 
 	// do all the tests
 	it('is able to get without error', function(){
 		//console.log("foo.bar", foo.bar)
-		console.assert( foo.bar === 65 );
-	});
-});
+		console.assert( foo.bar === 65 )
+	})
+
+	it('should not define new enumerable properties', function(){
+		console.assert( Object.keys(foo).length === 1 && 'bar' in foo )
+	})
+})
 
 describe('QGetterSetter.defineSetter', function(){
 	// define sample object
 	var foo	= {
 		bar	: 32
-	};
+	}
 
 	// setup the object
 	QGetterSetter.defineSetter(foo, 'bar', function(value){
-		return value*2;
-	});
+		return value*2
+	})
 	QGetterSetter.defineSetter(foo, 'bar', function(value){
-		return value+1;
-	});
+		return value+1
+	})
 
-	// do all the tests
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+
 	it('is able to set without error', function(){
 		foo.bar	= 32;
-	});
+	})
+
 	it('is able to get without error', function(){
-		console.assert(foo.bar === 65);
-	});
-});
+		console.assert(foo.bar === 65)
+	})
+
+	it('should not define new enumerable properties', function(){
+		console.assert( Object.keys(foo).length === 1 && 'bar' in foo )
+	})
+})
