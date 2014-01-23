@@ -1,103 +1,32 @@
 /**
- * handle attributes for properties
- * 
- * @namespace
+ * @fileOverview definition of PropertyAttr - based on other core libraries
  */
-var PropertyAttr	= {};
+
+var TypeCheck2		= TypeCheck2	|| require('../typecheck2.js');
+var PrivateForJS3	= PrivateForJS3	|| require('../privateforjs3.js');
 
 /**
- * Define a property attribute
+ * [PropertyAttr description]
  * 
- * @param {Object} baseObject the base object to which the property belong
- * @param {String} property   the name of the property
- * @return {PropertyAttr}	builder for property attributes
+ * @param {Object} baseObject the base object
+ * @param {String} property   the property name
+ * @param {Object} attributes the attributes for this property
  */
-PropertyAttr.define	= function(baseObject, property){
-	return new PropertyAttr.Builder(baseObject, property);
-};
+var PropertyAttr	= function(baseObject, property, attributes){
+	// honor .type	
+	if( attributes.type ){
+		var allowedType	= attributes.type
+		TypeCheck2.setter(baseObject, property, allowedType)
+	}
 
-/**
- * Constructor
- * 
- * @param {Object} baseObject the base object to which the property belong
- * @param {String} property   the name of the property
- */
-PropertyAttr.Builder	= function(baseObject, property){
-	// sanity check
-	console.assert(typeof(baseObject) === 'object' || typeof(baseObject) === 'function');
-	console.assert(typeof(property) === 'string');
-	// set local values
-	this._baseObject= baseObject;
-	this._property	= property; 
+	// honor .private
+	if( attributes.private ){
+		PrivateForJS3.privateProperty(baseObject, property)	
+	}
 }
+
 
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= PropertyAttr;
 
-//////////////////////////////////////////////////////////////////////////////////
-//		.typeCheck()							//
-//////////////////////////////////////////////////////////////////////////////////
 
-var TypeCheck	= TypeCheck	|| require('../typecheck.js')
-
-/**
- * check if this property is of validTypes
- * @param  {[type]} types valid types in typecheck.js format
- * @return {PropertyAttr.Builder} for chained API
- */
-PropertyAttr.Builder.prototype.typeCheck	= // backward compatibility
-PropertyAttr.Builder.prototype.type		= function(types){
-	if( arguments.length > 1 )	types	= Array.prototype.slice.call(arguments, 0);
-	TypeCheck.setter(this._baseObject, this._property, types);
-	return this;	// for chained API;
-}
-
-
-//////////////////////////////////////////////////////////////////////////////////
-//		.trackUsage()							//
-//////////////////////////////////////////////////////////////////////////////////
-
-var QGetterSetter	= QGetterSetter	|| require('../qgettersetter.js');
-var Stacktrace		= Stacktrace	|| require('../stacktrace.js');
-
-// create the tracker for .trackUsage
-PropertyAttr.usageTracker	= new Stacktrace.Tracker();
-
-/**
- * track where this property is used (getter and setter)
- * @param {String|undefined} trackName	optional name for Stacktrace.Tracker. default to originId
- * @return {PropertyAttr.Builder} for chained API
- */
-PropertyAttr.Builder.prototype.trackUsage	= // backward compatibility
-PropertyAttr.Builder.prototype.track		= function(trackName){
-	var tracker	= PropertyAttr.usageTracker;
-	// handle polymorphism
-	trackName	= trackName	|| 'PropertyAttr.trackUsage:'+Stacktrace.parse()[1].originId();
-	// define getter
-	QGetterSetter.defineGetter(this._baseObject, this._property, function(value){
-		tracker.record(trackName, 1);
-		return value;	// return value unchanged	
-	});
-	// define setter
-	QGetterSetter.defineSetter(this._baseObject, this._property, function(value){
-		tracker.record(trackName, 1);
-		return value;	// return value unchanged	
-	});
-	return this;	// for chained API
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-//		.privateOf()							//
-//////////////////////////////////////////////////////////////////////////////////
-
-var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
-
-/**
- * Mark this property as private
- * @param  {Function} klass the class to which it is private
- * @return {PropertyAttr.Builder} for chained API
- */
-PropertyAttr.Builder.prototype.private	= function(klass){
-	PrivateForJS.privateProperty(klass, this._baseObject, this._property);
-	return this;	// for chained API
-};

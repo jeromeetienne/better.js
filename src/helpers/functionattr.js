@@ -10,8 +10,8 @@ var PrivateForJS3	= PrivateForJS3	|| require('../privateforjs3.js');
  * * seem cool, but you loose all the shortness of closure
  * * so not now
  */
-// FunctionAttr2.plugins	= {}
-// FunctionAttr2.plugins['arguments']	= {
+// FunctionAttr.plugins	= {}
+// FunctionAttr.plugins['arguments']	= {
 // 	onBefore	: function(){
 // 		var allowedTypes	= attributes.arguments
 // 		console.assert(args.length <= allowedTypes.length, 'function received '+args.length+' parameters but allows only '+allowedTypes.length+'!');
@@ -21,7 +21,7 @@ var PrivateForJS3	= PrivateForJS3	|| require('../privateforjs3.js');
 // 		}		
 // 	}
 // }
-// FunctionAttr2.plugins['return']	= {
+// FunctionAttr.plugins['return']	= {
 // 	onAfter		: function(instance, args, returnedValue){
 // 		var allowedTypes= attributes.return
 // // console.log('blabla', arguments)
@@ -31,13 +31,13 @@ var PrivateForJS3	= PrivateForJS3	|| require('../privateforjs3.js');
 // }
 
 /**
- * [FunctionAttr2 description]
+ * [FunctionAttr description]
  * 
  * @param {Object} baseObject the base object
  * @param {String} property   the property name
  * @param {Object} attributes the attributes for this property
  */
-var FunctionAttr2	= function(originalFn, attributes){
+var FunctionAttr	= function(originalFn, attributes){
 	var functionName= attributes.name	|| originalFn.name
 
 	return wrapFunction(originalFn, functionName, function(instance, args){
@@ -96,6 +96,6 @@ var FunctionAttr2	= function(originalFn, attributes){
 
 
 // export the class in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= FunctionAttr2;
+if( typeof(window) === 'undefined' )	module.exports	= FunctionAttr;
 
 

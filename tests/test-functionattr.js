@@ -1,12 +1,12 @@
-var FunctionAttr2	= FunctionAttr2	|| require('../src/helpers/functionattr2.js');
+var FunctionAttr	= FunctionAttr	|| require('../src/helpers/functionattr.js');
 
-describe('FunctionAttr2', function(){
+describe('FunctionAttr', function(){
 	
 	//////////////////////////////////////////////////////////////////////////////////
 	//		function to test						//
 	//////////////////////////////////////////////////////////////////////////////////
 	
-	var cat	= FunctionAttr2(function(name){
+	var cat	= FunctionAttr(function(name){
 		return 3;
 	}, {
 		arguments	: [String],
@@ -17,7 +17,7 @@ describe('FunctionAttr2', function(){
 	 * fails all the time to get valid attributes
 	 * 
 	 */
-	var catBadReturn	= FunctionAttr2(function(name){
+	var catBadReturn	= FunctionAttr(function(name){
 		return 'aString';
 	}, {
 		arguments	: [String],

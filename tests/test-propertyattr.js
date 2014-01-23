@@ -2,36 +2,54 @@ var PropertyAttr	= PropertyAttr	|| require('../src/helpers/propertyattr.js');
 
 describe('PropertyAttr', function(){
 	
-	var foo		= {
-		bar	: 2
-	};
+	//////////////////////////////////////////////////////////////////////////////////
+	//		class to test							//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	/**
+	 * cat constructor
+	 */
+	var Cat	= function(name){
+		// Animal.call( this );
+		this.name	= name
+		this._weight	= 2
+	}
 
-	PropertyAttr.define(foo, 'bar')
-		.typeCheck([Number, 'nonan'])
-		.trackUsage('mocha-foo.bar');
+	Cat.prototype.getWheight= function(){
+		return this._weight
+	}
+	// instanciate the class
+	var cat	= new Cat('kitty')
+	PropertyAttr(cat, 'name', {
+		type	: String,
+	})
 
-	it('works with positive .typecheck()', function(){
-		foo.bar	= 2;
-	});
+	//////////////////////////////////////////////////////////////////////////////////
+	//		test .type							//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	it('should be ok if .type are valid', function(){
+		cat.name	= 'john'
+	})
 
-	it('works with negative .typecheck()', function(){
+	it('should fail if .type is invalid when setted *after* declaration', function(){
+		try{	
+			cat.name	= 3
+			var failed	= true
+		}catch(e){};
+		console.assert(failed !== true)
+	})
+
+	it('should fail if .type is invalid when setted *before* declaration', function(){
 		try{
-			foo.bar	= NaN;
-			var fail= true;
-		}catch(e){}
-		console.assert(!fail, 'this should never be seen')		
-	});
+			var cat	= new Cat('kitty')
+			PropertyAttr(cat, 'name', {
+				type	: Number,
+			})
+			var failed	= true
+		}catch(e){};
+		console.assert(failed !== true)
+	})
 
-	it('works with negative .typecheck()', function(){
-		try{
-			foo.bar	= 'aString';
-			var fail= true;
-		}catch(e){}
-		console.assert(!fail, 'this should never be seen')		
-	});
-
-	it('trackUsage properly', function(){
-		var tracker	= PropertyAttr.usageTracker;
-		console.assert( tracker.klasses()['mocha-foo.bar'].counter === 1 );
-	});
-});
+	
+})
