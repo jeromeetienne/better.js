@@ -2,8 +2,8 @@
  * @fileOverview definition of PropertyAttr - based on other core libraries
  */
 
-var StrongTyping	= StrongTyping	|| require('../strongtyping.js');
-var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
+var StrongTyping= StrongTyping	|| require('../strongtyping.js');
+var Privatize	= Privatize	|| require('../privatize.js');
 
 /**
  * [PropertyAttr description]
@@ -21,7 +21,7 @@ var PropertyAttr	= function(baseObject, property, attributes){
 
 	// honor .private
 	if( attributes.private ){
-		PrivateForJS.privateProperty(baseObject, property)	
+		Privatize.privateProperty(baseObject, property)	
 	}
 }
 

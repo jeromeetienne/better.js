@@ -2,8 +2,8 @@
  * @fileOverview definition of PropertyAttr - based on other core libraries
  */
 
-var StrongTyping	= StrongTyping	|| require('../strongtyping.js');
-var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
+var StrongTyping= StrongTyping	|| require('../strongtyping.js');
+var Privatize	= Privatize	|| require('../privatize.js');
 
 /** 
  * plugin system

@@ -46,7 +46,7 @@ So a Number between 0 and 130. Here is the validator.
 Here is one in case your value is a selection among options, e.g. 'low', 'normal', 'high'
 
 ```
-[TypeCheck2.Validator(function(value){
+[TypeCheck.Validator(function(value){
 	return ['low', 'normal', 'high'].indexof(value) !== -1
 })]
 ```

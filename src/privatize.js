@@ -3,7 +3,7 @@
  *
  * @namespace Strong typing for javascript
  */
-var PrivateForJS	= {};
+var Privatize	= {};
 
 // include dependancies
 var Stacktrace		= Stacktrace	|| require('./stacktrace.js');
@@ -11,7 +11,7 @@ var QGetterSetter	= QGetterSetter|| require('./qgettersetter.js')
 
 
 // export the namespace in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= PrivateForJS;
+if( typeof(window) === 'undefined' )	module.exports	= Privatize;
 
 //////////////////////////////////////////////////////////////////////////////////
 //		Handle PrivateOKFn						//
@@ -23,7 +23,7 @@ if( typeof(window) === 'undefined' )	module.exports	= PrivateForJS;
  * @param  {function} klass  the constructor of the class
  * @param  {function} privateFn 	private function to add
  */
-PrivateForJS.pushPrivateOkFn	= function(instance, privateFn){
+Privatize.pushPrivateOkFn	= function(instance, privateFn){
 	// create the storage value if needed - with non enumerable
 	if( instance._privateOkFn === undefined ){
 		Object.defineProperty(instance, '_privateOkFn', {
@@ -46,8 +46,8 @@ PrivateForJS.pushPrivateOkFn	= function(instance, privateFn){
  * @param  {String} property	the property name
  * @return {undefined}		nothing
  */
-PrivateForJS.privateProperty	= function(instance, property){
-	console.assert( '_privateOkFn' in instance, 'this instance isnt init for PrivateForJS')
+Privatize.privateProperty	= function(instance, property){
+	console.assert( '_privateOkFn' in instance, 'this instance isnt init for Privatize')
 	// check private in the getter
 	QGetterSetter.defineGetter(instance, property, function aFunction(value, caller, property){
 console.log('check getter property', property)
@@ -83,7 +83,7 @@ console.log('check setter property', property)
  * @param  {Function} fn    the function to overload
  * @return {Function}       the overloaded function
  */
-PrivateForJS.privateFunction	= function(instance, fn){
+Privatize.privateFunction	= function(instance, fn){
 	var functionName= fn.name || 'anonymous'
 	return function _checkPrivateFunction(){
 		// get caller
@@ -110,13 +110,13 @@ console.log('check function', functionName)
  * 
  * @param  {Object} instance [description]
  */
-PrivateForJS.initInstance	= function(instance){
+Privatize.initInstance	= function(instance){
 	// populate the ._privateOkFn with the .prototype function which start by '_'
 	for(var property in instance){
 		// TODO should i do a .hasOwnProperty on a .prototype ?
 		if( typeof(instance[property]) !== 'function')	continue;
 		// console.log('PrivateOKFn', property)
-		PrivateForJS.pushPrivateOkFn(instance, instance[property])
+		Privatize.pushPrivateOkFn(instance, instance[property])
 	}	
 }
 
@@ -126,18 +126,18 @@ PrivateForJS.initInstance	= function(instance){
  * 
  * @param  {object} instance	the instance of the object
  */
-PrivateForJS.privatize	= function(instance){
+Privatize.privatize	= function(instance){
 	// sanity check
-	console.assert( '_privateOkFn' in instance, 'this instance isnt init for PrivateForJS')
+	console.assert( '_privateOkFn' in instance, 'this instance isnt init for Privatize')
 	// declare any property/functions starting with '_' as private	
 	for(var property in instance){
 		if( property[0] !== '_' )		continue;
 		if( typeof(instance[property]) === 'function' ){
 			// console.log('declare', property, 'as private function')
-			instance[property] = PrivateForJS.privateFunction(instance, instance[property])
+			instance[property] = Privatize.privateFunction(instance, instance[property])
 		}else{
 			// console.log('declare', property, 'as private property')
-			PrivateForJS.privateProperty(instance, property);		
+			Privatize.privateProperty(instance, property);		
 		}
 	}
 };

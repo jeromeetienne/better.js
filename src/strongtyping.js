@@ -91,7 +91,7 @@ StrongTyping.value	= function(value, types){
 			var valid	= typeof(value) === 'string';
 		}else if( type === undefined ){
 			var valid	= typeof(value) === 'undefined';
-		}else if( typeof(type) === 'string' && type.toLowerCase() === 'always' ){
+		}else if( typeof(type) === 'string' && type.toLowerCase() === 'any' ){
 			var valid	= true;
 		}else if( typeof(type) === 'string' && type.toLowerCase() === 'never' ){
 			// return immediatly as a failed validator

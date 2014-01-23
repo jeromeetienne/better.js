@@ -1,6 +1,6 @@
-var PrivateForJS	= PrivateForJS	|| require('../src/privateforjs.js');
+var Privatize	= Privatize	|| require('../src/privatize.js');
 
-describe('PrivateForJS', function(){
+describe('Privatize', function(){
 	//////////////////////////////////////////////////////////////////////////////////
 	//		comment								//
 	//////////////////////////////////////////////////////////////////////////////////
@@ -10,8 +10,8 @@ describe('PrivateForJS', function(){
 		this.john	= 'smith'
 		this._bar	= 2
 
-		PrivateForJS.initInstance(this)
-		PrivateForJS.privatize(this)
+		Privatize.initInstance(this)
+		Privatize.privatize(this)
 	};
 
 	aClass1.prototype.bar	= function aClass1_bar(){

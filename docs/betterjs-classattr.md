@@ -1,4 +1,4 @@
-# What Better Can Do For Your Class ?
+## ClassAttr.js
 
 it is a better.js for class. 
 It provides a way to define some properties as private, the same for functions.
@@ -11,14 +11,12 @@ The constructor arguements got strong type too.
   * maybe to rewrite qgettersetter2 with Object.defineProperty
 * to support Object.freeze
 * to support default arguments
-  * Bjs.Class.defaults	= {}
-```
-
+  * ClassAttr.defaults	= {}
 
 ## Basic Usage
 
 ```
-var MyClass	= Bjs.Class(function(label, quantity){
+var MyClass	= ClassAttr(function(label, quantity){
 	this.label	= label
 	this.quantity	= quantity
 }, {
@@ -35,7 +33,7 @@ var MyClass	= Bjs.Class(function(label, quantity){
 ## API
 
 ```
-var MyClass	= Bjs.Class(function(label, quantity){
+var MyClass	= ClassAttr(function(label, quantity){
 	this._label	= label
 	this._quantity	= quantity
 }, {
@@ -54,7 +52,7 @@ var MyClass	= Bjs.Class(function(label, quantity){
 })
 ```
 
-if no attributes is provided, it will use ```Bjs.Class.defaultAttributes```. 
+if no attributes is provided, it will use ```ClassAttr.defaultAttributes```. 
 
 ## Notes
 

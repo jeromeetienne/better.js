@@ -30,8 +30,8 @@ var MyClass	= ClassAttr(ctor, {
 })
 */
 
-var StrongTyping	= StrongTyping	|| require('../strongtyping.js');
-var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
+var StrongTyping= StrongTyping	|| require('../strongtyping.js');
+var Privatize	= Privatize	|| require('../privatize.js');
 
 var ClassAttr	= function(originalCtor, attributes){
 	// handle arguments default values
@@ -78,8 +78,8 @@ var ClassAttr	= function(originalCtor, attributes){
 		
 		// honor .privatize
 		if( attributes.privatize ){
-			PrivateForJS.initInstance(instance)
-			PrivateForJS.privatize(instance)
+			Privatize.initInstance(instance)
+			Privatize.privatize(instance)
 		}
 
 		return instance
