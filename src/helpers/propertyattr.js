@@ -2,7 +2,7 @@
  * @fileOverview definition of PropertyAttr - based on other core libraries
  */
 
-var TypeCheck		= TypeCheck	|| require('../typecheck.js');
+var StrongTyping	= StrongTyping	|| require('../strongtyping.js');
 var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
 
 /**
@@ -16,7 +16,7 @@ var PropertyAttr	= function(baseObject, property, attributes){
 	// honor .type	
 	if( attributes.type ){
 		var allowedType	= attributes.type
-		TypeCheck.setter(baseObject, property, allowedType)
+		StrongTyping.setter(baseObject, property, allowedType)
 	}
 
 	// honor .private

@@ -1,20 +1,20 @@
-var TypeCheck	= TypeCheck	|| require('../src/typecheck.js');
+var StrongTyping	= StrongTyping	|| require('../src/strongtyping.js');
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-describe('TypeCheck.value', function(){
+describe('StrongTyping.value', function(){
 
 	it('is valid with Number', function(){
 		var value	= 99;
 		var types	= [Number,];
-		var valid	= TypeCheck.value(value, types)
+		var valid	= StrongTyping.value(value, types)
 		console.assert( valid === true )
 
 		var value	= 99;
 		var types	= [String,];
-		var valid	= TypeCheck.value(value, types)
+		var valid	= StrongTyping.value(value, types)
 		console.assert( valid === false )
 		// console.log('valid', valid)
 		// console.log('value', value, valid ? 'is' : 'isnt', 'of types', types)
@@ -23,58 +23,58 @@ describe('TypeCheck.value', function(){
 	it('is valid with NaN', function(){
 		var value	= NaN;
 		var types	= [Number];
-		var valid	= TypeCheck.value(value, types)
+		var valid	= StrongTyping.value(value, types)
 		console.assert( valid === true )
 
 		var value	= NaN;
 		var types	= [Number, 'noNaN'];
-		var valid	= TypeCheck.value(value, types)
+		var valid	= StrongTyping.value(value, types)
 		console.assert( valid === false )
 
 		var value	= 99;
 		var types	= [Number, 'noNaN'];
-		var valid	= TypeCheck.value(value, types)
+		var valid	= StrongTyping.value(value, types)
 		console.assert( valid === true )
 
 		var value	= NaN;
 		var types	= ['noNaN'];
-		var valid	= TypeCheck.value(value, types)
+		var valid	= StrongTyping.value(value, types)
 		console.assert( valid === false )
 	});
 	
 	it('is valid with String', function(){
 		var value	= 'aString';
 		var types	= [String,];
-		var valid	= TypeCheck.value(value, types)
+		var valid	= StrongTyping.value(value, types)
 		console.assert( valid === true )
 
 		var value	= 'aString';
 		var types	= [Number,];
-		var valid	= TypeCheck.value(value, types)
+		var valid	= StrongTyping.value(value, types)
 		console.assert( valid === false )
 	});
 
 	it('is valid with multiple types', function(){
 		var value	= 'aString';
 		var types	= [String,Number];
-		var valid	= TypeCheck.value(value, types)
+		var valid	= StrongTyping.value(value, types)
 		console.assert( valid === true )
 
 		var value	= 99;
 		var types	= [String,Number];
-		var valid	= TypeCheck.value(value, types)
+		var valid	= StrongTyping.value(value, types)
 		console.assert( valid === true )
 	});
 
 	it('is valid with {} as Object', function(){
 		var value	= {};
 		var types	= [String,Number];
-		var valid	= TypeCheck.value(value, types)
+		var valid	= StrongTyping.value(value, types)
 		console.assert( valid === false )
 
 		var value	= {};
 		var types	= [Object];
-		var valid	= TypeCheck.value(value, types)
+		var valid	= StrongTyping.value(value, types)
 		console.assert( valid === true )
 	});
 });
@@ -84,13 +84,13 @@ describe('TypeCheck.value', function(){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-describe('TypeCheck.fn', function(){
+describe('StrongTyping.fn', function(){
 	// define the original function
 	var fct		= function(aString, aNumber){
 		return aString + aNumber;
 	}
 	// setup fn
-	fct	= TypeCheck.fn(fct, [[String, Number], Number], String);
+	fct	= StrongTyping.fn(fct, [[String, Number], Number], String);
 
 	it('doesnt exception if function types match', function(){
 		var result	= fct('bla', 99)
@@ -137,11 +137,11 @@ describe('TypeCheck.fn', function(){
 //										//
 //////////////////////////////////////////////////////////////////////////////////
 
-describe('TypeCheck.setter', function(){
+describe('StrongTyping.setter', function(){
 	var foo		= {
 		x	: 3
 	};
-	TypeCheck.setter(foo, 'x', [Number, 'noNaN']);
+	StrongTyping.setter(foo, 'x', [Number, 'noNaN']);
 
 	it('check accuratly the type thru a setter', function(){
 		foo.x	= 4;		
@@ -156,36 +156,36 @@ describe('TypeCheck.setter', function(){
 	});
 });
 
-describe('TypeCheck.Validator', function(){
+describe('StrongTyping.Validator', function(){
 	it('check accuratly NaN positive test', function(){
 		var value	= 99;
 		var types	= [Number, 'noNaN'];
-		var valid	= TypeCheck.value(value, types);
+		var valid	= StrongTyping.value(value, types);
 		console.assert( valid === true )
 	});
 
 	it('check accuratly NaN negative test', function(){
 		var value	= NaN;
 		var types	= [Number, 'noNaN'];
-		var valid	= TypeCheck.value(value, types);
+		var valid	= StrongTyping.value(value, types);
 		console.assert( valid === false )
 	});
 
 	it('check accuratly with BoundChecking positive', function(){
 		var value	= 99;
-		var types	= [Number, TypeCheck.Validator(function(value){
+		var types	= [Number, StrongTyping.Validator(function(value){
 			return value < 100;
 		})];
-		var valid	= TypeCheck.value(value, types);
+		var valid	= StrongTyping.value(value, types);
 		console.assert( valid === true )
 	});
 
 	it('check accuratly with BoundChecking negative', function(){
 		var value	= 101;
-		var types	= [Number, TypeCheck.Validator(function(value){
+		var types	= [Number, StrongTyping.Validator(function(value){
 			return value < 100;
 		})];
-		var valid	= TypeCheck.value(value, types);
+		var valid	= StrongTyping.value(value, types);
 		console.assert( valid === false )
 	});
 });

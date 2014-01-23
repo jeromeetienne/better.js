@@ -2,7 +2,7 @@
  * @fileOverview definition of PropertyAttr - based on other core libraries
  */
 
-var TypeCheck		= TypeCheck	|| require('../typecheck.js');
+var StrongTyping	= StrongTyping	|| require('../strongtyping.js');
 var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
 
 /** 
@@ -16,7 +16,7 @@ var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
 // 		var allowedTypes	= attributes.arguments
 // 		console.assert(args.length <= allowedTypes.length, 'function received '+args.length+' parameters but allows only '+allowedTypes.length+'!');
 // 		for(var i = 0; i < allowedTypes.length; i++){
-// 			var isValid	= TypeCheck.value(args[i], allowedTypes[i]);
+// 			var isValid	= StrongTyping.value(args[i], allowedTypes[i]);
 // 			console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', arguments[i])
 // 		}		
 // 	}
@@ -25,7 +25,7 @@ var PrivateForJS	= PrivateForJS	|| require('../privateforjs.js');
 // 	onAfter		: function(instance, args, returnedValue){
 // 		var allowedTypes= attributes.return
 // // console.log('blabla', arguments)
-// 		var isValid	= TypeCheck.value(returnedValue, allowedTypes)
+// 		var isValid	= StrongTyping.value(returnedValue, allowedTypes)
 // 		console.assert(isValid, 'invalid type for returned value. MUST be of type', allowedTypes, 'It is ===', returnedValue)			
 // 	}
 // }
@@ -46,7 +46,7 @@ var FunctionAttr	= function(originalFn, attributes){
 			var allowedTypes	= attributes.arguments
 			console.assert(args.length <= allowedTypes.length, 'function received '+args.length+' parameters but allows only '+allowedTypes.length+'!');
 			for(var i = 0; i < allowedTypes.length; i++){
-				var isValid	= TypeCheck.value(args[i], allowedTypes[i]);
+				var isValid	= StrongTyping.value(args[i], allowedTypes[i]);
 				console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', arguments[i])
 			}			
 		}
@@ -61,7 +61,7 @@ var FunctionAttr	= function(originalFn, attributes){
 		if( attributes.return !== undefined ){
 			var allowedTypes= attributes.return
 	// console.log('blabla', arguments)
-			var isValid	= TypeCheck.value(returnedValue, allowedTypes)
+			var isValid	= StrongTyping.value(returnedValue, allowedTypes)
 			console.assert(isValid, 'invalid type for returned value. MUST be of type', allowedTypes, 'It is ===', returnedValue)			
 		}
 	})

@@ -1,5 +1,5 @@
 /**
- * @fileOverview contains TypeCheck class
+ * @fileOverview contains StrongTyping class
  * 
  * if input of type in text see 
  * * https://developers.google.com/closure/compiler/docs/js-for-compiler
@@ -10,13 +10,13 @@
 /**
  * @namespace Strong typing for javascript
  */
-var TypeCheck	= {};
+var StrongTyping	= {};
 
 // dependancy
 var QGetterSetter	= QGetterSetter	|| require('../src/qgettersetter.js')
 
 // export the namespace in node.js - if running in node.js
-if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;
+if( typeof(window) === 'undefined' )	module.exports	= StrongTyping;
 
 
 /**
@@ -26,15 +26,15 @@ if( typeof(window) === 'undefined' )	module.exports	= TypeCheck;
  * @param  {String} property   the string of the property name
  * @param  {Array}  types      the allows tipe
  */
-TypeCheck.setter	= function(baseObject, property, types){
+StrongTyping.setter	= function(baseObject, property, types){
 	// check initial value
 	var value	= baseObject[property];
-	var isValid	= TypeCheck.value(value, types)
+	var isValid	= StrongTyping.value(value, types)
 	console.assert(isValid, 'initial value got invalid type');
 	// setup the setter
 	QGetterSetter.defineSetter(baseObject, property, function(value){
 		// check the value type
-		var isValid	= TypeCheck.value(value, types);			
+		var isValid	= StrongTyping.value(value, types);			
 		console.assert(isValid, 'invalid type value='+value+' types='+types);
 		// return the value
 		return value;
@@ -49,20 +49,20 @@ TypeCheck.setter	= function(baseObject, property, types){
  * @param  {Array}    returnTypes allowed types for the return value
  * @return {boolean}  return isValid, so true if types matche, false otherwise
  */
-TypeCheck.fn	= function(originalFn, paramsTypes, returnTypes){
+StrongTyping.fn	= function(originalFn, paramsTypes, returnTypes){
 // TODO is this usefull ? isnt that a duplicate with propertyAttr2
 
-	return function TypeCheck_fn(){
+	return function StrongTyping_fn(){
 		// check arguments type
 		console.assert(arguments.length <= paramsTypes.length, 'function received '+arguments.length+' parameters but allows only '+paramsTypes.length+'!');
 		for(var i = 0; i < paramsTypes.length; i++){
-			var isValid	= TypeCheck.value(arguments[i], paramsTypes[i]);			
+			var isValid	= StrongTyping.value(arguments[i], paramsTypes[i]);			
 			console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', paramsTypes[i], 'It is ===', arguments[i])
 		}
 		// forward the call to the original function
 		var result	= originalFn.apply(this, arguments);
 		// check the result type
-		var isValid	= TypeCheck.value(result, returnTypes);			
+		var isValid	= StrongTyping.value(result, returnTypes);			
 		console.assert(isValid, 'invalid type for returned value. MUST be of type', returnTypes, 'It is ===', result);
 		// return the result
 		return result;
@@ -76,7 +76,7 @@ TypeCheck.fn	= function(originalFn, paramsTypes, returnTypes){
  * @param  {Array.<function>} types the types allowed for this variable
  * @return {boolean} return isValid, so true if types matche, false otherwise
  */
-TypeCheck.value	= function(value, types){
+StrongTyping.value	= function(value, types){
 	// handle parameter polymorphism
 	if( types instanceof Array === false )	types	= [types];
 	// if types array is empty, default to ['always'], return true as in valid
@@ -100,7 +100,7 @@ TypeCheck.value	= function(value, types){
 			var valid	= value === value;
 			if( valid === false )	return false;
 			continue;	// continue as it is a validator
-		}else if( type instanceof TypeCheck._ValidatorClass ){
+		}else if( type instanceof StrongTyping._ValidatorClass ){
 			var valid	= type.fn(value);
 			if( valid === false )	return false;
 			continue;	// continue as it is a validator
@@ -123,16 +123,16 @@ TypeCheck.value	= function(value, types){
  * 
  * @param {Function(value)} fn function which return true if value is valid, false otherwise
  */
-TypeCheck.Validator	= function(fn){
-	return new TypeCheck._ValidatorClass(fn)
+StrongTyping.Validator	= function(fn){
+	return new StrongTyping._ValidatorClass(fn)
 }
 
 /**
- * Internal class to be recognisable by TypeCheck.value()
+ * Internal class to be recognisable by StrongTyping.value()
  * 
  * @param  {Function} fn function which return true if value is valid, false otherwise
  */
-TypeCheck._ValidatorClass= function(fn){
+StrongTyping._ValidatorClass= function(fn){
 	console.assert(fn instanceof Function);
 	this.fn	= fn;
 }
