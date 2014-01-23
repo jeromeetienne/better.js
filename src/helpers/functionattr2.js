@@ -5,6 +5,31 @@
 var TypeCheck2		= TypeCheck2	|| require('../typecheck2.js');
 var PrivateForJS3	= PrivateForJS3	|| require('../privateforjs3.js');
 
+/** 
+ * plugin system
+ * * seem cool, but you loose all the shortness of closure
+ * * so not now
+ */
+// FunctionAttr2.plugins	= {}
+// FunctionAttr2.plugins['arguments']	= {
+// 	onBefore	: function(){
+// 		var allowedTypes	= attributes.arguments
+// 		console.assert(args.length <= allowedTypes.length, 'function received '+args.length+' parameters but allows only '+allowedTypes.length+'!');
+// 		for(var i = 0; i < allowedTypes.length; i++){
+// 			var isValid	= TypeCheck2.value(args[i], allowedTypes[i]);
+// 			console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', arguments[i])
+// 		}		
+// 	}
+// }
+// FunctionAttr2.plugins['return']	= {
+// 	onAfter		: function(instance, args, returnedValue){
+// 		var allowedTypes= attributes.return
+// // console.log('blabla', arguments)
+// 		var isValid	= TypeCheck2.value(returnedValue, allowedTypes)
+// 		console.assert(isValid, 'invalid type for returned value. MUST be of type', allowedTypes, 'It is ===', returnedValue)			
+// 	}
+// }
+
 /**
  * [FunctionAttr2 description]
  * 
@@ -21,7 +46,7 @@ var FunctionAttr2	= function(originalFn, attributes){
 			var allowedTypes	= attributes.arguments
 			console.assert(args.length <= allowedTypes.length, 'function received '+args.length+' parameters but allows only '+allowedTypes.length+'!');
 			for(var i = 0; i < allowedTypes.length; i++){
-				var isValid	= TypeCheck2.value(args[i], allowedTypes[i]);			
+				var isValid	= TypeCheck2.value(args[i], allowedTypes[i]);
 				console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', arguments[i])
 			}			
 		}

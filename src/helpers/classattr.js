@@ -13,6 +13,11 @@ var MyClass	= ClassAttr(ctor, {
 				// 'read'
 				// 'write'
 
+	name	: 'myClass',	// the name of the class, name the ctor function
+
+	obsolete: 'obsolete since v1.0',	// log once this message on usage, then throw an exception
+	deprecated: 'deprecated since v1.0',	// long once this message on usage
+
 
 	privatize	: true;	// privatize functions and property
 				// false
