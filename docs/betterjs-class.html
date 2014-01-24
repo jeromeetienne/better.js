@@ -7,7 +7,7 @@
     <meta name="description" content="Better.js for a better javascript in javascript">
     <meta name="author" content="Jerome Etienne">
     <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
-
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
     <title>Better.js - for a better javascript in javascript</title>
 
     <!-- Bootstr../ap core CSS -->
@@ -31,7 +31,6 @@
     <![endif]-->
 
     <!-- Custom styles for this template -->
-    <link href="../www/carousel.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../www/prettify/prettify.css" />
     <link rel="stylesheet" type="text/css" href="../www/prettify-theme-sons-of-obsidian-dark.css" />
 
@@ -43,12 +42,38 @@
       <!-- START THE FEATURETTES -->
 
       <div class="jumbotron">
-        <h1>Better.js Class</h1>
-        <p class="lead">It provides features such private functions or strong typing.
+        <h1>What Better.js Can Do For Your Classes?</h1>
+        <p class="lead">It provides features such <strong>private functions/properties</strong> 
+          or <strong>strong typing</strong>.
+          Those feature were missing in javascript. 
+          Better.js make it possible and easy to use.
           It helps you find bug earlier, so write a better code.
         </p>
-        <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p>
       </div>
+      <!-- Three columns of text below the carousel -->
+      <div class="row">
+        <div class="col-lg-4">
+          <h3>Private Things Stay Private!</h3>
+          <p>Your class has some properties or functions which are supposed to be internal only ?
+            You declare them as private and better.js will make sure they do remain private!
+            </p>
+          <p><a class="btn btn-primary" href="#PrivateInBetterJS" role="button">View details</a></p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <h3>Strong Typing For Arguments</h3>
+          <p>When your class is intentiated, it receives some arguements ?
+            Better.js will ensure that they match the types you defined.
+            </p>
+          <p><a class="btn btn-primary" href="#StrongTypingForArguments" role="button">View details</a></p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <h3>Strong Typing For Properties</h3>
+          <p>Your class got some properties ? You define the type they should have
+            and better.js makes sure those rules are respected.
+            </p>
+          <p><a class="btn btn-primary" href="#StrongTypingForProperties" role="button">View details</a></p>
+        </div><!-- /.col-lg-4 -->
+      </div><!-- /.row -->
 
       <hr class="featurette-divider">
 
@@ -67,6 +92,7 @@
 // Constructor of the class
 var Cat = function(name){
   this._name  = name
+  this.age    = 7
 }
 
 // getter for _name
@@ -81,11 +107,20 @@ Cat.prototype.getName = function(){
       
       <!-- Private in Better.js Class -->
 
-      <div class="page-header jumbotron">
+      <div class="page-header jumbotron" id='PrivateInBetterJS'>
         <h1>Private in Better.js Class</h1>
       </div>
         
       <div class="row featurette">
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Make a Better.js for Your Class</h2>
+          <p class="lead">We declare a better.js for it.
+            We give the class various attributes for better.js.
+            A Simple <code>privatize : true</code>. After that, 
+            all functions or property starting with <code>_</code>
+            are private.
+          </p>
+        </div>
         <div class="col-md-7">
           <pre class="prettyprint" style='font-size:140%'>
 // Here _name is accessible by everybody
@@ -99,33 +134,11 @@ Cat = Bjs.Class(Cat, {
 // Only Cat's functions can use it
 </pre>
         </div>
-        <div class="col-md-5">
-          <h2 class="featurette-heading">Make a Better.js for it</h2>
-          <p class="lead">We declare a better.js for it.
-            We give the class various attributes for better.js.
-            A Simple <code>privatize : true</code>. After that, 
-            all functions or property starting with <code>_</code>
-            are private.
-          </p>
-        </div>
       </div>
 
       <hr class="featurette-divider">
 
       <div class="row featurette">
-        <div class="col-md-5">
-          <h2 class="featurette-heading">Detect Unauthorized Access</h2>
-          <p class="lead">
-            Now let's use this <code>Cat</code> class. 
-            If <code>_name</code> is read thru the getter <code>.getName()</code>, all is 
-            ok.
-            if <code>_name</code> is read directly, an exception is thrown.
-          </p>
-          <p class="lead">
-            Unauthorized access is <strong>immediatly detected</strong> 
-            and the execution is stopped.
-          </p>
-        </div>
         <div class="col-md-7">
           <pre class="prettyprint" style='font-size:140%'>
 // get a new cat
@@ -143,14 +156,149 @@ console.log('My cat name is ', cat._name);
 // "Denied access to private property _name"
 </pre>
         </div>
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Detect Unauthorized Access</h2>
+          <p class="lead">
+            Now let's use this <code>Cat</code> class. 
+            If <code>_name</code> is read thru the getter <code>.getName()</code>, all is 
+            ok.
+            if <code>_name</code> is read directly, an exception is thrown.
+          </p>
+          <p class="lead">
+            Unauthorized access is <strong>immediatly detected</strong> 
+            and the execution is stopped.
+          </p>
+        </div>
       </div>
       <!-- /Private in Better.js Class -->
       
       <hr class="featurette-divider">
 
+      <!-- Strong Typing for Arguments -->
+      <div class="page-header jumbotron" id='StrongTypingForArguments'>
+        <h1>Strong Typing For Arguments</h1>
+      </div>
+
+      <div class="row featurette">
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Make a Better.js for Your Class</h2>
+          <p class="lead">We declare a better.js for it.
+            Our class can receive a name which is a <code>String</code>.
+            From now on, when this class is instanciated, better.js will 
+            check arguments against this definition. 
+          </p>
+        </div>
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+
+// Make a Better.js for Cat
+Cat = Bjs.Class(Cat, {
+  arguments : [String]
+})
+
+
+</pre>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+// get a new cat
+var cat = new Cat('kitty')
+
+// all is OK...
+
+// get a another cat
+var cat2 = new Cat(99)
+
+// Exception thrown
+// "Invalid arguments 0 - Should be String"
+</pre>
+        </div>
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Detect Invalid Arguments</h2>
+          <p class="lead">
+            Now let's use this <code>Cat</code> class. 
+            If the first arguments <code>name</code> is passed as a String, 
+            it matches the better.js definition, all is OK.
+            But if somebody tries to pass a Number instead,
+            the unauthorized type is <strong>immediatly detected</strong> 
+            and the execution is stopped.
+          </p>
+        </div>
+      </div>
+
+      <!-- /Strong Typing for Arguments -->
+
+      <!-- Strong Typing for Properties -->
+      <div class="page-header jumbotron" id='StrongTypingForProperties'>
+        <h1>Strong Typing For Properties</h1>
+      </div>
+
+      <div class="row featurette">
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Make a Better.js for Your Class</h2>
+          <p class="lead">We declare a better.js for it.
+            Our class has a <code>_name</code> property a name which is a <code>String</code>
+            and an <code>age</code> which is a <code>Number</code>.
+          </p>
+        </div>
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+// Make a Better.js for Cat
+Cat = Bjs.Class(Cat, {
+  properties : {
+    _name : String,
+    age : Number,
+  }
+})
+
+
+</pre>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+// get a new cat
+var cat = new Cat('kitty')
+
+// Let's try to set cat age with a Number
+cat.age = 14
+console.log('My cat age is', cat.age)
+// display 'My cat age is 14' ... all is OK...
+
+// Let's try to set cat age with a String
+cat.age = 'smoth'
+
+// Exception thrown
+// "Invalid property .age - Should be Number"
+</pre>
+        </div>
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Detect Invalid Properties</h2>
+          <p class="lead">
+            Now let's use this <code>Cat</code> class.
+            If we put a <code>Number</code> in <code>cat.age</code>, 
+            it matches our better.js, so all is ok.
+            When we try to put a <code>String</code> in there,
+            the unauthorized type is <strong>immediatly detected</strong> 
+            and the execution is stopped.
+          </p>
+        </div>
+      </div>
+
+      <!-- /Strong Typing for Properties -->
+
       <!-- Comparison with/without better.js -->
       <div class="page-header jumbotron">
-        <h1>What Better Class Can Do For You?</h1>
+        <h1>Features Summary</h1>
       </div>
       <div class='row' style='font-size: 150%;'>
         <table class="table table-bordered">
@@ -197,64 +345,6 @@ console.log('My cat name is ', cat._name);
 
       <hr class="featurette-divider">
 
-      <!-- Strong Typing for Arguments -->
-      <div class="page-header jumbotron">
-        <h1>Strong Typing For Arguments</h1>
-      </div>
-
-      <div class="row featurette">
-        <div class="col-md-7">
-          <pre class="prettyprint" style='font-size:140%'>
-
-
-// Make a Better.js for Cat
-Cat = Bjs.Class(Cat, {
-  arguments : [String]
-})
-
-
-
-</pre>
-        </div>
-        <div class="col-md-5">
-          <h2 class="featurette-heading">Make a Better.js for it</h2>
-          <p class="lead">We declare a better.js for it.
-            Our class can receive a name which is a <code>String</code>.
-            From now on, when this class is instanciated, arguments
-            will be check against this definition. 
-          </p>
-        </div>
-      </div>
-
-      <!-- /Strong Typing for Arguments -->
-
-      <!-- Strong Typing for Properties -->
-      <div class="page-header jumbotron">
-        <h1>Strong Typing For Properties</h1>
-      </div>
-
-      <div class="row featurette">
-        <div class="col-md-7">
-          <pre class="prettyprint" style='font-size:140%'>
-// Make a Better.js for Cat
-Cat = Bjs.Class(Cat, {
-  properties : {
-    _name : String
-  }
-})
-
-
-</pre>
-        </div>
-        <div class="col-md-5">
-          <h2 class="featurette-heading">Make a Better.js for it</h2>
-          <p class="lead">We declare a better.js for it.
-            Our class has a <code>_name</code> property a name which is a <code>String</code>.
-          </p>
-        </div>
-      </div>
-
-      <!-- /Strong Typing for Properties -->
 
       <!-- FOOTER -->
       <footer>
