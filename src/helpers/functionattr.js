@@ -40,11 +40,12 @@ var Privatize	= Privatize	|| require('../privatize.js');
 var FunctionAttr	= function(originalFn, attributes){
 	var functionName= attributes.name	|| originalFn.name
 	
+	// to honor .private
 	var privateDone	= false
 
 	return wrapFunction(originalFn, functionName, function(instance, args){
 		// honor .private
-		if( attributes.private === true && privateDone === false ){
+		if( privateDone === false && attributes.private === true ){
 			Privatize.pushPrivateOkFn(instance, originalFn)
 			privateDone	= true
 		}
@@ -58,7 +59,6 @@ var FunctionAttr	= function(originalFn, attributes){
 				console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', arguments[i])
 			}			
 		}
-		
 	}, function(returnedValue, instance, args){
 		// honor .return - check the result type
 		if( attributes.return !== undefined ){

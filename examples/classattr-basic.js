@@ -1,35 +1,18 @@
 var ClassAttr	= ClassAttr	|| require('../src/helpers/classattr.js')
 
-ClassAttr.overloadFunctionPrototype()
-
-//////////////////////////////////////////////////////////////////////////////////
-//		parent class								//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * animal ctos
- */
-var Animal	= function(){
-}
-
-Animal.prototype.isVegetal	= function(){
-	return false;
-}
-
 /**
  * cat constructor
  */
 var Cat	= function(name, weight){
-	// Animal.call( this );
-	this.name	= name
+	this._name	= name
 	this.weight	= weight || 0
 }
 
-Cat.prototype = Object.create( Animal.prototype );
-
-Cat.prototype.salute	= function(){
-	return 'miaou'+this._yo
+Cat.prototype.getName	= function(){
+	return this._name
 }
+
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //		comment								//

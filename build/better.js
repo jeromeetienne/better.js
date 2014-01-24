@@ -1303,11 +1303,12 @@ var Privatize	= Privatize	|| require('../privatize.js');
 var FunctionAttr	= function(originalFn, attributes){
 	var functionName= attributes.name	|| originalFn.name
 	
+	// to honor .private
 	var privateDone	= false
 
 	return wrapFunction(originalFn, functionName, function(instance, args){
 		// honor .private
-		if( attributes.private === true && privateDone === false ){
+		if( privateDone === false && attributes.private === true ){
 			Privatize.pushPrivateOkFn(instance, originalFn)
 			privateDone	= true
 		}
@@ -1321,7 +1322,6 @@ var FunctionAttr	= function(originalFn, attributes){
 				console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', arguments[i])
 			}			
 		}
-		
 	}, function(returnedValue, instance, args){
 		// honor .return - check the result type
 		if( attributes.return !== undefined ){
@@ -1562,16 +1562,16 @@ BetterJS.GlobalDetector	= GlobalDetector
 //		privateforjs.js							//
 //////////////////////////////////////////////////////////////////////////////////
 
-var PrivateForJS	= PrivateForJS		|| require('../src/privateforjs.js');
-BetterJS.PrivateForJS	= PrivateForJS
+var Privatize		= Privatize		|| require('../src/privatize.js');
+BetterJS.Privatize	= Privatize
 
 
 //////////////////////////////////////////////////////////////////////////////////
 //		typecheck.js							//
 //////////////////////////////////////////////////////////////////////////////////
 
-var TypeCheck		= TypeCheck		|| require('../src/typecheck.js');
-BetterJS.TypeCheck	= TypeCheck
+var StrongTyping	= StrongTyping		|| require('../src/strongtyping.js');
+BetterJS.StrongTyping	= StrongTyping
 
 //////////////////////////////////////////////////////////////////////////////////
 //		assertwhichstop.js						//
@@ -1743,7 +1743,9 @@ BetterJS.StackTracker	= Stacktrace.Tracker
 var ClassAttr	= ClassAttr		|| require('../src/helpers/classattr.js');
 BetterJS.Class	= ClassAttr
 
+
 // End of Better.js
+	return BetterJS
 })();
 
 // shorter Alias for Better.js

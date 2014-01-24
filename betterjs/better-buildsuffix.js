@@ -1,6 +1,8 @@
-// End of Better.js
+
+	// End of Better.js
+	return BetterJS
 })();
 
-// shorter Alias for Better.js
+// shorter Alias for Better.js - optional
 var Bjs	= BetterJS
 

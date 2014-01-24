@@ -47,7 +47,7 @@ You can do you own tho. here is one for range checking. Let's say the variable i
 So a Number between 0 and 130. Here is the validator.
 
 ```
-[Number, TypeCheck2.Validator(function(value){
+[Number, StrongTyping.Validator(function(value){
 	return value >= 0 && value <= 130	
 })]
 ```
@@ -55,7 +55,7 @@ So a Number between 0 and 130. Here is the validator.
 Here is one in case your value is a selection among options, e.g. 'low', 'normal', 'high'
 
 ```
-[TypeCheck.Validator(function(value){
+[StrongTyping.Validator(function(value){
 	return ['low', 'normal', 'high'].indexof(value) !== -1
 })]
 ```

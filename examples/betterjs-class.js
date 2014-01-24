@@ -1,35 +1,33 @@
-var ClassAttr	= ClassAttr	|| require('../src/helpers/classattr.js')
+var Bjs	= Bjs	|| require('../build/better.js')
 
-ClassAttr.overloadFunctionPrototype()
 
 //////////////////////////////////////////////////////////////////////////////////
-//		parent class								//
+//		comment								//
 //////////////////////////////////////////////////////////////////////////////////
 
-/**
- * animal ctos
- */
-var Animal	= function(){
-}
-
-Animal.prototype.isVegetal	= function(){
-	return false;
-}
-
-/**
- * cat constructor
- */
 var Cat	= function(name, weight){
-	// Animal.call( this );
 	this.name	= name
-	this.weight	= weight || 0
+	this._weight	= weight || 0
 }
 
-Cat.prototype = Object.create( Animal.prototype );
-
-Cat.prototype.salute	= function(){
-	return 'miaou'+this._yo
+Cat.prototype.getWeight	= function(){
+	return this._weight
 }
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Make a Better.js for Cat					//
+//////////////////////////////////////////////////////////////////////////////////
+
+Cat	= Bjs.Class(Cat, {
+	arguments	: [String, [Number, undefined]],
+	privatize	: true,
+	properties	: {
+		name	: String,
+		_weight	: Number,
+	},
+})
+
+
 
 //////////////////////////////////////////////////////////////////////////////////
 //		comment								//

@@ -18,16 +18,16 @@ BetterJS.GlobalDetector	= GlobalDetector
 //		privateforjs.js							//
 //////////////////////////////////////////////////////////////////////////////////
 
-var PrivateForJS	= PrivateForJS		|| require('../src/privateforjs.js');
-BetterJS.PrivateForJS	= PrivateForJS
+var Privatize		= Privatize		|| require('../src/privatize.js');
+BetterJS.Privatize	= Privatize
 
 
 //////////////////////////////////////////////////////////////////////////////////
 //		typecheck.js							//
 //////////////////////////////////////////////////////////////////////////////////
 
-var TypeCheck		= TypeCheck		|| require('../src/typecheck.js');
-BetterJS.TypeCheck	= TypeCheck
+var StrongTyping	= StrongTyping		|| require('../src/strongtyping.js');
+BetterJS.StrongTyping	= StrongTyping
 
 //////////////////////////////////////////////////////////////////////////////////
 //		assertwhichstop.js						//

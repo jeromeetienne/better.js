@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Better.js for a better javascript in javascript">
+    <meta name="author" content="Jerome Etienne">
+    <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+
+    <title>Better.js - for a better javascript in javascript</title>
+
+    <!-- Bootstr../ap core CSS -->
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        min-height: 2000px;
+      }
+
+      .navbar-static-top {
+        margin-bottom: 0px;
+      }
+    </style>
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Custom styles for this template -->
+    <link href="../www/carousel.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../www/prettify/prettify.css" />
+    <link rel="stylesheet" type="text/css" href="../www/prettify-theme-sons-of-obsidian-dark.css" />
+
+  </head>
+<!-- NAVBAR
+================================================== -->
+  <body>
+    <div class="container marketing">
+      <!-- START THE FEATURETTES -->
+
+      <div class="jumbotron">
+        <h1>Better.js Class</h1>
+        <p class="lead">It provides features such private functions or strong typing.
+          It helps you find bug earlier, so write a better code.
+        </p>
+        <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Get A Class</h2>
+          <p class="lead">
+            Here is our example class. 
+            This is a nice little kitty class. There is a contructor which receives 
+            a <code>name</code> arguments, put that in a private (or intented to be)
+            variable <code>this._name</code> and a 
+            getter function for private variable.
+        </div>
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+// Constructor of the class
+var Cat = function(name){
+  this._name  = name
+}
+
+// getter for _name
+Cat.prototype.getName = function(){
+  return this._name
+}
+</pre>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+      
+      <!-- Private in Better.js Class -->
+
+      <div class="page-header jumbotron">
+        <h1>Private in Better.js Class</h1>
+      </div>
+        
+      <div class="row featurette">
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+// Here _name is accessible by everybody
+
+// Make a Better.js for Cat
+Cat = Bjs.Class(Cat, {
+  privatize : true
+})
+
+// Here _name is now private
+// Only Cat's functions can use it
+</pre>
+        </div>
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Make a Better.js for it</h2>
+          <p class="lead">We declare a better.js for it.
+            We give the class various attributes for better.js.
+            A Simple <code>privatize : true</code>. After that, 
+            all functions or property starting with <code>_</code>
+            are private.
+          </p>
+        </div>
+      </div>
+
+      <hr class="featurette-divider">
+
+      <div class="row featurette">
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Detect Unauthorized Access</h2>
+          <p class="lead">
+            Now let's use this <code>Cat</code> class. 
+            If <code>_name</code> is read thru the getter <code>.getName()</code>, all is 
+            ok.
+            if <code>_name</code> is read directly, an exception is thrown.
+          </p>
+          <p class="lead">
+            Unauthorized access is <strong>immediatly detected</strong> 
+            and the execution is stopped.
+          </p>
+        </div>
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+// get a new cat
+var cat = new Cat('kitty')
+
+// access thru our getter - OK
+console.log('My cat name is ', cat.getName())
+
+// display "My cat name is kitty"
+
+// direct access to private property - BAD
+console.log('My cat name is ', cat._name);
+
+// Exception thrown 
+// "Denied access to private property _name"
+</pre>
+        </div>
+      </div>
+      <!-- /Private in Better.js Class -->
+      
+      <hr class="featurette-divider">
+
+      <!-- Comparison with/without better.js -->
+      <div class="page-header jumbotron">
+        <h1>What Better Class Can Do For You?</h1>
+      </div>
+      <div class='row' style='font-size: 150%;'>
+        <table class="table table-bordered">
+          <tr>
+            <th>Features</th>
+            <th>With Better.JS</th>
+            <th>Without Better.JS</th>
+            </tr>
+          <tr>
+            <td>
+              Detect Unauthorized access to private properties</td>
+            <td style='text-a'>
+              <span class="glyphicon glyphicon-ok" style='color: green;'></span></td>
+            <td>
+              <span class="glyphicon glyphicon-remove" style='color: red;'></span></td>
+            </tr>
+          <tr>
+            <td>
+              Detect Unauthorized access to private functions</td>
+            <td style='text-a'>
+              <span class="glyphicon glyphicon-ok" style='color: green;'></span></td>
+            <td>
+              <span class="glyphicon glyphicon-remove" style='color: red;'></span></td>
+            </tr>
+          <tr>
+            <td>
+              Strong Typing for Arguments</td>
+            <td style='text-a'>
+              <span class="glyphicon glyphicon-ok" style='color: green;'></span></td>
+            <td>
+              <span class="glyphicon glyphicon-remove" style='color: red;'></span></td>
+            </tr>
+          <tr>
+            <td>
+              Strong Typing on Properties</td>
+            <td style='text-a'>
+              <span class="glyphicon glyphicon-ok" style='color: green;'></span></td>
+            <td>
+              <span class="glyphicon glyphicon-remove" style='color: red;'></span></td>
+            </tr>
+        </table>
+      </div>
+      <!-- /Comparison with/without better.js -->
+
+      <hr class="featurette-divider">
+
+      <!-- Strong Typing for Arguments -->
+      <div class="page-header jumbotron">
+        <h1>Strong Typing For Arguments</h1>
+      </div>
+
+      <div class="row featurette">
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+
+
+// Make a Better.js for Cat
+Cat = Bjs.Class(Cat, {
+  arguments : [String]
+})
+
+
+
+</pre>
+        </div>
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Make a Better.js for it</h2>
+          <p class="lead">We declare a better.js for it.
+            Our class can receive a name which is a <code>String</code>.
+            From now on, when this class is instanciated, arguments
+            will be check against this definition. 
+          </p>
+        </div>
+      </div>
+
+      <!-- /Strong Typing for Arguments -->
+
+      <!-- Strong Typing for Properties -->
+      <div class="page-header jumbotron">
+        <h1>Strong Typing For Properties</h1>
+      </div>
+
+      <div class="row featurette">
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+// Make a Better.js for Cat
+Cat = Bjs.Class(Cat, {
+  properties : {
+    _name : String
+  }
+})
+
+
+</pre>
+        </div>
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Make a Better.js for it</h2>
+          <p class="lead">We declare a better.js for it.
+            Our class has a <code>_name</code> property a name which is a <code>String</code>.
+          </p>
+        </div>
+      </div>
+
+      <!-- /Strong Typing for Properties -->
+
+      <!-- FOOTER -->
+      <footer>
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p>&copy; 2013 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
+      </footer>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="../www/bootstrap/js/jquery-1.10.2.min.js"></script>
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="../www/holder.js"></script>
+
+    <!-- add prettify.js -->
+    <script type="text/javascript" src="../www/prettify/prettify.js"></script>
+    <script type="text/javascript">  
+      jQuery(function(){
+        prettyPrint();
+      })
+    </script>
+
+    <!-- github ribbon -->
+    <a href="https://github.com/jeromeetienne/better.js/" target='_blank'><img style="position: absolute; top: 0; right: 0; border: 0;z-index:2000" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+
+  </body>
+</html>
