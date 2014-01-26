@@ -21,7 +21,7 @@ var PropertyAttr	= function(baseObject, property, attributes){
 
 	// honor .private
 	if( attributes.private ){
-		Privatize.property(baseObject, property)	
+		Privatize.property(baseObject, property)
 	}
 }
 
