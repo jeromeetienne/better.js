@@ -1,4 +1,4 @@
-title: Yeoman For Three.js
+title: Strong Typing in Better.js
 author:
   name: "Jerome Etienne"
   twitter: "@jerome_etienne"
@@ -66,8 +66,8 @@ not available in js, so example in c++
   
 --
 
-# Both got PRO/CON**
+# Both got **PRO/CON**
 
--- 
+--
 
 # How to get strong typing in javascript

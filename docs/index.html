@@ -40,6 +40,7 @@
   <body>
     <div class="container marketing">
 
+
   <!-- ============================================================================ -->
   <!-- =         Page Header                                                      = -->
   <!-- ============================================================================ -->
@@ -60,7 +61,7 @@
             <!-- twitter -->
             <a href="https://twitter.com/share" class="twitter-share-button" data-via="jerome_etienne" data-text='Better.js - For a Better Javascript in Javascript!'>Tweet</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-            
+
             <!-- ******************* google plus ************************* -->
             <!-- Place this tag where you want the +1 button to render. -->
             <div class="g-plusone" data-size="medium"></div>
@@ -105,199 +106,57 @@
   <!-- =         /Page Header                                                     = -->
   <!-- ============================================================================ -->
 
-      <div class="jumbotron">
-        <h1 style='text-align:center;'>What Better.js Can Do For<br/>
-          <span style='color: orange; font-weight: bolder;'>Your Properties</strong>?
-        </h1>
-        <br/>
-        <p class="lead">It provides features such <strong>private</strong> 
-          or <strong>strong typing</strong>.
-          Those feature were missing in javascript. 
-          Better.js make it possible and easy to use.
-          It helps you find bug earlier, so write a better code.
-        </p>
+      <div class="row">
+        <h1 style='text-align: center;'>An Introduction</h1>
+        <div class="col-lg-6" style='text-align: center;'>
+          <h2>The Slides</h2>
+          <iframe width="420" height="315" src='slides-betterjs-main/'></iframe>
+        </div>
+        <div class="col-lg-6" style='text-align: center;'>
+          <h2>Screencast for It</h2>
+          <iframe width="420" height="315" src="//www.youtube.com/embed/K8VTbyUe6_0" frameborder="0" allowfullscreen></iframe>
+        </div>
       </div>
+
+      <hr class="featurette-divider">
+
+
       <!-- Three columns of text below the carousel -->
       <div class="row">
+        <h1 style='text-align: center;'>What Better.JS Can Do For You ?</h1>
         <div class="col-lg-4">
-          <h3>Strong Typing</h3>
-          <p>When your property is used, it receives some values.
-            Better.js will ensure that they match the types you defined.
+          <h2>Better Classes</h2>
+          <p>With Better.js, it is possible to pass attributes to class.
+            You can define which functions is <strong>private</strong> or not, same for properties.
+            You can apply <strong>strong typing to arguments</strong> and 
+            better.js check the validity of each arguments passed to your constructor.
+            You can apply <strong>strong typing to properties</strong> the same way. 
             </p>
-          <p><a class="btn btn-primary" href="#StrongTypingForProperties" role="button">View details</a></p>
+          <p><a class="btn btn-primary" href="betterjs-class.html" role="button">View details</a></p>
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-4">
-          <h3>Private</h3>
-          <p>Your property belong to a class and it is private. 
-            Tell that to Better.js and it will make sure your wishes are respected!
+          <h2>Better Functions</h2>
+          <p>With Better.js, you can define the <strong>strong typing for your arguments</strong> and 
+            better.js check the validity of each arguments passed to your function.
+            It is the same for <strong>strong typing for the returned value</strong>.
+            If this function is part of a class, you can declare it as
+            <strong>private</strong>
+            thus only this class will be able to use it.
+          </p>
+          <p><a class="btn btn-primary" href="betterjs-function.html" role="button">View details</a></p>
+        </div><!-- /.col-lg-4 -->
+        <div class="col-lg-4">
+          <h2>Better Properties</h2>
+          <p>With better.js you can have <strong>strong typing for your properties</strong>.
+            So you define the type allowed for your property, and better.js check
+            it everytime the value is modified.
+            If this property is part of a class, you can declare it as
+            <strong>private</strong>
+            thus only this class will be able to use it.
             </p>
-          <p><a class="btn btn-primary" href="#PrivateForProperties" role="button">View details</a></p>
+          <p><a class="btn btn-primary" href="betterjs-property.html" role="button">View details</a></p>
         </div><!-- /.col-lg-4 -->
       </div><!-- /.row -->
-
-      <hr class="featurette-divider">
-
-      
-      <!-- Strong Typing For Arguments -->
-
-      <div class="page-header jumbotron" id='StrongTypingForProperties'>
-        <h1>Strong Typing For Properties</h1>
-      </div>
-        
-      <div class="row featurette">
-        <div class="col-md-5">
-          <h2 class="featurette-heading">Make an Object in Better.js</h2>
-          <p class="lead">We declare a object with a <code>bar</code> property
-            which is a <code>String</code>. You tell that to better.js
-            and it will make sure it is only <code>String</code>.
-          </p>
-        </div>
-        <div class="col-md-7">
-          <pre class="prettyprint" style='font-size:140%'>
-// define an object
-var foo = {
-  bar : 'bla'
-};
-
-// Make a Better.js for it
-Bjs.Property(foo, 'bar', {
-  type  : String,
-})
-</pre>
-        </div>
-      </div>
-
-      <hr class="featurette-divider">
-
-      <div class="row featurette">
-        <div class="col-md-7">
-          <pre class="prettyprint" style='font-size:140%'>
-console.log('the value is', foo.bar)
-// display 'bar'... All is OK
-
-foo.bar = 'smith'
-console.log('the value is', foo.bar)
-// display 'smith'... All is OK
-
-foo.bar = 99
-// Exception thrown
-// "Invalid Type for 'bar' - Should be String"
-</pre>
-        </div>
-        <div class="col-md-5">
-          <h2 class="featurette-heading">Detect Invalid Values</h2>
-          <p class="lead">
-            Now let's use this <code>foo</code> object. 
-            You can read <code>foo</code> property without issue.
-            You can set it as long as it is with a <code>String</code>.
-            If You set it with <code>Number</code>, it is
-            <strong>immediatly detected</strong> by Better.js
-            and the execution is stopped.
-          </p>
-        </div>
-      </div>
-      <!-- /Private in Better.js Class -->
-      
-
-      <!-- /Strong Typing for Arguments -->
-
-      <!-- Strong Typing for Properties -->
-      <div class="page-header jumbotron" id='PrivateForProperties'>
-        <h1>Private For Properties</h1>
-      </div>
-
-      <div class="row featurette">
-        <div class="col-md-5">
-          <h2 class="featurette-heading">Make a Better.js for Your Code</h2>
-          <p class="lead">Say we got a <code>Dog</code> class,
-            and it has two property: a <code>.age</code> which is public
-            and another <code>_name</code> which is private.
-            So you tell that to better.js in your class constructor.
-          </p>
-        </div>
-        <div class="col-md-7">
-          <pre class="prettyprint" style='font-size:140%'>
-// Constructor of the class
-var Dog = function(name){
-  this._name = name
-  this.age = 3
-  // make a better.js for _name
-  Bjs.Property(this, '_name', {
-    private : true
-  })
-}
-</pre>
-        </div>
-      </div>
-
-      <hr class="featurette-divider">
-
-      <div class="row featurette">
-        <div class="col-md-7">
-          <pre class="prettyprint" style='font-size:140%'>
-// get a new dog
-var dog = new Dog('brutus')
-
-// Let's try to use a public property
-console.log('my dog age is', dog.age)
-// Display 'my dog age is 3'... All is OK
-
-// Let's try to use _name from outside
-console.log('my dog name is', dog._name)
-
-// Exception thrown
-// "Denied access to private property _name"
-
-// better.js detect unauthorized access! Perfect!
-</pre>
-        </div>
-        <div class="col-md-5">
-          <h2 class="featurette-heading">Detect Unauthorized Access</h2>
-          <p class="lead">
-            Now let's use this <code>Dog</code> class.
-            If we use a public property <code>age</code> from outside, 
-            it matches our better.js, so all is ok.
-            But When we try to call <code>_name</code> from outside,
-            the unauthorized access is <strong>immediatly detected</strong> 
-            and the execution is stopped.
-          </p>
-        </div>
-      </div>
-
-      <!-- /Strong Typing for Properties -->
-
-      <!-- Comparison with/without better.js -->
-      <div class="page-header jumbotron">
-        <h1>Features Summary</h1>
-      </div>
-      <div class='row' style='font-size: 150%;'>
-        <table class="table table-bordered">
-          <tr>
-            <th>Features</th>
-            <th>With Better.JS</th>
-            <th>Without Better.JS</th>
-            </tr>
-          <tr>
-            <td>
-              Detect Wrong Type for Properties</td>
-            <td style='text-a'>
-              <span class="glyphicon glyphicon-ok" style='color: green;'></span></td>
-            <td>
-              <span class="glyphicon glyphicon-remove" style='color: red;'></span></td>
-            </tr>
-          <tr>
-            <td>
-              Detect Unauthorized access to Private Properties</td>
-            <td style='text-a'>
-              <span class="glyphicon glyphicon-ok" style='color: green;'></span></td>
-            <td>
-              <span class="glyphicon glyphicon-remove" style='color: red;'></span></td>
-            </tr>
-        </table>
-      </div>
-      <!-- /Comparison with/without better.js -->
-
-      <hr class="featurette-divider">
 
     </div><!-- /.container -->
 
