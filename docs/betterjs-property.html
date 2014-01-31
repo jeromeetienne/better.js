@@ -299,6 +299,87 @@ console.log('my dog name is', dog._name)
 
       <hr class="featurette-divider">
 
+      <div class="page-header jumbotron">
+        <h1>Documentation</h1>
+      </div>
+      <div class='row'>
+        <div class="panel-group" id='documentation'>
+          <!-- type -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <code>type</code>
+              </h3>
+            </div>
+            <div class="panel-body">
+              <h3>Description</h3>
+                <code>type</code> option declares type of this property.
+                Every time this property is used, better.js will check its type remains valid. 
+              <h3>Values</h3>
+                <table class="table table-bordered table-condensed">
+                  <tr>
+                    <td>a array of type</td>
+                    <td>
+                      It uses the same syntax as other strong typing features.
+                      See <a href='betterjs-strongtyping.html'>details on type definition</a>.
+                    </tr>
+                  </table>
+              <h3>Examples</h3>
+                <pre class="prettyprint">// define an object
+var foo = {
+  bar : 'bla'
+};
+
+// Make a Better.js for it
+Bjs.Property(foo, 'bar', {
+  type  : String,
+})</pre>
+            </div>
+          </div>
+          <!-- privatize -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <code>private</code>
+              </h3>
+            </div>
+            <div class="panel-body">
+              <h3>Description</h3>
+                <code>private</code> option will declare your property as private 
+                  as soon as it is called. 
+                  Using <code>Bjs.Class</code>
+                  with <code>privatize</code> is recommended. 
+              <h3>Values</h3>
+                <table class="table table-bordered table-condensed">
+                  <tr>
+                    <td><code>true</code></td>
+                    <td>Enable <code>private</code> for this property</td>
+                    </tr>
+                  <tr>
+                    <td><code>false</code></td>
+                    <td>Disable <code>private</code> for this property. Default to false.</td>
+                    </tr>
+                  </table>
+              <h3>Examples</h3>
+                <pre class="prettyprint">// Constructor of the class
+var Dog = function(name){
+  this._name = name
+  this.age = 3
+  
+  // init this class for privates
+  Bjs.Privatize.prepare(this)
+  Bjs.Privatize.privatize(this)
+
+  // make a better.js for _name
+  Bjs.Property(this, '_name', {
+    private : true
+  })
+}</pre>
+            </div>
+          </div>          
+        </div>
+      </div>
+
     </div><!-- /.container -->
 
 

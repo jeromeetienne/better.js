@@ -383,7 +383,122 @@ dog.sayPrivate('yapyap')
 
       <hr class="featurette-divider">
 
+      <div class="page-header jumbotron">
+        <h1>Documentation</h1>
+      </div>
+      <div class='row'>
+        <div class="panel-group" id='documentation'>
+          <!-- arguments -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <code>arguments</code>
+              </h3>
+            </div>
+            <div class="panel-body">
+              <h3>Description</h3>
+                <code>arguments</code> option declares type for the function arguments.
+                Every time your function is called, better.js will check the arguments
+                are valid. 
+              <h3>Values</h3>
+                <table class="table table-bordered table-condensed">
+                  <tr>
+                    <td>a array of type</td>
+                    <td>
+                      It uses the same syntax as other strong typing features.
+                      See <a href='betterjs-strongtyping.html'>details on type definition</a>.
+                    </tr>
+                  </table>
+              <h3>Examples</h3>
+                <pre class="prettyprint">// define the function
+var Cat = function(name, age){
+  console.log('my name is', name, 'and i am ', age)
+}
+// make a better.js for it
+Cat = Bjs.Function(Cat, {
+  arguments : [String, Number]
+})</pre>
+            </div>
+          </div>
+          <!-- return -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <code>return</code>
+              </h3>
+            </div>
+            <div class="panel-body">
+              <h3>Description</h3>
+                <code>return</code> option declares type for the returned value of
+                your function.
+                Every time your function is called, better.js will check the return value
+                are valid. 
+              <h3>Values</h3>
+                <table class="table table-bordered table-condensed">
+                  <tr>
+                    <td>a array of type</td>
+                    <td>
+                      It uses the same syntax as other strong typing features.
+                      See <a href='betterjs-strongtyping.html'>details on type definition</a>.
+                    </tr>
+                  </table>
+              <h3>Examples</h3>
+                <pre class="prettyprint">// define the function
+var cat = function(name){
+  return name
+}
+// make a better.js for it
+cat = Bjs.Function(cat, {
+  return : String
+})</pre>
+            </div>
+          </div>
+          <!-- privatize -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <code>private</code>
+              </h3>
+            </div>
+            <div class="panel-body">
+              <h3>Description</h3>
+                <code>private</code> option will declare your function as private 
+                  as soon as it is called.
+                  Using <code>Bjs.Class</code>
+                  with <code>privatize</code> is recommended. 
+              <h3>Values</h3>
+                <table class="table table-bordered table-condensed">
+                  <tr>
+                    <td><code>true</code></td>
+                    <td>Enable <code>private</code> for this function</td>
+                    </tr>
+                  <tr>
+                    <td><code>false</code></td>
+                    <td>Disable <code>private</code> for this function. Default to false.</td>
+                    </tr>
+                  </table>
+              <h3>Examples</h3>
+                <pre class="prettyprint">// define a function
+var cat = function(){
+  this.john = 'smith'
+  this._bar = 2
 
+  // init this class for privates
+  Bjs.Privatize.prepare(this)
+  Bjs.Privatize.privatize(this)
+
+  // declare a function function
+  this.catPrivate = Bjs.Function(function(name){
+    return name+this._bar;
+  }, {
+    private   : true,
+  })
+}</pre>
+            </div>
+          </div>
+          
+        </div>
+      </div>
 
     </div><!-- /.container -->
 

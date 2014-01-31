@@ -418,6 +418,118 @@ cat.age = 'smoth'
 
       <hr class="featurette-divider">
 
+      <div class="page-header jumbotron">
+        <h1>Documentation</h1>
+      </div>
+      <div class='row'>
+        <div class="panel-group" id='documentation'>
+          <!-- arguments -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <code>arguments</code>
+              </h3>
+            </div>
+            <div class="panel-body">
+              <h3>Description</h3>
+                <code>arguments</code> option declares type for the contructor arguments.
+                Every time your constructor is called, better.js will check the arguments
+                are valid. 
+              <h3>Values</h3>
+                <table class="table table-bordered table-condensed">
+                  <tr>
+                    <td>a array of type</td>
+                    <td>
+                      It uses the same syntax as other strong typing features.
+                      See <a href='betterjs-strongtyping.html'>details on type definition</a>.
+                    </tr>
+                  </table>
+              <h3>Examples</h3>
+                <pre class="prettyprint">// define the function
+var Cat = function(name, age){
+  console.log('my name is', name, 'and i am ', age)
+}
+// make a better.js for it
+Cat = Bjs.Class(Cat, {
+  arguments : [String, Number]
+})</pre>
+            </div>
+          </div>
+          <!-- properties -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <code>properties</code>
+              </h3>
+            </div>
+            <div class="panel-body">
+              <h3>Description</h3>
+                <code>properties</code> option will declare the strong typing for the properties of an instance of this class. It is a 
+                <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object'>Object</a> 
+                where each key is the property name, and the value
+                is the strong typing definition for this property.
+              <h3>Values</h3>
+                <table class="table table-bordered table-condensed">
+                  <tr>
+                    <td><a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object'>js object</a></td>
+                    <td>It is a 
+                      <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object'>Object</a> 
+                      where each key is the property name, and the value
+                      is the strong typing definition for this property.</td>
+                    </tr>
+                  </table>
+              <h3>Examples</h3>
+                <pre  class="prettyprint">// Declare a Class
+var Cat = function(){
+  this.name   = 'kitty'
+  this.age    = 7
+}
+// Make a better.js for it
+Cat = Bjs.Class(Cat, {
+  property  : {
+    name  : String,
+    age   : Number
+  }
+})</pre>
+            </div>
+          </div>
+          <!-- privatize -->
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">
+                <code>privatize</code>
+              </h3>
+            </div>
+            <div class="panel-body">
+              <h3>Description</h3>
+                <code>privatize</code> option will declare as private any property or function with a 
+                name starting by <code>_</code>. Thus they are no more accessible from outside
+                your classes.
+              <h3>Values</h3>
+                <table class="table table-bordered table-condensed">
+                  <tr>
+                    <td><code>true</code></td>
+                    <td>Enable <code>privatize</code> for this class</td>
+                    </tr>
+                  <tr>
+                    <td><code>false</code></td>
+                    <td>Disable <code>privatize</code> for this class. Default to false</td>
+                    </tr>
+                  </table>
+              <h3>Examples</h3>
+                <pre class="prettyprint">// define a class
+var Cat = function(){
+  this._name  = 'kitty'
+}
+// Make a Better.js for it
+Cat = Bjs.Class(Cat, {
+  privatize : true
+})
+// Now ._name is accesible only from inside the class</pre>
+            </div>
+          </div>
+        </div>
+      </div>
 
     </div><!-- /.container -->
 

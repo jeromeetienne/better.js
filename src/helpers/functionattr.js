@@ -45,6 +45,8 @@ var FunctionAttr	= function(originalFn, attributes){
 
 	return wrapFunction(originalFn, functionName, function(instance, args){
 		// honor .private
+		// TODO to change, this wait for the first call.... this is crappy
+		// make it such as 'instance' MUST be provided by the caller
 		if( privateDone === false && attributes.private === true ){
 			Privatize.pushPrivateOkFn(instance, originalFn)
 			privateDone	= true
