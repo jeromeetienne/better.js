@@ -1,7 +1,7 @@
 # Better.js
 ## for a Better Javascript in Javascript 
 
-See [homepage](http://jeromeetienne.github.io/better.js/) for details.
+See [homepage](http://betterjs.org) for details.
 
 <img src="https://cloud.githubusercontent.com/assets/252962/2690780/1cf3c254-c362-11e3-876a-ec5a46ebae2b.png"/> 
 
