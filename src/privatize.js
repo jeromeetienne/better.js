@@ -25,13 +25,13 @@ if( typeof(window) === 'undefined' )	module.exports	= Privatize;
  */
 Privatize.pushPrivateOkFn	= function(instance, privateFn){
 	// init if needed
-	Privatize._initIfNeeded(instance);
+	Privatize.initIfNeeded(instance);
 	// actually add the function
 	instance._privateOkFn.push(privateFn)
 }
 
 
-Privatize._initIfNeeded	= function(instance){
+Privatize.initIfNeeded	= function(instance){
 	// create the storage value if needed - with non enumerable
 	if( instance._privateOkFn === undefined ){
 		Object.defineProperty(instance, '_privateOkFn', {
@@ -53,7 +53,8 @@ Privatize._initIfNeeded	= function(instance){
  * @return {undefined}		nothing
  */
 Privatize.property	= function(instance, property){
-	console.assert( '_privateOkFn' in instance, 'this instance isnt init for Privatize')
+	// init if needed
+	Privatize.initIfNeeded(instance);
 	// check private in the getter
 	QGetterSetter.defineGetter(instance, property, function aFunction(value, caller, property){
 // console.log('check getter property', property, instance._privateOkFn)
@@ -118,7 +119,7 @@ Privatize.function	= function(instance, fn){
  */
 Privatize.prepare	= function(instance){
 	// init if needed
-	Privatize._initIfNeeded(instance);
+	Privatize.initIfNeeded(instance);
 	// populate the ._privateOkFn with the .prototype function which start by '_'
 	for(var property in instance){
 		// TODO should i do a .hasOwnProperty on a .prototype ?
@@ -137,7 +138,7 @@ Privatize.prepare	= function(instance){
 Privatize.privatize	= function(instance, selectorRegexp){
 	selectorRegexp	= selectorRegexp	|| /^_.*/
 	// init if needed
-	Privatize._initIfNeeded(instance);
+	Privatize.initIfNeeded(instance);
 	// declare any property/functions starting with '_' as private	
 	for(var property in instance){
 		if( property.match(selectorRegexp) === null )		continue;

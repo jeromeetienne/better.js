@@ -952,13 +952,13 @@ if( typeof(window) === 'undefined' )	module.exports	= Privatize;
  */
 Privatize.pushPrivateOkFn	= function(instance, privateFn){
 	// init if needed
-	Privatize._initIfNeeded(instance);
+	Privatize.initIfNeeded(instance);
 	// actually add the function
 	instance._privateOkFn.push(privateFn)
 }
 
 
-Privatize._initIfNeeded	= function(instance){
+Privatize.initIfNeeded	= function(instance){
 	// create the storage value if needed - with non enumerable
 	if( instance._privateOkFn === undefined ){
 		Object.defineProperty(instance, '_privateOkFn', {
@@ -980,7 +980,8 @@ Privatize._initIfNeeded	= function(instance){
  * @return {undefined}		nothing
  */
 Privatize.property	= function(instance, property){
-	console.assert( '_privateOkFn' in instance, 'this instance isnt init for Privatize')
+	// init if needed
+	Privatize.initIfNeeded(instance);
 	// check private in the getter
 	QGetterSetter.defineGetter(instance, property, function aFunction(value, caller, property){
 // console.log('check getter property', property, instance._privateOkFn)
@@ -1045,7 +1046,7 @@ Privatize.function	= function(instance, fn){
  */
 Privatize.prepare	= function(instance){
 	// init if needed
-	Privatize._initIfNeeded(instance);
+	Privatize.initIfNeeded(instance);
 	// populate the ._privateOkFn with the .prototype function which start by '_'
 	for(var property in instance){
 		// TODO should i do a .hasOwnProperty on a .prototype ?
@@ -1064,7 +1065,7 @@ Privatize.prepare	= function(instance){
 Privatize.privatize	= function(instance, selectorRegexp){
 	selectorRegexp	= selectorRegexp	|| /^_.*/
 	// init if needed
-	Privatize._initIfNeeded(instance);
+	Privatize.initIfNeeded(instance);
 	// declare any property/functions starting with '_' as private	
 	for(var property in instance){
 		if( property.match(selectorRegexp) === null )		continue;
@@ -1308,6 +1309,8 @@ var FunctionAttr	= function(originalFn, attributes){
 
 	return wrapFunction(originalFn, functionName, function(instance, args){
 		// honor .private
+		// TODO to change, this wait for the first call.... this is crappy
+		// make it such as 'instance' MUST be provided by the caller
 		if( privateDone === false && attributes.private === true ){
 			Privatize.pushPrivateOkFn(instance, originalFn)
 			privateDone	= true
@@ -1388,7 +1391,7 @@ var PropertyAttr	= function(baseObject, property, attributes){
 
 	// honor .private
 	if( attributes.private ){
-		Privatize.property(baseObject, property)	
+		Privatize.property(baseObject, property)
 	}
 }
 
@@ -1685,6 +1688,7 @@ var PropertyAttr	= PropertyAttr		|| require('../src/helpers/propertyattr.js');
 BetterJS.PropertyAttr	= PropertyAttr
 BetterJS.property	= PropertyAttr.define
 
+BetterJS.Property	= PropertyAttr
 
 BetterJS.propertiesType	= function(baseObject, properties){
 	Object.keys(properties).forEach(function(property){
@@ -1704,6 +1708,7 @@ BetterJS.propertiesType	= function(baseObject, properties){
 var FunctionAttr	= FunctionAttr		|| require('../src/helpers/functionattr.js');
 // export the class
 BetterJS.FunctionAttr	= FunctionAttr
+BetterJS.Function	= FunctionAttr
 
 BetterJS.fn		= FunctionAttr.define
 
@@ -1744,10 +1749,10 @@ var ClassAttr	= ClassAttr		|| require('../src/helpers/classattr.js');
 BetterJS.Class	= ClassAttr
 
 
-// End of Better.js
+	// End of Better.js
 	return BetterJS
 })();
 
-// shorter Alias for Better.js
+// shorter Alias for Better.js - optional
 var Bjs	= BetterJS
 

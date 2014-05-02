@@ -1,6 +1,6 @@
 {
   "name": "better.js",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "For a better javascript in javascript",
   "main": "build/better.js",
   "directories": {
@@ -24,6 +24,5 @@
     "javascript"
   ],
   "author": "Jerome Etienne",
-  "license": "MIT",
-  "bin" : { "jsdoc2debugjs" : "./examples/jsdoc2debugjs/jsdoc2debug.js" } 
+  "license": "MIT"
 }

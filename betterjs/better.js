@@ -141,6 +141,7 @@ var PropertyAttr	= PropertyAttr		|| require('../src/helpers/propertyattr.js');
 BetterJS.PropertyAttr	= PropertyAttr
 BetterJS.property	= PropertyAttr.define
 
+BetterJS.Property	= PropertyAttr
 
 BetterJS.propertiesType	= function(baseObject, properties){
 	Object.keys(properties).forEach(function(property){
@@ -160,6 +161,7 @@ BetterJS.propertiesType	= function(baseObject, properties){
 var FunctionAttr	= FunctionAttr		|| require('../src/helpers/functionattr.js');
 // export the class
 BetterJS.FunctionAttr	= FunctionAttr
+BetterJS.Function	= FunctionAttr
 
 BetterJS.fn		= FunctionAttr.define
 
