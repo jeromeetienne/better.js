@@ -4,5 +4,5 @@
 })();
 
 // shorter Alias for Better.js - optional
-var Bjs	= BetterJS
+var Bjs	= BetterJS;
 
