@@ -8,7 +8,10 @@ jsdoced.js depends on (better.js)[http://betterjs.org]
 
 ## How to use it
 
-you use it like this (more about (jsdoc)[http://usejsdoc.com])
+Currently only ```JSDOC.Function``` is implemented.
+```JSDOC.Class``` and ```JSDOC.Property``` are next.
+
+You use ```JSDOC.Function``` like this (more about (jsdoc)[http://usejsdoc.com])
 
 ```
 /**
