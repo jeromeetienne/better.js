@@ -1,4 +1,13 @@
-var extractJsdoc	= function(url, bottomLine){
+var JSDOCED	= JSDOCED	|| {}
+
+/**
+ * Extract jsdoc comment just above the bottomLine in the file at url
+ * 
+ * @param  {String} url        the url to load
+ * @param  {Number} bottomLine the line number just below the comment
+ * @return {String}            the content of jsdoc comment
+ */
+JSDOCED.extractJsdoc	= function(url, bottomLine){
 	var jsdocContent;
 	// load url
 	var request = new XMLHttpRequest();

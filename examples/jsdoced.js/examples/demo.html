@@ -1,0 +1,44 @@
+<!doctype HTML>
+<body style='font-size:150%'>
+	<script src='../../../../build/better.js'></script>
+	<script src='../../../../build/jsdoced.js'></script>
+	<script>
+
+
+	/**
+	 * add two values
+	 * @param {Number} value1 value one
+	 * @param {Number} value2 value two
+	 * @return {Number} the result
+	 */
+	var add	= JSDOCED.Function(function(value1, value2){
+		return value1 + value2
+	})
+
+	// See Above... all is in the JSDOCED.Function() 
+	// 
+	// It is all there. super non obstrusive. 
+	// all done during excecution
+	// no compilation at all
+	// works on browser and node.js
+
+	</script>
+
+
+
+
+	<!-- DISPLAY INSTRUCTIONS -->
+	<h1>
+		jsdoced Demo : <a href='http://betterjs.org'>better.js</a>
+		and <a href='http://usejsdoc.org'>jsdoc</a> unified
+	</h1>
+	<ol>
+		<li>Open your js console</li>
+		<li>There is a add function defined. It can only receive Number's</li>
+		<li>Try typing <strong>add(1,2)</strong> and see the resolt, 3...</li>
+		<li>Try typing <strong>add(1,'foo')</strong> with a string.. and BLA the typing error is immediatly detected!</li>
+	</ol>
+	<ul>
+		<li><strong>Do ViewSource and see how jsdocTesting is easy!</strong></li>
+	</ul>
+</body>

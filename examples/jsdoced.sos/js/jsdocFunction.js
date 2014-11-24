@@ -37,7 +37,7 @@ Function.prototype.jsdocFunction	= function(){
 
 	var output	= parseJsdoc(jsdocContent)
 	// console.log('output')
-	console.log(JSON.stringify(output, null, '\t'))
+	// console.log(JSON.stringify(output, null, '\t'))
 
 	var options	= jsdocToBetterFunction(output)
 	// console.log('options')
