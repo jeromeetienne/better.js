@@ -1,0 +1,19 @@
+<!doctype HTML>
+<script src='webidl2.js-develop/lib/webidl2.js'></script>
+<script>
+	console.log('dd')
+
+	var url		= 'idl/windowtimers.idl'
+	var url		= 'idl/events.idl'
+	// var url		= 'idl/dom.idl'
+	// var url		= 'idl/AudioNode.idl'
+	// var url		= 'idl/webstorage.idl'
+	var request	= new XMLHttpRequest()
+	request.onload	= function(){
+		var widlContent	= this.responseText
+		var tree	= WebIDL2.parse(widlContent);
+		console.dir(tree)
+	}
+	request.open("get", url, true)
+	request.send()
+</script>

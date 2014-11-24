@@ -1,0 +1,31 @@
+<script src='../build/better.js'></script>
+<script>
+
+	//this.updateUI	= Better.jsDocFunction(this.updateUI)
+	/**
+	 * * get the jsdoc for this function
+	 *   * it can be done live by getting __FILE__ and __LINE__
+	 *   * it can be done in browser and node.js
+	 * * parse the jsdoc 
+	 * * implement the jsdoc in better.js
+	 */
+
+/**
+ * add two values
+ * @param {Number} value1 value one
+ * @param {Number} value2 value two
+ * @return {Number} the result
+ */
+var add	= function(value1, value2){
+	return value1 + value2
+}
+
+var add	= Better.Function(add, {
+	arguments	: [Number, Number],
+	return		: Number,
+})
+
+console.log('1 + 2', add(1,2) )
+
+
+</script>

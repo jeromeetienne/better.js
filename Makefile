@@ -12,6 +12,10 @@ deploy:
 test:
 	@./node_modules/.bin/mocha --harmony -R list tests
 
+watch: build
+	# fswatch is available at https://github.com/emcrisostomo/fswatch
+	fswatch -o src/ betterjs/ | xargs -n1 -I{} make build
+
 build:
 	echo		 			>  build/better.js
 	cat betterjs/better-buildprefix.js	>> build/better.js
@@ -43,6 +47,9 @@ buildBundle: build
 minifyBundle: buildBundle
 	uglifyjs build/better-bundle.js > build/better-bundle.min.js
 	@echo size minified + gzip is `gzip -c build/better-bundle.min.js | wc -c` byte
+
+publish: minify
+	npm publish
 
 JSDOC_ROOT	= $(HOME)/opt/jsdoc_toolkit-2.4.0/jsdoc-toolkit
 docs:

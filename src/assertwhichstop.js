@@ -10,7 +10,7 @@
  * @param {Boolean} [useDebugger] if true, a failled assert will trigger js debugger
 */
 var assertWhichStop	= function(condition, message, useDebugger){
-	if( condition )	return;
+	if( condition )	return
 	if( assertWhichStop.useDebugger || useDebugger )	debugger;
 	throw new Error(message	|| "Assert Failed");
 }

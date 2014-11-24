@@ -3,7 +3,6 @@ var BetterJS	= {}
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= BetterJS;
 
-
 //////////////////////////////////////////////////////////////////////////////////
 //		export all modules						//
 //////////////////////////////////////////////////////////////////////////////////
@@ -163,6 +162,7 @@ var FunctionAttr	= FunctionAttr		|| require('../src/helpers/functionattr.js');
 BetterJS.FunctionAttr	= FunctionAttr
 BetterJS.Function	= FunctionAttr
 
+// TODO to remove this - uselessly kludgy
 BetterJS.fn		= FunctionAttr.define
 
 BetterJS.overloadFunctionAttr	= function(){

@@ -410,7 +410,7 @@ Stacktrace.Tracker.prototype.reportString	= function(classNameRegExp, maxNOrigin
  * @param {Boolean} [useDebugger] if true, a failled assert will trigger js debugger
 */
 var assertWhichStop	= function(condition, message, useDebugger){
-	if( condition )	return;
+	if( condition )	return
 	if( assertWhichStop.useDebugger || useDebugger )	debugger;
 	throw new Error(message	|| "Assert Failed");
 }
@@ -1550,7 +1550,6 @@ var BetterJS	= {}
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= BetterJS;
 
-
 //////////////////////////////////////////////////////////////////////////////////
 //		export all modules						//
 //////////////////////////////////////////////////////////////////////////////////
@@ -1710,6 +1709,7 @@ var FunctionAttr	= FunctionAttr		|| require('../src/helpers/functionattr.js');
 BetterJS.FunctionAttr	= FunctionAttr
 BetterJS.Function	= FunctionAttr
 
+// TODO to remove this - uselessly kludgy
 BetterJS.fn		= FunctionAttr.define
 
 BetterJS.overloadFunctionAttr	= function(){
@@ -1756,3 +1756,5 @@ BetterJS.Class	= ClassAttr
 // shorter Alias for Better.js - optional
 var Bjs	= BetterJS;
 
+// shorter Alias for Better.js - optional
+var Better	= BetterJS;

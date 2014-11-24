@@ -1,5 +1,4 @@
-var Bjs	= Bjs	|| require('../build/better.js')
-
+var Better	= Better	|| require('../build/better.js')
 
 //////////////////////////////////////////////////////////////////////////////////
 //		comment								//
@@ -18,7 +17,7 @@ Cat.prototype.getWeight	= function(){
 //		Make a Better.js for Cat					//
 //////////////////////////////////////////////////////////////////////////////////
 
-Cat	= Bjs.Class(Cat, {
+Cat	= Better.Class(Cat, {
 	arguments	: [String, [Number, undefined]],
 	privatize	: true,
 	properties	: {
