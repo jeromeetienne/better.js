@@ -1,12 +1,9 @@
 {
   "name": "better.js",
-  "version": "0.0.1",
+  "version": "0.0.10",
   "main": "build/better.js",
   "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    "/*",
+    "!build"
   ]
 }
