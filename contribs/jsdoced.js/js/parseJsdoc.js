@@ -1,4 +1,4 @@
-var JSDOCED	= JSDOCED	|| {}
+var jsDoced	= jsDoced	|| {}
 
 /**
  * parse jsdoc comment and return a 'json-ified' version of it
@@ -6,7 +6,7 @@ var JSDOCED	= JSDOCED	|| {}
  * @param  {String} jsdocContent String containing the content
  * @return {Object} the json object
  */
-JSDOCED.parseJsdoc	= function(jsdocContent){
+jsDoced.parseJsdoc	= function(jsdocContent){
 	var lines	= jsdocContent.split('\n')
 
 	// remove first and last line

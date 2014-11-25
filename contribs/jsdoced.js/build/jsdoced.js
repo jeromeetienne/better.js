@@ -1,5 +1,79 @@
 
-var JSDOCED	= JSDOCED	|| {}
+/**
+ * @todo do a Function.prototype.version
+ * @todo do a jsDoced.Class() to force the generation of Class (instead of relying on @constructor)
+ * @todo same for the jsDoced.Function for consistency
+ */
+
+
+var jsDoced	= function(originalFct, options){
+	// default value for arguments
+	options	= options	|| {}
+
+	// console.log('prout')
+
+	var jsdocJSON	= options.jsdocJSON
+	if( jsdocJSON === undefined ){
+		// find caller location and extract jsdoc from it
+		var stackFrame	= Better.stack()[1]
+
+		// TODO isstackFrame.url === 'repl'
+		// the jsdoced is run inside the node.js interpreter
+		// there is nothing to download
+		// handle this case
+
+		var jsdocContent= jsDoced.extractJsdoc(stackFrame.url, stackFrame.line)
+		var jsdocJSON	= jsDoced.parseJsdoc(jsdocContent)
+	}
+
+	if( jsdocJSON.isClass ){
+		var attributes	= jsDoced.jsdocToBetterClass(jsdocJSON)
+		var betterClass	= Better.Class(originalFct, attributes)
+		return betterClass
+	}
+
+	var attributes	= jsDoced.jsdocToBetterFunction(jsdocJSON)
+	var betterFct	= Better.Function(originalFct, attributes)
+	return betterFct
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Comment								//
+//////////////////////////////////////////////////////////////////////////////////
+
+// export the class in node.js - if running in node.js
+if( typeof(window) === 'undefined' )	module.exports	= jsDoced;
+
+if( typeof(window) === 'undefined' )	var Better	= require('../../../build/better.js')
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Helpers
+//////////////////////////////////////////////////////////////////////////////////
+
+// /**
+//  * it is the same as ```jsDoced.Function``` but overloaded in Function.prototype
+//  */
+// Function.prototype.jsDoced	= function(){
+// 	var originalFct	= this
+
+// 	// find caller location
+// 	var stackFrame	= Better.stack()[1]
+
+// 	// extract jsdoc from called location 
+// 	var fctNLines	= originalFct.toString().split('\n').length
+// 	var jsdocContent= jsDoced.extractJsdoc(stackFrame.url, stackFrame.line - fctNLines + 1)
+// 	var jsdocJSON	= jsDoced.parseJsdoc(jsdocContent)
+
+// 	// call the actual jsDoced()
+// 	var newFct	= jsDoced(originalFct, {
+// 		jsdocJSON	: jsdocJSON
+// 	})
+// 	// return the jsdoced function
+// 	return newFct
+// }
+
+var jsDoced	= jsDoced	|| {}
 
 /**
  * Extract jsdoc comment just above the bottomLine in the file at url
@@ -8,26 +82,33 @@ var JSDOCED	= JSDOCED	|| {}
  * @param  {Number} bottomLine the line number just below the comment
  * @return {String}            the content of jsdoc comment
  */
-JSDOCED.extractJsdoc	= function(url, bottomLine){
+jsDoced.extractJsdoc	= function(url, bottomLine){
+	// return the cached jsdocContent if any
 	var inBrowser 	= typeof(window) !== 'undefined'	? true : false
-	if( inBrowser ){
-		// load url
+	var cache	= jsDoced.extractJsdoc.cache
+
+	if( cache[url] !== undefined ){
+		var content	= cache[url]
+	}else if( inBrowser ){
+		// load url via sync url
 		var request = new XMLHttpRequest();
-		var jsdocContent;
+		var content;
 		request.onload = function(){
-			var content	= request.responseText
-			jsdocContent	= parseFileContent(content)
+			content		= request.responseText
 		};
 		request.open("get", url, false);
 		request.send();
 	}else{
 		// load file sync
 		var content	= require('fs').readFileSync(url, 'utf8')
-		var jsdocContent= parseFileContent(content)
 	}
 
-	// console.log('returning')
-	console.assert( jsdocContent )
+	// write content in cache
+	cache[url]	= content
+
+	// get jsdocContent from file content
+	var jsdocContent= parseFileContent(content)
+	
 	return jsdocContent
 
 	function parseFileContent(content){
@@ -51,9 +132,11 @@ JSDOCED.extractJsdoc	= function(url, bottomLine){
 		return jsdocContent
 	}
 }
-var JSDOCED	= JSDOCED	|| {}
 
-JSDOCED.jsdocToBetterType	= function(type){
+jsDoced.extractJsdoc.cache	= {}
+var jsDoced	= jsDoced	|| {}
+
+jsDoced.jsdocToBetterType	= function(type){
 	if( type.toLowerCase() === 'number' ){
 		return Number
 	}else if( type.toLowerCase() === 'string' ){
@@ -65,16 +148,16 @@ JSDOCED.jsdocToBetterType	= function(type){
 //////////////////////////////////////////////////////////////////////////////////
 //		jsdocToBetterFunction
 //////////////////////////////////////////////////////////////////////////////////
-JSDOCED.jsdocToBetterClass	= function(output){
-	var convertType	= JSDOCED.jsdocToBetterType
+jsDoced.jsdocToBetterClass	= function(jsdocJSON){
+	var convertType	= jsDoced.jsdocToBetterType
 	var options	= {}
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//		arguments
 	//////////////////////////////////////////////////////////////////////////////////
 	options.arguments	= []
-	Object.keys(output.params).forEach(function(paramName){
-		var param	= output.params[paramName]
+	Object.keys(jsdocJSON.params).forEach(function(paramName){
+		var param	= jsdocJSON.params[paramName]
 		var argument	= convertType(param.type)
 		options.arguments.push(argument)
 	})
@@ -95,16 +178,16 @@ JSDOCED.jsdocToBetterClass	= function(output){
 //////////////////////////////////////////////////////////////////////////////////
 //		jsdocToBetterFunction
 //////////////////////////////////////////////////////////////////////////////////
-JSDOCED.jsdocToBetterFunction	= function(output){
-	var convertType	= JSDOCED.jsdocToBetterType
+jsDoced.jsdocToBetterFunction	= function(jsdocJSON){
+	var convertType	= jsDoced.jsdocToBetterType
 	var options	= {}
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//		arguments
 	//////////////////////////////////////////////////////////////////////////////////
 	options.arguments	= []
-	Object.keys(output.params).forEach(function(paramName){
-		var param	= output.params[paramName]
+	Object.keys(jsdocJSON.params).forEach(function(paramName){
+		var param	= jsdocJSON.params[paramName]
 		var argument	= convertType(param.type)
 		options.arguments.push(argument)
 	})
@@ -112,13 +195,13 @@ JSDOCED.jsdocToBetterFunction	= function(output){
 	//////////////////////////////////////////////////////////////////////////////////
 	//		arguments
 	//////////////////////////////////////////////////////////////////////////////////
-	if( output.return ){
-		options.return		= convertType(output.return.type)
+	if( jsdocJSON.return ){
+		options.return		= convertType(jsdocJSON.return.type)
 	}
 
 	return options
 }
-var JSDOCED	= JSDOCED	|| {}
+var jsDoced	= jsDoced	|| {}
 
 /**
  * parse jsdoc comment and return a 'json-ified' version of it
@@ -126,7 +209,7 @@ var JSDOCED	= JSDOCED	|| {}
  * @param  {String} jsdocContent String containing the content
  * @return {Object} the json object
  */
-JSDOCED.parseJsdoc	= function(jsdocContent){
+jsDoced.parseJsdoc	= function(jsdocContent){
 	var lines	= jsdocContent.split('\n')
 
 	// remove first and last line
@@ -218,54 +301,3 @@ JSDOCED.parseJsdoc	= function(jsdocContent){
 	// return output
 	return output
 }
-/**
- * @todo do a Function.prototype.version
- * @todo do a jsDoced.Class() to force the generation of Class (instead of relying on @constructor)
- * @todo same for the jsDoced.Function for consistency
- */
-
-
-var jsDoced	= function(originalFct){
-	// console.log('prout')
-	
-	var stackFrame	= Better.stack()[1]
-	var jsdocContent= JSDOCED.extractJsdoc(stackFrame.url, stackFrame.line)
-	// console.log('jsdocContent', jsdocContent)
-
-	var output	= JSDOCED.parseJsdoc(jsdocContent)
-
-	if( output.isClass ){
-		var attributes	= JSDOCED.jsdocToBetterClass(output)
-		var betterClass	= Better.Class(originalFct, attributes)
-		return betterClass
-	}else{
-		var attributes	= JSDOCED.jsdocToBetterFunction(output)
-		var betterFct	= Better.Function(originalFct, attributes)
-		return betterFct
-	}
-	console.assert(false, 'this point should not be reached')
-}
-
-
-
-// /**
-//  * it is the same as ```JSDOCED.Function``` but overloaded in Function.prototype
-//  */
-// Function.prototype.jsdocedFunction	= function(){
-// 	var originalFct	= this
-
-// 	// find caller location
-// 	var stackFrame	= Better.stack()[1]
-
-// 	// extract jsdoc from called location 
-// 	var fctNLines	= originalFct.toString().split('\n').length
-// 	var jsdocContent= JSDOCED.extractJsdoc(stackFrame.url, stackFrame.line - fctNLines + 1)
-
-// 	var output	= JSDOCED.parseJsdoc(jsdocContent)
-
-// 	var options	= JSDOCED.jsdocToBetterFunction(output)
-
-// 	var betterFct	= Better.Function(originalFct, options)
-
-// 	return betterFct
-// }

@@ -1,4 +1,4 @@
-var JSDOCED	= JSDOCED	|| {}
+var jsDoced	= jsDoced	|| {}
 
 /**
  * Extract jsdoc comment just above the bottomLine in the file at url
@@ -7,26 +7,33 @@ var JSDOCED	= JSDOCED	|| {}
  * @param  {Number} bottomLine the line number just below the comment
  * @return {String}            the content of jsdoc comment
  */
-JSDOCED.extractJsdoc	= function(url, bottomLine){
+jsDoced.extractJsdoc	= function(url, bottomLine){
+	// return the cached jsdocContent if any
 	var inBrowser 	= typeof(window) !== 'undefined'	? true : false
-	if( inBrowser ){
-		// load url
+	var cache	= jsDoced.extractJsdoc.cache
+
+	if( cache[url] !== undefined ){
+		var content	= cache[url]
+	}else if( inBrowser ){
+		// load url via sync url
 		var request = new XMLHttpRequest();
-		var jsdocContent;
+		var content;
 		request.onload = function(){
-			var content	= request.responseText
-			jsdocContent	= parseFileContent(content)
+			content		= request.responseText
 		};
 		request.open("get", url, false);
 		request.send();
 	}else{
 		// load file sync
 		var content	= require('fs').readFileSync(url, 'utf8')
-		var jsdocContent= parseFileContent(content)
 	}
 
-	// console.log('returning')
-	console.assert( jsdocContent )
+	// write content in cache
+	cache[url]	= content
+
+	// get jsdocContent from file content
+	var jsdocContent= parseFileContent(content)
+	
 	return jsdocContent
 
 	function parseFileContent(content){
@@ -50,3 +57,5 @@ JSDOCED.extractJsdoc	= function(url, bottomLine){
 		return jsdocContent
 	}
 }
+
+jsDoced.extractJsdoc.cache	= {}

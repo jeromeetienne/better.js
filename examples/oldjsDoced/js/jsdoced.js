@@ -9,27 +9,29 @@ var jsDoced	= function(originalFct){
 	// console.log('prout')
 	
 	var stackFrame	= Better.stack()[1]
-	var jsdocContent= JSDOCED.extractJsdoc(stackFrame.url, stackFrame.line)
+	var jsdocContent= jsDoced.extractJsdoc(stackFrame.url, stackFrame.line)
 	// console.log('jsdocContent', jsdocContent)
 
-	var output	= JSDOCED.parseJsdoc(jsdocContent)
+	var output	= jsDoced.parseJsdoc(jsdocContent)
 
 	if( output.isClass ){
-		var attributes	= JSDOCED.jsdocToBetterClass(output)
+		var attributes	= jsDoced.jsdocToBetterClass(output)
 		var betterClass	= Better.Class(originalFct, attributes)
 		return betterClass
 	}else{
-		var attributes	= JSDOCED.jsdocToBetterFunction(output)
+		var attributes	= jsDoced.jsdocToBetterFunction(output)
 		var betterFct	= Better.Function(originalFct, attributes)
 		return betterFct
 	}
 	console.assert(false, 'this point should not be reached')
 }
 
+// export the class in node.js - if running in node.js
+if( typeof(window) === 'undefined' )	module.exports	= jsDoced;
 
 
 // /**
-//  * it is the same as ```JSDOCED.Function``` but overloaded in Function.prototype
+//  * it is the same as ```jsDoced.Function``` but overloaded in Function.prototype
 //  */
 // Function.prototype.jsdocedFunction	= function(){
 // 	var originalFct	= this
@@ -39,11 +41,11 @@ var jsDoced	= function(originalFct){
 
 // 	// extract jsdoc from called location 
 // 	var fctNLines	= originalFct.toString().split('\n').length
-// 	var jsdocContent= JSDOCED.extractJsdoc(stackFrame.url, stackFrame.line - fctNLines + 1)
+// 	var jsdocContent= jsDoced.extractJsdoc(stackFrame.url, stackFrame.line - fctNLines + 1)
 
-// 	var output	= JSDOCED.parseJsdoc(jsdocContent)
+// 	var output	= jsDoced.parseJsdoc(jsdocContent)
 
-// 	var options	= JSDOCED.jsdocToBetterFunction(output)
+// 	var options	= jsDoced.jsdocToBetterFunction(output)
 
 // 	var betterFct	= Better.Function(originalFct, options)
 

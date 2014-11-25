@@ -1,0 +1,28 @@
+<script src='../../../../build/better.js'></script>
+<script src='../js/jsdoced.js'></script>
+<script src='../js/extractJsdoc.js'></script>
+<script src='../js/jsdocToBetter.js'></script>
+<script src='../js/parseJsdoc.js'></script>
+<script>
+
+/**
+ * cat constructor
+ *
+ * @constructor
+ * @param {String} name the name of the cat
+ * @param {Number} weight the weight of the cat
+ */
+var Cat	= jsDoced(function(name, weight){
+	this._name	= name
+	this.weight	= weight || 0
+})
+
+Cat.prototype.getName	= function(){
+	return this._name
+}
+
+
+var cat	= new Cat('kitty', 3)
+console.log('my cat name is', cat._name)
+
+</script>

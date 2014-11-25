@@ -1,6 +1,6 @@
-var JSDOCED	= JSDOCED	|| {}
+var jsDoced	= jsDoced	|| {}
 
-JSDOCED.jsdocToBetterType	= function(type){
+jsDoced.jsdocToBetterType	= function(type){
 	if( type.toLowerCase() === 'number' ){
 		return Number
 	}else if( type.toLowerCase() === 'string' ){
@@ -12,8 +12,8 @@ JSDOCED.jsdocToBetterType	= function(type){
 //////////////////////////////////////////////////////////////////////////////////
 //		jsdocToBetterFunction
 //////////////////////////////////////////////////////////////////////////////////
-JSDOCED.jsdocToBetterClass	= function(output){
-	var convertType	= JSDOCED.jsdocToBetterType
+jsDoced.jsdocToBetterClass	= function(output){
+	var convertType	= jsDoced.jsdocToBetterType
 	var options	= {}
 
 	//////////////////////////////////////////////////////////////////////////////////
@@ -42,8 +42,8 @@ JSDOCED.jsdocToBetterClass	= function(output){
 //////////////////////////////////////////////////////////////////////////////////
 //		jsdocToBetterFunction
 //////////////////////////////////////////////////////////////////////////////////
-JSDOCED.jsdocToBetterFunction	= function(output){
-	var convertType	= JSDOCED.jsdocToBetterType
+jsDoced.jsdocToBetterFunction	= function(output){
+	var convertType	= jsDoced.jsdocToBetterType
 	var options	= {}
 
 	//////////////////////////////////////////////////////////////////////////////////
