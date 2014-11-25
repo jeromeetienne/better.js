@@ -14,7 +14,7 @@ test:
 
 watch: build
 	# fswatch is available at https://github.com/emcrisostomo/fswatch
-	fswatch -o src/ betterjs/ contribs/jsdoced.js/js | xargs -n1 -I{} make build
+	fswatch -o src/ betterjs/ | xargs -n1 -I{} make build
 
 build:
 	echo		 			>  build/better.js
@@ -33,21 +33,11 @@ build:
 	cat src/helpers/classattr.js		>> build/better.js
 	cat betterjs/better.js			>> build/better.js
 	cat betterjs/better-buildsuffix.js	>> build/better.js
-	make -C contribs/jsdoced.js/ build
 	#cat vendor/long-stack-traces/lib/long-stack-traces.js	>> build/debug.js
 
 minify: build
 	uglifyjs build/better.js > build/better.min.js
 	@echo size minified + gzip is `gzip -c build/better.min.js | wc -c` byte
-	make -C contribs/jsdoced.js/ minify
-
-buildBundle: build
-	cat build/better.js		>  build/better-bundle.js
-	cat examples/helpers/*.js	>> build/better-bundle.js
-
-minifyBundle: buildBundle
-	uglifyjs build/better-bundle.js > build/better-bundle.min.js
-	@echo size minified + gzip is `gzip -c build/better-bundle.min.js | wc -c` byte
 
 publish: minify
 	npm publish
