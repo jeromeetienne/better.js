@@ -8,11 +8,28 @@ var JSDOCED	= JSDOCED	|| {}
  * @return {String}            the content of jsdoc comment
  */
 JSDOCED.extractJsdoc	= function(url, bottomLine){
-	var jsdocContent;
-	// load url
-	var request = new XMLHttpRequest();
-	request.onload = function(){
-		var content	= request.responseText
+	var inBrowser 	= typeof(window) !== 'undefined'	? true : false
+	if( inBrowser ){
+		// load url
+		var request = new XMLHttpRequest();
+		var jsdocContent;
+		request.onload = function(){
+			var content	= request.responseText
+			jsdocContent	= parseFileContent(content)
+		};
+		request.open("get", url, false);
+		request.send();
+	}else{
+		// load file sync
+		var content	= require('fs').readFileSync(url, 'utf8')
+		var jsdocContent= parseFileContent(content)
+	}
+
+	// console.log('returning')
+	console.assert( jsdocContent )
+	return jsdocContent
+
+	function parseFileContent(content){
 		var lines	= content.split('\n')
 		// console.log('loaded')
 
@@ -29,15 +46,7 @@ JSDOCED.extractJsdoc	= function(url, bottomLine){
 			if( isJsdocHead === true )	break
 		}
 		
-		jsdocContent	= lines.slice(lineStart, lineEnd+1).join('\n')
-		// console.log('jsdocContent', jsdocContent)
-
-
-	};
-	request.open("get", url, false);
-	request.send();
-
-	// console.log('returning')
-	console.assert( jsdocContent )
-	return jsdocContent
+		var jsdocContent	= lines.slice(lineStart, lineEnd+1).join('\n')
+		return jsdocContent
+	}
 }

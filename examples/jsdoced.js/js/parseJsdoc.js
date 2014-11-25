@@ -18,10 +18,14 @@ JSDOCED.parseJsdoc	= function(jsdocContent){
 		lines[i]	= lines[i].replace(/^(\s*\*\s*)/, '')
 	}
 
-	var output	= {}
+	var output	= {
+		params	: {},
+		tags	: {},
+	}
 
 	//////////////////////////////////////////////////////////////////////////////////
-	//		Description	//////////////////////////////////////////////////////////////////////////////////
+	//		Description
+	//////////////////////////////////////////////////////////////////////////////////
 	for(var i = 0; i < lines.length; i++){
 		var line	= lines[i]
 		var matches	= line.match(/^@([^\s])+/)
@@ -36,16 +40,16 @@ JSDOCED.parseJsdoc	= function(jsdocContent){
 	//////////////////////////////////////////////////////////////////////////////////
 	//		Tags
 	//////////////////////////////////////////////////////////////////////////////////
-	output.params	= {}
 	lines.forEach(function(line){
 		// console.log('line', line)
 		// console.log('tag line', line.match(/^@/))
 		if( line.match(/^@/) === null )	return
 		var matches	= line.match(/^@([^\s])+/)
 		// console.log('matches', matches)
-		var tagName	= matches[0].replace(/^@/, '')
+		var tagName	= matches[0].replace(/^@/, '').toLowerCase()
+
 		// console.log('tagName', tagName )
-		if( tagName.toLowerCase() === 'param' ){
+		if( tagName === 'param' ){
 			var matches	= line.match(/^@([^\s]+)\s+{([^\s]+)}\s+([^\s]+)\s+(.*)$/)
 			// console.log('matches', matches )
 			console.assert(matches.length === 5)
@@ -56,7 +60,7 @@ JSDOCED.parseJsdoc	= function(jsdocContent){
 				type		: paramType,
 				description	: paramDescription
 			}
-		}else if( tagName.toLowerCase() === 'return' ){
+		}else if( tagName === 'return' ){
 			var matches	= line.match(/^@([^\s]+)\s+{([^\s]+)}\s+(.*)$/)
 			// console.log('matches', matches )
 			console.assert(matches.length === 4)
@@ -67,14 +71,29 @@ JSDOCED.parseJsdoc	= function(jsdocContent){
 				description	: paramDescription
 			}
 		}else{
+			output.tags		= output.tags	|| {}
+			output.tags[tagName]	= true
 			// console.assert(false)
-			console.warn('unhandled tag tagName', tagName)
+			// console.warn('unhandled tag tagName', tagName)
+			// }else if( tagName.toLowerCase() === 'return' ){
 		}
 	})
 
 	//////////////////////////////////////////////////////////////////////////////////
-	//		Comment								//
+	//		add meta info in output 
 	//////////////////////////////////////////////////////////////////////////////////
+
+
+	var hasConstructor	= Object.getOwnPropertyNames(output.tags).indexOf('constructor') !== -1 ? true : false
+	var hasClass		= output.tags.class	? true : false 
+
+	output.isClass	= ( hasClass || hasConstructor ) ? true : false
+
+
+	// remove output.params if it is empty
+	if( Object.keys(output.params).length === 0 )	delete output.params
+	// remove output.tags if it is empty
+	if( Object.keys(output.tags).length === 0 )	delete output.tags
 
 	// return output
 	return output

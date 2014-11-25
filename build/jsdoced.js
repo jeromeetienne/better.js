@@ -9,11 +9,28 @@ var JSDOCED	= JSDOCED	|| {}
  * @return {String}            the content of jsdoc comment
  */
 JSDOCED.extractJsdoc	= function(url, bottomLine){
-	var jsdocContent;
-	// load url
-	var request = new XMLHttpRequest();
-	request.onload = function(){
-		var content	= request.responseText
+	var inBrowser 	= typeof(window) !== 'undefined'	? true : false
+	if( inBrowser ){
+		// load url
+		var request = new XMLHttpRequest();
+		var jsdocContent;
+		request.onload = function(){
+			var content	= request.responseText
+			jsdocContent	= parseFileContent(content)
+		};
+		request.open("get", url, false);
+		request.send();
+	}else{
+		// load file sync
+		var content	= require('fs').readFileSync(url, 'utf8')
+		var jsdocContent= parseFileContent(content)
+	}
+
+	// console.log('returning')
+	console.assert( jsdocContent )
+	return jsdocContent
+
+	function parseFileContent(content){
 		var lines	= content.split('\n')
 		// console.log('loaded')
 
@@ -30,24 +47,26 @@ JSDOCED.extractJsdoc	= function(url, bottomLine){
 			if( isJsdocHead === true )	break
 		}
 		
-		jsdocContent	= lines.slice(lineStart, lineEnd+1).join('\n')
-		// console.log('jsdocContent', jsdocContent)
-
-
-	};
-	request.open("get", url, false);
-	request.send();
-
-	// console.log('returning')
-	console.assert( jsdocContent )
-	return jsdocContent
+		var jsdocContent	= lines.slice(lineStart, lineEnd+1).join('\n')
+		return jsdocContent
+	}
 }
 var JSDOCED	= JSDOCED	|| {}
 
+JSDOCED.jsdocToBetterType	= function(type){
+	if( type.toLowerCase() === 'number' ){
+		return Number
+	}else if( type.toLowerCase() === 'string' ){
+		return String
+	}else	console.warn('unhandled type', type)
+
+	return undefined
+}
 //////////////////////////////////////////////////////////////////////////////////
 //		jsdocToBetterFunction
 //////////////////////////////////////////////////////////////////////////////////
-JSDOCED.jsdocToBetterFunction	= function(output){
+JSDOCED.jsdocToBetterClass	= function(output){
+	var convertType	= JSDOCED.jsdocToBetterType
 	var options	= {}
 
 	//////////////////////////////////////////////////////////////////////////////////
@@ -56,7 +75,37 @@ JSDOCED.jsdocToBetterFunction	= function(output){
 	options.arguments	= []
 	Object.keys(output.params).forEach(function(paramName){
 		var param	= output.params[paramName]
-		var argument	= jsdocToBetterjs(param.type)
+		var argument	= convertType(param.type)
+		options.arguments.push(argument)
+	})
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		privatize
+	//////////////////////////////////////////////////////////////////////////////////
+
+	options.privatize	= true
+	//////////////////////////////////////////////////////////////////////////////////
+	//		privatize
+	//////////////////////////////////////////////////////////////////////////////////
+
+	return options
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//		jsdocToBetterFunction
+//////////////////////////////////////////////////////////////////////////////////
+JSDOCED.jsdocToBetterFunction	= function(output){
+	var convertType	= JSDOCED.jsdocToBetterType
+	var options	= {}
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		arguments
+	//////////////////////////////////////////////////////////////////////////////////
+	options.arguments	= []
+	Object.keys(output.params).forEach(function(paramName){
+		var param	= output.params[paramName]
+		var argument	= convertType(param.type)
 		options.arguments.push(argument)
 	})
 
@@ -64,18 +113,10 @@ JSDOCED.jsdocToBetterFunction	= function(output){
 	//		arguments
 	//////////////////////////////////////////////////////////////////////////////////
 	if( output.return ){
-		options.return		= jsdocToBetterjs(output.return.type)
+		options.return		= convertType(output.return.type)
 	}
 
 	return options
-
-	function jsdocToBetterjs(type){
-		if( type.toLowerCase() === 'number' ){
-			return Number
-		}else	console.warn('unhandled type', type)
-
-		return undefined
-	}
 }
 var JSDOCED	= JSDOCED	|| {}
 
@@ -97,10 +138,14 @@ JSDOCED.parseJsdoc	= function(jsdocContent){
 		lines[i]	= lines[i].replace(/^(\s*\*\s*)/, '')
 	}
 
-	var output	= {}
+	var output	= {
+		params	: {},
+		tags	: {},
+	}
 
 	//////////////////////////////////////////////////////////////////////////////////
-	//		Description	//////////////////////////////////////////////////////////////////////////////////
+	//		Description
+	//////////////////////////////////////////////////////////////////////////////////
 	for(var i = 0; i < lines.length; i++){
 		var line	= lines[i]
 		var matches	= line.match(/^@([^\s])+/)
@@ -115,16 +160,16 @@ JSDOCED.parseJsdoc	= function(jsdocContent){
 	//////////////////////////////////////////////////////////////////////////////////
 	//		Tags
 	//////////////////////////////////////////////////////////////////////////////////
-	output.params	= {}
 	lines.forEach(function(line){
 		// console.log('line', line)
 		// console.log('tag line', line.match(/^@/))
 		if( line.match(/^@/) === null )	return
 		var matches	= line.match(/^@([^\s])+/)
 		// console.log('matches', matches)
-		var tagName	= matches[0].replace(/^@/, '')
+		var tagName	= matches[0].replace(/^@/, '').toLowerCase()
+
 		// console.log('tagName', tagName )
-		if( tagName.toLowerCase() === 'param' ){
+		if( tagName === 'param' ){
 			var matches	= line.match(/^@([^\s]+)\s+{([^\s]+)}\s+([^\s]+)\s+(.*)$/)
 			// console.log('matches', matches )
 			console.assert(matches.length === 5)
@@ -135,7 +180,7 @@ JSDOCED.parseJsdoc	= function(jsdocContent){
 				type		: paramType,
 				description	: paramDescription
 			}
-		}else if( tagName.toLowerCase() === 'return' ){
+		}else if( tagName === 'return' ){
 			var matches	= line.match(/^@([^\s]+)\s+{([^\s]+)}\s+(.*)$/)
 			// console.log('matches', matches )
 			console.assert(matches.length === 4)
@@ -146,21 +191,41 @@ JSDOCED.parseJsdoc	= function(jsdocContent){
 				description	: paramDescription
 			}
 		}else{
+			output.tags		= output.tags	|| {}
+			output.tags[tagName]	= true
 			// console.assert(false)
-			console.warn('unhandled tag tagName', tagName)
+			// console.warn('unhandled tag tagName', tagName)
+			// }else if( tagName.toLowerCase() === 'return' ){
 		}
 	})
 
 	//////////////////////////////////////////////////////////////////////////////////
-	//		Comment								//
+	//		add meta info in output 
 	//////////////////////////////////////////////////////////////////////////////////
+
+
+	var hasConstructor	= Object.getOwnPropertyNames(output.tags).indexOf('constructor') !== -1 ? true : false
+	var hasClass		= output.tags.class	? true : false 
+
+	output.isClass	= ( hasClass || hasConstructor ) ? true : false
+
+
+	// remove output.params if it is empty
+	if( Object.keys(output.params).length === 0 )	delete output.params
+	// remove output.tags if it is empty
+	if( Object.keys(output.tags).length === 0 )	delete output.tags
 
 	// return output
 	return output
 }
-var JSDOCED	= JSDOCED	|| {}
+/**
+ * @todo do a Function.prototype.version
+ * @todo do a jsDoced.Class() to force the generation of Class (instead of relying on @constructor)
+ * @todo same for the jsDoced.Function for consistency
+ */
 
-JSDOCED.Function	= function(originalFct){
+
+var jsDoced	= function(originalFct){
 	// console.log('prout')
 	
 	var stackFrame	= Better.stack()[1]
@@ -168,18 +233,20 @@ JSDOCED.Function	= function(originalFct){
 	// console.log('jsdocContent', jsdocContent)
 
 	var output	= JSDOCED.parseJsdoc(jsdocContent)
-	// console.log('output')
-	// console.log(JSON.stringify(output, null, '\t'))
 
-	var options	= JSDOCED.jsdocToBetterFunction(output)
-	// console.log('options')
-	// console.dir(options)
-
-	var betterFct	= Better.Function(originalFct, options)
-
-	return betterFct
+	if( output.isClass ){
+		var attributes	= JSDOCED.jsdocToBetterClass(output)
+		var betterClass	= Better.Class(originalFct, attributes)
+		return betterClass
+	}else{
+		var attributes	= JSDOCED.jsdocToBetterFunction(output)
+		var betterFct	= Better.Function(originalFct, attributes)
+		return betterFct
+	}
+	console.assert(false, 'this point should not be reached')
 }
-var JSDOCED	= JSDOCED	|| {}
+
+
 
 // /**
 //  * it is the same as ```JSDOCED.Function``` but overloaded in Function.prototype
