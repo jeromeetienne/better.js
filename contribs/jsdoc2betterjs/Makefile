@@ -1,5 +1,5 @@
 build:
-	./jsdoc2betterjs sample.js
+	./jsdoc2betterjs examples/sample.js
 
 compile:
-	./jsdoc2betterjs sample.js > sample.better.js
+	./jsdoc2betterjs examples/sample.js > examples/sample.better.js

@@ -3,8 +3,18 @@
 var recast	= require("recast");
 var builders	= recast.types.builders;
 
-var jsdocParse	= require('./jsdocParse.js')
-var jsdocExpr	= require('./jsdocExpression.js')
+var jsdocParse	= require('./utils/jsdocParse.js')
+var jsdocExpr	= require('./utils/jsdocExpression.js')
+
+
+if( process.argv[2] === '-h' ){
+	console.log('Usage: jsdoc2betterjs [options] path/to/file.js')
+	console.log('')
+	console.log('parse the jsdoc in your file.js')
+	console.log('and output a version modified to check jsdoc with better.js')
+	process.exit()
+}
+
 
 // read the content
 var filename	= process.argv[2]

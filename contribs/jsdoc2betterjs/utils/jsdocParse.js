@@ -108,6 +108,12 @@ jsDoced.parseJsdoc	= function(jsdocContent){
 //////////////////////////////////////////////////////////////////////////////////
 //		Comment								//
 //////////////////////////////////////////////////////////////////////////////////
+/**
+ * [extractJsdocContent description]
+ * @param  {String[]} 	lines      [description]
+ * @param  {Number}	bottomLine [description]
+ * @return {Object|null}           [description]
+ */
 jsDoced.extractJsdocContent	= function(lines, bottomLine){
 	var lineEnd	= bottomLine-1
 // console.assert(false)
