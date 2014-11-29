@@ -1,11 +1,11 @@
 {
   "name": "better.js",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "For a better javascript in javascript",
   "main": "build/better.js",
   "bin": {
-    "jsdoc2betterjs" : "./contribs/jsdoc2betterjs/jsdoc2betterjs"
-    },
+    "jsdoc2betterjs": "./contribs/jsdoc2betterjs/jsdoc2betterjs"
+  },
   "directories": {
     "doc": "docs",
     "example": "examples",
