@@ -1,7 +1,9 @@
 /**
- * @fileOverview Contains a object for the THREEx.Game.js
- * @class
- * @param {THREE.Object3D} object3d the object
+ * measure the length of a string
+ *
+ * @param  {String} aString the string to measure
+ * @return {Number} the length of the string
  */
-THREEx.GameObject	= function(object3d){
+var stringLength  = function(aString){
+  return aString.length
 }
