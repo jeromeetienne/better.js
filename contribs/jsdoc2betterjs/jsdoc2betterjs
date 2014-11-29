@@ -1,0 +1,44 @@
+#!/usr/bin/env node
+
+var recast	= require("recast");
+var builders	= recast.types.builders;
+
+var jsdocParse	= require('./jsdocParse.js')
+var jsdocExpr	= require('./jsdocExpression.js')
+
+// read the content
+var filename	= process.argv[2]
+var content	= require('fs').readFileSync(filename, 'utf8')
+var contentLines= content.split('\n')
+
+
+recast.run(function(ast, callback) {
+	recast.visit(ast, {
+		visitFunctionExpression: function(path) {
+			// console.log('FunctionExpression', path.value)
+
+			// NOTE: must be before path.replace() to avoid reccursive infinite loop (creating function in function)
+			this.traverse(path)
+
+			// get jsdocContent
+			var lineNumber		= path.value.loc.start.line-1
+			var jsdocContent	= jsdocParse.extractJsdocContent(contentLines, lineNumber)
+	// console.log('jsdocContent', lineNumber, jsdocContent)
+			// if no jsdocContent do nothing
+			if( jsdocContent === null )	return
+
+			var functionExpression	= path.value
+			var callExpression	= jsdocExpr.jsContent2CallExpression(jsdocContent, functionExpression)
+
+			path.replace(callExpression)
+		},
+	});
+
+	// NOTE: disabled this line to avoid display the outputed source
+	callback(ast);
+}, {
+	tabWidth	: 8,
+	useTabs		: true,
+	// sourceFileName	: 'map.json',
+});
+
