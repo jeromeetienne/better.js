@@ -6,40 +6,64 @@ var builders	= recast.types.builders;
 var jsdocParse	= require('./utils/jsdocParse.js')
 var jsdocExpr	= require('./utils/jsdocExpression.js')
 
-
+//////////////////////////////////////////////////////////////////////////////////
+//		Inline help
+//////////////////////////////////////////////////////////////////////////////////
 if( process.argv[2] === '-h' ){
 	console.log('Usage: jsdoc2betterjs [options] path/to/file.js')
 	console.log('')
-	console.log('parse the jsdoc in your file.js')
-	console.log('and output a version modified to check jsdoc with better.js')
+	console.log('Makes sure jsdoc is respected during execution.')
+	console.log('More about better.js at http://betterjs.org')
+	console.log('')
+
+	console.log('')
+	console.log('Options:')
+	console.log('\t-h	Display inline help')
+	console.log('')
+	console.log('\t-v	Display version')
+	console.log('')
+	process.exit()
+}
+if( process.argv[2] === '-v' ){
+	var packageJson	= require('./../../package.json')
+	console.log(packageJson.version)
 	process.exit()
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////
+//		pre read source file content
+//////////////////////////////////////////////////////////////////////////////////
 // read the content
+// - it is used to parse the jsdoc parts more easily
 var filename	= process.argv[2]
 var content	= require('fs').readFileSync(filename, 'utf8')
 var contentLines= content.split('\n')
 
 
+// launch recast.run()
 recast.run(function(ast, callback) {
 	recast.visit(ast, {
+		/**
+		 * receive the FunctionExpression node
+		 */
 		visitFunctionExpression: function(path) {
 			// console.log('FunctionExpression', path.value)
 
+			// call the subtree
 			// NOTE: must be before path.replace() to avoid reccursive infinite loop (creating function in function)
 			this.traverse(path)
 
-			// get jsdocContent
+			// get jsdocContent for this node
 			var lineNumber		= path.value.loc.start.line-1
 			var jsdocContent	= jsdocParse.extractJsdocContent(contentLines, lineNumber)
-	// console.log('jsdocContent', lineNumber, jsdocContent)
-			// if no jsdocContent do nothing
+			// if no jsdocContent, do nothing
 			if( jsdocContent === null )	return
 
+			// produce the callExpression to replace this node
 			var functionExpression	= path.value
 			var callExpression	= jsdocExpr.jsContent2CallExpression(jsdocContent, functionExpression)
 
+			// actually replace the node
 			path.replace(callExpression)
 		},
 	});
@@ -47,6 +71,7 @@ recast.run(function(ast, callback) {
 	// NOTE: disabled this line to avoid display the outputed source
 	callback(ast);
 }, {
+	// Options for recast - those are my personal preferences
 	tabWidth	: 8,
 	useTabs		: true,
 	// sourceFileName	: 'map.json',

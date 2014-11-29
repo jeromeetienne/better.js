@@ -8,6 +8,14 @@ var jsdocParse	= require('./jsdocParse.js')
 //////////////////////////////////////////////////////////////////////////////////
 //		Comment								//
 //////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * convert a jsdocContent and the function into a callExpression for react
+ * 
+ * @param  {String} 		jsdocContent - the actual jsdoc comment
+ * @param  {FunctionExpression} functionExpression - the FunctionExpression from the parser associated with the jsdoc
+ * @return {CallExpression}     the resulting call expression
+ */
 function jsContent2CallExpression(jsdocContent, functionExpression){
 
 	// get json version of jsdocContent
@@ -78,6 +86,12 @@ function jsContent2CallExpression(jsdocContent, functionExpression){
 //		Comment								//
 //////////////////////////////////////////////////////////////////////////////////
 
+/**
+ * convert a parsed jsdocJson @param into a Expression for the parser
+ * 
+ * @param  {Object}	param - the @param parsed in jsdocJson
+ * @return {Expression} the built expression
+ */
 function jsdocParam2Expression(param){
 
 	var hasMultiple	= param.type.split('|').length > 1 ? true : false 
@@ -92,8 +106,15 @@ function jsdocParam2Expression(param){
 	return parseOne(param.type)
 
 	//////////////////////////////////////////////////////////////////////////////////
-	//		Comment								//
+	//		utility functions
 	//////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * parse one type. aka do not support multiple type
+	 * 
+	 * @param  {String}	type - the type string as found in the jsdoc comment @param
+	 * @return {Expression}	the expression to put in the parser tree
+	 */
 	function parseOne(type){
 		console.assert(type.match(/\|/) === null)
 		// console.dir(param)
@@ -112,6 +133,11 @@ function jsdocParam2Expression(param){
 	}
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+//		exports
+//////////////////////////////////////////////////////////////////////////////////
+
+// export the module
 module.exports	= {
 	jsdocParam2Expression	: jsdocParam2Expression,
 	jsContent2CallExpression: jsContent2CallExpression
