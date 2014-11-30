@@ -162,6 +162,19 @@
 
       <!-- /////////////////////// -->
       <div class="row featurette">
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+/**
+ * measure the length of a string
+ *
+ * @param  {String} aString the string to measure
+ * @return {Number} the length of the string
+ */
+var stringLength  = function(aString){
+    return aString.length
+}
+</pre>
+        </div>
         <div class="col-md-5">
           <h2 class="featurette-heading">Use JSDOC To Test Your Code</h2>
           <p class="lead">
@@ -170,37 +183,11 @@
             to extract more informations on how to test your code.
           </p>
         </div>
-        <div class="col-md-7">
-          <pre class="prettyprint" style='font-size:140%'>
-/**
- * measure the length of a string
- *
- * @param  {String} aString the string to measure
- * @return {Number} the length of the string
- */
-var stringLength  = function(aString){
-    return aString.length
-}
-</pre>
-        </div>
       </div>
       <br/><br/><br/>
 
       <!-- /////////////////////// -->
       <div class="row featurette">
-        <div class="col-md-7">
-          <pre class="prettyprint" style='font-size:140%'>
-/**
- * measure the length of a string
- *
- * @param  {String} aString the string to measure
- * @return {Number} the length of the string
- */
-var stringLength  = function(aString){
-    return aString.length
-}
-</pre>
-        </div>
         <div class="col-md-5">
           <h2 class="featurette-heading">Provide Strong Typing to JS</h2>
           <p class="lead">
@@ -208,20 +195,25 @@ var stringLength  = function(aString){
             No more 'oops i forgot an argument' bug.
             We do the same for <code>@return</code>, thus we test the function behavior too.
         </div>
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+/**
+ * measure the length of a string
+ *
+ * @param  {String} aString the string to measure
+ * @return {Number} the length of the string
+ */
+var stringLength  = function(aString){
+    return aString.length
+}
+</pre>
+        </div>
       </div>
       <br/><br/><br/>
 
 
       <!-- /////////////////////// -->
       <div class="row featurette">
-        <div class="col-md-5">
-          <h2 class="featurette-heading">Provide Private to Your JS</h2>
-          <p class="lead">
-            All your JSDOC <code>@constructor</code> tag are detected to know what 
-            your classes are and enable <a href='betterjs-class.html'>Better.Class</a> privates.
-            Thus if your classes private are used outside your class, you 
-            will be warned immediatly
-        </div>
         <div class="col-md-7">
           <pre class="prettyprint" style='font-size:140%'>
 /**
@@ -234,6 +226,14 @@ var Cat  = function(age){
     this._age = age
 }
 </pre>
+        </div>
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Provide Private to Your JS</h2>
+          <p class="lead">
+            All your JSDOC <code>@constructor</code> tag are detected to know what 
+            your classes are and enable <a href='betterjs-class.html'>Better.Class</a> privates.
+            Thus if your classes private are used outside your class, you 
+            will be warned immediatly
         </div>
       </div>
       <br/><br/><br/>
