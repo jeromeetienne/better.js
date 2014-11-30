@@ -118,7 +118,7 @@
         </h1>
         <br/>
         <p class="lead">
-          It will <strong>automatically extract jsdoc</strong>  from your code.
+          <code>jsdoc2betterjs</code> will <strong>automatically extract jsdoc</strong>  from your code.
           Using your jsdoc comments, it will generate another javascript
           file which <strong>makes sure your jsdoc is respected during execution.</strong>
         </p>
@@ -130,15 +130,15 @@
       <div class="row">
         <div class="col-lg-4">
           <h3>Detect New Family of Bugs</h3>
-          <p>Before the jsdoc were not used to test your code.
-            You will likely find new bugs thanks to it.
+          <p>Before, <a href='http://usejsdoc.org' target='_blank'>jsdoc comments</a> were not used to test your code.
+            So you will likely find new bugs thanks to it.
             And it is a good news! You want to find those bugs 
             before your users see them :)
             </p>
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-4">
           <h3>Automatic Generation</h3>
-          <p>The jsdoc will automatically be exactracted from your javascript source. 
+          <p>The jsdoc will automatically be extracted from your javascript source. 
             Your jsdoc comments will be used to produce another version of your
             source, modified to check if your jsdoc is respected during execution.
             </p>
@@ -146,7 +146,7 @@
         <div class="col-lg-4">
           <h3>Javascript to Javascript</h3>
           <p>It is all pure javascript here. jsdoc is the established way to document javascript.
-            No new language here!
+            No new language!
             It works in node.js and browser.
             It can even generate sourcemap.
             It create a virtuous circle <strong>"The more you documents your code, the safer it becomes."</strong>.
@@ -154,7 +154,12 @@
         </div><!-- /.col-lg-4 -->
       </div><!-- /.row -->
 
-      <hr class="featurette-divider">
+      
+      <!-- Steps -->
+
+      <div class="page-header jumbotron" id='PrivateInBetterJS'>
+        <h1>How it works</h1>
+      </div>
 
       <div class="row featurette">
         <div class="col-md-5">
@@ -162,7 +167,7 @@
           <p class="lead">
             Here is our example function. 
             This is a simple function which measure the length of a string. 
-            There is jsdoc comment which provides details on the function:
+            There is <a href='http://usejsdoc.org/'>jsdoc comment</a> which provides details on the function:
             The <code>type of arguments</code> and the <code>type returned</code>.
            
         </div>
@@ -180,37 +185,42 @@ var stringLength  = function(aString){
 </pre>
         </div>
       </div>
+      <br/><br/><br/>
 
-      <hr class="featurette-divider">
       
-      <!-- Private in Better.js Class -->
+      <!-- /////////////////////// -->
 
       <div class="row featurette">
         <div class="col-md-7">
           <pre class="prettyprint" style='font-size:140%'>
+# Install jsdoc2betterjs if needed
+$ npm install -g better.js
+
 # Generate the better.js automatically
 $ jsdoc2betterjs file.js > file.better.js
 </pre>
         </div>
         <div class="col-md-5">
-          <h2 class="featurette-heading">Convert .js files into better.js</h2>
-          <p class="lead">Your code is analysed to extract the jsdoc it contains.
-            It <strong>automatically produces Better.Function</strong> which <strong>check if your jsdoc
-            is respected at runtime</strong>.
+          <h2 class="featurette-heading">Convert .js files into .better.js</h2>
+          <p class="lead"><code>jsdoc2betterjs</code> analysed your code and extract the jsdoc.
+            It <strong>automatically produces a .better.js file</strong> with the additional
+            code to <strong>check if your jsdoc is respected at runtime</strong>.
           </p>
         </div>
       </div>
-      <hr class="featurette-divider">
-      <!-- Private in Better.js Class -->
+      <br/><br/><br/>
+
+      <!-- /////////////////////// -->
 
       <div class="row featurette">
         <div class="col-md-5">
-          <h2 class="featurette-heading">Here is the Result!</h2>
-          <p class="lead">It is our code, but the function is wrapped in
-            a <strong>Better.Function</strong> with all the
+          <h2 class="featurette-heading">Here is the .better.js file</h2>
+          <p class="lead">On the right you can see the produced code.
+            The original function is wrapped in
+            a <a href='betterjs-function.html'>Better.Function</a> with all the
             types informations properly declared.
             Thus if your jsdoc isn't respected during execution,
-            you will be warned imediatly.
+            you will be <strong>warned imediatly!</strong>
           </p>
         </div>
         <div class="col-md-7">
@@ -230,8 +240,89 @@ var stringLength = Better.Function(function(aString){
 </pre>
         </div>
       </div>
+      <br/><br/><br/>
+
+      <!-- Steps -->
+
+      <div class="page-header jumbotron" id='PrivateInBetterJS'>
+        <h1>Misc</h1>
+      </div>
+
+      
+      <!-- /////////////////////// -->
+
+      <div class="row featurette">
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+# in node.js
+var Better = require('better.js');
+
+# in browser
+< script href='better.js'>< /script>
+</pre>
+        </div>
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Run in node.js and browser</h2>
+          <p class="lead">
+            It runs in node.js and modern browsers.
+            Thus you can test your javascript on the various environments you are running on.
+          </p>
+        </div>
+      </div>
+      <br/><br/><br/>
+
+      <!-- /////////////////////// -->
+      <div class="row featurette">
+        <div class="col-md-5">
+          <h2 class="featurette-heading">100% plain old javascript</h2>
+          <p class="lead">better.js is <strong>pure 100% javascript</strong>.
+            And jsdoc is the established way to document javascript.
+            <strong>Not a new language</strong> to learn, find documentation for, find tools for!
+            So everything is already well-known so it is <strong>painless to integrate</strong>.
+            Heck, it can even generate sourcemap.
+            </p> </strong>.
+          </p>
+        </div>
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+# Javascript is open standard
+
+# Javascript is run everywhere
+
+# =>
+
+# You can't beat that!
+</pre>
+        </div>
+      </div>
+      <br/><br/><br/>
+
+      <!-- /////////////////////// -->
+      <div class="row featurette">
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+/**
+ * measure the length of a string
+ *
+ * @param  {String} aString the string to measure
+ * @return {Number} the length of the string
+ */
+var stringLength  = function(aString){
+    return aString.length
+}
+</pre>
+        </div>
+        <div class="col-md-5">
+          <h2 class="featurette-heading">More docs means safer code</h2>
+          <p class="lead">With jsdoc2betterjs, writing jsdoc comments 
+            is like writing tests. Writing docs is good, Testing code is good.
+            It creates a virtuous circle <strong>"The more you documents your code, the safer it becomes."</strong>
+          </p>
+        </div>
+      </div>
 
     </div><!-- /.container -->
+    <br/><br/><br/>
 
 
     <!-- Bootstrap core JavaScript
