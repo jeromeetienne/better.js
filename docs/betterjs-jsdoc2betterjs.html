@@ -140,7 +140,8 @@
           <h3>Automatic Generation</h3>
           <p>The jsdoc will automatically be extracted from your javascript source. 
             Your jsdoc comments will be used to produce another version of your
-            source, modified to check if your jsdoc is respected during execution.
+            source, modified to check your jsdoc during execution.
+            It is all done for you.
             </p>
         </div><!-- /.col-lg-4 -->
         <div class="col-lg-4">
@@ -149,18 +150,100 @@
             No new language!
             It works in node.js and browser.
             It can even generate sourcemap.
-            It create a virtuous circle <strong>"The more you documents your code, the safer it becomes."</strong>.
             </p>
         </div><!-- /.col-lg-4 -->
       </div><!-- /.row -->
 
-      
+      <!-- ======================================== -->
       <!-- Steps -->
-
       <div class="page-header jumbotron" id='PrivateInBetterJS'>
-        <h1>How it works</h1>
+        <h1>Detect New Family of Bugs</h1>
       </div>
 
+      <!-- /////////////////////// -->
+      <div class="row featurette">
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Use JSDOC To Test Your Code</h2>
+          <p class="lead">
+            JSDOC contains valuable informations on the behavior of your code.
+            It was destined to programmers before. Now we use it with computers
+            to extract more informations on how to test your code.
+          </p>
+        </div>
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+/**
+ * measure the length of a string
+ *
+ * @param  {String} aString the string to measure
+ * @return {Number} the length of the string
+ */
+var stringLength  = function(aString){
+    return aString.length
+}
+</pre>
+        </div>
+      </div>
+      <br/><br/><br/>
+
+      <!-- /////////////////////// -->
+      <div class="row featurette">
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+/**
+ * measure the length of a string
+ *
+ * @param  {String} aString the string to measure
+ * @return {Number} the length of the string
+ */
+var stringLength  = function(aString){
+    return aString.length
+}
+</pre>
+        </div>
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Provide Strong Typing to JS</h2>
+          <p class="lead">
+            The tags <code>@param</code> are analysed to know which type is ok for this arguments
+            No more 'oops i forgot an argument' bug.
+            We do the same for <code>@return</code>, thus we test the function behavior too.
+        </div>
+      </div>
+      <br/><br/><br/>
+
+
+      <!-- /////////////////////// -->
+      <div class="row featurette">
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Provide Private to Your JS</h2>
+          <p class="lead">
+            All your JSDOC <code>@constructor</code> tag are detected to know what 
+            your classes are and enable <a href='betterjs-class.html'>Better.Class</a> privates.
+            Thus if your classes private are used outside your class, you 
+            will be warned immediatly
+        </div>
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+/**
+ * a cat with its age
+ *
+ * @constructor
+ * @param  {Number} age - the age of the cat
+ */
+var Cat  = function(age){
+    this._age = age
+}
+</pre>
+        </div>
+      </div>
+      <br/><br/><br/>
+      <!-- ======================================== -->
+      <!-- How it works -->
+      <div class="page-header jumbotron" id='PrivateInBetterJS'>
+        <h1>How It Works</h1>
+      </div>
+
+      <!-- /////////////////////// -->
       <div class="row featurette">
         <div class="col-md-5">
           <h2 class="featurette-heading">Get A Function</h2>
@@ -189,7 +272,6 @@ var stringLength  = function(aString){
 
       
       <!-- /////////////////////// -->
-
       <div class="row featurette">
         <div class="col-md-7">
           <pre class="prettyprint" style='font-size:140%'>
@@ -202,8 +284,8 @@ $ jsdoc2betterjs file.js > file.better.js
         </div>
         <div class="col-md-5">
           <h2 class="featurette-heading">Convert .js files into .better.js</h2>
-          <p class="lead"><code>jsdoc2betterjs</code> analysed your code and extract the jsdoc.
-            It <strong>automatically produces a .better.js file</strong> with the additional
+          <p class="lead"><code>jsdoc2betterjs</code> analyses your code and extract jsdoc.
+            It <strong>produces a .better.js file</strong> with the additional
             code to <strong>check if your jsdoc is respected at runtime</strong>.
           </p>
         </div>
@@ -242,10 +324,10 @@ var stringLength = Better.Function(function(aString){
       </div>
       <br/><br/><br/>
 
-      <!-- Steps -->
+      <!-- Benefits -->
 
       <div class="page-header jumbotron" id='PrivateInBetterJS'>
-        <h1>Misc</h1>
+        <h1>Benefits</h1>
       </div>
 
       
@@ -265,7 +347,7 @@ var Better = require('better.js');
           <h2 class="featurette-heading">Run in node.js and browser</h2>
           <p class="lead">
             It runs in node.js and modern browsers.
-            Thus you can test your javascript on the various environments you are running on.
+            Thus you can <strong>test your javascript in various environments</strong> you are running on.
           </p>
         </div>
       </div>
@@ -304,7 +386,7 @@ var Better = require('better.js');
 /**
  * measure the length of a string
  *
- * @param  {String} aString the string to measure
+ * @param  {String} aString - the string to measure
  * @return {Number} the length of the string
  */
 var stringLength  = function(aString){
@@ -314,7 +396,7 @@ var stringLength  = function(aString){
         </div>
         <div class="col-md-5">
           <h2 class="featurette-heading">More docs means safer code</h2>
-          <p class="lead">With jsdoc2betterjs, writing jsdoc comments 
+          <p class="lead">With <code>jsdoc2betterjs</code>, writing jsdoc comments 
             is like writing tests. Writing docs is good, Testing code is good.
             It creates a virtuous circle <strong>"The more you documents your code, the safer it becomes."</strong>
           </p>

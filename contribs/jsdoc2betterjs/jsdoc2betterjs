@@ -14,7 +14,6 @@ if( process.argv[2] === '-h' ){
 	console.log('')
 	console.log('Makes sure jsdoc is respected during execution.')
 	console.log('More about better.js at http://betterjs.org')
-	console.log('')
 
 	console.log('')
 	console.log('Options:')
