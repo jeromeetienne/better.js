@@ -16,10 +16,13 @@ var jsdocParse	= require('./jsdocParse.js')
  * @param  {FunctionExpression} functionExpression - the FunctionExpression from the parser associated with the jsdoc
  * @return {CallExpression}     the resulting call expression
  */
-function jsContent2CallExpression(jsdocContent, functionExpression){
+function jsContent2CallExpression(jsdocContent, functionExpression, cmdlineOptions){
 
 	// get json version of jsdocContent
 	var jsdocJson	= jsdocParse.parseJsdoc( jsdocContent )
+
+
+	if( jsdocJson.tags && jsdocJson.tags.nobetterjs )	return functionExpression
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//		Build options for better.js depending on jsdocContent
@@ -39,6 +42,23 @@ function jsContent2CallExpression(jsdocContent, functionExpression){
 			builders.identifier('arguments'), 
 			builders.arrayExpression(argumentsExpressions)
 		))
+	}else{
+		// honor cmdlineOptions.strictParams
+		if( cmdlineOptions.strictParams === true ){
+			// if no @params are defined, specify a empty []
+			options.push(builders.property('init', 
+				builders.identifier('arguments'), 
+				builders.arrayExpression([])
+			))					
+		}
+	}
+
+	// honor cmdlineOptions.strictReturn
+	if( jsdocJson.return === undefined && cmdlineOptions.strictReturns === true && jsdocJson.isClass === false ){
+		jsdocJson.return	= {
+			type		: 'undefined',
+			description	: 'default return type for strict'
+		}			
 	}
 	// honor jsdocJson.return
 	if( jsdocJson.return ){
@@ -49,8 +69,8 @@ function jsContent2CallExpression(jsdocContent, functionExpression){
 		))
 	}
 
-	// Enable .private : true by default classes
-	if( jsdocJson.isClass ){
+	// if cmdlineOptions.privatizeClass, Enable .private : true by default classes
+	if( jsdocJson.isClass && cmdlineOptions.privatizeClasses === true ){
 		options.push(builders.property('init', 
 			builders.identifier('private'), 
 			builders.literal(true)

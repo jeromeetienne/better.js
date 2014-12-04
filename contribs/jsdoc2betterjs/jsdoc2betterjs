@@ -10,13 +10,21 @@ var jsdocExpr	= require('./utils/jsdocExpression.js')
 //		Inline help
 //////////////////////////////////////////////////////////////////////////////////
 if( process.argv[2] === '-h' ){
-	console.log('Usage: jsdoc2betterjs [options] path/to/file.js')
+	console.log('Usage: jsdoc2betterjs [options] file.js file2.js...')
 	console.log('')
 	console.log('Makes sure jsdoc is respected during execution.')
 	console.log('More about better.js at http://betterjs.org')
 
 	console.log('')
 	console.log('Options:')
+	console.log('\t-m	Generate source map file. file.js into file.js.map')
+	console.log('')
+	console.log('\t-w	Write generated code from file.js into file.better.js')
+	console.log('')
+	console.log('\t-s	If @return or no @param are defined in jsdoc, check it is nothing during execution')
+	console.log('')
+	console.log('\t-p	Privatize the classes')
+	console.log('')
 	console.log('\t-h	Display inline help')
 	console.log('')
 	console.log('\t-v	Display version')
@@ -30,49 +38,141 @@ if( process.argv[2] === '-v' ){
 }
 
 //////////////////////////////////////////////////////////////////////////////////
-//		pre read source file content
+//		Comment								//
 //////////////////////////////////////////////////////////////////////////////////
-// read the content
-// - it is used to parse the jsdoc parts more easily
-var filename	= process.argv[2]
-var content	= require('fs').readFileSync(filename, 'utf8')
-var contentLines= content.split('\n')
+var cmdlineOptions	= {
+	strictParams		: false,
+	strictReturns		: false,
+	privatizeClasses	: false,
+	generateSourceMap	: false,
+	writeCodeFile		: false,
+	fileNames		: [],
+}
+
+for(var i = 2; process.argv[i] !== undefined; i++){
+	if( process.argv[i] === '-s' ){
+		cmdlineOptions.strictParams	= true
+		cmdlineOptions.strictReturns	= true
+		continue;
+	}else if( process.argv[i] === '-p' ){
+		cmdlineOptions.privatizeClasses	= true
+		continue;
+	}else if( process.argv[i] === '-m' ){
+		cmdlineOptions.generateSourceMap= true
+		continue;
+	}else if( process.argv[i] === '-w' ){
+		cmdlineOptions.writeCodeFile	= true
+		continue;
+	}else{
+		cmdlineOptions.fileNames.push( process.argv[i] )
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Comment								//
+//////////////////////////////////////////////////////////////////////////////////
+
+var processFile	= function processFile(filename, cmdlineOptions){
+	var recastOption	= {
+		// Options for recast - those are my personal preferences
+		tabWidth	: 8,
+		useTabs		: true,
+	}
+
+	if( cmdlineOptions.generateSourceMap ){
+		recastOption.sourceFileName	= filename
+		recastOption.sourceMapName	= filename+'.map.json'
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		pre read source file content
+	//////////////////////////////////////////////////////////////////////////////////
+	// read the content
+	// - it is used to parse the jsdoc parts more easily
+	var content	= require('fs').readFileSync(filename, 'utf8')
+	var contentLines= content.split('\n')
 
 
-// launch recast.run()
-recast.run(function(ast, callback) {
-	recast.visit(ast, {
-		/**
-		 * receive the FunctionExpression node
-		 */
-		visitFunctionExpression: function(path) {
-			// console.log('FunctionExpression', path.value)
+	//////////////////////////////////////////////////////////////////////////////////
+	//		recast transformer
+	//////////////////////////////////////////////////////////////////////////////////
+	var transformer	= function(ast, callback) {
+		recast.visit(ast, {
+			/**
+			 * receive the FunctionExpression node
+			 */
+			visitFunctionExpression: function(path) {
+				// console.log('FunctionExpression', path.value)
 
-			// call the subtree
-			// NOTE: must be before path.replace() to avoid reccursive infinite loop (creating function in function)
-			this.traverse(path)
+				// call the subtree
+				// NOTE: must be before path.replace() to avoid reccursive infinite loop (creating function in function)
+				this.traverse(path)
 
-			// get jsdocContent for this node
-			var lineNumber		= path.value.loc.start.line-1
-			var jsdocContent	= jsdocParse.extractJsdocContent(contentLines, lineNumber)
-			// if no jsdocContent, do nothing
-			if( jsdocContent === null )	return
+				// get jsdocContent for this node
+				var lineNumber		= path.value.loc.start.line-1
+				var jsdocContent	= jsdocParse.extractJsdocContent(contentLines, lineNumber)
+				// if no jsdocContent, do nothing
+				if( jsdocContent === null )	return
 
-			// produce the callExpression to replace this node
-			var functionExpression	= path.value
-			var callExpression	= jsdocExpr.jsContent2CallExpression(jsdocContent, functionExpression)
+				// produce the callExpression to replace this node
+				var functionExpression	= path.value
+				var callExpression	= jsdocExpr.jsContent2CallExpression(jsdocContent, functionExpression, cmdlineOptions)
 
-			// actually replace the node
-			path.replace(callExpression)
-		},
+				// actually replace the node
+				path.replace(callExpression)
+			},
+		});
+
+		// NOTE: disabled this line to avoid display the outputed source
+		callback(ast);
+	}
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+
+	// parse the file content
+	var ast	= recast.parse(content, recastOption)
+
+	// go thru the transformer
+	transformer(ast, function(node) {
+
+		// print the outputed node
+		var output	= recast.print(node, recastOption);
+
+		//////////////////////////////////////////////////////////////////////////////////
+		//		write the code
+		//////////////////////////////////////////////////////////////////////////////////
+		var code	= output.code
+		// Append the sourcemap url to the better.js files
+		if( cmdlineOptions.generateSourceMap === true ){
+			code += '\n\n//# sourceMappingURL=' + require('path').basename(recastOption.sourceMapName);
+		}
+		// honor cmdlineOptions.writeCodeFile
+		if( cmdlineOptions.writeCodeFile === true ){
+			var betterjsFilename	= filename.replace(/\.js$/, '.better.js')
+			require('fs').writeFileSync(betterjsFilename, code, 'utf8');
+		}else{
+			// else output to stdout
+			process.stdout.write(code)
+		}
+
+		//////////////////////////////////////////////////////////////////////////////////
+		//		write the map
+		//////////////////////////////////////////////////////////////////////////////////
+		if( cmdlineOptions.generateSourceMap ){
+			// var content	= ')]}' + JSON.stringify(output.map)
+			var content	= JSON.stringify(output.map)
+			require('fs').writeFileSync(recastOption.sourceMapName, content, 'utf8');
+		}
 	});
+}
 
-	// NOTE: disabled this line to avoid display the outputed source
-	callback(ast);
-}, {
-	// Options for recast - those are my personal preferences
-	tabWidth	: 8,
-	useTabs		: true,
-	// sourceFileName	: 'map.json',
-});
+
+//////////////////////////////////////////////////////////////////////////////////
+//		process each file
+//////////////////////////////////////////////////////////////////////////////////
+
+cmdlineOptions.fileNames.forEach(function(filename){
+	processFile(filename, cmdlineOptions)
+})
 

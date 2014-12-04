@@ -62,10 +62,10 @@ jsDoced.parseJsdoc	= function(jsdocContent){
 			var paramName		= matches[3]
 			var paramDescription	= matches[4]
 			output.params[paramName]	= {
-				type		: paramType,
+				type		: canonizeType(paramType),
 				description	: paramDescription
 			}
-		}else if( tagName === 'return' ){
+		}else if( tagName === 'return' ||  tagName === 'returns' ){
 			var matches	= line.match(/^@([^\s]+)\s+{([^\s]+)}\s+(.*)$/)
 			// console.log('matches', matches )
 			console.assert(matches.length === 4)
@@ -83,6 +83,16 @@ jsDoced.parseJsdoc	= function(jsdocContent){
 			// }else if( tagName.toLowerCase() === 'return' ){
 		}
 	})
+
+	function canonizeType(paramType){
+		if( paramType.toLowerCase() === 'function' )	return 'Function'
+		if( paramType.toLowerCase() === 'object' )	return 'Object'
+		if( paramType.toLowerCase() === 'boolean' )	return 'Boolean'
+		if( paramType.toLowerCase() === 'number' )	return 'Number'
+		if( paramType.toLowerCase() === 'date' )	return 'Date'
+		if( paramType.toLowerCase() === 'array' )	return 'Array'
+		return paramType
+	}
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//		add meta info in output 
@@ -102,6 +112,7 @@ jsDoced.parseJsdoc	= function(jsdocContent){
 
 	// return output
 	return output
+
 }
 
 
@@ -121,7 +132,7 @@ jsDoced.extractJsdocContent	= function(lines, bottomLine){
 	// skip blank lines
 	while( lineEnd >= 0 && lines[lineEnd].match(/^\s*$/) !== null ){
 		lineEnd -- 
-		console.log('skip')
+		// console.log('skip')
 	}		
 
 // console.log('lineEnd', lineEnd, lines[lineEnd])

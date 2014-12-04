@@ -1,6 +1,7 @@
 
 /**
  * super bla
+ *
  * @param  {String|Number} name the name of the personn
  * @param  {Number|undefined} age the age
  * @return {Number|null} the length of the name
@@ -13,3 +14,5 @@ var nameLength	= Better.Function(function(name, age){
         return: [Number, null]
 })
 
+
+//# sourceMappingURL=sample.js.map.json
