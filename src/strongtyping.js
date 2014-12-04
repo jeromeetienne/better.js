@@ -89,8 +89,14 @@ StrongTyping.value	= function(value, types){
 			var valid	= typeof(value) === 'number';
 		}else if( type === String ){
 			var valid	= typeof(value) === 'string';
+		}else if( type === Boolean ){
+			var valid	= value instanceof Boolean;
+		}else if( type === Function ){
+			var valid	= value instanceof Function;
 		}else if( type === undefined ){
 			var valid	= typeof(value) === 'undefined';
+		}else if( type === null ){
+			var valid	= value === null;
 		}else if( typeof(type) === 'string' && type.toLowerCase() === 'any' ){
 			var valid	= true;
 		}else if( typeof(type) === 'string' && type.toLowerCase() === 'never' ){
