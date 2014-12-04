@@ -19,6 +19,7 @@ It may break code.
 var foo = Object.Function(function foo(){
     console.log('bar')
 })
+```
 
 ## Possible way to get them with better.js
 
