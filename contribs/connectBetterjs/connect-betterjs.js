@@ -2,7 +2,7 @@
  * connect middleware for better.js cache folder.
  * All cached files are assumed to be children of the cache folder parent.
  * Made to fit one possible workflow to handle jsdoc2betterjs.
- * 
+ *
  * @param  {String}	cacheFolder - the better.js cache folder
  * @return {Function}	the configured middleware
  */
@@ -45,5 +45,5 @@ function connectBetterjsCacheFolder(cacheFolder){
 	}
 }
 
-// export the 
+// export the middleware
 module.exports	= connectBetterjsCacheFolder

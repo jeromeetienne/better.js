@@ -35,8 +35,8 @@ myproject/.betterjs/foo.bar.js # the associated better.js
 # Designed to be non obstrusive
 
 This is the main purpose by this workflow. i want it to be easy to integrate
-in your project thus you can test with your jsdoc. And i wanted 
-to be easy to remove thus you can run without all those 
+in your project thus you can test with your jsdoc. And i wanted
+to be easy to remove thus you can run without all those
 checks in production.
 Here is what i mean by non-obstrusive.
 
@@ -45,8 +45,8 @@ Here is what i mean by non-obstrusive.
 **non obstrusive in your files** : All the better.js files are in
 a single place. You can easily delete them when you dont need them anymore. You can ignore them put it in .gitignore.
 
-**non obstrusive in your workflow** : It is easy to switch between 
-the plain js version and better.js one. It is easy to add it or 
+**non obstrusive in your workflow** : It is easy to switch between
+the plain js version and better.js one. It is easy to add it or
 remove it at will.
 
 
@@ -82,14 +82,14 @@ Like in [npm package.json](https://www.npmjs.org/doc/files/package.json.html) or
 Here is a possible Makefile.
 
 ```
-watchBetterjs: buildBetterjs
+watch: build
     # fswatch is available at https://github.com/emcrisostomo/fswatch
     fswatch js/ | xargs -n1 jsdoc2betterjs -s -p -d .betterjs
 
-buildBetterjs:
+build:
     jsdoc2betterjs -s -p -d .betterjs js/*.js js/**/*.js
 
-cleanBetterjs:
+clean:
     rm -rf .betterjs
 ```
 

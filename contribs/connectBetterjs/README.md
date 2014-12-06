@@ -1,15 +1,15 @@
-# Examples of workflow with better.js cache folder
+# Example of workflow with better.js cache folder
 
 See description of [this workflow](https://github.com/jeromeetienne/better.js/blob/master/contribs/jsdoc2betterjs/WORKFLOW.md).
 
 ## Steps by Steps
 
 - to run the server
-    + ```node apps.js``` 
+    + ```node apps.js```
 - we read a normal javascript file. e.g. example_js/main.js
     - ```curl http://127.0.0.1:3000/example_js/main.js```
     - It delivers raw main.js as there is no better.js version
-- we generate the .better cache folder
+- we generate the .betterjs cache folder
     - ```make build```
 - we read the same url of our javascript file
     - ```curl http://127.0.0.1:3000/example_js/main.js```
@@ -18,7 +18,6 @@ See description of [this workflow](https://github.com/jeromeetienne/better.js/bl
     + ```make clean```
     - ```curl http://127.0.0.1:3000/example_js/main.js```
     + it will deliver the original again
-
 
 ## To run the server
 
@@ -45,4 +44,3 @@ make build
 ```
 make clean
 ```
-
