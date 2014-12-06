@@ -126,14 +126,19 @@ jsDoced.parseJsdoc	= function(jsdocContent){
  * @return {Object|null}           [description]
  */
 jsDoced.extractJsdocContent	= function(lines, bottomLine){
+	console.assert(bottomLine >= 0)
+// console.log('jsDoced.extractJsdocContent', arguments)
 	var lineEnd	= bottomLine-1
+
 // console.assert(false)
 // console.log('lineEnd', lineEnd)
 	// skip blank lines
 	while( lineEnd >= 0 && lines[lineEnd].match(/^\s*$/) !== null ){
 		lineEnd -- 
 		// console.log('skip')
-	}		
+	}
+
+	if( lineEnd < 0 )	return null		
 
 // console.log('lineEnd', lineEnd, lines[lineEnd])
 	// check if it is the signature end
