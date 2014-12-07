@@ -29,7 +29,7 @@ And here is another example showing how it mirror your folders hierarchy.
 
 ```
 myproject/foo/bar.js           # your javascript files
-myproject/.betterjs/foo.bar.js # the associated better.js
+myproject/.betterjs/foo/bar.js # the associated better.js
 ```
 
 # Designed to be non obstrusive
