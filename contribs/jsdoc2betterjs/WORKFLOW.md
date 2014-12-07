@@ -104,7 +104,7 @@ Before deliverying the static file, it checks your ```.betterjs``` folder.
 If it contains a matching better.js file, it deliver this one instead.
 Thus you load the better.js version without having to modify your
 browser code.
-Check out the [connect middleware for better.js](https://github.com/jeromeetienne/better.js/tree/master/contribs/connectBetterjs]
+Check out the [connect middleware for better.js](https://github.com/jeromeetienne/better.js/tree/master/contribs/connectBetterjs)
 
 ## How to integrate it if you load your javascript via script tag ?
 
