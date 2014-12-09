@@ -7,9 +7,8 @@ output: index.html
 <style>pre { background: lightgrey; font-size: 100%;}</style>
 
 # jsdoc2betterjs
-## or
-## Test your Javascript with jsdoc.
-## [Jerome Etienne](http://twitter.com/jerome_etienne)
+## - Test your Javascript with jsdoc -
+## by [Jerome Etienne](http://twitter.com/jerome_etienne)
 
 --
 
@@ -17,13 +16,9 @@ output: index.html
 
 --
 
-## It is..
+## It is A Mariage in Javascript World!
 
 # [jsdoc](http://usejsdoc.org) + [better.js](http://betterjs.org)
-
---
-
-## A Mariage in javascript world!
 --
 
 ## On One Hand, We Have...
@@ -124,7 +119,13 @@ var stringLength = Better.Function(function(myString){
 
 --
 
-## Now What If We Mary Them ?
+## Now Let's Mix Them Together!
+
+--
+
+# [JSDOC](http://usejsdoc.org)
+## To
+# Get The Info
 
 --
 
@@ -139,6 +140,12 @@ var stringLength = Better.Function(function(myString){
 
 --
 
+# [better.js](http://betterjs.org)
+## to
+# Test Execution
+
+--
+
 ### Better.js To Test During Execution
 
 * jsdoc information is used to produce better.js code
@@ -150,12 +157,8 @@ var stringLength = Better.Function(function(myString){
 
 --
 
-## Cool! Let's automatize all that!
-
---
-
-# jsdoc2betterjs
-## a Javascript to Javascript compiler
+# [jsdoc2betterjs](http://betterjs.org/docs/betterjs-jsdoc2betterjs.html)
+# Automatize it all!
 
 --
 
@@ -182,19 +185,20 @@ jsdoc2betterjs myFile.js > myFile.better.js
 
 ## So now...
 
-# Your Code is Tested With Your jsdoc
+# Test your code with jsdoc
 
 --
 
-### Benefits
-* Then any error in the type of a value will be notified.
-* The same anybody accessing private members.
+### Benefits - Error Detections
+* Detect a new family of bugs
+* Any typing error is detected immediately
+* Unauthorized private access is detected immediately
 
 **You just have to write jsdoc in your code**
 
 --
 
-### JSDOC is now more than doc
+### JSDOC Is Now More Than Doc
 
 * it is a way to specify how your code should run
 * it is a way to write tests for your application
