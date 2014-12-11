@@ -1170,8 +1170,14 @@ StrongTyping.value	= function(value, types){
 			var valid	= typeof(value) === 'number';
 		}else if( type === String ){
 			var valid	= typeof(value) === 'string';
+		}else if( type === Boolean ){
+			var valid	= value instanceof Boolean;
+		}else if( type === Function ){
+			var valid	= value instanceof Function;
 		}else if( type === undefined ){
 			var valid	= typeof(value) === 'undefined';
+		}else if( type === null ){
+			var valid	= value === null;
 		}else if( typeof(type) === 'string' && type.toLowerCase() === 'any' ){
 			var valid	= true;
 		}else if( typeof(type) === 'string' && type.toLowerCase() === 'never' ){
@@ -1383,6 +1389,11 @@ var Privatize	= Privatize	|| require('../privatize.js');
  * @param {Object} attributes the attributes for this property
  */
 var PropertyAttr	= function(baseObject, property, attributes){
+	// honor .value
+	if( attributes.value ){
+		baseObject[property]	= attributes.value
+	}
+
 	// honor .type	
 	if( attributes.type ){
 		var allowedType	= attributes.type
@@ -1393,13 +1404,16 @@ var PropertyAttr	= function(baseObject, property, attributes){
 	if( attributes.private ){
 		Privatize.property(baseObject, property)
 	}
+	
+	// honor .value
+	if( attributes.value ){
+		return attributes.value
+	}
 }
 
 
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= PropertyAttr;
-
-
 /**
  * @fileOverview definition of ClassAttr - based on other core libraries
  * 

@@ -13,6 +13,11 @@ var Privatize	= Privatize	|| require('../privatize.js');
  * @param {Object} attributes the attributes for this property
  */
 var PropertyAttr	= function(baseObject, property, attributes){
+	// honor .value
+	if( attributes.value ){
+		baseObject[property]	= attributes.value
+	}
+
 	// honor .type	
 	if( attributes.type ){
 		var allowedType	= attributes.type
@@ -23,10 +28,13 @@ var PropertyAttr	= function(baseObject, property, attributes){
 	if( attributes.private ){
 		Privatize.property(baseObject, property)
 	}
+	
+	// honor .value
+	if( attributes.value ){
+		return attributes.value
+	}
 }
 
 
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= PropertyAttr;
-
-

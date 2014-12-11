@@ -21,7 +21,7 @@ function jsContent2CallExpression(jsdocContent, functionExpression, cmdlineOptio
 	// get json version of jsdocContent
 	var jsdocJson	= jsdocParse.parseJsdoc( jsdocContent )
 
-
+	// honor @nobetterjs - return identity
 	if( jsdocJson.tags && jsdocJson.tags.nobetterjs )	return functionExpression
 
 	//////////////////////////////////////////////////////////////////////////////////
@@ -114,6 +114,7 @@ function jsContent2CallExpression(jsdocContent, functionExpression, cmdlineOptio
  */
 function jsdocParam2Expression(param){
 
+	// handle the multiple param case
 	var hasMultiple	= param.type.split('|').length > 1 ? true : false 
 	if( hasMultiple ){
 		var expressions	= []
@@ -123,6 +124,7 @@ function jsdocParam2Expression(param){
 		return builders.arrayExpression(expressions)
 	}
 
+	// parse one param
 	return parseOne(param.type)
 
 	//////////////////////////////////////////////////////////////////////////////////
