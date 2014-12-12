@@ -10,3 +10,14 @@ var nameLength	= function(name, age){
 	var slota	= function(){}
 	return name.length
 }
+
+var foo = {}
+
+/**
+ * @type {Boolean}
+ */
+foo.bar	= true;
+
+var a;
+
+a = 'bou'

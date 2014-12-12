@@ -3,6 +3,10 @@ var recast	= require("recast");
 var jsdocParse	= require('./jsdocParse.js')
 var jsdocExpr	= require('./jsdocExpression.js')
 
+var types       = recast.types;
+var namedTypes  = types.namedTypes;
+var builders    = types.builders;
+
 
 /**
  * process one file
@@ -47,18 +51,36 @@ var processFile	= function processFile(filename, cmdlineOptions, onProcessed){
 				// NOTE: must be before path.replace() to avoid reccursive infinite loop (creating function in function)
 				this.traverse(path)
 
-				// get jsdocContent for this node
-				var lineNumber		= path.value.loc.start.line-1
-				var jsdocContent	= jsdocParse.extractJsdocContent(contentLines, lineNumber)
-				// if no jsdocContent, do nothing
-				if( jsdocContent === null )	return
+				// get jsdocJson for this node
+				var lineNumber	= path.value.loc.start.line-1
+				var jsdocJson	= jsdocParse.extractJsdocJson(contentLines, lineNumber)
+				// if no jsdocJson, do nothing
+				if( jsdocJson === null )	return
 
 				// produce the callExpression to replace this node
 				var functionExpression	= path.value
-				var callExpression	= jsdocExpr.jsContent2CallExpression(jsdocContent, functionExpression, cmdlineOptions)
+				var callExpression	= jsdocExpr.jsdocJsonFunction2CallExpression(jsdocJson, functionExpression, cmdlineOptions)
 
 				// actually replace the node
 				path.replace(callExpression)
+			},
+			visitAssignmentExpression: function(path){
+				this.traverse(path);
+
+				// get jsdocContent for this node
+				var lineNumber	= path.value.loc.start.line-1
+				var jsdocJson	= jsdocParse.extractJsdocJson(contentLines, lineNumber)
+				// if no jsdocContent, do nothing
+				if( jsdocJson === null )	return
+
+				//////////////////////////////////////////////////////////////////////////////////
+				//		Comment								//
+				//////////////////////////////////////////////////////////////////////////////////
+				var assignmentExpression	= path.value
+				var newAssignmentExpression	= jsdocExpr.jsdocJsonProperty2AssignmentExpression(jsdocJson, assignmentExpression, cmdlineOptions)
+
+				// actually replace the node
+				path.replace(newAssignmentExpression)
 			},
 		});
 

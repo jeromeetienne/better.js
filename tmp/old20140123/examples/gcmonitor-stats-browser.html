@@ -1,0 +1,41 @@
+<!doctype html>
+<script src='../src/gcmonitor.js'></script>
+<script src='helpers/gcmonitorstats.js'></script>
+<body>
+	<div>
+		<label>nb Allocation</label>
+		<input id="nAlloc" type="range" min="0" max="5000" step="100" value="3300"/>
+	</div>
+	<div>
+		<label>nb Allocation element</label>
+		<input id="allocSize" type="range" min="0" max="5000" value="3570"/>
+	</div>
+	<div>
+		<label>Allocation Period</label>
+		<input id="allocPeriod" type="range" min="0" max="3000" value="434"/>
+	</div>
+<script>
+	setTimeout(function timeoutCb(){
+		// allocate memory
+		var nAlloc	= parseInt(document.getElementById('nAlloc').value);
+		var allocSize	= parseInt(document.getElementById('allocSize').value);
+		for(var j = 0; j < nAlloc; j++){
+			arr	= new Array(allocSize)
+			for(var i = 0; i < arr.length; i++){
+				arr[i]	= i;
+			}			
+		}
+		// relaunch timeout
+		var allocPeriod	= parseInt(document.getElementById('allocPeriod').value);
+		setTimeout(timeoutCb, allocPeriod);
+	}, 0);
+
+	var gcMonitorStats	= new GcMonitorStats();
+	gcMonitorStats.domElement.style.position='absolute';
+	gcMonitorStats.domElement.style.bottom	= '0px';
+	gcMonitorStats.domElement.style.right	= '0px';
+	document.body.appendChild(gcMonitorStats.domElement)
+	setInterval(function(){
+		gcMonitorStats.update();
+	}, 1000/10)
+</script></body>

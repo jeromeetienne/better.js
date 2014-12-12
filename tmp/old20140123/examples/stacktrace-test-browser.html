@@ -1,0 +1,10 @@
+<!doctype html>
+<script src="../src/stacktrace.js"></script>
+<script>
+function foo(){
+	var stacktrace	= Stacktrace.parse();
+	console.log('stacktrace', JSON.stringify(stacktrace, null, '\t'));
+};
+
+foo();
+</script>

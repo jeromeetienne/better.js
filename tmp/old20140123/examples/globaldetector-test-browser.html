@@ -1,0 +1,15 @@
+<!doctype html>
+<script src='../src/globaldetector.js'></script>
+<body><script>
+	// declare something which is in chrome debugger
+	GlobalDetector.ignoreList.push('__screenCapturePageContext__');
+
+	// declare a global which MUST NOT be detected
+	foo	= 'bar';
+
+	// start the detector
+	var globalDetector	= new GlobalDetector().start();
+	
+	// declare a global which MUST be detected
+	pif	= 'paf';
+</script></body>

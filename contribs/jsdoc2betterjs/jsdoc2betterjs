@@ -6,7 +6,7 @@ var builders	= recast.types.builders;
 //////////////////////////////////////////////////////////////////////////////////
 //		Inline help
 //////////////////////////////////////////////////////////////////////////////////
-if( process.argv[2] === '-h' ){
+if( process.argv[2] === '-h' || process.argv[2] === undefined ){
 	console.log('Usage: jsdoc2betterjs [options] file.js file2.js...')
 	console.log('')
 	console.log('Makes sure jsdoc is respected during execution.')

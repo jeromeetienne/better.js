@@ -1,8 +1,8 @@
-var jsDoced	= jsDoced	|| {}
+var jsdocParse	= jsdocParse	|| {}
 
 
 
-if( typeof(window) === 'undefined' )	module.exports	= jsDoced;
+if( typeof(window) === 'undefined' )	module.exports	= jsdocParse;
 
 
 /**
@@ -11,7 +11,7 @@ if( typeof(window) === 'undefined' )	module.exports	= jsDoced;
  * @param  {String} jsdocContent String containing the content
  * @return {Object} the json object
  */
-jsDoced.parseJsdoc	= function(jsdocContent){
+jsdocParse.parseJsdoc	= function(jsdocContent){
 	var lines	= jsdocContent.split('\n')
 
 	// remove first and last line
@@ -75,6 +75,12 @@ jsDoced.parseJsdoc	= function(jsdocContent){
 				type		: paramType,
 				description	: paramDescription
 			}
+		}else if( tagName === 'type' ){
+			var matches	= line.match(/^@([^\s]+)\s+{([^\s]+)}(.*)$/)
+			// console.log('matches', matches )
+			console.assert(matches.length === 4)
+			var paramType		= matches[2]
+			output.type		= paramType
 		}else{
 			output.tags		= output.tags	|| {}
 			output.tags[tagName]	= true
@@ -125,9 +131,9 @@ jsDoced.parseJsdoc	= function(jsdocContent){
  * @param  {Number}	bottomLine [description]
  * @return {Object|null}           [description]
  */
-jsDoced.extractJsdocContent	= function(lines, bottomLine){
+jsdocParse.extractJsdocContent	= function(lines, bottomLine){
 	console.assert(bottomLine >= 0)
-// console.log('jsDoced.extractJsdocContent', arguments)
+// console.log('jsdocParse.extractJsdocContent', arguments)
 	var lineEnd	= bottomLine-1
 
 // console.assert(false)
@@ -153,4 +159,23 @@ jsDoced.extractJsdocContent	= function(lines, bottomLine){
 	if( lineEnd <= lineStart )	return null
 	var jsdocContent	= lines.slice(lineStart, lineEnd+1).join('\n')
 	return jsdocContent
+}
+
+/**
+ * extract jsdoc and return it as json
+ * 
+ * @param  {String[]} 	lines      [description]
+ * @param  {Number}	bottomLine [description]
+ * @return {Object|null}           [description]
+ */
+jsdocParse.extractJsdocJson	= function(lines, bottomLine){
+	// get jsdocContent
+	var jsdocContent	= jsdocParse.extractJsdocContent(lines, bottomLine)
+	// if no jsdocContent, do nothing
+	if( jsdocContent === null )	return null
+
+	// get json version of jsdocContent
+	var jsdocJson	= jsdocParse.parseJsdoc( jsdocContent )
+
+	return jsdocJson
 }

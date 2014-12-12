@@ -1,0 +1,14 @@
+<!doctype html><title>examples</title>
+<script src="../src/qgettersetter.js"></script>
+<script src="../src/stacktrace.js"></script>
+<script src="./helpers/qgettersetter-fileline.js"></script>
+<body><script>
+(function blabla(){
+	// sanity check
+	console.assert(__FILE__ === 'qgettersetter-fileline-browser.html')
+	console.assert(__LINE__ === 9)
+	console.assert(__FUNCTION__ === 'blabla')
+	// display output
+	console.log('__FILE__=', __FILE__, '__LINE__=',__LINE__, '__FUNCTION__=', __FUNCTION__)
+})();
+</script></body>

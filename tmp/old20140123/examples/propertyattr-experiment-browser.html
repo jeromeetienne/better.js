@@ -1,0 +1,24 @@
+<!doctype html>
+<script src='../src/qgettersetter.js'></script>
+<script src='../src/typecheck.js'></script>
+<script src='../src/stacktrace.js'></script>
+<script src='../src/privateforjs.js'></script>
+<script src='../src/helpers/propertyattr.js'></script>
+
+<body><script>
+	var foo		= {
+		bar	: 2
+	};
+
+	PropertyAttr.define(foo, 'bar')
+		.typeCheck([Number, 'nonan'])
+		.trackUsage();
+
+	foo.bar	= 3;
+
+	console.log('value', foo.bar)
+	foo.bar	= NaN;
+
+	console.log('PropertyAttr.usageTracker')
+	PropertyAttr.usageTracker.dump();
+</script></body>

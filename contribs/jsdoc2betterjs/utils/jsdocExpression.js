@@ -1,3 +1,7 @@
+var jsdocExpression	= jsdocExpression	|| {}
+
+if( typeof(window) === 'undefined' )	module.exports	= jsdocExpression;
+
 var recast	= require("recast");
 var types	= recast.types;
 var namedTypes	= types.namedTypes;
@@ -12,14 +16,11 @@ var jsdocParse	= require('./jsdocParse.js')
 /**
  * convert a jsdocContent and the function into a callExpression for react
  * 
- * @param  {String} 		jsdocContent - the actual jsdoc comment
+ * @param  {Object} 		jsdocJson - the jsdoc in json
  * @param  {FunctionExpression} functionExpression - the FunctionExpression from the parser associated with the jsdoc
  * @return {CallExpression}     the resulting call expression
  */
-function jsContent2CallExpression(jsdocContent, functionExpression, cmdlineOptions){
-
-	// get json version of jsdocContent
-	var jsdocJson	= jsdocParse.parseJsdoc( jsdocContent )
+jsdocExpression.jsdocJsonFunction2CallExpression	= function(jsdocJson, functionExpression, cmdlineOptions){
 
 	// honor @nobetterjs - return identity
 	if( jsdocJson.tags && jsdocJson.tags.nobetterjs )	return functionExpression
@@ -34,7 +35,7 @@ function jsContent2CallExpression(jsdocContent, functionExpression, cmdlineOptio
 		var argumentsExpressions	= []
 		Object.keys(jsdocJson.params).forEach(function(paramName){
 			var param	= jsdocJson.params[paramName]
-			var expression	= jsdocParam2Expression(param)
+			var expression	= jsdocExpression.jsdocType2Expression(param.type)
 			argumentsExpressions.push(expression)
 		})
 
@@ -62,7 +63,7 @@ function jsContent2CallExpression(jsdocContent, functionExpression, cmdlineOptio
 	}
 	// honor jsdocJson.return
 	if( jsdocJson.return ){
-		var returnExpression	= jsdocParam2Expression(jsdocJson.return)
+		var returnExpression	= jsdocExpression.jsdocType2Expression(jsdocJson.return.type)
 		options.push(builders.property('init', 
 			builders.identifier('return'), 
 			returnExpression
@@ -74,7 +75,7 @@ function jsContent2CallExpression(jsdocContent, functionExpression, cmdlineOptio
 		options.push(builders.property('init', 
 			builders.identifier('private'), 
 			builders.literal(true)
-		))		
+		))
 	}
 
 	// if there is no options to add, it means the jsdoc cant be used, do nothing
@@ -100,8 +101,90 @@ function jsContent2CallExpression(jsdocContent, functionExpression, cmdlineOptio
 }
 
 
+//////////////////////////////////////////////////////////////////////////////////
+//		Comment								//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * convert a jsdocContent and the function into a callExpression for react
+ * 
+ * @param  {Object} 		jsdocJson - the jsdoc in json
+ * @param  {assignmentExpression} assignmentExpression - the FunctionExpression from the parser associated with the jsdoc
+ * @return {CallExpression}     the resulting call expression
+ */
+jsdocExpression.jsdocJsonProperty2AssignmentExpression	= function(jsdocJson, assignmentExpression, cmdlineOptions){
+
+	// honor @nobetterjs - return identity
+	if( jsdocJson.tags && jsdocJson.tags.nobetterjs )	return assignmentExpression
+
+	var leftExpression		= assignmentExpression.left
+	var rightExpression		= assignmentExpression.right
+
+	// console.log('assignment expression', assignmentExpression.left)
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+	// if leftExpression isnt a 'MemberExpression', return now
+	if( leftExpression.type !== 'MemberExpression' )	return assignmentExpression
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+
+	var options	= []
+
+	if( jsdocJson.type ){
+		var typeExpression	= jsdocExpression.jsdocType2Expression(jsdocJson.type)
+		options.push(builders.property('init', 
+			builders.identifier('type'), 
+			typeExpression
+		))				
+	}
 
 
+	options.push(builders.property('init', 
+		builders.identifier('value'), 
+		rightExpression
+	))
+	//////////////////////////////////////////////////////////////////////////////////
+	//		get objectName and propertyName
+	//////////////////////////////////////////////////////////////////////////////////
+	// get object name
+	console.assert( leftExpression.object.type === 'Identifier' )
+	var objectName	= leftExpression.object.name
+
+	// get property name
+	var propertyName= null
+	if( leftExpression.property.type === 'Identifier' ){
+		propertyName	= leftExpression.property.name
+	}else if( leftExpression.property.type === 'Literal' ){
+		propertyName	= leftExpression.property.value
+	}else	console.assert(false)
+
+	// console.log('objectName', objectName+'.'+propertyName)
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+	var callExpression	= builders.callExpression(
+		builders.identifier('Better.Property'),
+		[
+			builders.identifier(objectName),
+			builders.literal(propertyName),
+			builders.objectExpression(options),
+		]
+	)
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+	var newAssignmentExpression	= builders.assignmentExpression(
+		assignmentExpression.operator,
+		assignmentExpression.left,
+		callExpression
+	)
+	return newAssignmentExpression
+}
 //////////////////////////////////////////////////////////////////////////////////
 //		Comment								//
 //////////////////////////////////////////////////////////////////////////////////
@@ -112,20 +195,20 @@ function jsContent2CallExpression(jsdocContent, functionExpression, cmdlineOptio
  * @param  {Object}	param - the @param parsed in jsdocJson
  * @return {Expression} the built expression
  */
-function jsdocParam2Expression(param){
+jsdocExpression.jsdocType2Expression	= function(type){
 
 	// handle the multiple param case
-	var hasMultiple	= param.type.split('|').length > 1 ? true : false 
+	var hasMultiple	= type.split('|').length > 1 ? true : false 
 	if( hasMultiple ){
 		var expressions	= []
-		param.type.split('|').forEach(function(type){
+		type.split('|').forEach(function(type){
 			expressions.push( parseOne(type) )
 		})
 		return builders.arrayExpression(expressions)
 	}
 
 	// parse one param
-	return parseOne(param.type)
+	return parseOne(type)
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//		utility functions
@@ -153,14 +236,4 @@ function jsdocParam2Expression(param){
 		return expression
 
 	}
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-//		exports
-//////////////////////////////////////////////////////////////////////////////////
-
-// export the module
-module.exports	= {
-	jsdocParam2Expression	: jsdocParam2Expression,
-	jsContent2CallExpression: jsContent2CallExpression
 }
