@@ -64,6 +64,9 @@ var processFile	= function processFile(filename, cmdlineOptions, onProcessed){
 				// actually replace the node
 				path.replace(callExpression)
 			},
+			/**
+			 * receive the AssignmentExpression node
+			 */
 			visitAssignmentExpression: function(path){
 				this.traverse(path);
 

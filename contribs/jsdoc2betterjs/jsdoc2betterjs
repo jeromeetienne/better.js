@@ -21,7 +21,7 @@ if( process.argv[2] === '-h' || process.argv[2] === undefined ){
 	console.log('\t-d DIR	Write generated code into DIR with a folder hierachie similar to relative')
 	console.log('\t	path to the original file.js.')
 	console.log('')
-	console.log('\t-s	If @return or no @param are defined in jsdoc, check it is nothing during execution')
+	console.log('\t-s	If @return or no @param are undefined in jsdoc, check it is nothing during execution')
 	console.log('')
 	console.log('\t-p	Privatize the classes')
 	console.log('')

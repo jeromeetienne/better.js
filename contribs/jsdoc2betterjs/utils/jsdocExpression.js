@@ -142,7 +142,6 @@ jsdocExpression.jsdocJsonProperty2AssignmentExpression	= function(jsdocJson, ass
 		))				
 	}
 
-
 	options.push(builders.property('init', 
 		builders.identifier('value'), 
 		rightExpression
