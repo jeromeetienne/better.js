@@ -72,7 +72,7 @@ jsdocParse.parseJsdoc	= function(jsdocContent){
 			var paramType		= matches[2]
 			var paramDescription	= matches[3]
 			output.return		= {
-				type		: paramType,
+				type		: canonizeType(paramType),
 				description	: paramDescription
 			}
 		}else if( tagName === 'type' ){
@@ -80,7 +80,7 @@ jsdocParse.parseJsdoc	= function(jsdocContent){
 			// console.log('matches', matches )
 			console.assert(matches.length === 4)
 			var paramType		= matches[2]
-			output.type		= paramType
+			output.type		= canonizeType(paramType)
 		}else{
 			output.tags		= output.tags	|| {}
 			output.tags[tagName]	= true
@@ -90,26 +90,88 @@ jsdocParse.parseJsdoc	= function(jsdocContent){
 		}
 	})
 
-	function canonizeType(paramType){
-		if( paramType.toLowerCase() === 'function' )	return 'Function'
-		if( paramType.toLowerCase() === 'object' )	return 'Object'
-		if( paramType.toLowerCase() === 'boolean' )	return 'Boolean'
-		if( paramType.toLowerCase() === 'number' )	return 'Number'
-		if( paramType.toLowerCase() === 'date' )	return 'Date'
-		if( paramType.toLowerCase() === 'array' )	return 'Array'
-		return paramType
+	/**
+	 * canonize a @type.
+	 * - it handles a good subset of http://usejsdoc.org/tags-type.html
+	 * 
+	 * @param  {String} type - the type as a string from jsdoc
+	 * @return {String}      The type as a string for better.js
+	 */
+	function canonizeType(type){
+
+		//////////////////////////////////////////////////////////////////////////////////
+		//		Comments
+		//////////////////////////////////////////////////////////////////////////////////
+
+		// handle the multiple param case
+		var hasMultiple	= type.split('|').length > 1 ? true : false 
+		if( hasMultiple ){
+			var canonizedType	= ''
+			type.split('|').forEach(function(type, index){
+				if( index > 0 )	canonizedType	+= '|'
+				canonizedType	+= processOne(type)
+			})
+			return canonizedType
+		}
+
+		// parse one param
+		return processOne(type)
+
+		/**
+		 * process one @type
+		 * 
+		 * @param  {String} paramType - the type as a string from jsdoc
+		 * @return {String}           The type as a string for better.js
+		 */
+		function processOne(paramType){		
+			if( paramType.toLowerCase() === 'function' )	return 'Function'
+			if( paramType.toLowerCase() === 'object' )	return 'Object'
+			if( paramType.toLowerCase() === 'boolean' )	return 'Boolean'
+			if( paramType.toLowerCase() === 'number' )	return 'Number'
+			if( paramType.toLowerCase() === 'date' )	return 'Date'
+			if( paramType.toLowerCase() === 'array' )	return 'Array'
+
+			// from http://usejsdoc.org/tags-type.html
+
+			// honor "@type {?Number} - an number or null"
+			// - return Number|null
+			if( paramType[0] === '?' )	return canonizeType(paramType.slice(1))+'|null'
+			// honor "@type {!Number} - an number but never null"
+			// - return Number|"nonnull"
+			if( paramType[0] === '!' )	return canonizeType(paramType.slice(1))+'|"nonnull"'
+			// honor "@type {Number[]} - an array of number"
+			if( paramType.match(/\[\]$/) )	return 'Array'
+			// honor "@type {Array.<Number>} - an array of number"
+			if( paramType.match(/^Array\./i) )	return 'Array'
+			// honor "@type {Number=} - an option number"
+			if( paramType.match(/=$/i) )	return canonizeType(paramType.slice(0,-1))+'|undefined'
+
+			return paramType
+		}
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////
-	//		add meta info in output 
+	//		post processing 
 	//////////////////////////////////////////////////////////////////////////////////
 
-
+	// honor output.isClass
 	var hasConstructor	= Object.getOwnPropertyNames(output.tags).indexOf('constructor') !== -1 ? true : false
 	var hasClass		= output.tags.class	? true : false 
-
 	output.isClass	= ( hasClass || hasConstructor ) ? true : false
 
+	// honor "@param {String} [myString] - this is a optional string"
+	Object.keys(output.params).slice(0).forEach(function(paramName){
+		// test if it is a optional parameter
+		var matches	= paramName.match(/^\[(.*)\]$/);
+		if( matches === null )	return
+		// README: here the @param changes of paramName as we remove the []
+		var newName	= matches[1]
+		// recreate param with new name
+		output.params[newName]	= output.params[paramName]
+		output.params[newName].type	= output.params[newName].type + '|undefined'
+		// delete old param
+		delete	output.params[paramName]
+	})
 
 	// remove output.params if it is empty
 	if( Object.keys(output.params).length === 0 )	delete output.params

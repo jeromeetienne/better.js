@@ -18,7 +18,7 @@ var builders    = types.builders;
 var processFile	= function processFile(filename, cmdlineOptions, onProcessed){
 
 	// log events
-	cmdlineOptions.logEvents && process.stderr.write('Processing '+filename+'\n');
+	cmdlineOptions.logEvents && process.stderr.write('jsdoc2betterjs: Processing '+filename+'\n');
 
 	var recastOption	= {
 		// Options for recast - those are my personal preferences
@@ -73,7 +73,10 @@ var processFile	= function processFile(filename, cmdlineOptions, onProcessed){
 			 */
 			visitAssignmentExpression: function(path){
 				this.traverse(path);
-return
+
+ 				// honor cmdlineOptions.propertyEnabled
+				if( cmdlineOptions.propertyEnabled === false )	return;
+
 				// get jsdocContent for this node
 				var lineNumber	= path.value.loc.start.line-1
 				var jsdocJson	= jsdocParse.extractJsdocJson(contentLines, lineNumber)

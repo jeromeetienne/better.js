@@ -18,6 +18,3 @@ var foo = {}
  */
 foo.bar	= true;
 
-var a;
-
-a = 'bou'

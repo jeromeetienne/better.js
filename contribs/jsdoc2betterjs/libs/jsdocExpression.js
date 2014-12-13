@@ -113,20 +113,30 @@ jsdocExpression.jsdocJsonFunction2CallExpression	= function(jsdocJson, functionE
  * @return {CallExpression}     the resulting call expression
  */
 jsdocExpression.jsdocJsonProperty2AssignmentExpression	= function(jsdocJson, assignmentExpression, cmdlineOptions){
+	var leftExpression		= assignmentExpression.left
+	var rightExpression		= assignmentExpression.right
+
+
+	// console.log('assignment expression', assignmentExpression.right)
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		test we want to change this assignmentExpression
+	//////////////////////////////////////////////////////////////////////////////////
 
 	// honor @nobetterjs - return identity
 	if( jsdocJson.tags && jsdocJson.tags.nobetterjs )	return assignmentExpression
 
-	var leftExpression		= assignmentExpression.left
-	var rightExpression		= assignmentExpression.right
-
-	// console.log('assignment expression', assignmentExpression.left)
-
-	//////////////////////////////////////////////////////////////////////////////////
-	//		Comment								//
-	//////////////////////////////////////////////////////////////////////////////////
 	// if leftExpression isnt a 'MemberExpression', return now
 	if( leftExpression.type !== 'MemberExpression' )	return assignmentExpression
+
+	// if rightExpression is a 'CallExpression' with 'Better.Function' or 'Better.Class', return now
+	// - thus it doesnt conflict with Better.Function
+	if( rightExpression.type === 'CallExpression' 
+			&& (rightExpression.callee.name === 'Better.Class'
+				|| rightExpression.callee.name === 'Better.Function')
+			){
+		return assignmentExpression
+	}
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//		Comment								//
@@ -149,15 +159,6 @@ jsdocExpression.jsdocJsonProperty2AssignmentExpression	= function(jsdocJson, ass
 	//////////////////////////////////////////////////////////////////////////////////
 	//		get objectName and propertyName
 	//////////////////////////////////////////////////////////////////////////////////
-	// get object name
-	if( leftExpression.object.type === 'Identifier' ){
-		var objectName	= leftExpression.object.name
-	}else if( leftExpression.object.type === 'ThisExpression' ){
-		var objectName	= 'this'
-	}else{
-		console.log('leftExpression', leftExpression.object)
-		console.assert(false)
-	}
 
 	// get property name
 	var propertyName= null
@@ -167,15 +168,13 @@ jsdocExpression.jsdocJsonProperty2AssignmentExpression	= function(jsdocJson, ass
 		propertyName	= leftExpression.property.value
 	}else	console.assert(false)
 
-	// console.log('objectName', objectName+'.'+propertyName)
-
 	//////////////////////////////////////////////////////////////////////////////////
 	//		Comment								//
 	//////////////////////////////////////////////////////////////////////////////////
 	var callExpression	= builders.callExpression(
 		builders.identifier('Better.Property'),
 		[
-			builders.identifier(objectName),
+			leftExpression.object,
 			builders.literal(propertyName),
 			builders.objectExpression(options),
 		]
@@ -201,6 +200,10 @@ jsdocExpression.jsdocJsonProperty2AssignmentExpression	= function(jsdocJson, ass
  * @return {Expression} the built expression
  */
 jsdocExpression.jsdocType2Expression	= function(type){
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		Comments
+	//////////////////////////////////////////////////////////////////////////////////
 
 	// handle the multiple param case
 	var hasMultiple	= type.split('|').length > 1 ? true : false 
