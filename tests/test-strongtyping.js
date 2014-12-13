@@ -16,8 +16,18 @@ describe('StrongTyping.value', function(){
 		var types	= [String,];
 		var valid	= StrongTyping.value(value, types)
 		console.assert( valid === false )
-		// console.log('valid', valid)
-		// console.log('value', value, valid ? 'is' : 'isnt', 'of types', types)
+	});
+
+	it('is valid with Boolean', function(){
+		var value	= true;
+		var types	= [Boolean,];
+		var valid	= StrongTyping.value(value, types)
+		console.assert( valid === true )
+
+		var value	= 'aString';
+		var types	= [Boolean,];
+		var valid	= StrongTyping.value(value, types)
+		console.assert( valid === false )
 	});
 
 	it('is valid with NaN', function(){

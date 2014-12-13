@@ -150,8 +150,14 @@ jsdocExpression.jsdocJsonProperty2AssignmentExpression	= function(jsdocJson, ass
 	//		get objectName and propertyName
 	//////////////////////////////////////////////////////////////////////////////////
 	// get object name
-	console.assert( leftExpression.object.type === 'Identifier' )
-	var objectName	= leftExpression.object.name
+	if( leftExpression.object.type === 'Identifier' ){
+		var objectName	= leftExpression.object.name
+	}else if( leftExpression.object.type === 'ThisExpression' ){
+		var objectName	= 'this'
+	}else{
+		console.log('leftExpression', leftExpression.object)
+		console.assert(false)
+	}
 
 	// get property name
 	var propertyName= null

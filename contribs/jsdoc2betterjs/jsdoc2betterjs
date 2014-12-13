@@ -25,6 +25,8 @@ if( process.argv[2] === '-h' || process.argv[2] === undefined ){
 	console.log('')
 	console.log('\t-p	Privatize the classes')
 	console.log('')
+	console.log('\t--log	Log events on stderr')
+	console.log('')
 	console.log('\t-h	Display inline help')
 	console.log('')
 	console.log('\t-v	Display version')
@@ -44,6 +46,8 @@ var cmdlineOptions	= {
 	strictParams		: false,
 	strictReturns		: false,
 	privatizeClasses	: false,
+	logEvents		: false,
+
 	generateSourceMap	: false,
 	codeFolderName		: null,
 	fileNames		: [],
@@ -63,9 +67,17 @@ for(var i = 2; process.argv[i] !== undefined; i++){
 	}else if( process.argv[i] === '-d' ){
 		cmdlineOptions.codeFolderName	= process.argv[++i]
 		continue;
+	}else if( process.argv[i] === '--log' ){
+		cmdlineOptions.logEvents	= true
+		continue;
 	}else{
 		cmdlineOptions.fileNames.push( process.argv[i] )
 	}
+}
+
+if( cmdlineOptions.fileNames.length === 0 ){
+	console.error('jsdoc2betterjs: a filename MUST be provided!')
+	process.exit()
 }
 
 //////////////////////////////////////////////////////////////////////////////////

@@ -16,6 +16,10 @@ var builders    = types.builders;
  * @return {Object}                output from recast.print()
  */
 var processFile	= function processFile(filename, cmdlineOptions, onProcessed){
+
+	// log events
+	cmdlineOptions.logEvents && process.stderr.write('Processing '+filename+'\n');
+
 	var recastOption	= {
 		// Options for recast - those are my personal preferences
 		tabWidth	: 8,
@@ -69,7 +73,7 @@ var processFile	= function processFile(filename, cmdlineOptions, onProcessed){
 			 */
 			visitAssignmentExpression: function(path){
 				this.traverse(path);
-
+return
 				// get jsdocContent for this node
 				var lineNumber	= path.value.loc.start.line-1
 				var jsdocJson	= jsdocParse.extractJsdocJson(contentLines, lineNumber)
