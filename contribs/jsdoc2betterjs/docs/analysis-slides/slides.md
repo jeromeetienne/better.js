@@ -2,8 +2,12 @@ title: jsDoced Javascript
 output: index.html
 --
 
-# jsDoced Javascript
-## the good, the bad, and the ugly
+<base target='_blank'/>
+<style>pre { background: lightgrey; font-size: 100%;}</style>
+
+# jsdoc2betterjs
+## - An Analysis -
+## by [Jerome Etienne](http://twitter.com/jerome_etienne)
 
 --
 
@@ -36,10 +40,8 @@ output: index.html
 
 ### Plain old javascript
 
-* jsdoced.js is actually valid javascript
-* no tool chain to change
+* all code is actually valid javascript
 * no new language to learn
-* no compilation
 
 --
 
@@ -55,41 +57,15 @@ output: index.html
 
 It is like a [debug build](http://vinayakgarg.wordpress.com/2012/03/31/difference-between-debug-build-and-release-build/)
 
---
-
-### Source code is modified
-
-* it is the tradeoff of not having compilation
-* and testing at execution time
-* would it be possible to make it less obtrusive ?
-  * like adding jsDoced() automatically
-  * it is certainly possible
-  * just parse and rewrite the js
-  * myfile.js -> myfile.jsdoced.js
-
-
-
 
 --
 
-# And The Ugly
+## And The Ugly ?
 
 --
 
-### Sync file loading
-
-* to get the jsdoc above the ```jsDoced()```
-* the file is loaded synchronously
-* it it rescource consuming
-* possible improvement: extract jsdoc before
-
+## no uglyness, all is shiny and pink!
 
 --
 
-# jsDoc-ed Javascript
-
-## [@jerome_etienne](http://twitter.com/jerome_etienne)
-## [http://betterjs.org](http://betterjs.org)
-
---
-
+# Check it out at [betterjs.org](http://betterjs.org/docs/betterjs-jsdoc2betterjs.html)
