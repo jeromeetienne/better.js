@@ -123,6 +123,85 @@ StrongTyping.value	= function(value, types){
 	return result;
 }
 
+/**
+ * Convert a type to a user-friendly name
+ *
+ * @param  {*} type            The type to check
+ * @return {String|Array}      The name of the type, or an array of names if the argument is an array of types
+ */
+StrongTyping.typename = function(type) {
+	var stringified = '' + type;
+
+	// if the type param is an array of types, return an array of typenames
+	if (stringified === '[object Array]') {
+		var typenames = new Array(type.length);
+		for (var ii = 0; ii < type.length; ++ii) {
+			typenames[ii] = StrongTyping.typename(type[ii]);
+		}
+		return typenames;
+	}
+
+	// shortcuts for known types
+	if (type === Number) return 'Number';
+	if (type === String) return 'String';
+	if (type === Boolean) return 'Boolean';
+	if (type === Function) return 'Function';
+	if (type === Object) return 'Object';
+	if (type === Array) return 'Array';
+	if (type === undefined) return 'undefined';
+	if (type === null) return 'null';
+
+	if (typeof(type) === 'function' && type.name) {
+		return type.name;
+	}
+
+	return stringified;
+}
+
+/**
+ * Convert a value to a list of user-friendly type names
+ *
+ * @param  {*}          value Any value type to check
+ * @return {String[]}   An array of matching typenames for the value
+ */
+StrongTyping.valuetypenames = function(value) {
+	var typenames = [];
+
+	var valtype = typeof(value);
+	switch (valtype) {
+		case 'number':
+			typenames.push('Number');
+			break;
+		case 'string':
+			typenames.push('String');
+			break;
+		case 'boolean':
+			typenames.push('Boolean');
+			break;
+		case 'function':
+			typenames.push('Function');
+			break;
+		case 'object':
+			if (value === null) {
+				typenames.push('null');
+			} else if (value === '[object Array]') {
+				typenames.push('Array');
+			} else {
+				typenames.push('Object');
+				if (value.constructor) {
+					typenames.push(value.constructor.name);
+				}
+			}
+			break;
+		default:
+			// undefined falls through here
+			typenames.push(valtype);
+			break;
+	}
+
+	return typenames;
+}
+
 //////////////////////////////////////////////////////////////////////////////////
 //										//
 //////////////////////////////////////////////////////////////////////////////////
