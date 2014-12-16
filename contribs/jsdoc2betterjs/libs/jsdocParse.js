@@ -56,8 +56,8 @@ jsdocParse.parseJsdoc	= function(jsdocContent){
 		// console.log('tagName', tagName )
 		if( tagName === 'param' ){
 			var matches	= line.match(/^@([^\s]+)\s+{([^\s]+)}\s+([^\s]+)\s+(.*)$/)
+			console.assert(matches && matches.length === 5, 'Malformed tag: ' + line);
 			// console.log('matches', matches )
-			console.assert(matches.length === 5)
 			var paramType		= matches[2]
 			var paramName		= matches[3]
 			var paramDescription	= matches[4]
@@ -67,8 +67,8 @@ jsdocParse.parseJsdoc	= function(jsdocContent){
 			}
 		}else if( tagName === 'return' ||  tagName === 'returns' ){
 			var matches	= line.match(/^@([^\s]+)\s+{([^\s]+)}\s+(.*)$/)
+			console.assert(matches && matches.length === 4, 'Malformed tag: ' + line);
 			// console.log('matches', matches )
-			console.assert(matches.length === 4)
 			var paramType		= matches[2]
 			var paramDescription	= matches[3]
 			output.return		= {
@@ -77,10 +77,16 @@ jsdocParse.parseJsdoc	= function(jsdocContent){
 			}
 		}else if( tagName === 'type' ){
 			var matches	= line.match(/^@([^\s]+)\s+{([^\s]+)}(.*)$/)
+			console.assert(matches && matches.length === 4, 'Malformed tag: ' + line);
 			// console.log('matches', matches )
-			console.assert(matches.length === 4)
 			var paramType		= matches[2]
 			output.type		= canonizeType(paramType)
+		}else if( tagName === 'method' || tagName === 'function' || tagName === 'func' ){
+			var matches	= line.match(/^@([^\s]+)\s+(.*)$/)
+			console.assert(matches && matches.length === 3, 'Malformed tag: ' + line);
+			// console.log('matches', matches )
+			var funcName		= matches[2]
+			output.name		= funcName;
 		}else{
 			output.tags		= output.tags	|| {}
 			output.tags[tagName]	= true
