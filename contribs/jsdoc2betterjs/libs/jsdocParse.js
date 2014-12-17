@@ -215,8 +215,11 @@ jsdocParse.extractJsdocContent	= function(lines, bottomLine){
 	for(var lineStart = lineEnd;lineStart >= 0; lineStart--){
 		var line	= lines[lineStart]
 		var matches	= line.match(/^\s*\/\*\*\s*$/)
-		var isJsdocHead	= matches !== null ? true : false
-		if( isJsdocHead === true )	break
+		if( matches !== null )	break
+
+		// check for other comment markers and abort if found
+		matches = line.match(/\/\*/);
+		if( matches !== null ) return null
 	}
 	if( lineEnd <= lineStart )	return null
 	var jsdocContent	= lines.slice(lineStart, lineEnd+1).join('\n')
