@@ -64,6 +64,7 @@ var processFile	= function processFile(filename, cmdlineOptions, onProcessed){
 				// produce the callExpression to replace this node
 				var functionExpression	= path.value
 				var callExpression	= jsdocExpr.jsdocJsonFunction2CallExpression(jsdocJson, functionExpression, cmdlineOptions)
+				if( callExpression === null ) return
 
 				// actually replace the node
 				path.replace(callExpression)
@@ -88,9 +89,33 @@ var processFile	= function processFile(filename, cmdlineOptions, onProcessed){
 				//////////////////////////////////////////////////////////////////////////////////
 				var assignmentExpression	= path.value
 				var newAssignmentExpression	= jsdocExpr.jsdocJsonProperty2AssignmentExpression(jsdocJson, assignmentExpression, cmdlineOptions)
+				if( newAssignmentExpression === null ) return
 
 				// actually replace the node
 				path.replace(newAssignmentExpression)
+			},
+
+			visitFunctionDeclaration: function(path){
+				// console.log('FunctionDeclaration', path.value);
+				this.traverse(path);
+
+				// get jsdocContent for this node
+				var lineNumber	= path.value.loc.start.line-1
+				var jsdocJson	= jsdocParse.extractJsdocJson(contentLines, lineNumber)
+				// if no jsdocContent, do nothing
+				if( jsdocJson === null )	return
+
+				// produce the expressions to replace this node
+				var functionDeclaration = path.value
+				var functionName = functionDeclaration.id.name;
+				var newFunctionName = functionName + '__betterjs';
+				var newFunctionDeclaration = jsdocExpr.jsdocJsonFunction2Declaration(jsdocJson, functionDeclaration, functionName, newFunctionName, cmdlineOptions)
+				if( newFunctionDeclaration === null ) return
+
+				// actually replace the node
+				functionDeclaration.id.name = newFunctionName;
+				path.insertBefore(functionDeclaration);
+				path.replace(newFunctionDeclaration)
 			},
 		});
 
