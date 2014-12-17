@@ -1269,7 +1269,7 @@ StrongTyping.valuetypenames = function(value) {
 				typenames.push('Array');
 			} else {
 				typenames.push('Object');
-				if (value.constructor) {
+				if (value.constructor && value.constructor !== Object) {
 					typenames.push(value.constructor.name);
 				}
 			}
