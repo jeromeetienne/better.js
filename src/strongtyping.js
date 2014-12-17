@@ -130,7 +130,7 @@ StrongTyping.value	= function(value, types){
  * @return {String|Array}      The name of the type, or an array of names if the argument is an array of types
  */
 StrongTyping.typename = function(type) {
-	var stringified = '' + type;
+	var stringified = Object.prototype.toString.apply(type);
 
 	// if the type param is an array of types, return an array of typenames
 	if (stringified === '[object Array]') {
@@ -184,7 +184,7 @@ StrongTyping.valuetypenames = function(value) {
 		case 'object':
 			if (value === null) {
 				typenames.push('null');
-			} else if (value === '[object Array]') {
+			} else if (Object.prototype.toString.apply(value) === '[object Array]') {
 				typenames.push('Array');
 			} else {
 				typenames.push('Object');
