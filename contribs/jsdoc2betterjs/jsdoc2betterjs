@@ -34,12 +34,51 @@ if( process.argv[2] === '-h' || process.argv[2] === undefined ){
 	console.log('')
 	console.log('\t-v	Display version')
 	console.log('')
+	console.log('servecachedir [DIR]	server this directory as cache directory. defalt to .betterjs')
+	console.log('')
 	process.exit()
 }
 if( process.argv[2] === '-v' ){
 	var packageJson	= require('./../../package.json')
 	console.log(packageJson.version)
-	process.exit()
+	return
+}
+
+if( process.argv[2] === 'servecachedir' ){
+	var cacheDirName= process.argv[3] || '.betterjs'
+	// Create a node-static server instance to serve the './public' folder
+	var fileServer	= new (require('node-static')).Server('.');
+	var server	= require('http').createServer(function(request, response){
+		// console.log('request', request.url)
+		request.addListener('end', function(){
+			var isJavascript	= request.url.match(/\.js$/) !== null ? true : false
+			// server normal files
+			if( isJavascript === false ){
+				fileServer.serve(request, response);
+				return
+			}
+
+			// test is betterjsPath exist
+			var betterjsPath	= cacheDirName+request.url
+			require('fs').exists(betterjsPath, function(exists){
+				// if betterjs file doesnt exists, server it normally
+				if( exists === false ){
+					fileServer.serve(request, response);
+				}else{
+					// if betterjs file DOES exist, server it normally
+					console.log('serve better.js version', betterjsPath)
+					fileServer.serveFile(betterjsPath, 200, {}, request, response);
+				}
+
+			})
+		})
+		request.resume();
+	})
+	var port	= process.env.PORT	|| 8000
+	var listenAddr	= process.env.IP	|| '0.0.0.0'
+	console.log('Start listening on '+listenAddr+':'+port)
+	server.listen(port, listenAddr);
+	return
 }
 
 //////////////////////////////////////////////////////////////////////////////////
