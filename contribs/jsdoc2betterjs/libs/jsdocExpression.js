@@ -14,16 +14,16 @@ var jsdocParse	= require('./jsdocParse.js')
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * convert a jsdocContent and the function into a callExpression for react
+ * convert a jsdocContent and the function into a callExpression for recast
  * 
- * @param  {Object} 		jsdocJson - the jsdoc in json
+ * @param  {Object}             jsdocJson - the jsdoc in json
  * @param  {FunctionExpression} functionExpression - the FunctionExpression from the parser associated with the jsdoc
- * @return {CallExpression}     the resulting call expression
+ * @return {?CallExpression}    the resulting call expression, or null if no replacement is necessary
  */
 jsdocExpression.jsdocJsonFunction2CallExpression	= function(jsdocJson, functionExpression, cmdlineOptions){
 
 	// honor @nobetterjs - return identity
-	if( jsdocJson.tags && jsdocJson.tags.nobetterjs )	return functionExpression
+	if( jsdocJson.tags && jsdocJson.tags.nobetterjs )	return null
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//		Build options for better.js depending on jsdocContent
@@ -79,7 +79,7 @@ jsdocExpression.jsdocJsonFunction2CallExpression	= function(jsdocJson, functionE
 	}
 
 	// if there is no options to add, it means the jsdoc cant be used, do nothing
-	if( options.length === 0 )	return functionExpression
+	if( options.length === 0 )	return null
 
 	//////////////////////////////////////////////////////////////////////////////////
 	//		build callExpression
@@ -100,17 +100,64 @@ jsdocExpression.jsdocJsonFunction2CallExpression	= function(jsdocJson, functionE
 	return callExpression
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+//		Comment								//
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * convert a jsdocContent and the function into a wrapped declaration for recast
+ *
+ * @param  {Object}               jsdocJson - the jsdoc in json
+ * @param  {FunctionDeclaration}  functionDeclaration - the FunctionDeclaration from the parser associated with the jsdoc
+ * @param  {String}               origFunctionName - the original function name (ie someFunction)
+ * @param  {String}               newFunctionName - the new function name (ie someFunction__betterjs)
+ * @return {?FunctionDeclaration} the resulting declaration, or null if no replacement is necessary
+ */
+jsdocExpression.jsdocJsonFunction2Declaration = function(jsdocJson, functionDeclaration, origFunctionName, newFunctionName, cmdlineOptions){
+	// generate the call expression for the function
+	var callExpression = jsdocExpression.jsdocJsonFunction2CallExpression(jsdocJson, builders.identifier(newFunctionName), cmdlineOptions)
+	if( callExpression === null ) return null
+
+	var assignmentStatement = builders.expressionStatement(builders.assignmentExpression(
+		'=',
+		builders.identifier(origFunctionName + '.__betterjs'),
+		builders.logicalExpression(
+			'||',
+			builders.identifier(origFunctionName + '.__betterjs'),
+			callExpression
+		)
+	))
+
+	var returnStatement = builders.returnStatement(
+		builders.callExpression(
+			builders.identifier(origFunctionName + '.__betterjs.apply'),
+			[
+				builders.identifier('this'),
+				builders.identifier('arguments')
+			]
+		)
+	)
+
+	return builders.functionDeclaration(
+		builders.identifier(origFunctionName),
+		[],
+		builders.blockStatement([
+			assignmentStatement,
+			returnStatement
+		])
+	)
+}
 
 //////////////////////////////////////////////////////////////////////////////////
 //		Comment								//
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * convert a jsdocContent and the function into a callExpression for react
+ * convert a jsdocContent and the function into a callExpression for recast
  * 
- * @param  {Object} 		jsdocJson - the jsdoc in json
+ * @param  {Object}               jsdocJson - the jsdoc in json
  * @param  {assignmentExpression} assignmentExpression - the FunctionExpression from the parser associated with the jsdoc
- * @return {CallExpression}     the resulting call expression
+ * @return {?CallExpression}      the resulting call expression, or null if no replacement is necessary
  */
 jsdocExpression.jsdocJsonProperty2AssignmentExpression	= function(jsdocJson, assignmentExpression, cmdlineOptions){
 	var leftExpression		= assignmentExpression.left
@@ -124,10 +171,10 @@ jsdocExpression.jsdocJsonProperty2AssignmentExpression	= function(jsdocJson, ass
 	//////////////////////////////////////////////////////////////////////////////////
 
 	// honor @nobetterjs - return identity
-	if( jsdocJson.tags && jsdocJson.tags.nobetterjs )	return assignmentExpression
+	if( jsdocJson.tags && jsdocJson.tags.nobetterjs )	return null
 
 	// if leftExpression isnt a 'MemberExpression', return now
-	if( leftExpression.type !== 'MemberExpression' )	return assignmentExpression
+	if( leftExpression.type !== 'MemberExpression' )	return null
 
 	// if rightExpression is a 'CallExpression' with 'Better.Function' or 'Better.Class', return now
 	// - thus it doesnt conflict with Better.Function
@@ -135,7 +182,7 @@ jsdocExpression.jsdocJsonProperty2AssignmentExpression	= function(jsdocJson, ass
 			&& (rightExpression.callee.name === 'Better.Class'
 				|| rightExpression.callee.name === 'Better.Function')
 			){
-		return assignmentExpression
+		return null
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////
