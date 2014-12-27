@@ -43,7 +43,6 @@ if( process.argv[2] === '-v' ){
 	console.log(packageJson.version)
 	return
 }
-
 if( process.argv[2] === 'servecachedir' ){
 	var cacheDirName= process.argv[3] || '.betterjs'
 	// Create a node-static server instance to serve the './public' folder
@@ -63,6 +62,7 @@ if( process.argv[2] === 'servecachedir' ){
 			require('fs').exists(betterjsPath, function(exists){
 				// if betterjs file doesnt exists, server it normally
 				if( exists === false ){
+					console.log('serve normal version', request.url)
 					fileServer.serve(request, response);
 				}else{
 					// if betterjs file DOES exist, server it normally
@@ -76,7 +76,8 @@ if( process.argv[2] === 'servecachedir' ){
 	})
 	var port	= process.env.PORT	|| 8000
 	var listenAddr	= process.env.IP	|| '0.0.0.0'
-	console.log('Start listening on '+listenAddr+':'+port)
+	console.log('jsdoc2betterjs: start serving better.js cache folder in "'+cacheDirName+'/"')
+	console.log('Listening on '+listenAddr+':'+port)
 	server.listen(port, listenAddr);
 	return
 }

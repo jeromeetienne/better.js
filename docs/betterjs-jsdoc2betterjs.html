@@ -155,89 +155,6 @@
       </div><!-- /.row -->
 
       <!-- ======================================== -->
-      <!-- Steps -->
-      <div class="page-header jumbotron" id='PrivateInBetterJS'>
-        <h1>Detect New Family of Bugs</h1>
-      </div>
-
-      <!-- /////////////////////// -->
-      <div class="row featurette">
-        <div class="col-md-7">
-          <pre class="prettyprint" style='font-size:140%'>
-/**
- * measure the length of a string
- *
- * @param  {String} aString - the string to measure
- * @return {Number} the length of the string
- */
-var stringLength  = function(aString){
-    return aString.length
-}
-</pre>
-        </div>
-        <div class="col-md-5">
-          <h2 class="featurette-heading">Use JSDOC To Test Your Code</h2>
-          <p class="lead">
-            JSDOC contains valuable informations on the behavior of your code.
-            It was destined to programmers before. Now we use it with computers
-            to extract more informations on how to test your code.
-          </p>
-        </div>
-      </div>
-      <br/><br/><br/>
-
-      <!-- /////////////////////// -->
-      <div class="row featurette">
-        <div class="col-md-5">
-          <h2 class="featurette-heading">Detect Typing Error In Javascript</h2>
-          <p class="lead">
-            The tags <code>@param</code> are analysed to know which type is ok for this arguments
-            No more 'oops i forgot an argument' bug.
-            We do the same for <code>@return</code>, thus we test the function behavior too.
-        </div>
-        <div class="col-md-7">
-          <pre class="prettyprint" style='font-size:140%'>
-/**
- * measure the length of a string
- *
- * @param  {String} aString - the string to measure
- * @return {Number} the length of the string
- */
-var stringLength  = function(aString){
-    return aString.length
-}
-</pre>
-        </div>
-      </div>
-      <br/><br/><br/>
-
-
-      <!-- /////////////////////// -->
-      <div class="row featurette">
-        <div class="col-md-7">
-          <pre class="prettyprint" style='font-size:140%'>
-/**
- * a cat with its age
- *
- * @constructor
- * @param  {Number} age - the age of the cat
- */
-var Cat  = function(age){
-    this._age = age
-}
-</pre>
-        </div>
-        <div class="col-md-5">
-          <h2 class="featurette-heading">Detect Private Errors in JS</h2>
-          <p class="lead">
-            All your JSDOC <code>@constructor</code> tag are detected to know what
-            your classes are and enable <a href='betterjs-class.html'>Better.Class</a> privates.
-            Thus if your classes private are used outside your class, you
-            will be warned immediatly
-        </div>
-      </div>
-      <br/><br/><br/>
-      <!-- ======================================== -->
       <!-- How it works -->
       <div class="page-header jumbotron" id='PrivateInBetterJS'>
         <h1>How It Works</h1>
@@ -320,6 +237,91 @@ var stringLength = Better.Function(function(aString){
     return: Number
 })
 </pre>
+        </div>
+      </div>
+      <br/><br/><br/>
+
+
+      <!-- ======================================== -->
+      <!-- Steps -->
+      <div class="page-header jumbotron" id='PrivateInBetterJS'>
+        <h1>Detect New Family of Bugs</h1>
+      </div>
+
+      <!-- /////////////////////// -->
+      <div class="row featurette">
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+/**
+ * measure the length of a string
+ *
+ * @param  {String} aString - the string to measure
+ * @return {Number} the length of the string
+ */
+var stringLength  = function(aString){
+    return aString.length
+}
+</pre>
+        </div>
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Use JSDOC To Test Your Code</h2>
+          <p class="lead">
+            JSDOC contains valuable informations on the behavior of your code.
+            It was destined to programmers before. Now we use it with computers
+            to extract more informations on how to test your code.
+          </p>
+        </div>
+      </div>
+      <br/><br/><br/>
+
+      <!-- /////////////////////// -->
+      <div class="row featurette">
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Detect Typing Error In Javascript</h2>
+          <p class="lead">
+            The tags <code>@param</code> are analysed to know which type is ok for this arguments
+            No more 'oops i forgot an argument' bug.
+            We do the same for <code>@return</code>, thus we test the function behavior too.
+        </div>
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+/**
+ * measure the length of a string
+ *
+ * @param  {String} aString - the string to measure
+ * @return {Number} the length of the string
+ */
+var stringLength  = function(aString){
+    return aString.length
+}
+</pre>
+        </div>
+      </div>
+      <br/><br/><br/>
+
+
+      <!-- /////////////////////// -->
+      <div class="row featurette">
+        <div class="col-md-7">
+          <pre class="prettyprint" style='font-size:140%'>
+/**
+ * a cat with its age
+ *
+ * @constructor
+ * @param  {Number} age - the age of the cat
+ */
+var Cat  = function(age){
+    this._age = age
+}
+</pre>
+        </div>
+        <div class="col-md-5">
+          <h2 class="featurette-heading">Detect Private Errors in JS</h2>
+          <p class="lead">
+            All your JSDOC <code>@constructor</code> tag are detected to know what
+            your classes are and enable <a href='betterjs-class.html'>Better.Class</a> privates.
+            Thus if your classes private are used outside your class, you
+            will be warned immediatly
         </div>
       </div>
       <br/><br/><br/>

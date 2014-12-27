@@ -82,6 +82,8 @@ Like in [npm package.json](https://www.npmjs.org/doc/files/package.json.html) or
 Here is a possible Makefile.
 
 ```
+###################################################
+# Support betterjs cache dir - http://betterjs.org
 buildBetterjs:
     jsdoc2betterjs -s -p -d .betterjs js/*.js js/**/*.js
 
