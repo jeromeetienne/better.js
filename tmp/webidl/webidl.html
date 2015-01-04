@@ -1,0 +1,48 @@
+<!doctype html>
+<script src='vendor/webidl2.js'></script>
+<script src='../../build/better.js'></script>
+
+
+
+<!-- http://dev.w3.org/html5/spec-preview/timers.html -->
+<script type='text/webidl' id='timerWebIDL'>
+	[NoInterfaceObject]
+	interface WindowTimers {
+	  long setTimeout(ArbitraryCallback handler, optional long timeout, any... args);
+	  long setTimeout([AllowAny] DOMString handler, optional long timeout, any... args);
+	  void clearTimeout(long handle);
+	  long setInterval(ArbitraryCallback handler, optional long timeout, any... args);
+	  long setInterval([AllowAny] DOMString handler, optional long timeout, any... args);
+	  void clearInterval(long handle);
+	};
+
+	Window implements WindowTimers;
+
+	[TreatNonCallableAsNull] callback ArbitraryCallback = any (any... args);
+</script>
+
+
+<body><script>
+	var content	= 'string of WebIDL'
+	var content	= document.querySelector('#timerWebIDL').innerHTML
+
+	// console.log('content', content)
+	var treeAST	= WebIDL2.parse(content);
+	console.log('treeAST', treeAST)
+
+
+	// member clearTimeout
+	var member	= treeAST[0].members[2]
+
+	console.dir(member)
+	console.log('function name', member.name)
+
+	console.log(member.arguments[0])
+
+
+	function idlTypeToBetterjsType( idlType ){
+		if( idlType.idlType === 'long' ){
+			return Number
+		}else	console.assert(false, 'Unknown type', idlType.idlType)
+	}
+</script></body>
