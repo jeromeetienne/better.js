@@ -96,7 +96,10 @@ cleanBetterjs:
 
 serverBetterjs: buildBetterjs
     jsdoc2betterjs servecachedir .betterjs
+
+###################################################
 ```
+
 
 About fswatch, [fswatch](https://github.com/emcrisostomo/fswatch) is a simple tool i use to detect change in the filesystem. You can use another if you see fit. fswatch works well here as it output the filename of the changed file. Thus it is all incremental. When you change one file, only this file is regenerated.
 
