@@ -12,6 +12,7 @@
     "test": "tests"
   },
   "devDependencies": {
+    "chai": "~1.6",
     "mocha": "~1.6.0"
   },
   "scripts": {

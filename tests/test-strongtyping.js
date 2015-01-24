@@ -1,3 +1,4 @@
+var expect = require('chai').expect;
 var StrongTyping	= StrongTyping	|| require('../src/strongtyping.js');
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -89,6 +90,83 @@ describe('StrongTyping.value', function(){
 	});
 });
 
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+describe('StrongTyping.typename', function(){
+
+	it('returns the names of basic types', function(){
+		expect( StrongTyping.typename(Number) ).to.equal( 'Number' )
+		expect( StrongTyping.typename(String) ).to.equal( 'String' )
+		expect( StrongTyping.typename(Boolean) ).to.equal( 'Boolean' )
+		expect( StrongTyping.typename(Function) ).to.equal( 'Function' )
+		expect( StrongTyping.typename(Object) ).to.equal( 'Object' )
+		expect( StrongTyping.typename(Array) ).to.equal( 'Array' )
+		expect( StrongTyping.typename(undefined) ).to.equal( 'undefined' )
+		expect( StrongTyping.typename(null) ).to.equal( 'null' )
+	});
+
+	it('returns the names of functions', function(){
+		function TestOne() {}
+		function TestTwo() {}
+		TestTwo.prototype.foo = function () {}
+
+		expect( StrongTyping.typename(TestOne) ).to.equal( 'TestOne' )
+		expect( StrongTyping.typename(TestTwo) ).to.equal( 'TestTwo' )
+	});
+
+	it('returns stringified version of unknown/invalid types', function(){
+		expect( StrongTyping.typename(123) ).to.equal( '[object Number]' )
+	});
+
+	it('returns an array of names for an array of types', function(){
+		var names = StrongTyping.typename([ Number, String, Array, null ])
+		expect( names ).to.deep.equal([ 'Number', 'String', 'Array', 'null' ])
+	});
+
+});
+
+//////////////////////////////////////////////////////////////////////////////////
+//										//
+//////////////////////////////////////////////////////////////////////////////////
+
+describe('StrongTyping.valuetypenames', function(){
+
+	it('returns the names of basic types', function(){
+		expect( StrongTyping.valuetypenames(0) ).to.deep.equal([ 'Number' ]);
+		expect( StrongTyping.valuetypenames(123) ).to.deep.equal([ 'Number' ]);
+		expect( StrongTyping.valuetypenames(NaN) ).to.deep.equal([ 'Number' ]);
+		expect( StrongTyping.valuetypenames(-Infinity) ).to.deep.equal([ 'Number' ]);
+
+		expect( StrongTyping.valuetypenames('') ).to.deep.equal([ 'String' ]);
+		expect( StrongTyping.valuetypenames('hello') ).to.deep.equal([ 'String' ]);
+
+		expect( StrongTyping.valuetypenames(false) ).to.deep.equal([ 'Boolean' ]);
+		expect( StrongTyping.valuetypenames(true) ).to.deep.equal([ 'Boolean' ]);
+
+		expect( StrongTyping.valuetypenames(function foo() {}) ).to.deep.equal([ 'Function' ]);
+
+		expect( StrongTyping.valuetypenames([]) ).to.deep.equal([ 'Array' ]);
+		expect( StrongTyping.valuetypenames([1, 2, 3]) ).to.deep.equal([ 'Array' ]);
+
+		expect( StrongTyping.valuetypenames(null) ).to.deep.equal([ 'null' ]);
+		expect( StrongTyping.valuetypenames(undefined) ).to.deep.equal([ 'undefined' ]);
+	});
+
+	it('returns the names of objects', function(){
+		function TestOne() {}
+		function TestTwo() {}
+		TestTwo.prototype.foo = function () {}
+
+		expect( StrongTyping.valuetypenames({}) ).to.deep.equal([ 'Object' ]);
+		expect( StrongTyping.valuetypenames({ a:1, b:2 }) ).to.deep.equal([ 'Object' ]);
+
+		expect( StrongTyping.valuetypenames(new TestOne()) ).to.deep.equal([ 'Object', 'TestOne' ]);
+		expect( StrongTyping.valuetypenames(new TestTwo()) ).to.deep.equal([ 'Object', 'TestTwo' ]);
+	});
+
+});
 
 //////////////////////////////////////////////////////////////////////////////////
 //										//

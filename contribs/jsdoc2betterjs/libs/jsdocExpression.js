@@ -70,6 +70,13 @@ jsdocExpression.jsdocJsonFunction2CallExpression	= function(jsdocJson, functionE
 		))
 	}
 
+	if( jsdocJson.name ){
+		options.push(builders.property('init',
+			builders.identifier('name'),
+			builders.literal(jsdocJson.name)
+		))
+	}
+
 	// if cmdlineOptions.privatizeClass, Enable .private : true by default classes
 	if( jsdocJson.isClass && cmdlineOptions.privatizeClasses === true ){
 		options.push(builders.property('init', 
