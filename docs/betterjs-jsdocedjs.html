@@ -4,13 +4,13 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="jsdoc2betterjs - test your code with jsdoc">
+    <meta name="description" content="jsdoced.js - test your code with jsdoc">
     <meta name="author" content="Jerome Etienne">
     <link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
     <link rel="canonical" href="http://betterjs.org/"/>
 
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-    <title>jsdoc2betterjs - test your code with jsdoc</title>
+    <title>jsdoced.js - test your code with jsdoc</title>
 
     <!-- Bootstr../ap core CSS -->
     <link href="../www/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -96,7 +96,7 @@
             <li><a href="../docs/betterjs-class.html">Classes</a></li>
             <li><a href="../docs/betterjs-property.html">Properties</a></li>
             <li><a href="../docs/betterjs-function.html">Functions</a></li>
-            <li><a href="../docs/betterjs-jsdoc2betterjs.html">jsdoc2betterjs</a></li>
+            <li><a href="../docs/betterjs-jsdocedjs.html">jsdoced.js</a></li>
             <li><a href="../docs/">Docs</a></li>
             <li><a href="https://twitter.com/jerome_etienne" target='_blank'>by @jerome_etienne</a></li>
           </ul>
@@ -118,7 +118,7 @@
         </h1>
         <br/>
         <p class="lead">
-          <code>jsdoc2betterjs</code> will <strong>automatically extract jsdoc</strong>  from your code.
+          <code>jsdoced.js</code> will <strong>automatically extract jsdoc</strong>  from your code.
           Using your jsdoc comments, it will generate another javascript
           file which <strong>makes sure your jsdoc is respected during execution.</strong>
         </p>
@@ -192,16 +192,16 @@ var stringLength  = function(aString){
       <div class="row featurette">
         <div class="col-md-7">
           <pre class="prettyprint" style='font-size:140%'>
-# Install jsdoc2betterjs if needed
+# Install jsdoced.js if needed
 $ npm install -g better.js
 
 # Generate the better.js automatically
-$ jsdoc2betterjs file.js > file.better.js
+$ jsdoced.js -o file.better.js file.js 
 </pre>
         </div>
         <div class="col-md-5">
           <h2 class="featurette-heading">Convert .js files into .better.js</h2>
-          <p class="lead"><code>jsdoc2betterjs</code> analyses your code and extract jsdoc.
+          <p class="lead"><code>jsdoced.js</code> analyses your code and extract jsdoc.
             It <strong>produces a .better.js file</strong> with the additional
             code to <strong>check if your jsdoc is respected at runtime</strong>.
           </p>
@@ -363,7 +363,7 @@ var Better = require('better.js');
             And jsdoc is the established way to document javascript.
             <strong>Not a new language</strong> to learn, find documentation for, find tools for!
             So everything is already well-known so it is <strong>painless to integrate</strong>.
-            Checkout <a href='https://github.com/jeromeetienne/better.js/blob/master/contribs/jsdoc2betterjs/WORKFLOW.md'>betterjs cache folder workflow</a>.
+            Checkout <a href='https://github.com/jeromeetienne/jsdoced.js/blob/master/WORKFLOW.md'>betterjs cache folder workflow</a>.
             Heck, it can even generate sourcemap.
             </p> </strong>.
           </p>
@@ -399,7 +399,7 @@ var stringLength  = function(aString){
         </div>
         <div class="col-md-5">
           <h2 class="featurette-heading">More docs means safer code</h2>
-          <p class="lead">With <code>jsdoc2betterjs</code>, writing jsdoc comments
+          <p class="lead">With <code>jsdoced.js</code>, writing jsdoc comments
             is like writing tests. Writing docs is good, Testing code is good.
             It creates a virtuous circle <strong>"The more you documents your code, the safer it becomes."</strong>
           </p>
@@ -415,14 +415,14 @@ var stringLength  = function(aString){
       <!-- /////////////////////// -->
       <div class="row featurette">
         <div class="col-lg-6" style='text-align:right;'>
-          <iframe width="420" height="315" src='../contribs/jsdoc2betterjs/docs/obvious-slides/'></iframe>
+          <iframe width="420" height="315" src='http://jeromeetienne.github.io/jsdoced.js/docs/obvious-slides/'></iframe>
         </div>
         <div class="col-lg-5">
           <h2 class="featurette-heading">
-            The "Obvious" Slides <a href='../contribs/jsdoc2betterjs/docs/obvious-slides/' target='_blank'>[link]</a>
+            The "Obvious" Slides <a href='http://jeromeetienne.github.io/jsdoced.js/docs/obvious-slides/' target='_blank'>[link]</a>
           </h2>
           <p class="lead">
-            It introduces jsdoc2betterjs. 
+            It introduces jsdoced.js. 
             What is it ? 
             How it can be useful?
             How you can use it ?
@@ -435,14 +435,14 @@ var stringLength  = function(aString){
       <!-- /////////////////////// -->
       <div class="row featurette">
         <div class="col-lg-6" style='text-align:right;'>
-          <iframe width="420" height="315" src='../contribs/jsdoc2betterjs/docs/analysis-slides/'></iframe>
+          <iframe width="420" height="315" src='http://jeromeetienne.github.io/jsdoced.js/docs/analysis-slides/'></iframe>
         </div>
         <div class="col-lg-6">
           <h2 class="featurette-heading">
-            The "Analysis" Slides <a href='../contribs/jsdoc2betterjs/docs/analysis-slides/' target='_blank'>[link]</a>
+            The "Analysis" Slides <a href='http://jeromeetienne.github.io/jsdoced.js/docs/analysis-slides/' target='_blank'>[link]</a>
           </h2>
           <p class="lead">
-            It presents the advantages and disavantages of jsdoc2betterjs. 
+            It presents the advantages and disavantages of jsdoced.js. 
           </p>
         </div>
       </div>
@@ -451,15 +451,15 @@ var stringLength  = function(aString){
       <!-- /////////////////////// -->
       <div class="row featurette">
         <div class="col-lg-6" style='text-align:right;'>
-          <iframe width="420" height="315" src='../contribs/jsdoc2betterjs/docs/stepbystep-slides/'></iframe>
+          <iframe width="420" height="315" src='http://jeromeetienne.github.io/jsdoced.js/docs/stepbystep-slides/'></iframe>
         </div>
         <div class="col-lg-6">
           <h2 class="featurette-heading">
-            The "Step by Step" Slides <a href='../contribs/jsdoc2betterjs/docs/stepbystep-slides/' target='_blank'>[link]</a>
+            The "Step by Step" Slides <a href='http://jeromeetienne.github.io/jsdoced.js/docs/stepbystep-slides/' target='_blank'>[link]</a>
           </h2>
           <p class="lead">
             The slides presents the practical steps
-            to show you how your code can be improved with jsdoc2betterjs.
+            to show you how your code can be improved with jsdoced.js.
           </p>
         </div>
       </div>
