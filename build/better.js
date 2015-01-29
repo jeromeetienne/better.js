@@ -1150,6 +1150,11 @@ StrongTyping.fn	= function(originalFn, paramsTypes, returnTypes){
 	}
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Comments
+//////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Check the type of a value
  * 
@@ -1163,45 +1168,71 @@ StrongTyping.value	= function(value, types){
 	// if types array is empty, default to ['always'], return true as in valid
 	if( types.length === 0 )	return true;
 	// go thru each type
-	var result	= false;
+        var result      = false
 	for(var i = 0; i < types.length; i++){
 		var type	= types[i];
-		if( type === Number ){
-			var valid	= typeof(value) === 'number';
-		}else if( type === String ){
-			var valid	= typeof(value) === 'string';
-		}else if( type === Boolean ){
-			var valid	= typeof(value) === 'boolean'
-		}else if( type === Function ){
-			var valid	= value instanceof Function;
-		}else if( type === undefined ){
-			var valid	= typeof(value) === 'undefined';
-		}else if( type === null ){
-			var valid	= value === null;
-		}else if( typeof(type) === 'string' && type.toLowerCase() === 'any' ){
-			var valid	= true;
-		}else if( typeof(type) === 'string' && type.toLowerCase() === 'never' ){
-			// return immediatly as a failed validator
-			return false;
-		}else if( typeof(type) === 'string' && type.toLowerCase() === 'nonnull' ){
-			var valid	= value !== null;
-			if( valid === false )	return false;
-			continue;	// continue as it is a validator
-		}else if( typeof(type) === 'string' && type.toLowerCase() === 'nonan' ){
-			var valid	= value === value;
-			if( valid === false )	return false;
-			continue;	// continue as it is a validator
-		}else if( type instanceof StrongTyping._ValidatorClass ){
-			var valid	= type.fn(value);
-			if( valid === false )	return false;
-			continue;	// continue as it is a validator
-		}else {
-			var valid	= value instanceof type;
-		}
-		result	= result || valid;
+		var match	= testTypeMatchesValue(type, value)
+                // if match is 'NEVER', it will 
+                if( match === 'NEVER')  return false;
+                console.assert(match === true || match === false)
+                
+                result	= result || match;
 	}
 	// return the just computed result
 	return result;
+
+
+        /**
+         * test if a type matches a value
+         * @param {*} type  - the type
+         * @param {*} value - the value
+         * @return {Boolean|String} - true if they matches, false if they dont match, 'NEVER' to declare the value 
+         * will never match
+         */
+        function testTypeMatchesValue(type, value){
+                // PRIMITIVE TYPE
+		if( type === Number ){
+			return typeof(value) === 'number';
+		}else if( type === String ){
+			return typeof(value) === 'string';
+		}else if( type === Boolean ){
+			return typeof(value) === 'boolean'
+		}else if( type === Function ){
+			return value instanceof Function;
+		}else if( type === undefined ){
+			return typeof(value) === 'undefined';
+		}else if( type === null ){
+			return value === null;
+
+                // CUSTOM TYPE
+		}else if( typeof(type) === 'string' && type.toLowerCase() === 'any' ){
+			return true
+		}else if( typeof(type) === 'string' && type.toLowerCase() === 'never' ){
+			return false;
+
+                // VALIDATORS
+		}else if( typeof(type) === 'string' && type.toLowerCase() === 'nonnull' ){
+			if( value === null )	return 'NEVER'
+			return false;	// continue as it is a validator
+		}else if( typeof(type) === 'string' && type.toLowerCase() === 'nonan' ){
+			if( isNaN(value) === true )	return 'NEVER';
+			return false;	// continue as it is a validator
+		}else if( type instanceof StrongTyping._ValidatorClass ){
+			var isValid	= type.fn(value);
+			if( isValid === false )	return 'NEVER';
+ 			return false;	// continue as it is a validator
+                
+                // HANDLE 'TYPE-IN-STRING' case
+		}else if( typeof(type) === 'string' ){
+                        // this mean type is a string containing a type, so we eval it and test it
+			return testTypeMatchesValue(eval(type), value)
+
+                // INSTANCEOF
+                }else{
+                        // here type is supposedly a contructor function() so we use instanceof
+        		return value instanceof type;                        
+                }
+        }
 }
 
 //////////////////////////////////////////////////////////////////////////////////

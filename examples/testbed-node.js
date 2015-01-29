@@ -7,7 +7,9 @@ var Better	= Better	|| require('../build/better.js')
 var foo	= Better.Function(function(value){
 	console.log('value', value)
 }, {
-	arguments	: [Boolean]
+	arguments	: [['nonan', Number]]
 })
 
 foo(true)
+
+// foo('ddd')

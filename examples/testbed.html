@@ -1,78 +1,32 @@
-<script src='../src/helpers/classattr.js'></script>
-<script src='../src/qgettersetter.js'></script>
-<script src='../src/typecheck.js'></script>
-<script src='../src/privateforjs.js'></script>
-<script src='../src/objecticer.js'></script>
+<script src='../build/better.js'></script>
 <script>
-var ClassAttr	= ClassAttr	|| require('../src/helpers/classattr.js')
-
-ClassAttr.overloadFunctionPrototype()
-
-//////////////////////////////////////////////////////////////////////////////////
-//		parent class								//
-//////////////////////////////////////////////////////////////////////////////////
-
-/**
- * animal ctos
- */
-var Animal	= function(){
-}
-
-Animal.prototype.isVegetal	= function(){
-	return false;
-}
-
-/**
- * cat constructor
- */
-var Cat	= function(name){
-	// Animal.call( this );
-	this.name	= name
-	this._yo	= 99
-	console.log('end of ctor')
-}
-
-Cat.prototype = Object.create( Animal.prototype );
-
-Cat.prototype.salute	= function(){
-	return 'miaou'
-}
-
-//////////////////////////////////////////////////////////////////////////////////
-//		comment								//
-//////////////////////////////////////////////////////////////////////////////////
-
-Cat	= ClassAttr(Cat, {
-	accept		: [String],
-	privatize	: true,
-	ice		: true,
-	properties	: {
-		name	: String,		
-	},
-	onAfter		: function(instance, args){
-		console.log('onAfter')
-	}
+var foo	= Better.Function(function(value){
+	console.log('value', value)
+}, {
+	arguments	: [['nonan', Number]]
 })
 
-var cat	= new Cat('kitty')
+// foo(NaN)
 
-var ObjectIcer		= ObjectIcer	|| require('../src/objecticer.js');
-cat	= ObjectIcer(cat)
-// cat.prototype	= cat.prototype
-cat.constructor = Cat
+	var StrongTyping	= Better.StrongTyping
+	
+	var value	= NaN;
+	var types	= [Number];
+	var valid	= StrongTyping.value(value, types)
+	console.assert( valid === true )
 
+	var value	= NaN;
+	var types	= [Number, 'noNaN'];
+	var valid	= StrongTyping.value(value, types)
+	console.assert( valid === false )
 
-console.assert(cat instanceof Cat)
-console.assert(cat instanceof Animal)
-console.assert(typeof(cat.name) === 'string')
+	var value	= 99;
+	var types	= [Number, 'noNaN'];
+	var valid	= StrongTyping.value(value, types)
+	console.assert( valid === true )
 
-// cat.name	= 99
-console.log('name', cat.name)
-
-cat.prout	= 99
-
-// console.log('name', cat._yo)
-
-
-
+	var value	= NaN;
+	var types	= ['noNaN'];
+	var valid	= StrongTyping.value(value, types)
+	console.assert( valid === false )
 </script>
