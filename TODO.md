@@ -5,7 +5,7 @@
 * to rename typecheck.js in strongtyping.js
 * make slides for 'you think js is weak typing ? thing again!'
 
-# add core features
+# add core features 
 * strong typing
   * for property
   * for function calls
