@@ -10,7 +10,7 @@ deploy:
 	git commit -a -m "New deploy" && git push -f origin HEAD:gh-pages && git reset HEAD~
 
 test:
-	@./node_modules/.bin/mocha --harmony -R list tests
+	@./node_modules/.bin/mocha --harmony-proxies -R list tests
 
 watch: build
 	# fswatch is available at https://github.com/emcrisostomo/fswatch
@@ -52,5 +52,3 @@ docs:
 			src/*.js src/helpers/*.js examples/helpers/*.js
 
 .PHONY: docs build minify
-
-
