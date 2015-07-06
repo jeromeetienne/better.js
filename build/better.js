@@ -153,7 +153,7 @@ if( typeof(window) === 'undefined' )	module.exports	= Stacktrace;
 
 /**
  * parse the stacktrace of an Error.
- * 
+ *
  * @param  {Error|undefined} error optional error to parse. if not provided, generate one.
  * @return {Array.<Object>}	parsed stacktrace
  */
@@ -163,13 +163,13 @@ Stacktrace.parse	= function(nShift, error){
 	error	= error	|| new Error();
 	// sanity check
 	console.assert(error instanceof Error);
-	// call the proper parser depending on the usage 
+	// call the proper parser depending on the usage
 	if( typeof(window) === 'undefined' ){
 		var stacktrace	= _parserV8(error)
 	}else if( navigator.userAgent.match('Chrome/') ){
-		var stacktrace	= _parserV8(error)		
+		var stacktrace	= _parserV8(error)
 	}else if( navigator.userAgent.match('Firefox/') ){
-		var stacktrace	= _parserFirefox(error)				
+		var stacktrace	= _parserFirefox(error)
 	}else{
 		console.assert(false, 'Stacktrace.parse() not yet implemented for', navigator.userAgent)
 		return [];
@@ -185,6 +185,9 @@ Stacktrace.parse	= function(nShift, error){
 
 	/**
 	 * parse stacktrace for v8 - works in node.js and chrome
+	 *
+	 * Official definition of v8 stackformat
+	 * https://code.google.com/p/v8-wiki/wiki/JavaScriptStackTraceApi#Appendix:_Stack_trace_format
 	 */
 	function _parserV8(error){
 		// start parse the error stack string
@@ -246,7 +249,7 @@ Stacktrace.parse	= function(nShift, error){
 
 /**
  * handle stack frame
- * 
+ *
  * TODO do a .fromOriginId()
  */
 Stacktrace.Frame	= function(opts){
@@ -320,7 +323,7 @@ Stacktrace.Tracker.prototype.record	= function(className, stackLevel){
 	// update counters for this originId
 	var perOrigins		= klass.perOrigins;
 	perOrigins[originId]	= perOrigins[originId] !== undefined ? perOrigins[originId]  : 0;
-	perOrigins[originId]	+= 1;		
+	perOrigins[originId]	+= 1;
 }
 
 /**
@@ -341,8 +344,8 @@ Stacktrace.Tracker.prototype.klasses	= function(){
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Dump current state of the tracker in console.log(). 
- * 
+ * Dump current state of the tracker in console.log().
+ *
  * @see Stacktrace.Tracker.reportString()
  */
 Stacktrace.Tracker.prototype.dump	= function(){
@@ -352,7 +355,7 @@ Stacktrace.Tracker.prototype.dump	= function(){
 
 /**
  * Reporter in a String
- * 
+ *
  * @param  {RegExp} classNameRegExp regexp of the classname to keep
  * @param  {Number} maxNOrigin      nb origin to display per class
  */
@@ -375,7 +378,7 @@ Stacktrace.Tracker.prototype.reportString	= function(classNameRegExp, maxNOrigin
 	classNames.forEach(function(className){
 		var klass	= this._klasses[className];
 		output.push(className+': total '+klass.counter+' times');
-		
+
 		var perOrigins	= klass.perOrigins;
 
 		var ranks	= Object.keys(perOrigins);
@@ -394,10 +397,6 @@ Stacktrace.Tracker.prototype.reportString	= function(classNameRegExp, maxNOrigin
 	}.bind(this));
 	return output.join('\n');
 };
-
-
-
-
 /**
  * assert which actually try to stop the excecution
  * if debug.assert.useDebugger is falsy, throw an exception. else trigger the
@@ -1801,9 +1800,6 @@ BetterJS.Class	= ClassAttr
 	// End of Better.js
 	return BetterJS
 })();
-
-// shorter Alias for Better.js - optional
-var Bjs	= BetterJS;
 
 // shorter Alias for Better.js - optional
 var Better	= BetterJS;

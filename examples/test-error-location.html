@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<script>
+	// Error.prepareStackTrace(error, structuredStackTrace)
+
+	// Error.prepareStackTrace = function bla(error, structuredStackTrace) {
+	// 
+	// 	console.log('dsdfsdf')
+	// 	
+	// }
+
+	Error.prepareStackTrace = function(error, structuredStackTrace) {
+		var value = [
+			'Error: BOOM!',
+			'    at throwError (http://127.0.0.1:8000/examples/test-error-location2.html:36:9)',
+			'    at http://127.0.0.1:8000/examples/test-error-location.html:44:3'
+		].join('\n')
+		return value
+	}
+//     var filename = new Error().stack.split("\n")[1].match(/^    at ((?:\w+:\/\/)?[^:]+)/)[1];
+// console.log('filename', filename)
+	
+	////////////////////////////////////////////////////////////////////////
+	//
+	////////////////////////////////////////////////////////////////////////
+
+	function MyError() {
+		// See https://code.google.com/p/v8/wiki/JavaScriptStackTraceApi
+		// if (Error.captureStackTrace) {
+		// 	Error.captureStackTrace(this, MyError);
+		// 	// debugger;
+		// } else {
+			this.stack = (new Error).stack || '';
+		// }
+		this.message = 'BOOM!';
+	}
+	// Use your favorite library's inheritance helper
+	// instead of this monstrosity.
+	var T = function() {};
+	T.prototype = Error.prototype;
+	MyError.prototype = new T;
+
+	function throwError() {
+		throw new MyError();
+	}
+	
+	
+	////////////////////////////////////////////////////////////////////////
+	//
+	////////////////////////////////////////////////////////////////////////
+	// try {
+		throwError();
+	// }catch(error){
+		// console.log('error object from exception', error.stack)
+		// console.dir(error)
+	// }
+  	
+	////////////////////////////////////////////////////////////////////////
+	//
+	////////////////////////////////////////////////////////////////////////
+	// throw new MyError();
+  
+</script>
