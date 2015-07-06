@@ -57,13 +57,13 @@ StrongTyping.fn	= function(originalFn, paramsTypes, returnTypes){
 		console.assert(arguments.length <= paramsTypes.length, 'function received '+arguments.length+' parameters but allows only '+paramsTypes.length+'!');
 		for(var i = 0; i < paramsTypes.length; i++){
 			var isValid	= StrongTyping.value(arguments[i], paramsTypes[i]);			
-			console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', StrongTyping.typesToString(paramsTypes[i]), 'It is ===', arguments[i])
+			console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', StrongTyping.allowedTypesToString(paramsTypes[i]), 'It is ===', arguments[i])
 		}
 		// forward the call to the original function
 		var result	= originalFn.apply(this, arguments);
 		// check the result type
 		var isValid	= StrongTyping.value(result, returnTypes);			
-		console.assert(isValid, 'invalid type for returned value. MUST be of type', StrongTyping.typesToString(returnTypes), 'It is ===', result);
+		console.assert(isValid, 'invalid type for returned value. MUST be of type', StrongTyping.allowedTypesToString(returnTypes), 'It is ===', result);
 		// return the result
 		return result;
 	}
@@ -212,6 +212,7 @@ StrongTyping.allowedTypesToString	= function(allowedTypes){
 	function typeToString(allowedType){
 		if( allowedType === Number )	return 'Number'
 		if( allowedType === String )	return 'String'
+		if( allowedType === Object )	return 'Object'
 		return allowedType.toString()
 	}
 }
@@ -225,6 +226,7 @@ StrongTyping.allowedTypesToString	= function(allowedTypes){
 StrongTyping.valueTypeToString	= function(value){
 	if( typeof(value) === 'string' )	return 'String'
 	if( typeof(value) === 'number' )	return 'Number'
+	if( typeof(value) === 'object' )	return 'Object'
 
 	return typeof(value)
 }

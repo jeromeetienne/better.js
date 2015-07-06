@@ -199,3 +199,41 @@ describe('StrongTyping.Validator', function(){
 		console.assert( valid === false )
 	});
 });
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//		StrongTyping.valueTypeToString
+//////////////////////////////////////////////////////////////////////////////////
+
+describe('StrongTyping.valueTypeToString', function(){		
+	it('should detect numbers', function(){
+		console.assert( StrongTyping.valueTypeToString(3) === 'Number' );
+	});
+
+	it('should detect strings', function(){
+		console.assert( StrongTyping.valueTypeToString('foobar') === 'String' );
+	});
+});
+
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//		StrongTyping.valueTypeToString
+//////////////////////////////////////////////////////////////////////////////////
+
+describe('StrongTyping.allowedTypesToString', function(){
+		
+	it('should detect numbers', function(){
+		console.assert( StrongTyping.allowedTypesToString(Number) === 'Number' );
+	});
+
+	it('should detect strings', function(){
+		console.assert( StrongTyping.allowedTypesToString(String) === 'String' );
+	});
+
+	it('should detect objects', function(){
+		console.assert( StrongTyping.allowedTypesToString(Object) === 'Object' );
+	});
+});
+
+
