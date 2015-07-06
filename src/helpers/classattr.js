@@ -54,7 +54,6 @@ var ClassAttr	= function(originalCtor, attributes){
 					, StrongTyping.allowedTypesToString(allowedTypes[i])
 					, 'and it is'
 					, StrongTyping.valueTypeToString(args[i]))
-
 			}
 		}
 
