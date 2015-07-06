@@ -1104,18 +1104,23 @@ if( typeof(window) === 'undefined' )	module.exports	= StrongTyping;
  * 
  * @param  {Object} baseObject the base object which contains the property
  * @param  {String} property   the string of the property name
- * @param  {Array}  types      the allows tipe
+ * @param  {Array}  allowedTypes      the allows tipe
  */
-StrongTyping.setter	= function(baseObject, property, types){
+StrongTyping.setter	= function(baseObject, property, allowedTypes){
 	// check initial value
 	var value	= baseObject[property];
-	var isValid	= StrongTyping.value(value, types)
+	var isValid	= StrongTyping.value(value, allowedTypes)
 	console.assert(isValid, 'initial value got invalid type');
 	// setup the setter
 	QGetterSetter.defineSetter(baseObject, property, function(value){
 		// check the value type
-		var isValid	= StrongTyping.value(value, types);			
-		console.assert(isValid, 'invalid type value='+value+' types='+types);
+		var isValid	= StrongTyping.value(value, allowedTypes);
+
+		console.assert(isValid, 'Invalid type. MUST be a'
+			, StrongTyping.allowedTypesToString(allowedTypes)
+			, 'and it is'
+			, StrongTyping.valueTypeToString(value))
+
 		// return the value
 		return value;
 	});
@@ -1558,7 +1563,10 @@ var ClassAttr	= function(originalCtor, attributes){
 			var allowedTypes	= attributes.arguments
 			for(var i = 0; i < allowedTypes.length; i++){
 				var isValid	= StrongTyping.value(args[i], allowedTypes[i]);			
-				console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', args[i])
+				console.assert(isValid, 'argument['+i+'] type is invalid. MUST be a'
+					, StrongTyping.allowedTypesToString(allowedTypes[i])
+					, 'and it is'
+					, StrongTyping.valueTypeToString(args[i]))
 			}
 		}
 
