@@ -1,32 +1,15 @@
 <script src='../build/better.js'></script>
 <script>
-var foo	= Better.Function(function(value){
-	console.log('value', value)
-}, {
-	arguments	: [['nonan', Number]]
-})
 
-// foo(NaN)
+	var foo	= Better.Function(function(value){
+		console.log('value', value)
+		return 'bla'
+	}, {
+		arguments	: [Number],
+		return : Number
+	})
 
-	var StrongTyping	= Better.StrongTyping
-	
-	var value	= NaN;
-	var types	= [Number];
-	var valid	= StrongTyping.value(value, types)
-	console.assert( valid === true )
+	foo(3)
 
-	var value	= NaN;
-	var types	= [Number, 'noNaN'];
-	var valid	= StrongTyping.value(value, types)
-	console.assert( valid === false )
-
-	var value	= 99;
-	var types	= [Number, 'noNaN'];
-	var valid	= StrongTyping.value(value, types)
-	console.assert( valid === true )
-
-	var value	= NaN;
-	var types	= ['noNaN'];
-	var valid	= StrongTyping.value(value, types)
-	console.assert( valid === false )
+// foo('ddd')
 </script>
