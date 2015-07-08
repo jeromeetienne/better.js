@@ -12,8 +12,8 @@ console.log('filename', filename)
 // jme- bad
     Error.prepareStackTrace = function(error, structuredStackTrace) {
         if (!error.__cachedTrace) {
-console.log('structuredStackTrace', structuredStackTrace[0])
             error.__cachedTrace = filterInternalFrames(FormatStackTrace(error, structuredStackTrace));
+console.log('structuredStackTrace', structuredStackTrace[0])
             if (!has.call(error, "__previous")) {
                 var previous = currentTraceError;
                 while (previous) {
@@ -25,6 +25,8 @@ console.log('structuredStackTrace', structuredStackTrace[0])
                 }
             }
         }
+console.log('cachedTrace', error.__cachedTrace)
+console.dir(error.__cachedTrace)
         return error.__cachedTrace;
     }
 
@@ -96,7 +98,7 @@ console.log('structuredStackTrace', structuredStackTrace[0])
         [
             window.Node.prototype,
             window.MessagePort.prototype,
-            window.SVGElementInstance.prototype,
+        //     window.SVGElementInstance.prototype,
             window.WebSocket.prototype,
             window.XMLHttpRequest.prototype,
             window.EventSource.prototype,

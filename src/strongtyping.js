@@ -24,18 +24,23 @@ if( typeof(window) === 'undefined' )	module.exports	= StrongTyping;
  * 
  * @param  {Object} baseObject the base object which contains the property
  * @param  {String} property   the string of the property name
- * @param  {Array}  types      the allows tipe
+ * @param  {Array}  allowedTypes      the allows tipe
  */
-StrongTyping.setter	= function(baseObject, property, types){
+StrongTyping.setter	= function(baseObject, property, allowedTypes){
 	// check initial value
 	var value	= baseObject[property];
-	var isValid	= StrongTyping.value(value, types)
+	var isValid	= StrongTyping.value(value, allowedTypes)
 	console.assert(isValid, 'initial value got invalid type');
 	// setup the setter
 	QGetterSetter.defineSetter(baseObject, property, function(value){
 		// check the value type
-		var isValid	= StrongTyping.value(value, types);			
-		console.assert(isValid, 'invalid type value='+value+' types='+types);
+		var isValid	= StrongTyping.value(value, allowedTypes);
+
+		console.assert(isValid, 'Invalid type. MUST be a'
+			, StrongTyping.allowedTypesToString(allowedTypes)
+			, 'and it is'
+			, StrongTyping.valueTypeToString(value))
+
 		// return the value
 		return value;
 	});
@@ -57,17 +62,18 @@ StrongTyping.fn	= function(originalFn, paramsTypes, returnTypes){
 		console.assert(arguments.length <= paramsTypes.length, 'function received '+arguments.length+' parameters but allows only '+paramsTypes.length+'!');
 		for(var i = 0; i < paramsTypes.length; i++){
 			var isValid	= StrongTyping.value(arguments[i], paramsTypes[i]);			
-			console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', paramsTypes[i], 'It is ===', arguments[i])
+			console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', StrongTyping.allowedTypesToString(paramsTypes[i]), 'It is ===', arguments[i])
 		}
 		// forward the call to the original function
 		var result	= originalFn.apply(this, arguments);
 		// check the result type
 		var isValid	= StrongTyping.value(result, returnTypes);			
-		console.assert(isValid, 'invalid type for returned value. MUST be of type', returnTypes, 'It is ===', result);
+		console.assert(isValid, 'invalid type for returned value. MUST be of type', StrongTyping.allowedTypesToString(returnTypes), 'It is ===', result);
 		// return the result
 		return result;
 	}
 }
+
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -176,4 +182,56 @@ StrongTyping.Validator	= function(fn){
 StrongTyping._ValidatorClass= function(fn){
 	console.assert(fn instanceof Function);
 	this.fn	= fn;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Comments
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Convert allowed types into String
+ * @param  {Array} allowedTypes - allowed types
+ * @return {String}       the just-built string
+ */
+StrongTyping.allowedTypesToString	= function(allowedTypes){
+	// handle parameter polymorphism
+	if( allowedTypes instanceof Array === false ){
+		return typeToString(allowedTypes)
+	}
+
+	var output = '['
+	for(var i = 0; i < allowedTypes.length; i++){
+		if( i > 0 )	output += ', '
+		output += typeToString(allowedTypes[i])
+	}
+	output += ']'
+	return output
+
+	/**
+	 * convert one allowed type to a string
+	 * 
+	 * @param  {any} allowedType - the allowed type
+	 * @return {String}          - the string for this type
+	 */
+	function typeToString(allowedType){
+		if( allowedType === Number )	return 'Number'
+		if( allowedType === String )	return 'String'
+		if( allowedType === Object )	return 'Object'
+		return allowedType.toString()
+	}
+}
+
+/**
+ * get the type of a value and return it as a String
+ * 
+ * @param  {any} value - allowed types
+ * @return {String}       the just-built string
+ */
+StrongTyping.valueTypeToString	= function(value){
+	if( typeof(value) === 'string' )	return 'String'
+	if( typeof(value) === 'number' )	return 'Number'
+	if( typeof(value) === 'object' )	return 'Object'
+
+	return typeof(value)
 }

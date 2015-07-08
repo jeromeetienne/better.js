@@ -153,7 +153,7 @@ if( typeof(window) === 'undefined' )	module.exports	= Stacktrace;
 
 /**
  * parse the stacktrace of an Error.
- * 
+ *
  * @param  {Error|undefined} error optional error to parse. if not provided, generate one.
  * @return {Array.<Object>}	parsed stacktrace
  */
@@ -163,13 +163,13 @@ Stacktrace.parse	= function(nShift, error){
 	error	= error	|| new Error();
 	// sanity check
 	console.assert(error instanceof Error);
-	// call the proper parser depending on the usage 
+	// call the proper parser depending on the usage
 	if( typeof(window) === 'undefined' ){
 		var stacktrace	= _parserV8(error)
 	}else if( navigator.userAgent.match('Chrome/') ){
-		var stacktrace	= _parserV8(error)		
+		var stacktrace	= _parserV8(error)
 	}else if( navigator.userAgent.match('Firefox/') ){
-		var stacktrace	= _parserFirefox(error)				
+		var stacktrace	= _parserFirefox(error)
 	}else{
 		console.assert(false, 'Stacktrace.parse() not yet implemented for', navigator.userAgent)
 		return [];
@@ -185,6 +185,9 @@ Stacktrace.parse	= function(nShift, error){
 
 	/**
 	 * parse stacktrace for v8 - works in node.js and chrome
+	 *
+	 * Official definition of v8 stackformat
+	 * https://code.google.com/p/v8-wiki/wiki/JavaScriptStackTraceApi#Appendix:_Stack_trace_format
 	 */
 	function _parserV8(error){
 		// start parse the error stack string
@@ -246,7 +249,7 @@ Stacktrace.parse	= function(nShift, error){
 
 /**
  * handle stack frame
- * 
+ *
  * TODO do a .fromOriginId()
  */
 Stacktrace.Frame	= function(opts){
@@ -320,7 +323,7 @@ Stacktrace.Tracker.prototype.record	= function(className, stackLevel){
 	// update counters for this originId
 	var perOrigins		= klass.perOrigins;
 	perOrigins[originId]	= perOrigins[originId] !== undefined ? perOrigins[originId]  : 0;
-	perOrigins[originId]	+= 1;		
+	perOrigins[originId]	+= 1;
 }
 
 /**
@@ -341,8 +344,8 @@ Stacktrace.Tracker.prototype.klasses	= function(){
 //////////////////////////////////////////////////////////////////////////////////
 
 /**
- * Dump current state of the tracker in console.log(). 
- * 
+ * Dump current state of the tracker in console.log().
+ *
  * @see Stacktrace.Tracker.reportString()
  */
 Stacktrace.Tracker.prototype.dump	= function(){
@@ -352,7 +355,7 @@ Stacktrace.Tracker.prototype.dump	= function(){
 
 /**
  * Reporter in a String
- * 
+ *
  * @param  {RegExp} classNameRegExp regexp of the classname to keep
  * @param  {Number} maxNOrigin      nb origin to display per class
  */
@@ -375,7 +378,7 @@ Stacktrace.Tracker.prototype.reportString	= function(classNameRegExp, maxNOrigin
 	classNames.forEach(function(className){
 		var klass	= this._klasses[className];
 		output.push(className+': total '+klass.counter+' times');
-		
+
 		var perOrigins	= klass.perOrigins;
 
 		var ranks	= Object.keys(perOrigins);
@@ -394,10 +397,6 @@ Stacktrace.Tracker.prototype.reportString	= function(classNameRegExp, maxNOrigin
 	}.bind(this));
 	return output.join('\n');
 };
-
-
-
-
 /**
  * assert which actually try to stop the excecution
  * if debug.assert.useDebugger is falsy, throw an exception. else trigger the
@@ -1105,18 +1104,23 @@ if( typeof(window) === 'undefined' )	module.exports	= StrongTyping;
  * 
  * @param  {Object} baseObject the base object which contains the property
  * @param  {String} property   the string of the property name
- * @param  {Array}  types      the allows tipe
+ * @param  {Array}  allowedTypes      the allows tipe
  */
-StrongTyping.setter	= function(baseObject, property, types){
+StrongTyping.setter	= function(baseObject, property, allowedTypes){
 	// check initial value
 	var value	= baseObject[property];
-	var isValid	= StrongTyping.value(value, types)
+	var isValid	= StrongTyping.value(value, allowedTypes)
 	console.assert(isValid, 'initial value got invalid type');
 	// setup the setter
 	QGetterSetter.defineSetter(baseObject, property, function(value){
 		// check the value type
-		var isValid	= StrongTyping.value(value, types);			
-		console.assert(isValid, 'invalid type value='+value+' types='+types);
+		var isValid	= StrongTyping.value(value, allowedTypes);
+
+		console.assert(isValid, 'Invalid type. MUST be a'
+			, StrongTyping.allowedTypesToString(allowedTypes)
+			, 'and it is'
+			, StrongTyping.valueTypeToString(value))
+
 		// return the value
 		return value;
 	});
@@ -1138,17 +1142,18 @@ StrongTyping.fn	= function(originalFn, paramsTypes, returnTypes){
 		console.assert(arguments.length <= paramsTypes.length, 'function received '+arguments.length+' parameters but allows only '+paramsTypes.length+'!');
 		for(var i = 0; i < paramsTypes.length; i++){
 			var isValid	= StrongTyping.value(arguments[i], paramsTypes[i]);			
-			console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', paramsTypes[i], 'It is ===', arguments[i])
+			console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', StrongTyping.allowedTypesToString(paramsTypes[i]), 'It is ===', arguments[i])
 		}
 		// forward the call to the original function
 		var result	= originalFn.apply(this, arguments);
 		// check the result type
 		var isValid	= StrongTyping.value(result, returnTypes);			
-		console.assert(isValid, 'invalid type for returned value. MUST be of type', returnTypes, 'It is ===', result);
+		console.assert(isValid, 'invalid type for returned value. MUST be of type', StrongTyping.allowedTypesToString(returnTypes), 'It is ===', result);
 		// return the result
 		return result;
 	}
 }
+
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -1258,6 +1263,58 @@ StrongTyping._ValidatorClass= function(fn){
 	console.assert(fn instanceof Function);
 	this.fn	= fn;
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//		Comments
+//////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Convert allowed types into String
+ * @param  {Array} allowedTypes - allowed types
+ * @return {String}       the just-built string
+ */
+StrongTyping.allowedTypesToString	= function(allowedTypes){
+	// handle parameter polymorphism
+	if( allowedTypes instanceof Array === false ){
+		return typeToString(allowedTypes)
+	}
+
+	var output = '['
+	for(var i = 0; i < allowedTypes.length; i++){
+		if( i > 0 )	output += ', '
+		output += typeToString(allowedTypes[i])
+	}
+	output += ']'
+	return output
+
+	/**
+	 * convert one allowed type to a string
+	 * 
+	 * @param  {any} allowedType - the allowed type
+	 * @return {String}          - the string for this type
+	 */
+	function typeToString(allowedType){
+		if( allowedType === Number )	return 'Number'
+		if( allowedType === String )	return 'String'
+		if( allowedType === Object )	return 'Object'
+		return allowedType.toString()
+	}
+}
+
+/**
+ * get the type of a value and return it as a String
+ * 
+ * @param  {any} value - allowed types
+ * @return {String}       the just-built string
+ */
+StrongTyping.valueTypeToString	= function(value){
+	if( typeof(value) === 'string' )	return 'String'
+	if( typeof(value) === 'number' )	return 'Number'
+	if( typeof(value) === 'object' )	return 'Object'
+
+	return typeof(value)
+}
 /**
  * use Proxy API to freeze access and creation of unexisting property.
  * After this, if you read a unexisting property, you will get an exception, instead of the usual undefined.
@@ -1363,16 +1420,21 @@ var FunctionAttr	= function(originalFn, attributes){
 			console.assert(args.length <= allowedTypes.length, 'function received '+args.length+' parameters but allows only '+allowedTypes.length+'!');
 			for(var i = 0; i < allowedTypes.length; i++){
 				var isValid	= StrongTyping.value(args[i], allowedTypes[i]);
-				console.assert(isValid, 'arguments['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', args[i])
+				console.assert(isValid, 'type of argument['+i+'] is invalid! MUST be a'
+					, StrongTyping.allowedTypesToString(allowedTypes[i])
+					, 'and it is'
+					, StrongTyping.valueTypeToString(args[i]))
 			}			
 		}
 	}, function(returnedValue, instance, args){
 		// honor .return - check the result type
 		if( attributes.return !== undefined ){
 			var allowedTypes= attributes.return
-	// console.log('blabla', arguments)
 			var isValid	= StrongTyping.value(returnedValue, allowedTypes)
-			console.assert(isValid, 'invalid type for returned value. MUST be of type', allowedTypes, 'It is ===', returnedValue)			
+			console.assert(isValid, 'type of returned value is invalid! MUST be a'
+				, StrongTyping.allowedTypesToString(allowedTypes)
+				, 'and it is'
+				, StrongTyping.valueTypeToString(returnedValue))
 		}
 	})
 	
@@ -1498,8 +1560,11 @@ var ClassAttr	= function(originalCtor, attributes){
 		if( attributes.arguments ){
 			var allowedTypes	= attributes.arguments
 			for(var i = 0; i < allowedTypes.length; i++){
-				var isValid	= StrongTyping.value(args[i], allowedTypes[i]);	
-				console.assert(isValid, 'arguments['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', args[i])
+				var isValid	= StrongTyping.value(args[i], allowedTypes[i]);			
+				console.assert(isValid, 'argument['+i+'] type is invalid. MUST be a'
+					, StrongTyping.allowedTypesToString(allowedTypes[i])
+					, 'and it is'
+					, StrongTyping.valueTypeToString(args[i]))
 			}
 		}
 
@@ -1799,9 +1864,6 @@ BetterJS.Class	= ClassAttr
 	// End of Better.js
 	return BetterJS
 })();
-
-// shorter Alias for Better.js - optional
-var Bjs	= BetterJS;
 
 // shorter Alias for Better.js - optional
 var Better	= BetterJS;

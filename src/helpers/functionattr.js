@@ -58,16 +58,21 @@ var FunctionAttr	= function(originalFn, attributes){
 			console.assert(args.length <= allowedTypes.length, 'function received '+args.length+' parameters but allows only '+allowedTypes.length+'!');
 			for(var i = 0; i < allowedTypes.length; i++){
 				var isValid	= StrongTyping.value(args[i], allowedTypes[i]);
-				console.assert(isValid, 'arguments['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', args[i])
+				console.assert(isValid, 'type of argument['+i+'] is invalid! MUST be a'
+					, StrongTyping.allowedTypesToString(allowedTypes[i])
+					, 'and it is'
+					, StrongTyping.valueTypeToString(args[i]))
 			}			
 		}
 	}, function(returnedValue, instance, args){
 		// honor .return - check the result type
 		if( attributes.return !== undefined ){
 			var allowedTypes= attributes.return
-	// console.log('blabla', arguments)
 			var isValid	= StrongTyping.value(returnedValue, allowedTypes)
-			console.assert(isValid, 'invalid type for returned value. MUST be of type', allowedTypes, 'It is ===', returnedValue)			
+			console.assert(isValid, 'type of returned value is invalid! MUST be a'
+				, StrongTyping.allowedTypesToString(allowedTypes)
+				, 'and it is'
+				, StrongTyping.valueTypeToString(returnedValue))
 		}
 	})
 	
