@@ -10,6 +10,6 @@ var foo	= Better.Function(function(value){
 	arguments	: ['Object']
 })
 
-foo({})
+// foo({})
 
-// foo('ddd')
+foo('ddd')

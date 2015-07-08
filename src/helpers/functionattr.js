@@ -58,7 +58,7 @@ var FunctionAttr	= function(originalFn, attributes){
 			console.assert(args.length <= allowedTypes.length, 'function received '+args.length+' parameters but allows only '+allowedTypes.length+'!');
 			for(var i = 0; i < allowedTypes.length; i++){
 				var isValid	= StrongTyping.value(args[i], allowedTypes[i]);
-				console.assert(isValid, 'argument['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', arguments[i])
+				console.assert(isValid, 'arguments['+i+'] type is invalid. MUST be of type', allowedTypes[i], 'It is ===', args[i])
 			}			
 		}
 	}, function(returnedValue, instance, args){
@@ -102,5 +102,3 @@ var FunctionAttr	= function(originalFn, attributes){
 
 // export the class in node.js - if running in node.js
 if( typeof(window) === 'undefined' )	module.exports	= FunctionAttr;
-
-
