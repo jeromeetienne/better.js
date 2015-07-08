@@ -1,6 +1,6 @@
 {
   "name": "better.js",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "For a better javascript in javascript",
   "main": "build/better.js",
   "bin": {
