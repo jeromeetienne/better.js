@@ -57,7 +57,7 @@ Privatize.property	= function(instance, property){
 	Privatize.init(instance);
 	// check private in the getter
 	QGetterSetter.defineGetter(instance, property, function aFunction(value, caller, property){
-// console.log('check getter property', property, instance._privateOkFn)
+console.log('check getter property', property, instance._privateOkFn, caller)
 		// if caller not privateOK, notify the caller
 		if( instance._privateOkFn.indexOf(caller) === -1 ){
 			// get stackFrame for the originId of the user
@@ -126,7 +126,7 @@ Privatize.prepare	= function(instance){
 		if( typeof(instance[property]) !== 'function')	continue;
 		// console.log('PrivateOKFn', property)
 		Privatize.pushPrivateOkFn(instance, instance[property])
-	}	
+	}
 }
 
 

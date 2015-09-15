@@ -99,6 +99,9 @@ var FunctionAttr	= function(originalFn, attributes){
 		// - see https://github.com/jeromeetienne/creatorpattern.js
 		var jsCode	= fn.toString().replace(/SuperName/g, functionName) 
 		eval('fn = '+jsCode+';')
+		
+		
+		
 		// return the just built function
 		return fn
 	}
