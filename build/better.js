@@ -1467,7 +1467,7 @@ var FunctionAttr	= function(originalFn, attributes){
 		eval('fn = '+jsCode+';')
 		
 		// declare __betterjsOriginalFn
-		Object.defineProperty(fn, '__betterjsOriginalFn', {
+		Object.defineProperty(fn, '__betterjsOriginalFn', { 
 		        enumerable	: false,
 		        writable	: false,
 		        value		: originalFn,
