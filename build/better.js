@@ -952,8 +952,12 @@ if( typeof(window) === 'undefined' )	module.exports	= Privatize;
 Privatize.pushPrivateOkFn	= function(instance, privateFn){
 	// init if needed
 	Privatize.init(instance);
+
+	// honor .__betterjsOriginalFn
+	var callerFn	= privateFn.__betterjsOriginalFn || privateFn
+
 	// actually add the function
-	instance._privateOkFn.push(privateFn)
+	instance._privateOkFn.push(callerFn)
 }
 
 
@@ -1462,7 +1466,12 @@ var FunctionAttr	= function(originalFn, attributes){
 		var jsCode	= fn.toString().replace(/SuperName/g, functionName) 
 		eval('fn = '+jsCode+';')
 		
-		
+		// declare __betterjsOriginalFn
+		Object.defineProperty(fn, '__betterjsOriginalFn', {
+		        enumerable	: false,
+		        writable	: false,
+		        value		: originalFn,
+		})
 		
 		// return the just built function
 		return fn

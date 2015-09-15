@@ -26,8 +26,12 @@ if( typeof(window) === 'undefined' )	module.exports	= Privatize;
 Privatize.pushPrivateOkFn	= function(instance, privateFn){
 	// init if needed
 	Privatize.init(instance);
+
+	// honor .__betterjsOriginalFn
+	var callerFn	= privateFn.__betterjsOriginalFn || privateFn
+
 	// actually add the function
-	instance._privateOkFn.push(privateFn)
+	instance._privateOkFn.push(callerFn)
 }
 
 

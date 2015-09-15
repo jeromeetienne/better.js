@@ -100,7 +100,12 @@ var FunctionAttr	= function(originalFn, attributes){
 		var jsCode	= fn.toString().replace(/SuperName/g, functionName) 
 		eval('fn = '+jsCode+';')
 		
-		
+		// declare __betterjsOriginalFn
+		Object.defineProperty(fn, '__betterjsOriginalFn', {
+		        enumerable	: false,
+		        writable	: false,
+		        value		: originalFn,
+		})
 		
 		// return the just built function
 		return fn
