@@ -59,7 +59,7 @@ QGetterSetter._Property	= function(baseObject, property){
 		},
 		set		: function setterHandler(value){
 			for(var i = 0; i < _this._setters.length; i++){
-				value	= _this._setters[i](value)
+				value	= _this._setters[i](value, setterHandler.caller, property)
 			}
 			baseObject['__'+property] = value;
 		},
@@ -983,11 +983,14 @@ Privatize.init	= function(instance){
  * @return {undefined}		nothing
  */
 Privatize.property	= function(instance, property){
+console.assert(property !== undefined)
+console.assert(property !== "undefined")
+console.log('')
 	// init if needed
 	Privatize.init(instance);
 	// check private in the getter
 	QGetterSetter.defineGetter(instance, property, function aFunction(value, caller, property){
-console.log('check getter property', property, instance._privateOkFn, caller)
+// console.log('check getter property', property, instance._privateOkFn, caller)
 		// if caller not privateOK, notify the caller
 		if( instance._privateOkFn.indexOf(caller) === -1 ){
 			// get stackFrame for the originId of the user
@@ -1000,6 +1003,8 @@ console.log('check getter property', property, instance._privateOkFn, caller)
 	});
 	// check private in the setter
 	QGetterSetter.defineSetter(instance, property, function aFunction(value, caller, property){
+console.assert(property !== undefined)
+console.assert(property !== "undefined")
 // console.log('check setter property', property)
 		// if caller not privateOK, notify the caller
 		if( instance._privateOkFn.indexOf(caller) === -1 ){
@@ -1302,6 +1307,7 @@ StrongTyping.allowedTypesToString	= function(allowedTypes){
 		if( allowedType === Number )	return 'Number'
 		if( allowedType === String )	return 'String'
 		if( allowedType === Object )	return 'Object'
+		if( allowedType === undefined )	return 'undefined'
 		return allowedType.toString()
 	}
 }
@@ -1871,7 +1877,6 @@ BetterJS.StackTracker	= Stacktrace.Tracker
 // get it for node.js
 var ClassAttr	= ClassAttr		|| require('../src/helpers/classattr.js');
 BetterJS.Class	= ClassAttr
-
 
 	// End of Better.js
 	return BetterJS

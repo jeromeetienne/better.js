@@ -218,6 +218,7 @@ StrongTyping.allowedTypesToString	= function(allowedTypes){
 		if( allowedType === Number )	return 'Number'
 		if( allowedType === String )	return 'String'
 		if( allowedType === Object )	return 'Object'
+		if( allowedType === undefined )	return 'undefined'
 		return allowedType.toString()
 	}
 }

@@ -10,7 +10,7 @@ describe('ObjectIcer (read only)', function(){
 	//		Handle when it isn't available
 	//////////////////////////////////////////////////////////////////////////////////
 	if( ObjectIcer.isAvailable === false ){
-		console.log('ObjectIcer', ObjectIcer.isAvailable)
+		// console.log('ObjectIcer', ObjectIcer.isAvailable)
 		it('should be available and it is NOT! Reconfig your javascript VM please.', function(){
 			console.assert(true, 'Please reconfig the js VM on which you run this test')		
 		});
@@ -55,7 +55,7 @@ describe('ObjectIcer (write only)', function(){
 	//		Handle when it isn't available
 	//////////////////////////////////////////////////////////////////////////////////
 	if( ObjectIcer.isAvailable === false ){
-		console.log('ObjectIcer', ObjectIcer.isAvailable)
+		// console.log('ObjectIcer', ObjectIcer.isAvailable)
 		it('should be available and it is NOT! Reconfig your javascript VM please.', function(){
 			console.assert(true, 'Please reconfig the js VM on which you run this test')		
 		});
@@ -93,7 +93,7 @@ describe('ObjectIcer (rw)', function(){
 	//		Handle when it isn't available
 	//////////////////////////////////////////////////////////////////////////////////
 	if( ObjectIcer.isAvailable === false ){
-		console.log('ObjectIcer', ObjectIcer.isAvailable)
+		// console.log('ObjectIcer', ObjectIcer.isAvailable)
 		it('should be available and it is NOT! Reconfig your javascript VM please.', function(){
 			console.assert(true, 'Please reconfig the js VM on which you run this test')		
 		});

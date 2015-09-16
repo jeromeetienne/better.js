@@ -55,7 +55,7 @@ QGetterSetter._Property	= function(baseObject, property){
 		},
 		set		: function setterHandler(value){
 			for(var i = 0; i < _this._setters.length; i++){
-				value	= _this._setters[i](value)
+				value	= _this._setters[i](value, setterHandler.caller, property)
 			}
 			baseObject['__'+property] = value;
 		},

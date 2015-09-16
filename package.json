@@ -1,11 +1,8 @@
 {
   "name": "better.js",
-  "version": "0.0.21",
+  "version": "0.0.25",
   "description": "For a better javascript in javascript",
   "main": "build/better.js",
-  "bin": {
-    "jsdoc2betterjs": "./contribs/jsdoc2betterjs/jsdoc2betterjs"
-  },
   "directories": {
     "doc": "docs",
     "example": "examples",
@@ -26,8 +23,5 @@
     "javascript"
   ],
   "author": "Jerome Etienne",
-  "license": "MIT",
-  "dependencies": {
-    "recast": "^0.9.6"
-  }
+  "license": "MIT"
 }

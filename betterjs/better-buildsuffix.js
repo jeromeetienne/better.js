@@ -1,4 +1,3 @@
-
 	// End of Better.js
 	return BetterJS
 })();
