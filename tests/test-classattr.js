@@ -1,4 +1,5 @@
 var ClassAttr	= ClassAttr	|| require('../src/helpers/classattr.js');
+var FunctionAttr= FunctionAttr	|| require('../src/helpers/functionattr.js');
 
 describe('ClassAttr', function(){
 
@@ -23,9 +24,11 @@ describe('ClassAttr', function(){
 	Cat.prototype.salute	= function(){
 		return 'miaou, i weight '+this._weight
 	}
-	Cat.prototype.getWeight	= function(){
+	Cat.prototype.getWeight	= FunctionAttr(function(){
 		return this._weight
-	}
+	}, {
+		return: Number
+	})
 	
 
 	// classattr definition
@@ -103,4 +106,18 @@ describe('ClassAttr', function(){
 		var cat	= new Cat('kitty', 1)
 		console.assert(cat instanceof Animal)
 	})
+
+	//////////////////////////////////////////////////////////////////////////////////
+	//		comment								//
+	//////////////////////////////////////////////////////////////////////////////////
+	
+	it('should be ok to access private property from function of its own class with FunctionAttr', function(){
+		var cat	= new Cat('kitty', 12)
+		console.assert(cat.getWeight() === 12)
+	})
+	it('should be ok to access private property from function of its own class without FunctionAttr', function(){
+		var cat	= new Cat('kitty', 8)
+		console.assert(cat.salute() === 'miaou, i weight 8' )
+	})
 })
+
