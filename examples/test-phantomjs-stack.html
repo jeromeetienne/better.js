@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<script src='../../build/better.js'></script>
+<script>
+	function getStackFrames(){
+		// return 'blou'
+		try {
+			i.dont.exist+=0;	//doesn't exist- that's the point
+		} catch( error ) {
+			var stackTrace = Better.Stacktrace.parse(0, error)
+			return stackTrace
+		}
+		return []
+	}
+	var stackFrames = getStackFrames()
+	console.dir(JSON.stringify(stackFrames, null, '\t'));
+</script>
