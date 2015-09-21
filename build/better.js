@@ -153,14 +153,25 @@ if( typeof(window) === 'undefined' )	module.exports	= Stacktrace;
 
 /**
  * parse the stacktrace of an Error.
- *
- * @param  {Error|undefined} error optional error to parse. if not provided, generate one.
+ * @param  {Number} nShift
+ * @param  {Error|undefined} error - optional error to parse. if not provided, generate one.
  * @return {Array.<Object>}	parsed stacktrace
  */
 Stacktrace.parse	= function(nShift, error){
 	// handle polymorphism
 	nShift	= nShift !== undefined ? nShift	: 0;
-	error	= error	|| new Error();
+
+	// get error if not provided
+	// error	= error	|| new Error();
+	if( error === undefined ){
+		// new Error().stack dont work in PhantomJS
+		try {
+			i.dont.exist+=0;	//doesn't exist- that's the point
+		} catch( exception ) {
+			error = exception;
+		}
+	}
+
 	// sanity check
 	console.assert(error instanceof Error);
 	// call the proper parser depending on the usage
@@ -170,11 +181,13 @@ Stacktrace.parse	= function(nShift, error){
 		var stacktrace	= _parserV8(error)
 	}else if( navigator.userAgent.match('Firefox/') ){
 		var stacktrace	= _parserFirefox(error)
+	}else if( navigator.userAgent.match('PhantomJS/') ){
+		var stacktrace	= _parserPhantomJS(error)
 	}else{
 		console.assert(false, 'Stacktrace.parse() not yet implemented for', navigator.userAgent)
 		return [];
 	}
-	// add one to remove the parser*() function
+	// add one to remove the parser() function
 	nShift	+= 1;
 	console.assert(stacktrace.length >= nShift, 'stacktrace length not large enougth to shift '+nShift)
 	return stacktrace.slice(nShift);
@@ -238,6 +251,43 @@ Stacktrace.parse	= function(nShift, error){
 				line	: parseInt(matches[3], 10),
 				column	: 1
 			}));
+		});
+		return stacktrace;
+	};
+
+	/**
+	 * parse the stacktrace from phantomJS
+	 */
+	function _parserPhantomJS(error){
+		// start parse the error stack string
+		var lines	= error.stack.split("\n").slice(1);
+		var stacktrace	= [];
+		lines.forEach(function(line){
+			if( line.match(/\(native\)$/) ){
+				var matches	= line.match(/^\s*at (.+) \(native\)/);
+				stacktrace.push(new Stacktrace.Frame({
+					fct	: matches[1],
+					url	: 'native',
+					line	: 1,
+					column	: 1
+				}));
+			}else if( line.match(/\)$/) ){
+				var matches	= line.match(/^\s*at (.+) \((.+):(\d+)\)/);
+				stacktrace.push(new Stacktrace.Frame({
+					fct	: matches[1],
+					url	: matches[2],
+					line	: parseInt(matches[3], 10),
+					column	: 1
+				}));
+			}else{
+				var matches	= line.match(/^\s*at (.+):(\d+)/);
+				stacktrace.push(new Stacktrace.Frame({
+					url	: matches[1],
+					fct	: '<anonymous>',
+					line	: parseInt(matches[2], 10),
+					column	: 1
+				}));
+			}
 		});
 		return stacktrace;
 	};
